@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.10.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Rudiments: /home/dmuse/src/fedora40x64/rudiments/include/rudiments/nodecollection.h Source File</title>
+<title>Rudiments: /home/dmuse/src/dev/rudiments/include/rudiments/nodecollection.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -52,7 +52,7 @@ $(function() { codefold.init(0); });
   <div class="headertitle"><div class="title">nodecollection.h</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">// Copyright (c) 1999-2018 David Muse</span></div>
+<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">// Copyright (c) David Muse</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment">// See the COPYING file for more information.</span></div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span> </div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#ifndef RUDIMENTS_NODECOLLECTION_H</span></div>
@@ -62,40 +62,42 @@ $(function() { codefold.init(0); });
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="keyword">template</span> &lt;<span class="keyword">class</span> valuetype&gt;</div>
 <div class="foldopen" id="foldopen00012" data-start="{" data-end="};">
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno"><a class="line" href="classnodecollectionnode.html">   12</a></span><span class="keyword">class </span><a class="code hl_class" href="classnodecollectionnode.html">nodecollectionnode</a> : <span class="keyword">virtual</span> <span class="keyword">public</span> <a class="code hl_class" href="classobject.html">object</a> {</div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno"><a class="line" href="classnodecollectionnode.html">   12</a></span><span class="keyword">class </span><a class="code hl_class" href="classnodecollectionnode.html">nodecollectionnode</a> {</div>
 <div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>        <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno"><a class="line" href="classnodecollectionnode.html#a0e56c021f83f859e7a3abce7bf37a8df">   15</a></span>                <span class="keyword">virtual</span> <span class="keywordtype">void</span>            <a class="code hl_function" href="classnodecollectionnode.html#a0e56c021f83f859e7a3abce7bf37a8df">setValue</a>(valuetype value)=0;</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno"><a class="line" href="classnodecollectionnode.html#af1b7ed9cf70146dff3ccee1339a0af22">   15</a></span>                <span class="keyword">virtual</span> <a class="code hl_function" href="classnodecollectionnode.html#af1b7ed9cf70146dff3ccee1339a0af22">~nodecollectionnode</a>() {};</div>
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno"><a class="line" href="classnodecollectionnode.html#a4b89985ecc72fa982149d3d2bb613e30">   18</a></span>                <span class="keyword">virtual</span> valuetype       <a class="code hl_function" href="classnodecollectionnode.html#a4b89985ecc72fa982149d3d2bb613e30">getValue</a>()=0;</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno"><a class="line" href="classnodecollectionnode.html#a0e56c021f83f859e7a3abce7bf37a8df">   18</a></span>                <span class="keyword">virtual</span> <span class="keywordtype">void</span>            <a class="code hl_function" href="classnodecollectionnode.html#a0e56c021f83f859e7a3abce7bf37a8df">setValue</a>(valuetype value)=0;</div>
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="classnodecollectionnode.html#a35e7b6d6bd042e712404d6c8939e9bc4">   21</a></span>                <span class="keyword">virtual</span> valuetype       &amp;<a class="code hl_function" href="classnodecollectionnode.html#a35e7b6d6bd042e712404d6c8939e9bc4">getReference</a>()=0;</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="classnodecollectionnode.html#a4b89985ecc72fa982149d3d2bb613e30">   21</a></span>                <span class="keyword">virtual</span> valuetype       <a class="code hl_function" href="classnodecollectionnode.html#a4b89985ecc72fa982149d3d2bb613e30">getValue</a>()=0;</div>
 <div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno"><a class="line" href="classnodecollectionnode.html#a9bcc74a8d99af96dfaeae7840731bf90">   25</a></span>                <span class="keyword">virtual</span> <a class="code hl_class" href="classnodecollectionnode.html">nodecollectionnode&lt;valuetype&gt;</a>   *<a class="code hl_function" href="classnodecollectionnode.html#a9bcc74a8d99af96dfaeae7840731bf90">getNext</a>()=0;</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>};</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno"><a class="line" href="classnodecollectionnode.html#a35e7b6d6bd042e712404d6c8939e9bc4">   24</a></span>                <span class="keyword">virtual</span> valuetype       &amp;<a class="code hl_function" href="classnodecollectionnode.html#a35e7b6d6bd042e712404d6c8939e9bc4">getReference</a>()=0;</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno"><a class="line" href="classnodecollectionnode.html#a9bcc74a8d99af96dfaeae7840731bf90">   28</a></span>                <span class="keyword">virtual</span> <a class="code hl_class" href="classnodecollectionnode.html">nodecollectionnode&lt;valuetype&gt;</a>   *<a class="code hl_function" href="classnodecollectionnode.html#a9bcc74a8d99af96dfaeae7840731bf90">getNext</a>()=0;</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>};</div>
 </div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="keyword">template</span> &lt;<span class="keyword">class</span> valuetype&gt;</div>
-<div class="foldopen" id="foldopen00031" data-start="{" data-end="};">
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno"><a class="line" href="classnodecollection.html">   31</a></span><span class="keyword">class </span><a class="code hl_class" href="classnodecollection.html">nodecollection</a> : <span class="keyword">public</span> <a class="code hl_class" href="classcollection.html">collection</a> {</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>        <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno"><a class="line" href="classnodecollection.html#a0c391e88356fa3b454c7f43900936ec5">   34</a></span>                <span class="keyword">virtual</span> <a class="code hl_class" href="classnodecollectionnode.html">nodecollectionnode&lt;valuetype&gt;</a>   *<a class="code hl_function" href="classnodecollection.html#a0c391e88356fa3b454c7f43900936ec5">getFirst</a>()=0;</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>};</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="keyword">template</span> &lt;<span class="keyword">class</span> valuetype&gt;</div>
+<div class="foldopen" id="foldopen00034" data-start="{" data-end="};">
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno"><a class="line" href="classnodecollection.html">   34</a></span><span class="keyword">class </span><a class="code hl_class" href="classnodecollection.html">nodecollection</a> : <span class="keyword">public</span> <a class="code hl_class" href="classcollection.html">collection</a> {</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>        <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno"><a class="line" href="classnodecollection.html#a0c391e88356fa3b454c7f43900936ec5">   37</a></span>                <span class="keyword">virtual</span> <a class="code hl_class" href="classnodecollectionnode.html">nodecollectionnode&lt;valuetype&gt;</a>   *<a class="code hl_function" href="classnodecollection.html#a0c391e88356fa3b454c7f43900936ec5">getFirst</a>()=0;</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>};</div>
 </div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aclasscollection_html"><div class="ttname"><a href="classcollection.html">collection</a></div><div class="ttdef"><b>Definition</b> collection.h:11</div></div>
-<div class="ttc" id="aclassnodecollection_html"><div class="ttname"><a href="classnodecollection.html">nodecollection</a></div><div class="ttdef"><b>Definition</b> nodecollection.h:31</div></div>
+<div class="ttc" id="aclassnodecollection_html"><div class="ttname"><a href="classnodecollection.html">nodecollection</a></div><div class="ttdef"><b>Definition</b> nodecollection.h:34</div></div>
 <div class="ttc" id="aclassnodecollection_html_a0c391e88356fa3b454c7f43900936ec5"><div class="ttname"><a href="classnodecollection.html#a0c391e88356fa3b454c7f43900936ec5">nodecollection::getFirst</a></div><div class="ttdeci">virtual nodecollectionnode&lt; valuetype &gt; * getFirst()=0</div></div>
 <div class="ttc" id="aclassnodecollectionnode_html"><div class="ttname"><a href="classnodecollectionnode.html">nodecollectionnode</a></div><div class="ttdef"><b>Definition</b> nodecollection.h:12</div></div>
 <div class="ttc" id="aclassnodecollectionnode_html_a0e56c021f83f859e7a3abce7bf37a8df"><div class="ttname"><a href="classnodecollectionnode.html#a0e56c021f83f859e7a3abce7bf37a8df">nodecollectionnode::setValue</a></div><div class="ttdeci">virtual void setValue(valuetype value)=0</div></div>
 <div class="ttc" id="aclassnodecollectionnode_html_a35e7b6d6bd042e712404d6c8939e9bc4"><div class="ttname"><a href="classnodecollectionnode.html#a35e7b6d6bd042e712404d6c8939e9bc4">nodecollectionnode::getReference</a></div><div class="ttdeci">virtual valuetype &amp; getReference()=0</div></div>
 <div class="ttc" id="aclassnodecollectionnode_html_a4b89985ecc72fa982149d3d2bb613e30"><div class="ttname"><a href="classnodecollectionnode.html#a4b89985ecc72fa982149d3d2bb613e30">nodecollectionnode::getValue</a></div><div class="ttdeci">virtual valuetype getValue()=0</div></div>
 <div class="ttc" id="aclassnodecollectionnode_html_a9bcc74a8d99af96dfaeae7840731bf90"><div class="ttname"><a href="classnodecollectionnode.html#a9bcc74a8d99af96dfaeae7840731bf90">nodecollectionnode::getNext</a></div><div class="ttdeci">virtual nodecollectionnode&lt; valuetype &gt; * getNext()=0</div></div>
-<div class="ttc" id="aclassobject_html"><div class="ttname"><a href="classobject.html">object</a></div><div class="ttdef"><b>Definition</b> object.h:10</div></div>
+<div class="ttc" id="aclassnodecollectionnode_html_af1b7ed9cf70146dff3ccee1339a0af22"><div class="ttname"><a href="classnodecollectionnode.html#af1b7ed9cf70146dff3ccee1339a0af22">nodecollectionnode::~nodecollectionnode</a></div><div class="ttdeci">virtual ~nodecollectionnode()</div><div class="ttdef"><b>Definition</b> nodecollection.h:15</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Dec 3 2024 01:50:18 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.10.0
+Generated on Sat Aug 8 2026 19:56:13 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.10.0
 </small></address>
 </body>
 </html>

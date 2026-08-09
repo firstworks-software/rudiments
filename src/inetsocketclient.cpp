@@ -10,7 +10,7 @@
 #include <rudiments/process.h>
 #include <rudiments/error.h>
 #include <rudiments/environment.h>
-#include <rudiments/randomnumber.h>
+#include <rudiments/prng.h>
 
 #include <rudiments/private/winsock.h>
 
@@ -119,11 +119,11 @@ int32_t inetsocketclient::connect() {
 		listnode<char *> *hostlistnode=hostlist.getFirst();
 		if (pvt->_randomize && hostlist.getCount()>1) {
 			if (!pvt->_seeded) {
-				pvt->_seed=randomnumber::getSeed();
+				pvt->_seed=prng::getSeed();
 				pvt->_seeded=true;
 			}
-			pvt->_seed=randomnumber::generate(pvt->_seed);
-			int32_t	skip=randomnumber::scale(pvt->_seed,0,
+			pvt->_seed=prng::generate(pvt->_seed);
+			int32_t	skip=prng::scale(pvt->_seed,0,
 							hostlist.getCount()-1);
 			for (int32_t i=0; i<skip; i++) {
 				hostlistnode=hostlistnode->getNext();
@@ -238,12 +238,12 @@ int32_t inetsocketclient::connect(const char *host) {
 				if (pvt->_randomize && addrlist.getCount()>1) {
 					if (!pvt->_seeded) {
 						pvt->_seed=
-							randomnumber::getSeed();
+							prng::getSeed();
 						pvt->_seeded=true;
 					}
-					pvt->_seed=randomnumber::generate(
+					pvt->_seed=prng::generate(
 								pvt->_seed);
-					int32_t	skip=randomnumber::scale(
+					int32_t	skip=prng::scale(
 							pvt->_seed,0,
 							addrlist.getCount()-1);
 					for (int32_t i=0; i<skip; i++) {
@@ -345,12 +345,12 @@ int32_t inetsocketclient::connect(const char *host) {
 				if (pvt->_randomize && addrlist.getCount()>1) {
 					if (!pvt->_seeded) {
 						pvt->_seed=
-							randomnumber::getSeed();
+							prng::getSeed();
 						pvt->_seeded=true;
 					}
-					pvt->_seed=randomnumber::generate(
+					pvt->_seed=prng::generate(
 								pvt->_seed);
-					int32_t	skip=randomnumber::scale(
+					int32_t	skip=prng::scale(
 							pvt->_seed,0,
 							addrlist.getCount()-1);
 					for (int32_t i=0; i<skip; i++) {

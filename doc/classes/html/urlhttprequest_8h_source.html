@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.10.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Rudiments: /home/dmuse/src/fedora40x64/rudiments/include/rudiments/urlhttprequest.h Source File</title>
+<title>Rudiments: /home/dmuse/src/dev/rudiments/include/rudiments/urlhttprequest.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -52,7 +52,7 @@ $(function() { codefold.init(0); });
   <div class="headertitle"><div class="title">urlhttprequest.h</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">// Copyright (c) 1999-2018 David Muse</span></div>
+<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">// Copyright (c) David Muse</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment">// See the COPYING file for more information</span></div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span> </div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#ifndef RUDIMENTS_URLHTTPREQUEST_H</span></div>
@@ -122,11 +122,11 @@ $(function() { codefold.init(0); });
 <div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span> </div>
 <div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span> </div>
 <div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span> </div>
-<div class="line"><a id="l00184" name="l00184"></a><span class="lineno"><a class="line" href="classurlhttprequest.html#afb13f02f262573a0350e6421f51f71aa">  184</a></span>                <span class="keyword">virtual</span> <span class="keywordtype">bool</span>    <a class="code hl_function" href="classurlhttprequest.html#afb13f02f262573a0350e6421f51f71aa">getMethodIsAllowed</a>();</div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno"><a class="line" href="classurlhttprequest.html#a1e4c4bea7f12c5e6044e90ac97b6b02d">  184</a></span>                <span class="keyword">virtual</span> <span class="keywordtype">bool</span>    <a class="code hl_function" href="classurlhttprequest.html#a1e4c4bea7f12c5e6044e90ac97b6b02d">isMethodAllowed</a>();</div>
 <div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span> </div>
-<div class="line"><a id="l00194" name="l00194"></a><span class="lineno"><a class="line" href="classurlhttprequest.html#ae3cbb4f704a108e4af77076c3c23bae3">  194</a></span>                <span class="keyword">virtual</span> <span class="keywordtype">bool</span>    <a class="code hl_function" href="classurlhttprequest.html#ae3cbb4f704a108e4af77076c3c23bae3">getIpIsAllowed</a>();</div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno"><a class="line" href="classurlhttprequest.html#acab79c44e1fc6c2f169ec6629ea73386">  194</a></span>                <span class="keyword">virtual</span> <span class="keywordtype">bool</span>    <a class="code hl_function" href="classurlhttprequest.html#acab79c44e1fc6c2f169ec6629ea73386">isIpAllowed</a>();</div>
 <div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span> </div>
-<div class="line"><a id="l00204" name="l00204"></a><span class="lineno"><a class="line" href="classurlhttprequest.html#a3f2b63d1c6904c1435175d0b5dcead75">  204</a></span>                <span class="keyword">virtual</span> <span class="keywordtype">bool</span>    <a class="code hl_function" href="classurlhttprequest.html#a3f2b63d1c6904c1435175d0b5dcead75">getRefererIsAllowed</a>();</div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno"><a class="line" href="classurlhttprequest.html#a7940afc80a6b36cc67ba3b1f9ba2780a">  204</a></span>                <span class="keyword">virtual</span> <span class="keywordtype">bool</span>    <a class="code hl_function" href="classurlhttprequest.html#a7940afc80a6b36cc67ba3b1f9ba2780a">isRefererAllowed</a>();</div>
 <div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span> </div>
 <div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span> </div>
 <div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span><span class="preprocessor">        #include &lt;rudiments/private/urlhttprequest.h&gt;</span></div>
@@ -144,12 +144,13 @@ $(function() { codefold.init(0); });
 <div class="ttc" id="aclassurlhttprequest_html_a09a47e310064310c4801565d0f974bd0"><div class="ttname"><a href="classurlhttprequest.html#a09a47e310064310c4801565d0f974bd0">urlhttprequest::getSkinPath</a></div><div class="ttdeci">const char * getSkinPath()</div></div>
 <div class="ttc" id="aclassurlhttprequest_html_a0efba0ec3cab795cd264261a516929b2"><div class="ttname"><a href="classurlhttprequest.html#a0efba0ec3cab795cd264261a516929b2">urlhttprequest::getPagePath</a></div><div class="ttdeci">const char * getPagePath()</div></div>
 <div class="ttc" id="aclassurlhttprequest_html_a17d9091156ab35a6191bafcb41eed15a"><div class="ttname"><a href="classurlhttprequest.html#a17d9091156ab35a6191bafcb41eed15a">urlhttprequest::getPageUrl</a></div><div class="ttdeci">const char * getPageUrl()</div></div>
+<div class="ttc" id="aclassurlhttprequest_html_a1e4c4bea7f12c5e6044e90ac97b6b02d"><div class="ttname"><a href="classurlhttprequest.html#a1e4c4bea7f12c5e6044e90ac97b6b02d">urlhttprequest::isMethodAllowed</a></div><div class="ttdeci">virtual bool isMethodAllowed()</div></div>
 <div class="ttc" id="aclassurlhttprequest_html_a2798e8180916fd13ea86285342a5c7d7"><div class="ttname"><a href="classurlhttprequest.html#a2798e8180916fd13ea86285342a5c7d7">urlhttprequest::getSkinUrl</a></div><div class="ttdeci">const char * getSkinUrl()</div></div>
 <div class="ttc" id="aclassurlhttprequest_html_a3a8cc2626cb860f9fd2898a091798912"><div class="ttname"><a href="classurlhttprequest.html#a3a8cc2626cb860f9fd2898a091798912">urlhttprequest::getSkinVariable</a></div><div class="ttdeci">const char * getSkinVariable(const char *name)</div></div>
-<div class="ttc" id="aclassurlhttprequest_html_a3f2b63d1c6904c1435175d0b5dcead75"><div class="ttname"><a href="classurlhttprequest.html#a3f2b63d1c6904c1435175d0b5dcead75">urlhttprequest::getRefererIsAllowed</a></div><div class="ttdeci">virtual bool getRefererIsAllowed()</div></div>
 <div class="ttc" id="aclassurlhttprequest_html_a5781712b81fc32dcb63f542c6882a5c5"><div class="ttname"><a href="classurlhttprequest.html#a5781712b81fc32dcb63f542c6882a5c5">urlhttprequest::getSkinVariables</a></div><div class="ttdeci">const char *const * getSkinVariables()</div></div>
 <div class="ttc" id="aclassurlhttprequest_html_a5a671e448c4e573022c95fc205e936ea"><div class="ttname"><a href="classurlhttprequest.html#a5a671e448c4e573022c95fc205e936ea">urlhttprequest::getApplication</a></div><div class="ttdeci">const char * getApplication()</div></div>
 <div class="ttc" id="aclassurlhttprequest_html_a5e548472e35f4d6119042687f4c25d14"><div class="ttname"><a href="classurlhttprequest.html#a5e548472e35f4d6119042687f4c25d14">urlhttprequest::getModulePath</a></div><div class="ttdeci">const char * getModulePath()</div></div>
+<div class="ttc" id="aclassurlhttprequest_html_a7940afc80a6b36cc67ba3b1f9ba2780a"><div class="ttname"><a href="classurlhttprequest.html#a7940afc80a6b36cc67ba3b1f9ba2780a">urlhttprequest::isRefererAllowed</a></div><div class="ttdeci">virtual bool isRefererAllowed()</div></div>
 <div class="ttc" id="aclassurlhttprequest_html_a7af731c70b9f1d8d30bd5d2c6b674bfb"><div class="ttname"><a href="classurlhttprequest.html#a7af731c70b9f1d8d30bd5d2c6b674bfb">urlhttprequest::getProgram</a></div><div class="ttdeci">const char * getProgram()</div></div>
 <div class="ttc" id="aclassurlhttprequest_html_a7ebc36e41c2824b7489a1e6eb6a3b54d"><div class="ttname"><a href="classurlhttprequest.html#a7ebc36e41c2824b7489a1e6eb6a3b54d">urlhttprequest::getApplicationPath</a></div><div class="ttdeci">const char * getApplicationPath()</div></div>
 <div class="ttc" id="aclassurlhttprequest_html_a86de6b00461202193aade936f78bb20c"><div class="ttname"><a href="classurlhttprequest.html#a86de6b00461202193aade936f78bb20c">urlhttprequest::writeVariables</a></div><div class="ttdeci">void writeVariables()</div></div>
@@ -159,17 +160,16 @@ $(function() { codefold.init(0); });
 <div class="ttc" id="aclassurlhttprequest_html_ab2db9f8ebe26c9ef4deef73d1688c875"><div class="ttname"><a href="classurlhttprequest.html#ab2db9f8ebe26c9ef4deef73d1688c875">urlhttprequest::getModule</a></div><div class="ttdeci">const char * getModule()</div></div>
 <div class="ttc" id="aclassurlhttprequest_html_ab5305a8b4ba6eda1eba61df411a1fc14"><div class="ttname"><a href="classurlhttprequest.html#ab5305a8b4ba6eda1eba61df411a1fc14">urlhttprequest::getSkinVariableCount</a></div><div class="ttdeci">uint64_t getSkinVariableCount()</div></div>
 <div class="ttc" id="aclassurlhttprequest_html_ac266b5d1fbc8af4df00d1b0c5d00f731"><div class="ttname"><a href="classurlhttprequest.html#ac266b5d1fbc8af4df00d1b0c5d00f731">urlhttprequest::getSkinValues</a></div><div class="ttdeci">const char *const * getSkinValues()</div></div>
+<div class="ttc" id="aclassurlhttprequest_html_acab79c44e1fc6c2f169ec6629ea73386"><div class="ttname"><a href="classurlhttprequest.html#acab79c44e1fc6c2f169ec6629ea73386">urlhttprequest::isIpAllowed</a></div><div class="ttdeci">virtual bool isIpAllowed()</div></div>
 <div class="ttc" id="aclassurlhttprequest_html_ad1ffc687efa986eb24b34a76c1a63546"><div class="ttname"><a href="classurlhttprequest.html#ad1ffc687efa986eb24b34a76c1a63546">urlhttprequest::getPage</a></div><div class="ttdeci">const char * getPage()</div></div>
 <div class="ttc" id="aclassurlhttprequest_html_ad8e9098007c011829208bbef37ecaf26"><div class="ttname"><a href="classurlhttprequest.html#ad8e9098007c011829208bbef37ecaf26">urlhttprequest::getUrlVariables</a></div><div class="ttdeci">const char *const * getUrlVariables()</div></div>
 <div class="ttc" id="aclassurlhttprequest_html_adc577ee7b74a70d17c2da266743cf860"><div class="ttname"><a href="classurlhttprequest.html#adc577ee7b74a70d17c2da266743cf860">urlhttprequest::getProgramUrl</a></div><div class="ttdeci">const char * getProgramUrl()</div></div>
-<div class="ttc" id="aclassurlhttprequest_html_ae3cbb4f704a108e4af77076c3c23bae3"><div class="ttname"><a href="classurlhttprequest.html#ae3cbb4f704a108e4af77076c3c23bae3">urlhttprequest::getIpIsAllowed</a></div><div class="ttdeci">virtual bool getIpIsAllowed()</div></div>
 <div class="ttc" id="aclassurlhttprequest_html_ae965c6205333a94f6403d4ae8a5eaa89"><div class="ttname"><a href="classurlhttprequest.html#ae965c6205333a94f6403d4ae8a5eaa89">urlhttprequest::getApplicationUrl</a></div><div class="ttdeci">const char * getApplicationUrl()</div></div>
 <div class="ttc" id="aclassurlhttprequest_html_af4a6eb7bd68959ae51707aa716062e0c"><div class="ttname"><a href="classurlhttprequest.html#af4a6eb7bd68959ae51707aa716062e0c">urlhttprequest::getUrlVariableCount</a></div><div class="ttdeci">uint64_t getUrlVariableCount()</div></div>
-<div class="ttc" id="aclassurlhttprequest_html_afb13f02f262573a0350e6421f51f71aa"><div class="ttname"><a href="classurlhttprequest.html#afb13f02f262573a0350e6421f51f71aa">urlhttprequest::getMethodIsAllowed</a></div><div class="ttdeci">virtual bool getMethodIsAllowed()</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Dec 3 2024 01:50:18 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.10.0
+Generated on Sat Aug 8 2026 19:56:14 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.10.0
 </small></address>
 </body>
 </html>

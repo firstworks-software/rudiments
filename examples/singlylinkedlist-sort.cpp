@@ -1,5 +1,5 @@
 #include <rudiments/singlylinkedlist.h>
-#include <rudiments/randomnumber.h>
+#include <rudiments/prng.h>
 #include <rudiments/stdio.h>
 
 int main(int argc, const char **argv) {
@@ -8,8 +8,8 @@ int main(int argc, const char **argv) {
 	singlylinkedlist<uint32_t>	sllhs;
 
 	// generate random numbers and append them to the lists
-	randomnumber	rr;
-	rr.setSeed(randomnumber::getSeed());
+	prng	rr;
+	rr.setSeed(prng::getSeed());
 
 	stdoutput.printf("generating numbers...\n");
 	for (uint16_t i=0; i<20000; i++) {

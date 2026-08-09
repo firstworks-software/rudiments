@@ -3,7 +3,7 @@
 
 #include <rudiments/hash.h>
 #include <rudiments/bytestring.h>
-#include <rudiments/randomnumber.h>
+#include <rudiments/prng.h>
 #include <rudiments/stdio.h>
 
 class hashprivate {

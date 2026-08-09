@@ -11,7 +11,7 @@
 #endif
 #include <rudiments/file.h>
 #include <rudiments/sys.h>
-#include <rudiments/randomnumber.h>
+#include <rudiments/prng.h>
 
 // for DIR
 #if defined(RUDIMENTS_HAVE_DIRENT_H)
@@ -322,14 +322,14 @@ bool directory::createTemporaryDirectory(char *templatedirname, mode_t perms) {
 		// replace X's with random characters...
 
 		// seed the random number
-		uint32_t	seed=randomnumber::getSeed();
+		uint32_t	seed=prng::getSeed();
 
 		// for each of the 6 characters...
 		for (uint8_t i=0; i<6; i++) {
 
 			// get a random number, scale it to 0-60
-			seed=randomnumber::generate(seed);
-			char	ch=(char)randomnumber::scale(seed,0,59);
+			seed=prng::generate(seed);
+			char	ch=(char)prng::scale(seed,0,59);
 
 			// translate...
 			//  0-9  -> '0' - '9'

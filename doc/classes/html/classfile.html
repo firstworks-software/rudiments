@@ -653,8 +653,6 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:ae03516555808139c5b96d1376fb60322"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a12014a374b30ca4c60fac11297540b13" id="r_a12014a374b30ca4c60fac11297540b13"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classavltreenode.html">static</a> <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a12014a374b30ca4c60fac11297540b13">isAccessible</a> (<a class="el" href="classavltreenode.html">const</a> <a class="el" href="classavltreenode.html">char</a> *<a class="el" href="classavltreenode.html">filename</a>, int32_t <a class="el" href="classavltreenode.html">mode</a>)</td></tr>
 <tr class="separator:a12014a374b30ca4c60fac11297540b13"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a949fbc0e273514f03dff59936788f342" id="r_a949fbc0e273514f03dff59936788f342"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classavltreenode.html">static</a> <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a949fbc0e273514f03dff59936788f342">getLastChangeTime</a> (<a class="el" href="classavltreenode.html">const</a> <a class="el" href="classavltreenode.html">char</a> *<a class="el" href="classavltreenode.html">filename</a>, <a class="el" href="classavltreenode.html">time_t</a> *<a class="el" href="classavltreenode.html">ctime</a>)</td></tr>
-<tr class="separator:a949fbc0e273514f03dff59936788f342"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa61dbbbaaf6455d38da77714d5412499" id="r_aa61dbbbaaf6455d38da77714d5412499"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classavltreenode.html">static</a> <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa61dbbbaaf6455d38da77714d5412499">setPermissions</a> (<a class="el" href="classavltreenode.html">const</a> <a class="el" href="classavltreenode.html">char</a> *<a class="el" href="classavltreenode.html">filename</a>, mode_t <a class="el" href="classavltreenode.html">perms</a>)</td></tr>
 <tr class="separator:aa61dbbbaaf6455d38da77714d5412499"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac501f76853aaefcb3223448cbd019ad3" id="r_ac501f76853aaefcb3223448cbd019ad3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classavltreenode.html">static</a> <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac501f76853aaefcb3223448cbd019ad3">changeOwner</a> (<a class="el" href="classavltreenode.html">const</a> <a class="el" href="classavltreenode.html">char</a> *<a class="el" href="classavltreenode.html">filename</a>, <a class="el" href="classavltreenode.html">const</a> <a class="el" href="classavltreenode.html">char</a> *<a class="el" href="classavltreenode.html">newuser</a>, <a class="el" href="classavltreenode.html">const</a> <a class="el" href="classavltreenode.html">char</a> *<a class="el" href="classavltreenode.html">newgroup</a>)</td></tr>
@@ -1988,7 +1986,7 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Returns the non-directory portion of "filename", truncating "ext". This method allocates a buffer internally and returns it. The calling program must deallocate the buffer. </p>
+<p>Returns the non-directory portion of "filename", truncating "ext" if the non-directory portion ends with it, and returning the non-directory portion unmodified if it doesn't. Returns NULL if "filename" is NULL. The comparison of "ext" is case-sensitive. This method allocates a buffer internally and returns it. The calling program must deallocate the buffer. </p>
 
 </div>
 </div>
@@ -2526,7 +2524,7 @@ Static Public Member Functions</h2></td></tr>
 </div>
 </div>
 <a id="a8e27c3e340e41d82a3d51a71f83cf0de" name="a8e27c3e340e41d82a3d51a71f83cf0de"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8e27c3e340e41d82a3d51a71f83cf0de">&#9670;&#160;</a></span>getLastChangeTime() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a8e27c3e340e41d82a3d51a71f83cf0de">&#9670;&#160;</a></span>getLastChangeTime()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2548,37 +2546,6 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Returns the time of last change of the file.</p>
-<p>Change time IS affected by changing file permissions, ownership or creating links. </p>
-
-</div>
-</div>
-<a id="a949fbc0e273514f03dff59936788f342" name="a949fbc0e273514f03dff59936788f342"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a949fbc0e273514f03dff59936788f342">&#9670;&#160;</a></span>getLastChangeTime() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classavltreenode.html">static</a> <a class="el" href="classbool.html">bool</a> file::getLastChangeTime </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classavltreenode.html">const</a> <a class="el" href="classavltreenode.html">char</a> *</td>          <td class="paramname"><span class="paramname"><em>filename</em>, </span></td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classavltreenode.html">time_t</a> *</td>          <td class="paramname"><span class="paramname"><em>ctime</em></span>&#160;)</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Sets "ctime" to the last change time of "filename". Returns true on success and false on failure.</p>
 <p>Change time IS affected by changing file permissions, ownership or creating links. </p>
 
 </div>
@@ -4752,7 +4719,7 @@ Static Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Dec 3 2024 01:50:19 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.10.0
+Generated on Sat Aug 8 2026 19:56:14 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.10.0
 </small></address>
 </body>
 </html>

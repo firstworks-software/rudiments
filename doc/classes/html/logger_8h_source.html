@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.10.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Rudiments: /home/dmuse/src/fedora40x64/rudiments/include/rudiments/logger.h Source File</title>
+<title>Rudiments: /home/dmuse/src/dev/rudiments/include/rudiments/logger.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -52,7 +52,7 @@ $(function() { codefold.init(0); });
   <div class="headertitle"><div class="title">logger.h</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">// Copyright (c) 1999-2018 David Muse</span></div>
+<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">// Copyright (c) David Muse</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment">// See the COPYING file for more information.</span></div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span> </div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#ifndef RUDIMENTS_LOGGER_H</span></div>
@@ -119,7 +119,7 @@ $(function() { codefold.init(0); });
 <div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span><span class="keyword">typedef</span> <a class="code hl_class" href="classlinkedlist.html">linkedlist&lt;logdestination *&gt;</a>    <a class="code hl_class" href="classlinkedlist.html">loggerlist</a>;</div>
 <div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span> </div>
 <div class="foldopen" id="foldopen00083" data-start="{" data-end="};">
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno"><a class="line" href="classlogger.html">   83</a></span><span class="keyword">class </span>RUDIMENTS_DLLSPEC <a class="code hl_class" href="classlogger.html">logger</a> : <span class="keyword">public</span> <a class="code hl_class" href="classobject.html">object</a> {</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno"><a class="line" href="classlogger.html">   83</a></span><span class="keyword">class </span>RUDIMENTS_DLLSPEC <a class="code hl_class" href="classlogger.html">logger</a> : <span class="keyword">public</span> <a class="code hl_class" href="classoutput.html">output</a> {</div>
 <div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>        <span class="keyword">public</span>:</div>
 <div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span> </div>
 <div class="line"><a id="l00087" name="l00087"></a><span class="lineno"><a class="line" href="classlogger.html#a4f753a510e00c892b38e95c2284363a6">   87</a></span>                <a class="code hl_function" href="classlogger.html#a4f753a510e00c892b38e95c2284363a6">logger</a>();</div>
@@ -192,11 +192,50 @@ $(function() { codefold.init(0); });
 <div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>                                <span class="keyword">const</span> <span class="keywordtype">wchar_t</span> *header,</div>
 <div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>                                uint32_t indent);</div>
 <div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span> </div>
-<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span><span class="preprocessor">        #include &lt;rudiments/private/logger.h&gt;</span></div>
-<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>};</div>
+<div class="line"><a id="l00235" name="l00235"></a><span class="lineno"><a class="line" href="classlogger.html#aa2e8f4b8e24de5aca0e7ee27aa3f9c4b">  235</a></span>                ssize_t <a class="code hl_function" href="classlogger.html#aa2e8f4b8e24de5aca0e7ee27aa3f9c4b">write</a>(<span class="keyword">const</span> byte_t *<span class="keywordtype">string</span>, <span class="keywordtype">size_t</span> size);</div>
+<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span> </div>
+<div class="line"><a id="l00241" name="l00241"></a><span class="lineno"><a class="line" href="classlogger.html#a1872f8d7b668d8a2096ed7190b9d8f97">  241</a></span>                ssize_t <a class="code hl_function" href="classlogger.html#a1872f8d7b668d8a2096ed7190b9d8f97">write</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *<span class="keywordtype">string</span>);</div>
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span> </div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno"><a class="line" href="classlogger.html#af97938adae3e71f11d34de447cb05a2d">  249</a></span>                ssize_t <a class="code hl_function" href="classlogger.html#af97938adae3e71f11d34de447cb05a2d">write</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *<span class="keywordtype">string</span>, <span class="keywordtype">size_t</span> length);</div>
+<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span> </div>
+<div class="line"><a id="l00255" name="l00255"></a><span class="lineno"><a class="line" href="classlogger.html#a8cd9322e6322124630c239c1a388bb63">  255</a></span>                ssize_t <a class="code hl_function" href="classlogger.html#a8cd9322e6322124630c239c1a388bb63">write</a>(<span class="keywordtype">char</span> <a class="code hl_class" href="classcharacter.html">character</a>);</div>
+<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span> </div>
+<div class="line"><a id="l00261" name="l00261"></a><span class="lineno"><a class="line" href="classlogger.html#a9cef7e5a6dd5631afae0484260a58aae">  261</a></span>                ssize_t <a class="code hl_function" href="classlogger.html#a9cef7e5a6dd5631afae0484260a58aae">write</a>(<span class="keyword">const</span> <span class="keywordtype">wchar_t</span> *<span class="keywordtype">string</span>);</div>
+<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span> </div>
+<div class="line"><a id="l00269" name="l00269"></a><span class="lineno"><a class="line" href="classlogger.html#a3045d0dff4caf0dd4ca76ddf7fe5d97c">  269</a></span>                ssize_t <a class="code hl_function" href="classlogger.html#a3045d0dff4caf0dd4ca76ddf7fe5d97c">write</a>(<span class="keyword">const</span> <span class="keywordtype">wchar_t</span> *<span class="keywordtype">string</span>, <span class="keywordtype">size_t</span> length);</div>
+<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span> </div>
+<div class="line"><a id="l00275" name="l00275"></a><span class="lineno"><a class="line" href="classlogger.html#a684a19d95280fcdbd889b78b851c77c9">  275</a></span>                ssize_t <a class="code hl_function" href="classlogger.html#a684a19d95280fcdbd889b78b851c77c9">write</a>(<span class="keywordtype">wchar_t</span> <a class="code hl_class" href="classcharacter.html">character</a>);</div>
+<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span> </div>
+<div class="line"><a id="l00281" name="l00281"></a><span class="lineno"><a class="line" href="classlogger.html#aeb8bfe52a9ddb2591fd601541d453258">  281</a></span>                ssize_t <a class="code hl_function" href="classlogger.html#aeb8bfe52a9ddb2591fd601541d453258">writeUcs2</a>(<span class="keyword">const</span> ucs2_t *<span class="keywordtype">string</span>);</div>
+<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span> </div>
+<div class="line"><a id="l00289" name="l00289"></a><span class="lineno"><a class="line" href="classlogger.html#a9ec7d74792a0b79bf49acd191e790272">  289</a></span>                ssize_t <a class="code hl_function" href="classlogger.html#a9ec7d74792a0b79bf49acd191e790272">writeUcs2</a>(<span class="keyword">const</span> ucs2_t *<span class="keywordtype">string</span>, <span class="keywordtype">size_t</span> length);</div>
+<div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span> </div>
+<div class="line"><a id="l00295" name="l00295"></a><span class="lineno"><a class="line" href="classlogger.html#a975109a4799576b67aa1fbdd9cd8a582">  295</a></span>                ssize_t <a class="code hl_function" href="classlogger.html#a975109a4799576b67aa1fbdd9cd8a582">writeUcs2</a>(ucs2_t <a class="code hl_class" href="classcharacter.html">character</a>);</div>
+<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span> </div>
+<div class="line"><a id="l00301" name="l00301"></a><span class="lineno"><a class="line" href="classlogger.html#a5c94676ba3cef5e7f57e1fbce205103e">  301</a></span>                ssize_t <a class="code hl_function" href="classlogger.html#a5c94676ba3cef5e7f57e1fbce205103e">write</a>(int16_t number);</div>
+<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span> </div>
+<div class="line"><a id="l00307" name="l00307"></a><span class="lineno"><a class="line" href="classlogger.html#a73e07162435f12f51adeea71ee20dbae">  307</a></span>                ssize_t <a class="code hl_function" href="classlogger.html#a73e07162435f12f51adeea71ee20dbae">write</a>(int32_t number);</div>
+<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span> </div>
+<div class="line"><a id="l00313" name="l00313"></a><span class="lineno"><a class="line" href="classlogger.html#aa9add627591887d64c5d7696de8a1781">  313</a></span>                ssize_t <a class="code hl_function" href="classlogger.html#aa9add627591887d64c5d7696de8a1781">write</a>(int64_t number);</div>
+<div class="line"><a id="l00314" name="l00314"></a><span class="lineno">  314</span> </div>
+<div class="line"><a id="l00319" name="l00319"></a><span class="lineno"><a class="line" href="classlogger.html#a0b6496230826eedbe153b35c870cb8fd">  319</a></span>                ssize_t <a class="code hl_function" href="classlogger.html#a0b6496230826eedbe153b35c870cb8fd">write</a>(byte_t <a class="code hl_class" href="classcharacter.html">character</a>);</div>
+<div class="line"><a id="l00320" name="l00320"></a><span class="lineno">  320</span> </div>
+<div class="line"><a id="l00325" name="l00325"></a><span class="lineno"><a class="line" href="classlogger.html#af5adc422f63b0422c87c8308549ac64d">  325</a></span>                ssize_t <a class="code hl_function" href="classlogger.html#af5adc422f63b0422c87c8308549ac64d">write</a>(uint16_t number);</div>
+<div class="line"><a id="l00326" name="l00326"></a><span class="lineno">  326</span> </div>
+<div class="line"><a id="l00331" name="l00331"></a><span class="lineno"><a class="line" href="classlogger.html#a8ff9cb2fe4ef7a7670ba8f9d46b05503">  331</a></span>                ssize_t <a class="code hl_function" href="classlogger.html#a8ff9cb2fe4ef7a7670ba8f9d46b05503">write</a>(uint32_t number);</div>
+<div class="line"><a id="l00332" name="l00332"></a><span class="lineno">  332</span> </div>
+<div class="line"><a id="l00337" name="l00337"></a><span class="lineno"><a class="line" href="classlogger.html#ae05bcfa85343cb366cd20544706f69b7">  337</a></span>                ssize_t <a class="code hl_function" href="classlogger.html#ae05bcfa85343cb366cd20544706f69b7">write</a>(uint64_t number);</div>
+<div class="line"><a id="l00338" name="l00338"></a><span class="lineno">  338</span> </div>
+<div class="line"><a id="l00343" name="l00343"></a><span class="lineno"><a class="line" href="classlogger.html#ac11b16982b5948ac93364d697c130e8c">  343</a></span>                ssize_t <a class="code hl_function" href="classlogger.html#ac11b16982b5948ac93364d697c130e8c">write</a>(<span class="keywordtype">float</span> number);</div>
+<div class="line"><a id="l00344" name="l00344"></a><span class="lineno">  344</span> </div>
+<div class="line"><a id="l00349" name="l00349"></a><span class="lineno"><a class="line" href="classlogger.html#a54405350266cf47fbdb86b9c0dca1d9c">  349</a></span>                ssize_t <a class="code hl_function" href="classlogger.html#a54405350266cf47fbdb86b9c0dca1d9c">write</a>(<span class="keywordtype">double</span> number);</div>
+<div class="line"><a id="l00350" name="l00350"></a><span class="lineno">  350</span> </div>
+<div class="line"><a id="l00351" name="l00351"></a><span class="lineno">  351</span><span class="preprocessor">        #include &lt;rudiments/private/logger.h&gt;</span></div>
+<div class="line"><a id="l00352" name="l00352"></a><span class="lineno">  352</span>};</div>
 </div>
-<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span> </div>
-<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00353" name="l00353"></a><span class="lineno">  353</span> </div>
+<div class="line"><a id="l00354" name="l00354"></a><span class="lineno">  354</span><span class="preprocessor">#endif</span></div>
+<div class="ttc" id="aclasscharacter_html"><div class="ttname"><a href="classcharacter.html">character</a></div><div class="ttdef"><b>Definition</b> character.h:11</div></div>
 <div class="ttc" id="aclassfiledestination_html"><div class="ttname"><a href="classfiledestination.html">filedestination</a></div><div class="ttdef"><b>Definition</b> logger.h:39</div></div>
 <div class="ttc" id="aclassfiledestination_html_a8c386bbce398d384ccd19ab87acc6d35"><div class="ttname"><a href="classfiledestination.html#a8c386bbce398d384ccd19ab87acc6d35">filedestination::close</a></div><div class="ttdeci">void close()</div></div>
 <div class="ttc" id="aclassfiledestination_html_a91c45d01dbc6df9ebd2de958290c6aac"><div class="ttname"><a href="classfiledestination.html#a91c45d01dbc6df9ebd2de958290c6aac">filedestination::~filedestination</a></div><div class="ttdeci">virtual ~filedestination()</div></div>
@@ -206,28 +245,48 @@ $(function() { codefold.init(0); });
 <div class="ttc" id="aclasslistnode_html"><div class="ttname"><a href="classlistnode.html">listnode</a></div><div class="ttdef"><b>Definition</b> listcollection.h:12</div></div>
 <div class="ttc" id="aclasslogdestination_html"><div class="ttname"><a href="classlogdestination.html">logdestination</a></div><div class="ttdef"><b>Definition</b> logger.h:11</div></div>
 <div class="ttc" id="aclasslogger_html"><div class="ttname"><a href="classlogger.html">logger</a></div><div class="ttdef"><b>Definition</b> logger.h:83</div></div>
+<div class="ttc" id="aclasslogger_html_a0b6496230826eedbe153b35c870cb8fd"><div class="ttname"><a href="classlogger.html#a0b6496230826eedbe153b35c870cb8fd">logger::write</a></div><div class="ttdeci">ssize_t write(byte_t character)</div></div>
 <div class="ttc" id="aclasslogger_html_a0fa36a289f16a5a17e0b71a9a79153d6"><div class="ttname"><a href="classlogger.html#a0fa36a289f16a5a17e0b71a9a79153d6">logger::end</a></div><div class="ttdeci">void end(uint8_t level, const wchar_t *header, uint32_t indent)</div></div>
+<div class="ttc" id="aclasslogger_html_a1872f8d7b668d8a2096ed7190b9d8f97"><div class="ttname"><a href="classlogger.html#a1872f8d7b668d8a2096ed7190b9d8f97">logger::write</a></div><div class="ttdeci">ssize_t write(const char *string)</div></div>
 <div class="ttc" id="aclasslogger_html_a1ab0e1a164650b72e9fcd5a0151e42da"><div class="ttname"><a href="classlogger.html#a1ab0e1a164650b72e9fcd5a0151e42da">logger::getWideIndent</a></div><div class="ttdeci">char getWideIndent()</div></div>
+<div class="ttc" id="aclasslogger_html_a3045d0dff4caf0dd4ca76ddf7fe5d97c"><div class="ttname"><a href="classlogger.html#a3045d0dff4caf0dd4ca76ddf7fe5d97c">logger::write</a></div><div class="ttdeci">ssize_t write(const wchar_t *string, size_t length)</div></div>
 <div class="ttc" id="aclasslogger_html_a330db2be566d5898fa173b3fdc29648b"><div class="ttname"><a href="classlogger.html#a330db2be566d5898fa173b3fdc29648b">logger::removeAllLogDestinations</a></div><div class="ttdeci">void removeAllLogDestinations()</div></div>
 <div class="ttc" id="aclasslogger_html_a374ccb8efaea49dc821c773ac29a4d59"><div class="ttname"><a href="classlogger.html#a374ccb8efaea49dc821c773ac29a4d59">logger::getLogHeader</a></div><div class="ttdeci">static char * getLogHeader(const char *name)</div></div>
 <div class="ttc" id="aclasslogger_html_a3d561465ece7939c62662ac66089ccaa"><div class="ttname"><a href="classlogger.html#a3d561465ece7939c62662ac66089ccaa">logger::write</a></div><div class="ttdeci">void write(uint8_t level, const wchar_t *header, uint32_t indent, const wchar_t *format, va_list *argp)</div></div>
 <div class="ttc" id="aclasslogger_html_a4a6fd4d1731e44ff808e23a6c2f6bca2"><div class="ttname"><a href="classlogger.html#a4a6fd4d1731e44ff808e23a6c2f6bca2">logger::setWideIndent</a></div><div class="ttdeci">void setWideIndent(wchar_t ch)</div></div>
 <div class="ttc" id="aclasslogger_html_a4f753a510e00c892b38e95c2284363a6"><div class="ttname"><a href="classlogger.html#a4f753a510e00c892b38e95c2284363a6">logger::logger</a></div><div class="ttdeci">logger()</div></div>
+<div class="ttc" id="aclasslogger_html_a54405350266cf47fbdb86b9c0dca1d9c"><div class="ttname"><a href="classlogger.html#a54405350266cf47fbdb86b9c0dca1d9c">logger::write</a></div><div class="ttdeci">ssize_t write(double number)</div></div>
+<div class="ttc" id="aclasslogger_html_a5c94676ba3cef5e7f57e1fbce205103e"><div class="ttname"><a href="classlogger.html#a5c94676ba3cef5e7f57e1fbce205103e">logger::write</a></div><div class="ttdeci">ssize_t write(int16_t number)</div></div>
 <div class="ttc" id="aclasslogger_html_a640f6c6618aa860607f4f802f6d2b083"><div class="ttname"><a href="classlogger.html#a640f6c6618aa860607f4f802f6d2b083">logger::getLogHeader</a></div><div class="ttdeci">static wchar_t * getLogHeader(const wchar_t *name)</div></div>
 <div class="ttc" id="aclasslogger_html_a655c25c0731d1574af23878223c014c9"><div class="ttname"><a href="classlogger.html#a655c25c0731d1574af23878223c014c9">logger::setIndent</a></div><div class="ttdeci">void setIndent(char ch)</div></div>
 <div class="ttc" id="aclasslogger_html_a6804f395be21db7efdf8e1bec721a857"><div class="ttname"><a href="classlogger.html#a6804f395be21db7efdf8e1bec721a857">logger::start</a></div><div class="ttdeci">void start(uint8_t level, const wchar_t *header, uint32_t indent, const wchar_t *string)</div></div>
+<div class="ttc" id="aclasslogger_html_a684a19d95280fcdbd889b78b851c77c9"><div class="ttname"><a href="classlogger.html#a684a19d95280fcdbd889b78b851c77c9">logger::write</a></div><div class="ttdeci">ssize_t write(wchar_t character)</div></div>
 <div class="ttc" id="aclasslogger_html_a6c5ea7a150fbc434a0d0865f204d9d42"><div class="ttname"><a href="classlogger.html#a6c5ea7a150fbc434a0d0865f204d9d42">logger::addLogDestination</a></div><div class="ttdeci">void addLogDestination(logdestination *logdest)</div></div>
+<div class="ttc" id="aclasslogger_html_a73e07162435f12f51adeea71ee20dbae"><div class="ttname"><a href="classlogger.html#a73e07162435f12f51adeea71ee20dbae">logger::write</a></div><div class="ttdeci">ssize_t write(int32_t number)</div></div>
 <div class="ttc" id="aclasslogger_html_a7a317790df2958975f1158154e3b8a57"><div class="ttname"><a href="classlogger.html#a7a317790df2958975f1158154e3b8a57">logger::write</a></div><div class="ttdeci">void write(uint8_t level, const wchar_t *header, uint32_t indent, const wchar_t *format,...)</div></div>
 <div class="ttc" id="aclasslogger_html_a80a3f931ccad4e5caaa6bb2713ab164e"><div class="ttname"><a href="classlogger.html#a80a3f931ccad4e5caaa6bb2713ab164e">logger::end</a></div><div class="ttdeci">void end(uint8_t level, const char *header, uint32_t indent)</div></div>
+<div class="ttc" id="aclasslogger_html_a8cd9322e6322124630c239c1a388bb63"><div class="ttname"><a href="classlogger.html#a8cd9322e6322124630c239c1a388bb63">logger::write</a></div><div class="ttdeci">ssize_t write(char character)</div></div>
+<div class="ttc" id="aclasslogger_html_a8ff9cb2fe4ef7a7670ba8f9d46b05503"><div class="ttname"><a href="classlogger.html#a8ff9cb2fe4ef7a7670ba8f9d46b05503">logger::write</a></div><div class="ttdeci">ssize_t write(uint32_t number)</div></div>
+<div class="ttc" id="aclasslogger_html_a975109a4799576b67aa1fbdd9cd8a582"><div class="ttname"><a href="classlogger.html#a975109a4799576b67aa1fbdd9cd8a582">logger::writeUcs2</a></div><div class="ttdeci">ssize_t writeUcs2(ucs2_t character)</div></div>
 <div class="ttc" id="aclasslogger_html_a990c230bd47f267622246e5fe3af433e"><div class="ttname"><a href="classlogger.html#a990c230bd47f267622246e5fe3af433e">logger::write</a></div><div class="ttdeci">void write(uint8_t level, const char *header, uint32_t indent, const char *format, va_list *argp)</div></div>
 <div class="ttc" id="aclasslogger_html_a9aaaaab333172496225cc5bb22017fb5"><div class="ttname"><a href="classlogger.html#a9aaaaab333172496225cc5bb22017fb5">logger::getLogLevel</a></div><div class="ttdeci">uint8_t getLogLevel()</div></div>
+<div class="ttc" id="aclasslogger_html_a9cef7e5a6dd5631afae0484260a58aae"><div class="ttname"><a href="classlogger.html#a9cef7e5a6dd5631afae0484260a58aae">logger::write</a></div><div class="ttdeci">ssize_t write(const wchar_t *string)</div></div>
+<div class="ttc" id="aclasslogger_html_a9ec7d74792a0b79bf49acd191e790272"><div class="ttname"><a href="classlogger.html#a9ec7d74792a0b79bf49acd191e790272">logger::writeUcs2</a></div><div class="ttdeci">ssize_t writeUcs2(const ucs2_t *string, size_t length)</div></div>
+<div class="ttc" id="aclasslogger_html_aa2e8f4b8e24de5aca0e7ee27aa3f9c4b"><div class="ttname"><a href="classlogger.html#aa2e8f4b8e24de5aca0e7ee27aa3f9c4b">logger::write</a></div><div class="ttdeci">ssize_t write(const byte_t *string, size_t size)</div></div>
 <div class="ttc" id="aclasslogger_html_aa55a10f2718eb580a695585101b7b26e"><div class="ttname"><a href="classlogger.html#aa55a10f2718eb580a695585101b7b26e">logger::setLogLevel</a></div><div class="ttdeci">void setLogLevel(uint8_t level)</div></div>
+<div class="ttc" id="aclasslogger_html_aa9add627591887d64c5d7696de8a1781"><div class="ttname"><a href="classlogger.html#aa9add627591887d64c5d7696de8a1781">logger::write</a></div><div class="ttdeci">ssize_t write(int64_t number)</div></div>
 <div class="ttc" id="aclasslogger_html_aadd537feeeb16186f6aeb4ca0267a8d7"><div class="ttname"><a href="classlogger.html#aadd537feeeb16186f6aeb4ca0267a8d7">logger::~logger</a></div><div class="ttdeci">~logger()</div></div>
 <div class="ttc" id="aclasslogger_html_aaf79b362d245754b7940ef7c26cb8c5b"><div class="ttname"><a href="classlogger.html#aaf79b362d245754b7940ef7c26cb8c5b">logger::removeLogDestination</a></div><div class="ttdeci">void removeLogDestination(logdestination *logdest)</div></div>
+<div class="ttc" id="aclasslogger_html_ac11b16982b5948ac93364d697c130e8c"><div class="ttname"><a href="classlogger.html#ac11b16982b5948ac93364d697c130e8c">logger::write</a></div><div class="ttdeci">ssize_t write(float number)</div></div>
 <div class="ttc" id="aclasslogger_html_acb2a213d7fe8c058534aa86dc93c3935"><div class="ttname"><a href="classlogger.html#acb2a213d7fe8c058534aa86dc93c3935">logger::getIndent</a></div><div class="ttdeci">char getIndent()</div></div>
 <div class="ttc" id="aclasslogger_html_ad5112fe527edfff39b50bcab9e4a0e36"><div class="ttname"><a href="classlogger.html#ad5112fe527edfff39b50bcab9e4a0e36">logger::start</a></div><div class="ttdeci">void start(uint8_t level, const char *header, uint32_t indent, const char *string)</div></div>
+<div class="ttc" id="aclasslogger_html_ae05bcfa85343cb366cd20544706f69b7"><div class="ttname"><a href="classlogger.html#ae05bcfa85343cb366cd20544706f69b7">logger::write</a></div><div class="ttdeci">ssize_t write(uint64_t number)</div></div>
+<div class="ttc" id="aclasslogger_html_aeb8bfe52a9ddb2591fd601541d453258"><div class="ttname"><a href="classlogger.html#aeb8bfe52a9ddb2591fd601541d453258">logger::writeUcs2</a></div><div class="ttdeci">ssize_t writeUcs2(const ucs2_t *string)</div></div>
+<div class="ttc" id="aclasslogger_html_af5adc422f63b0422c87c8308549ac64d"><div class="ttname"><a href="classlogger.html#af5adc422f63b0422c87c8308549ac64d">logger::write</a></div><div class="ttdeci">ssize_t write(uint16_t number)</div></div>
 <div class="ttc" id="aclasslogger_html_af63237e62f4d5a0fc358a2915e27c860"><div class="ttname"><a href="classlogger.html#af63237e62f4d5a0fc358a2915e27c860">logger::write</a></div><div class="ttdeci">void write(uint8_t level, const char *header, uint32_t indent, const char *format,...)</div></div>
+<div class="ttc" id="aclasslogger_html_af97938adae3e71f11d34de447cb05a2d"><div class="ttname"><a href="classlogger.html#af97938adae3e71f11d34de447cb05a2d">logger::write</a></div><div class="ttdeci">ssize_t write(const char *string, size_t length)</div></div>
 <div class="ttc" id="aclassobject_html"><div class="ttname"><a href="classobject.html">object</a></div><div class="ttdef"><b>Definition</b> object.h:10</div></div>
+<div class="ttc" id="aclassoutput_html"><div class="ttname"><a href="classoutput.html">output</a></div><div class="ttdef"><b>Definition</b> output.h:11</div></div>
 <div class="ttc" id="aclassstderrdestination_html"><div class="ttname"><a href="classstderrdestination.html">stderrdestination</a></div><div class="ttdef"><b>Definition</b> logger.h:66</div></div>
 <div class="ttc" id="aclassstdoutdestination_html"><div class="ttname"><a href="classstdoutdestination.html">stdoutdestination</a></div><div class="ttdef"><b>Definition</b> logger.h:60</div></div>
 <div class="ttc" id="aclasssyslogdestination_html"><div class="ttname"><a href="classsyslogdestination.html">syslogdestination</a></div><div class="ttdef"><b>Definition</b> logger.h:16</div></div>
@@ -238,7 +297,7 @@ $(function() { codefold.init(0); });
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Dec 3 2024 01:50:18 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.10.0
+Generated on Sat Aug 8 2026 19:56:13 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.10.0
 </small></address>
 </body>
 </html>

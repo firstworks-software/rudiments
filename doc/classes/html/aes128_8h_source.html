@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.10.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Rudiments: /home/dmuse/src/fedora40x64/rudiments/include/rudiments/aes128.h Source File</title>
+<title>Rudiments: /home/dmuse/src/dev/rudiments/include/rudiments/aes128.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -52,7 +52,7 @@ $(function() { codefold.init(0); });
   <div class="headertitle"><div class="title">aes128.h</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">// Copyright (c) 1999-2018 David Muse</span></div>
+<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">// Copyright (c) David Muse</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment">// See the COPYING file for more information.</span></div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span> </div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#ifndef RUDIMENTS_AES128_H</span></div>
@@ -75,23 +75,26 @@ $(function() { codefold.init(0); });
 <div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
 <div class="line"><a id="l00036" name="l00036"></a><span class="lineno"><a class="line" href="classaes128.html#a7b9552562776abd014c74491524cd049">   36</a></span>                <span class="keyword">const</span> byte_t    *<a class="code hl_function" href="classaes128.html#a7b9552562776abd014c74491524cd049">getDecryptedData</a>();</div>
 <div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span><span class="preprocessor">        #include &lt;rudiments/private/aes128.h&gt;</span></div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>};</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno"><a class="line" href="classaes128.html#a74c9d2fc02e6d851b4a17424c4df3ca1">   41</a></span>                <span class="keywordtype">bool</span>    <a class="code hl_function" href="classaes128.html#a74c9d2fc02e6d851b4a17424c4df3ca1">isSupported</a>();</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span><span class="preprocessor">        #include &lt;rudiments/private/aes128.h&gt;</span></div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>};</div>
 </div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aclassaes128_html"><div class="ttname"><a href="classaes128.html">aes128</a></div><div class="ttdef"><b>Definition</b> aes128.h:10</div></div>
 <div class="ttc" id="aclassaes128_html_a2c452e762084be2ba4cc6f4b024932bb"><div class="ttname"><a href="classaes128.html#a2c452e762084be2ba4cc6f4b024932bb">aes128::~aes128</a></div><div class="ttdeci">~aes128()</div></div>
 <div class="ttc" id="aclassaes128_html_a30607c4812fff05d9990ac0b5b20d744"><div class="ttname"><a href="classaes128.html#a30607c4812fff05d9990ac0b5b20d744">aes128::aes128</a></div><div class="ttdeci">aes128()</div></div>
 <div class="ttc" id="aclassaes128_html_a57a0d882df6cb19e171d0f8cebe6443c"><div class="ttname"><a href="classaes128.html#a57a0d882df6cb19e171d0f8cebe6443c">aes128::getKeySize</a></div><div class="ttdeci">size_t getKeySize()</div></div>
+<div class="ttc" id="aclassaes128_html_a74c9d2fc02e6d851b4a17424c4df3ca1"><div class="ttname"><a href="classaes128.html#a74c9d2fc02e6d851b4a17424c4df3ca1">aes128::isSupported</a></div><div class="ttdeci">bool isSupported()</div></div>
 <div class="ttc" id="aclassaes128_html_a7b9552562776abd014c74491524cd049"><div class="ttname"><a href="classaes128.html#a7b9552562776abd014c74491524cd049">aes128::getDecryptedData</a></div><div class="ttdeci">const byte_t * getDecryptedData()</div></div>
 <div class="ttc" id="aclassaes128_html_ab4697c50d3b65a4b496d3cb23a35e5d9"><div class="ttname"><a href="classaes128.html#ab4697c50d3b65a4b496d3cb23a35e5d9">aes128::getEncryptedData</a></div><div class="ttdeci">const byte_t * getEncryptedData()</div></div>
 <div class="ttc" id="aclassaes128_html_acf5e4d2457f8b9ec067285048b521790"><div class="ttname"><a href="classaes128.html#acf5e4d2457f8b9ec067285048b521790">aes128::getIvSize</a></div><div class="ttdeci">size_t getIvSize()</div></div>
-<div class="ttc" id="aclassencryption_html"><div class="ttname"><a href="classencryption.html">encryption</a></div><div class="ttdef"><b>Definition</b> encryption.h:21</div></div>
+<div class="ttc" id="aclassencryption_html"><div class="ttname"><a href="classencryption.html">encryption</a></div><div class="ttdef"><b>Definition</b> encryption.h:34</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Dec 3 2024 01:50:18 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.10.0
+Generated on Sat Aug 8 2026 19:56:13 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.10.0
 </small></address>
 </body>
 </html>

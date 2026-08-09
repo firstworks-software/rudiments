@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.10.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Rudiments: /home/dmuse/src/fedora40x64/rudiments/include/rudiments/private/httpserverapi.h Source File</title>
+<title>Rudiments: /home/dmuse/src/dev/rudiments/include/rudiments/private/httpserverapi.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -52,7 +52,7 @@ $(function() { codefold.init(0); });
   <div class="headertitle"><div class="title">httpserverapi.h</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">// Copyright (c) 1999-2018 David Muse</span></div>
+<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">// Copyright (c) David Muse</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment">// See the COPYING file for more information</span></div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span> </div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span>                <span class="keyword">virtual</span> <span class="keywordtype">void</span>            initEnvironmentVariables()=0;</div>
@@ -66,15 +66,15 @@ $(function() { codefold.init(0); });
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>                                                        <span class="keyword">const</span> <span class="keywordtype">char</span> *value)=0;</div>
 <div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>                <span class="keyword">virtual</span> <span class="keywordtype">void</span>            updateEnvironmentVariables()=0;</div>
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>                <span class="keyword">virtual</span> <a class="code hl_class" href="classhttpserverapi.html">httpserverapi</a>   *sendStatusHeader(<span class="keyword">const</span> <span class="keywordtype">char</span> *<span class="keywordtype">string</span>)=0;</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>                <span class="keyword">virtual</span> <a class="code hl_class" href="classhttpserverapi.html">httpserverapi</a>   *sendHeader(<span class="keyword">const</span> <span class="keywordtype">char</span> *variable,</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>                                                        <span class="keyword">const</span> <span class="keywordtype">char</span> *value)=0;</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>                <span class="keyword">virtual</span> <a class="code hl_class" href="classhttpserverapi.html">httpserverapi</a>   *sendHeader(<span class="keyword">const</span> <span class="keywordtype">char</span> *<span class="keywordtype">string</span>)=0;</div>
-<div class="ttc" id="aclasshttpserverapi_html"><div class="ttname"><a href="classhttpserverapi.html">httpserverapi</a></div><div class="ttdef"><b>Definition</b> httpserverapi.h:22</div></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>                <span class="keyword">virtual</span> <span class="keywordtype">void</span>    writeStatusLine(<span class="keyword">const</span> <span class="keywordtype">char</span> *<span class="keywordtype">string</span>)=0;</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>                <span class="keyword">virtual</span> <span class="keywordtype">void</span>    writeStatusHeader(<span class="keyword">const</span> <span class="keywordtype">char</span> *<span class="keywordtype">string</span>)=0;</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>                <span class="keyword">virtual</span> <span class="keywordtype">void</span>    writeHeader(<span class="keyword">const</span> <span class="keywordtype">char</span> *variable,</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>                                                        <span class="keyword">const</span> <span class="keywordtype">char</span> *value)=0;</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>                <span class="keyword">virtual</span> <span class="keywordtype">void</span>    writeHeaderTerminator()=0;</div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Dec 3 2024 01:50:18 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.10.0
+Generated on Sat Aug 8 2026 19:56:13 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.10.0
 </small></address>
 </body>
 </html>

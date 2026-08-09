@@ -298,14 +298,14 @@ AC_ARG_ENABLE(protocolentry,
 	[  --disable-protocolentry Don't build protocolentry class],
 	INCLUDE_PROTOCOLENTRY="0",
 	INCLUDE_PROTOCOLENTRY="1")
-AC_ARG_ENABLE(randomnumber,
-	[  --disable-randomnumber  Don't build randomnumber],
-	INCLUDE_RANDOMNUMBER="0",
-	INCLUDE_RANDOMNUMBER="1")
-AC_ARG_ENABLE(csrandomnumber,
-	[  --disable-csrandomnumber Don't build csrandomnumber],
-	INCLUDE_CSRANDOMNUMBER="0",
-	INCLUDE_CSRANDOMNUMBER="1")
+AC_ARG_ENABLE(prng,
+	[  --disable-prng          Don't build prng],
+	INCLUDE_PRNG="0",
+	INCLUDE_PRNG="1")
+AC_ARG_ENABLE(csprng,
+	[  --disable-csprng        Don't build csprng],
+	INCLUDE_CSPRNG="0",
+	INCLUDE_CSPRNG="1")
 AC_ARG_ENABLE(bytestring,
 	[  --disable-bytestring    Don't build bytestring class],
 	INCLUDE_BYTESTRING="0",
@@ -5516,18 +5516,18 @@ AC_PREFIX_DEFAULT(/usr/local/firstworks)
 dnl perform substitutions for disable options
 HEADERS0="object.h collection.h comparator.h nodecollection.h listcollection.h treecollection.h tablecollection.h scalarcollection.h arraycollection.h dictionarycollection.h resultcodes.h debugprint.h"
 HEADERS1="table.h linkedlist.h singlylinkedlist.h avltree.h scalar.h"
-HEADERS2="dictionary.h hash.h sha1.h sha256.h sha512.h md5.h encryption.h aes128.h aes192.h aes256.h pbkdf2.h dh.h"
+HEADERS2="dictionary.h hash.h rng.h sha1.h sha256.h sha512.h md5.h encryption.h aes128.h aes192.h aes256.h pbkdf2.h dh.h"
 HEADERS3="dynamicarray.h staticarray.h output.h input.h wastebasket.h sensitivevalue.h resourcepool.h"
 PRIVATEHEADERS0="config.h debugprint.h objectincludes.h object.h collection.h collectioninlines.h comparator.h comparatorinlines.h listnode.h listcollectioninlines.h treenode.h treecollection.h treecollectioninlines.h dictionarycollectioninlines.h"
 PRIVATEHEADERS1="inttypes.h new.h"
 PRIVATEHEADERS2="winsock.h dll.h"
 PRIVATEHEADERS3="tablecollection.h tablecollectioninlines.h table.h tableincludes.h tableinlines.h linkedlist.h linkedlistincludes.h linkedlistinlines.h linkedlistnode.h nodeinlines.h avltree.h avltreeincludes.h avltreeinlines.h avltreenode.h scalarcollectioninlines.h scalar.h scalarincludes.h scalarinlines.h"
 PRIVATEHEADERS4="singlylinkedlist.h singlylinkedlistincludes.h singlylinkedlistinlines.h singlylinkedlistnode.h"
-PRIVATEHEADERS5="dictionary.h dictionaryincludes.h dictionaryinlines.h hash.h hashincludes.h encryption.h encryptionincludes.h sha1.h sha1includes.h sha256.h sha256includes.h sha512.h sha512includes.h md5.h md5includes.h aes128.h aes128includes.h aes192.h aes192includes.h aes256.h aes256includes.h pbkdf2.h pbkdf2includes.h dh.h dhincludes.h"
+PRIVATEHEADERS5="dictionary.h dictionaryincludes.h dictionaryinlines.h hash.h hashincludes.h rng.h rngincludes.h encryption.h encryptionincludes.h sha1.h sha1includes.h sha256.h sha256includes.h sha512.h sha512includes.h md5.h md5includes.h aes128.h aes128includes.h aes192.h aes192includes.h aes256.h aes256includes.h pbkdf2.h pbkdf2includes.h dh.h dhincludes.h"
 PRIVATEHEADERS6="arraycollectioninlines.h dynamicarray.h dynamicarrayincludes.h dynamicarrayinlines.h"
 PRIVATEHEADERS7="staticarray.h staticarrayinlines.h outputincludes.h output.h outputinlines.h input.h inputincludes.h inputinlines.h wastebasketincludes.h wastebasket.h sensitivevalueincludes.h sensitivevalue.h resourcepool.h resourcepoolincludes.h resourcepoolinlines.h"
-SRCS="winsock.cpp object.cpp hash.cpp sha1.cpp sha256.cpp sha512.cpp md5.cpp encryption.cpp aes128.cpp aes192.cpp aes256.cpp pbkdf2.cpp dh.cpp output.cpp input.cpp wastebasket.cpp sensitivevalue.cpp"
-LOBJS="winsock.lo object.lo hash.lo sha1.lo sha256.lo sha512.lo md5.lo encryption.lo aes128.lo aes192.lo aes256.lo pbkdf2.lo dh.lo output.lo input.lo wastebasket.lo sensitivevalue.lo"
+SRCS="winsock.cpp object.cpp hash.cpp rng.cpp sha1.cpp sha256.cpp sha512.cpp md5.cpp encryption.cpp aes128.cpp aes192.cpp aes256.cpp pbkdf2.cpp dh.cpp output.cpp input.cpp wastebasket.cpp sensitivevalue.cpp"
+LOBJS="winsock.lo object.lo hash.lo rng.lo sha1.lo sha256.lo sha512.lo md5.lo encryption.lo aes128.lo aes192.lo aes256.lo pbkdf2.lo dh.lo output.lo input.lo wastebasket.lo sensitivevalue.lo"
 EXTRACPPFLAGS=""
 
 if ( test "$INCLUDE_CHARACTER" = "1" )
@@ -5906,20 +5906,20 @@ then
 	LOBJS="$LOBJS protocolentry.lo"
 fi
 
-if ( test "$INCLUDE_RANDOMNUMBER" = "1" )
+if ( test "$INCLUDE_PRNG" = "1" )
 then
-	HEADERS2="$HEADERS2 randomnumber.h"
-	PRIVATEHEADERS4="$PRIVATEHEADERS4 randomnumber.h randomnumberincludes.h"
-	SRCS="$SRCS randomnumber.cpp"
-	LOBJS="$LOBJS randomnumber.lo"
+	HEADERS2="$HEADERS2 prng.h"
+	PRIVATEHEADERS4="$PRIVATEHEADERS4 prng.h prngincludes.h"
+	SRCS="$SRCS prng.cpp"
+	LOBJS="$LOBJS prng.lo"
 fi
 
-if ( test "$INCLUDE_CSRANDOMNUMBER" = "1" )
+if ( test "$INCLUDE_CSPRNG" = "1" )
 then
-	HEADERS2="$HEADERS2 csrandomnumber.h"
-	PRIVATEHEADERS4="$PRIVATEHEADERS4 csrandomnumber.h csrandomnumberincludes.h"
-	SRCS="$SRCS csrandomnumber.cpp"
-	LOBJS="$LOBJS csrandomnumber.lo"
+	HEADERS2="$HEADERS2 csprng.h"
+	PRIVATEHEADERS4="$PRIVATEHEADERS4 csprng.h csprngincludes.h"
+	SRCS="$SRCS csprng.cpp"
+	LOBJS="$LOBJS csprng.lo"
 fi
 
 if ( test "$INCLUDE_BYTESTRING" = "1" )

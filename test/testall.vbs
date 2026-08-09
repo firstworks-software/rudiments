@@ -45,7 +45,8 @@ tests=Array(_
 	"process",_
 	"propdom",_
 	"protocolentry",_
-	"randomnumber",_
+	"prng",_
+	"csprng",_
 	"regularexpression",_
 	"resourcepool",_
 	"scalar",_

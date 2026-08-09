@@ -15,7 +15,7 @@ for program in \
 	character \
 	charstring \
 	commandline \
-	csrandomnumber \
+	csprng \
 	csvdom \
 	datetime \
 	des \
@@ -49,7 +49,7 @@ for program in \
 	process \
 	propdom \
 	protocolentry \
-	randomnumber \
+	prng \
 	regularexpression \
 	resourcepool \
 	scalar \

@@ -3,7 +3,7 @@
 
 #include <rudiments/encryption.h>
 #include <rudiments/bytestring.h>
-#include <rudiments/randomnumber.h>
+#include <rudiments/prng.h>
 #include <rudiments/stdio.h>
 
 class encryptionprivate {
@@ -86,9 +86,9 @@ void encryption::setRandomIv() {
 }
 
 void encryption::setRandomBuffer(byte_t *buffer, size_t buffersize) {
-	randomnumber	r;
+	prng	r;
 	// seed explicitly, some platforms don't self-seed on construction
-	r.setSeed(randomnumber::getSeed());
+	r.setSeed(prng::getSeed());
 	r.generateBytes(buffer,buffersize);
 }
 

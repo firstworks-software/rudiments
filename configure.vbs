@@ -79,7 +79,9 @@ srcs="winsock.cpp "+_
 	"permissions.cpp "+_
 	"process.cpp "+_
 	"protocolentry.cpp "+_
-	"randomnumber.cpp "+_
+	"rng.cpp "+_
+	"prng.cpp "+_
+	"csprng.cpp "+_
 	"bytestring.cpp "+_
 	"regularexpression.cpp "+_
 	"semaphoreset.cpp "+_
@@ -184,7 +186,9 @@ lobjs="winsock.obj "+_
 	"permissions.obj "+_
 	"process.obj "+_
 	"protocolentry.obj "+_
-	"randomnumber.obj "+_
+	"rng.obj "+_
+	"prng.obj "+_
+	"csprng.obj "+_
 	"bytestring.obj "+_
 	"regularexpression.obj "+_
 	"semaphoreset.obj "+_
@@ -298,7 +302,9 @@ headers2="dictionary.h "+_
 	"permissions.h "+_
 	"process.h "+_
 	"protocolentry.h "+_
-	"randomnumber.h "+_
+	"rng.h "+_
+	"prng.h "+_
+	"csprng.h "+_
 	"bytestring.h "+_
 	"regularexpression.h "+_
 	"semaphoreset.h "+_
@@ -482,8 +488,12 @@ privateheaders4="singlylinkedlist.h "+_
 	"processincludes.h "+_
 	"protocolentry.h "+_
 	"protocolentryincludes.h "+_
-	"randomnumber.h "+_
-	"randomnumberincludes.h "+_
+	"rng.h "+_
+	"rngincludes.h "+_
+	"prng.h "+_
+	"prngincludes.h "+_
+	"csprng.h "+_
+	"csprngincludes.h "+_
 	"bytestringincludes.h "+_
 	"regularexpression.h "+_
 	"regularexpressionincludes.h "+_

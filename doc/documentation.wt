@@ -47,7 +47,7 @@
 * '''Regular Expressions'''
  * [programming/regularexpression.html Using the regularexpression class]
 * '''Random Numbers'''
- * [programming/randomnumber.html Using the randomnumber class]
+ * [programming/prng.html Using the prng class]
 * '''Hashing and Encryption'''
  * [programming/md5.html Using the md5 class]
  * [programming/sha1.html Using the sha1 class]

@@ -2,7 +2,7 @@
 // See the file COPYING for more information
 
 #include <rudiments/aes192.h>
-#include <rudiments/randomnumber.h>
+#include <rudiments/prng.h>
 #include "test.cpp"
 
 int main(int argc, const char **argv) {
@@ -102,8 +102,8 @@ int main(int argc, const char **argv) {
 		padoffbad.getError()==ENCRYPTION_ERROR_INVALID_PADDING);
 	stdoutput.printf("\n");
 
-	randomnumber	rn;
-	int32_t		seed=randomnumber::getSeed();
+	prng	rn;
+	int32_t		seed=prng::getSeed();
 	rn.setSeed(seed);
 
 	// for 2^0 through 2^23...

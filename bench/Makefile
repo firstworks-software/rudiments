@@ -17,7 +17,7 @@ PROGS = dictionary \
 	string \
 	vector \
 	memorypool \
-	randomnumber \
+	prng \
 	inetsocketclient \
 	inetsocketserver \
 	bytestring \
@@ -76,8 +76,8 @@ vector: vector.cpp vector.$(OBJ)
 memorypool: memorypool.cpp memorypool.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) memorypool.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
-randomnumber: randomnumber.cpp randomnumber.$(OBJ) 
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) randomnumber.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+prng: prng.cpp prng.$(OBJ) 
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) prng.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 inetsocketclient: inetsocketclient.cpp inetsocketclient.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) inetsocketclient.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)

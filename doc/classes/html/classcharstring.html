@@ -6433,7 +6433,14 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Returns a new string which is a copy of "str" in which parts that match "from" have been replaced with "to".</p>
+<p>Returns a new string which is a copy of "str" in which parts that match "from" have been replaced with "to". The part replaced is the whole match, not any one of the pattern's capture groups.</p>
+<p>In "to", a backslash followed by a digit is replaced with what that capture group matched - \0 for the whole match, \1 for the first group, and so on through \9. Any group can also be written with its number between angle brackets, as \g&lt;12&gt;, which is the only way to reach the groups past the ninth.</p>
+<p>A capture group can be referred to by name too, as \g&lt;name&gt;. A non-empty, all-digits body between the angle brackets is a group number. Anything else, including an empty body, is a group name, and is looked up with <a class="el" href="classregularexpression.html#ae34e0b8d001076975c9b89ec6042b518">regularexpression::getSubstringIndex()</a>.</p>
+<p>Named capture groups are a PCRE feature. The POSIX regular expression engines that the regularexpression class falls back to, on platforms without PCRE, do not have them, so \g&lt;name&gt; contributes nothing on those platforms.</p>
+<p>A group that didn't participate in the match, or that the pattern doesn't have at all, contributes nothing. So does a name that no group in the pattern has.</p>
+<p>A backslash followed by a backslash is replaced with a single backslash. A backslash followed by anything else, or a backslash at the end of "to", is left as it is. A \g&lt; with no closing &gt; before the end of "to" is left as it is too.</p>
+<p>A part that matches but is empty is skipped rather than replaced. Replacing one would insert "to" between every pair of characters. Note that this is a substitution policy, and not a disagreement about where the matches are - <a class="el" href="classregularexpression.html#a5561f7d2158370f3fb2e0f0b29a64231">regularexpression::matchNext()</a>, which walks a subject rather than rewriting it, reports empty matches like any other. Both are deliberate.</p>
+<p>Each match after the first resumes where the previous one ended, but the expression is still evaluated against the whole of "str". So ^ matches only at the real start of "str", not at each resume point. On platforms with PCRE, a lookbehind and \b also see what precedes the resume point; on platforms where this class falls back to a POSIX engine, only ^ is handled that way.</p>
 <p>If "global" is true then all matching parts are replaced. If "global" is false then only the first matching part is replaced. </p>
 
 </div>
@@ -7280,7 +7287,7 @@ Static Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Dec 3 2024 01:50:19 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.10.0
+Generated on Sat Aug 8 2026 19:56:14 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.10.0
 </small></address>
 </body>
 </html>

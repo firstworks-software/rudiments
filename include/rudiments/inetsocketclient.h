@@ -49,7 +49,7 @@ class RUDIMENTS_DLLSPEC inetsocketclient :
 		/** Sets thte seed used when randomizing addresses to "seed".
 		 *  
 		 *  By default the random number generator used internally is
-		 *  seeded using randomnumber::getSeed().  This may or may not
+		 *  seeded using prng::getSeed().  This may or may not
 		 *  be suitable as it will fall back to seeding the generator
 		 *  with the time of day on platforms that don't support any
 		 *  other method.

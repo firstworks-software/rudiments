@@ -24,7 +24,7 @@ Rudiments provides a wide range of utility classes.
 * '''Regular Expressions'''
  * [programming/regularexpression.html Using the regularexpression class]
 * '''Random Numbers'''
- * [programming/randomnumber.html Using the randomnumber class]
+ * [programming/prng.html Using the prng class]
 * '''Encryption'''
  * [programming/crypt.html Using the crypt class]
 * '''Date and Time'''

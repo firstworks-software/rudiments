@@ -914,8 +914,8 @@ enable_userentry
 enable_permissions
 enable_process
 enable_protocolentry
-enable_randomnumber
-enable_csrandomnumber
+enable_prng
+enable_csprng
 enable_bytestring
 enable_regularexpression
 enable_semaphoreset
@@ -1656,8 +1656,8 @@ Optional Features:
   --disable-permissions   Don't build permissions
   --disable-process       Don't build process
   --disable-protocolentry Don't build protocolentry class
-  --disable-randomnumber  Don't build randomnumber
-  --disable-csrandomnumber Don't build csrandomnumber
+  --disable-prng          Don't build prng
+  --disable-csprng        Don't build csprng
   --disable-bytestring    Don't build bytestring class
   --disable-regularexpression    Don't build regularexpression
   --disable-semaphoreset  Don't build semaphoreset
@@ -3863,20 +3863,20 @@ else $as_nop
   INCLUDE_PROTOCOLENTRY="1"
 fi
 
-# Check whether --enable-randomnumber was given.
-if test ${enable_randomnumber+y}
+# Check whether --enable-prng was given.
+if test ${enable_prng+y}
 then :
-  enableval=$enable_randomnumber; INCLUDE_RANDOMNUMBER="0"
+  enableval=$enable_prng; INCLUDE_PRNG="0"
 else $as_nop
-  INCLUDE_RANDOMNUMBER="1"
+  INCLUDE_PRNG="1"
 fi
 
-# Check whether --enable-csrandomnumber was given.
-if test ${enable_csrandomnumber+y}
+# Check whether --enable-csprng was given.
+if test ${enable_csprng+y}
 then :
-  enableval=$enable_csrandomnumber; INCLUDE_CSRANDOMNUMBER="0"
+  enableval=$enable_csprng; INCLUDE_CSPRNG="0"
 else $as_nop
-  INCLUDE_CSRANDOMNUMBER="1"
+  INCLUDE_CSPRNG="1"
 fi
 
 # Check whether --enable-bytestring was given.
@@ -45531,18 +45531,18 @@ printf "%s\n" "#define SONAME_VERSION_INFO \"13:0:0\"" >>confdefs.h
 
 HEADERS0="object.h collection.h comparator.h nodecollection.h listcollection.h treecollection.h tablecollection.h scalarcollection.h arraycollection.h dictionarycollection.h resultcodes.h debugprint.h"
 HEADERS1="table.h linkedlist.h singlylinkedlist.h avltree.h scalar.h"
-HEADERS2="dictionary.h hash.h sha1.h sha256.h sha512.h md5.h encryption.h aes128.h aes192.h aes256.h pbkdf2.h dh.h"
+HEADERS2="dictionary.h hash.h rng.h sha1.h sha256.h sha512.h md5.h encryption.h aes128.h aes192.h aes256.h pbkdf2.h dh.h"
 HEADERS3="dynamicarray.h staticarray.h output.h input.h wastebasket.h sensitivevalue.h resourcepool.h"
 PRIVATEHEADERS0="config.h debugprint.h objectincludes.h object.h collection.h collectioninlines.h comparator.h comparatorinlines.h listnode.h listcollectioninlines.h treenode.h treecollection.h treecollectioninlines.h dictionarycollectioninlines.h"
 PRIVATEHEADERS1="inttypes.h new.h"
 PRIVATEHEADERS2="winsock.h dll.h"
 PRIVATEHEADERS3="tablecollection.h tablecollectioninlines.h table.h tableincludes.h tableinlines.h linkedlist.h linkedlistincludes.h linkedlistinlines.h linkedlistnode.h nodeinlines.h avltree.h avltreeincludes.h avltreeinlines.h avltreenode.h scalarcollectioninlines.h scalar.h scalarincludes.h scalarinlines.h"
 PRIVATEHEADERS4="singlylinkedlist.h singlylinkedlistincludes.h singlylinkedlistinlines.h singlylinkedlistnode.h"
-PRIVATEHEADERS5="dictionary.h dictionaryincludes.h dictionaryinlines.h hash.h hashincludes.h encryption.h encryptionincludes.h sha1.h sha1includes.h sha256.h sha256includes.h sha512.h sha512includes.h md5.h md5includes.h aes128.h aes128includes.h aes192.h aes192includes.h aes256.h aes256includes.h pbkdf2.h pbkdf2includes.h dh.h dhincludes.h"
+PRIVATEHEADERS5="dictionary.h dictionaryincludes.h dictionaryinlines.h hash.h hashincludes.h rng.h rngincludes.h encryption.h encryptionincludes.h sha1.h sha1includes.h sha256.h sha256includes.h sha512.h sha512includes.h md5.h md5includes.h aes128.h aes128includes.h aes192.h aes192includes.h aes256.h aes256includes.h pbkdf2.h pbkdf2includes.h dh.h dhincludes.h"
 PRIVATEHEADERS6="arraycollectioninlines.h dynamicarray.h dynamicarrayincludes.h dynamicarrayinlines.h"
 PRIVATEHEADERS7="staticarray.h staticarrayinlines.h outputincludes.h output.h outputinlines.h input.h inputincludes.h inputinlines.h wastebasketincludes.h wastebasket.h sensitivevalueincludes.h sensitivevalue.h resourcepool.h resourcepoolincludes.h resourcepoolinlines.h"
-SRCS="winsock.cpp object.cpp hash.cpp sha1.cpp sha256.cpp sha512.cpp md5.cpp encryption.cpp aes128.cpp aes192.cpp aes256.cpp pbkdf2.cpp dh.cpp output.cpp input.cpp wastebasket.cpp sensitivevalue.cpp"
-LOBJS="winsock.lo object.lo hash.lo sha1.lo sha256.lo sha512.lo md5.lo encryption.lo aes128.lo aes192.lo aes256.lo pbkdf2.lo dh.lo output.lo input.lo wastebasket.lo sensitivevalue.lo"
+SRCS="winsock.cpp object.cpp hash.cpp rng.cpp sha1.cpp sha256.cpp sha512.cpp md5.cpp encryption.cpp aes128.cpp aes192.cpp aes256.cpp pbkdf2.cpp dh.cpp output.cpp input.cpp wastebasket.cpp sensitivevalue.cpp"
+LOBJS="winsock.lo object.lo hash.lo rng.lo sha1.lo sha256.lo sha512.lo md5.lo encryption.lo aes128.lo aes192.lo aes256.lo pbkdf2.lo dh.lo output.lo input.lo wastebasket.lo sensitivevalue.lo"
 EXTRACPPFLAGS=""
 
 if ( test "$INCLUDE_CHARACTER" = "1" )
@@ -45921,20 +45921,20 @@ then
 	LOBJS="$LOBJS protocolentry.lo"
 fi
 
-if ( test "$INCLUDE_RANDOMNUMBER" = "1" )
+if ( test "$INCLUDE_PRNG" = "1" )
 then
-	HEADERS2="$HEADERS2 randomnumber.h"
-	PRIVATEHEADERS4="$PRIVATEHEADERS4 randomnumber.h randomnumberincludes.h"
-	SRCS="$SRCS randomnumber.cpp"
-	LOBJS="$LOBJS randomnumber.lo"
+	HEADERS2="$HEADERS2 prng.h"
+	PRIVATEHEADERS4="$PRIVATEHEADERS4 prng.h prngincludes.h"
+	SRCS="$SRCS prng.cpp"
+	LOBJS="$LOBJS prng.lo"
 fi
 
-if ( test "$INCLUDE_CSRANDOMNUMBER" = "1" )
+if ( test "$INCLUDE_CSPRNG" = "1" )
 then
-	HEADERS2="$HEADERS2 csrandomnumber.h"
-	PRIVATEHEADERS4="$PRIVATEHEADERS4 csrandomnumber.h csrandomnumberincludes.h"
-	SRCS="$SRCS csrandomnumber.cpp"
-	LOBJS="$LOBJS csrandomnumber.lo"
+	HEADERS2="$HEADERS2 csprng.h"
+	PRIVATEHEADERS4="$PRIVATEHEADERS4 csprng.h csprngincludes.h"
+	SRCS="$SRCS csprng.cpp"
+	LOBJS="$LOBJS csprng.lo"
 fi
 
 if ( test "$INCLUDE_BYTESTRING" = "1" )

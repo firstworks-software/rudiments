@@ -114,8 +114,8 @@ PROGS2 = \
 	propsax$(EXE) \
 	protocolentry-name$(EXE) \
 	protocolentry-number$(EXE) \
-	randomnumber-multiple$(EXE) \
-	randomnumber-static$(EXE) \
+	prng-multiple$(EXE) \
+	prng-static$(EXE) \
 	reboot$(EXE) \
 	regularexpression-compile$(EXE) \
 	regularexpression-multiple$(EXE) \
@@ -508,11 +508,11 @@ protocolentry-name$(EXE): protocolentry-name.cpp protocolentry-name.$(OBJ)
 protocolentry-number$(EXE): protocolentry-number.cpp protocolentry-number.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ protocolentry-number.$(OBJ) $(LIBS)
 
-randomnumber-multiple$(EXE): randomnumber-multiple.cpp randomnumber-multiple.$(OBJ)
-	$(LTLINK) $(LINK) $(OUT)$@ randomnumber-multiple.$(OBJ) $(LIBS)
+prng-multiple$(EXE): prng-multiple.cpp prng-multiple.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ prng-multiple.$(OBJ) $(LIBS)
 
-randomnumber-static$(EXE): randomnumber-static.cpp randomnumber-static.$(OBJ)
-	$(LTLINK) $(LINK) $(OUT)$@ randomnumber-static.$(OBJ) $(LIBS)
+prng-static$(EXE): prng-static.cpp prng-static.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ prng-static.$(OBJ) $(LIBS)
 
 reboot$(EXE): reboot.cpp reboot.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ reboot.$(OBJ) $(LIBS)

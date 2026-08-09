@@ -5,7 +5,7 @@
 #include <rudiments/linkedlist.h>
 #include <rudiments/singlylinkedlist.h>
 #include <rudiments/charstring.h>
-#include <rudiments/randomnumber.h>
+#include <rudiments/prng.h>
 #include <rudiments/snooze.h>
 #include <rudiments/stringbuffer.h>
 #include <rudiments/sys.h>
@@ -21,7 +21,7 @@ uint16_t	nodecount;
 // generates a random number
 template<class type>
 inline
-void generateRandom(randomnumber *r, type *number) {
+void generateRandom(prng *r, type *number) {
 	int32_t	num=0;
 	r->generate(&num,randomlow,randomhigh);
 	*number=(type)num;
@@ -119,8 +119,8 @@ int main(int argc, char **argv) {
 	header("avltree");
 
 	// initialize random number generator
-	randomnumber	r;
-	uint32_t	seed=randomnumber::getSeed();
+	prng	r;
+	uint32_t	seed=prng::getSeed();
 	stdoutput.printf("(seed: %d)\n\n",seed);
 	if (argc==2) {
 		seed=charstring::convertToInteger(argv[1]);

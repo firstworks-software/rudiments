@@ -1,4 +1,26 @@
 2.3.0 - bumped the version to 2.3.0
+	added an rng abstract base class, and renamed randomnumber to prng and
+	csrandomnumber to csprng - rng declares the 7 instance methods
+	(setSeed(), generate(uint32_t*), generate(int32_t*,lower,upper), and
+	the four generateBytes() overloads) that prng and csprng each
+	implement, so code that only needs to generate numbers can be
+	written against rng and swap either implementation in; static
+	methods aren't part of the interface, since c++ doesn't allow
+	virtual statics; prng and csprng keep their prior behavior exactly,
+	but csprng, which has no seed concept, now also carries degenerate
+	versions of every method rng/prng expose that it previously lacked -
+	setSeed() is a no-op that returns true, getSeed() returns a
+	meaningless placeholder, the seeded static generate()/generateBytes()
+	overloads ignore the seed and draw a real cryptographically secure
+	value instead of a reproducible one, and getNeedsMutex()/setMutex()
+	are a no-op pair reflecting that none of csprng's backends
+	(openssl's RAND_bytes(), a per-instance CryptGenRandom() handle, or
+	a per-instance /dev/urandom device) ever holds shared mutable
+	state - these exist only so csprng presents the same interface as
+	prng/rng and can be used interchangeably with them; this is a
+	breaking rename - randomnumber and csrandomnumber are gone, not kept
+	as aliases - so SQL Relay and other dependents need a follow-up
+	update to the new names
 	fixed randomnumber::scale() to clamp its result to "upper" - float only
 	carries 24 bits of precision, so for a "number" near getRandMax(), the
 	scaled value could round up to exactly 1.0 and push the result one

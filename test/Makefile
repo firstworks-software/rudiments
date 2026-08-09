@@ -31,8 +31,8 @@ PROGS1= dictionary \
 	singlylinkedlist \
 	listmetrics \
 	memorypool \
-	randomnumber \
-	csrandomnumber \
+	prng \
+	csprng \
 	sharedmemory \
 	signal \
 	kill \
@@ -210,11 +210,11 @@ datetime: datetime.cpp datetime.$(OBJ)
 dictionary: dictionary.cpp dictionary.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) dictionary.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
-randomnumber: randomnumber.cpp randomnumber.$(OBJ)
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) randomnumber.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+prng: prng.cpp prng.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) prng.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
-csrandomnumber: csrandomnumber.cpp csrandomnumber.$(OBJ)
-	$(LTLINK) $(LINK) $(OUT)$@$(EXE) csrandomnumber.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+csprng: csprng.cpp csprng.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) csprng.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 signal: signal.cpp signal.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) signal.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)

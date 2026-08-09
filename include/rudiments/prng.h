@@ -1,0 +1,206 @@
+// Copyright (c) David Muse
+// See the COPYING file for more information.
+
+#ifndef RUDIMENTS_PRNG_H
+#define RUDIMENTS_PRNG_H
+
+#include <rudiments/private/prngincludes.h>
+
+/** The prng class provides methods for generating and scaling
+ *  random numbers.
+ *
+ *  prng is not cryptographically secure.  Given a known seed, it
+ *  produces a fully deterministic series of numbers - the same seed always
+ *  yields the same series, and anyone who knows or can guess the seed can
+ *  predict every number that follows.  That makes it well suited to
+ *  scaling, jitter, and reproducible test fixtures, where a repeatable
+ *  series is a feature.  It must not be used to generate secrets - keys,
+ *  tokens, salts, nonces, or anything else that needs to be unpredictable.
+ *  Use csprng for those.
+ *
+ *  prng implements the rng interface.
+ *
+ *  Superfluous background:
+ * 
+ *  There is no such thing as true randomness.   Many random number generators
+ *  just return values from a highly divergent series.  Others collect "entropy"
+ *  from system hardware returning numbers that are actually associated with
+ *  system activity but in an indiscernible way.  In most cases, entropy-based
+ *  systems are just used to seed systems that return values from a highly
+ *  divergnet series.
+ *
+ *  If there is only one running process generating random numbers using a
+ *  highly divergent series, successive calls to generate() will never return
+ *  the same value until all numbers between 0 and the number returned by
+ *  getRandMax() (usually 2^31-1 but could be 2^32-1 or 2^15-1 on some systems)
+ *  have been returned.  At that point, the entire sequence will repeat.
+ *
+ *  Calls to generate() with lower/upper parameters may return the same value
+ *  before all numbers in the range have been returned because it just scales
+ *  the result of generate() without lower/upper parameters which operates on a
+ *  larger range. */
+class RUDIMENTS_DLLSPEC prng : public rng {
+	public:
+
+		/** Creates a new instance of the prng class. */
+		prng();
+
+		/** Deletes this instance of the prng class. */
+		virtual	~prng();
+
+		/** Sets the initial seed for this instance. */
+		virtual bool	setSeed(uint32_t seed);
+
+		/** Generates a random number between 0 and the number given
+		 *  by getRandMax() (usually 2^31-1 but could be 2^32-1 or
+		 *  2^15-1) and sets "result" to this number.
+		 *
+		 *  Returns true on success and false on failure. */
+		virtual bool	generate(uint32_t *result);
+
+		/** Generates a random number between "lower" and "upper"
+		 *  and sets "result" to this number.
+		 *
+		 *  Returns true on success and false on failure. */
+		virtual bool	generate(int32_t *result, int32_t lower,
+							int32_t upper);
+
+		/** Allocates a new buffer of "size" bytes, fills it with
+		 *  random bytes and returns it.  The caller is responsible
+		 *  for calling delete[] on the returned buffer.
+		 *
+		 *  Returns NULL on failure. */
+		virtual byte_t	*generateBytes(size_t size);
+
+		/** Fills the first "size" bytes of "buffer" (which is
+		 *  "buffersize" bytes long) with random bytes.
+		 *
+		 *  Returns false, without modifying "buffer", if "size" is
+		 *  greater than "buffersize".  Returns true on success and
+		 *  false on failure. */
+		virtual bool	generateBytes(byte_t *buffer, size_t buffersize,
+							size_t size);
+
+		/** Fills "buffer", which is "buffersize" bytes long, entirely
+		 *  with random bytes.
+		 *
+		 *  Returns true on success and false on failure. */
+		virtual bool	generateBytes(byte_t *buffer,
+							size_t buffersize);
+
+		/** Appends "size" random bytes to "buffer".
+		 *
+		 *  Returns true on success and false on failure. */
+		virtual bool	generateBytes(bytebuffer *buffer, size_t size);
+
+		/** Generates a random number seed by first attempting
+		 *  to get one from /dev/urandom and if that fails,
+		 *  getting the number of seconds since 1970.
+		 *
+		 *  NOTE: If your application is multi-threaded, /dev/urandom
+		 *  is not accessible, and separate threads can call getSeed(),
+		 *  unsynchronized, then be sure to give the datetime and
+		 *  environment classes individual mutexes using
+		 *  datetime::setMutex() and environemnt::setMutex(), as on
+		 *  some platforms, getting the number of seconds since 1970
+		 *  involves calling non-thread safe date/time-related functions
+		 *  as well as getting, and possibly setting, the TZ environment
+		 *  variable. */
+		static	uint32_t	getSeed();
+
+		/** Generates a random number between 0 and 2^32, based
+		 *  on seed, and returns it.  
+		 * 
+		 *  It is ok to use the result of this method as the 
+		 *  seed for the next number. */
+		static	uint32_t	generate(uint32_t seed);
+
+		/** Generates a random number between 0 and the number given
+		 *  by getRandMax() (usually 2^31-1 but could be 2^32-1 or
+		 *  2^15-1), based on "seed", scales that value to be between
+		 *  "lower" and "upper" and returns it.
+		 * 
+		 *  It is NOT ok to use the result of this method as 
+		 *  the seed for the next number. */
+		static	int32_t	generate(uint32_t seed, int32_t lower,
+							int32_t upper);
+
+		/** Allocates a new buffer of "size" bytes, fills it with
+		 *  random bytes, based on "seed", and returns it.  The
+		 *  caller is responsible for calling delete[] on the
+		 *  returned buffer.
+		 *
+		 *  Like the other seeded static methods, this generates a
+		 *  reproducible series of bytes - the same seed always
+		 *  yields the same bytes.  If you don't have a seed of your
+		 *  own, you can use getSeed() to get one.
+		 *
+		 *  Returns NULL on failure. */
+		static	byte_t	*generateBytes(uint32_t seed, size_t size);
+
+		/** Fills the first "size" bytes of "buffer" (which is
+		 *  "buffersize" bytes long) with random bytes, based on
+		 *  "seed".
+		 *
+		 *  Like the other seeded static methods, this generates a
+		 *  reproducible series of bytes - the same seed always
+		 *  yields the same bytes.  If you don't have a seed of your
+		 *  own, you can use getSeed() to get one.
+		 *
+		 *  Returns false, without modifying "buffer", if "size" is
+		 *  greater than "buffersize".  Returns true on success and
+		 *  false on failure. */
+		static	bool	generateBytes(uint32_t seed, byte_t *buffer,
+							size_t buffersize,
+							size_t size);
+
+		/** Fills "buffer", which is "buffersize" bytes long, entirely
+		 *  with random bytes, based on "seed".
+		 *
+		 *  Like the other seeded static methods, this generates a
+		 *  reproducible series of bytes - the same seed always
+		 *  yields the same bytes.  If you don't have a seed of your
+		 *  own, you can use getSeed() to get one.
+		 *
+		 *  Returns true on success and false on failure. */
+		static	bool	generateBytes(uint32_t seed, byte_t *buffer,
+							size_t buffersize);
+
+		/** Appends "size" random bytes to "buffer", based on "seed".
+		 *
+		 *  Like the other seeded static methods, this generates a
+		 *  reproducible series of bytes - the same seed always
+		 *  yields the same bytes.  If you don't have a seed of your
+		 *  own, you can use getSeed() to get one.
+		 *
+		 *  Returns true on success and false on failure. */
+		static	bool	generateBytes(uint32_t seed, bytebuffer *buffer,
+							size_t size);
+
+		/** Scales "number" to be between "lower" and "upper" and
+		 *  returns it.
+		 * 
+		 *  It is NOT ok to use the result of this method as 
+		 *  the seed for the next number. */
+		static	int32_t	scale(uint32_t number, int32_t lower,
+							int32_t upper);
+
+		/** Returns the largest number that generate() could
+		 *  possibly generate.  This is usually 2^31-1 on 32 or 64 bit
+		 *  machines but there are exceptions where it is 2^32-1 or
+		 *  2^15-1. */
+		static	uint32_t	getRandMax();
+
+		/** Returns true if this class needs a mutex to operate safely
+		 *  in a threaded environment and false otherwise. */
+		static	bool	getNeedsMutex();
+
+		/** Allows you to supply a mutex is the class needs it
+		 *  (see getNeedsMutex()).  If your application is not
+		 *  multithreaded, then there is no need to supply a mutex. */
+		static	void	setMutex(threadmutex *mtx);
+
+	#include <rudiments/private/prng.h>
+};
+
+#endif

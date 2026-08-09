@@ -32,7 +32,7 @@
 #endif
 #ifndef RUDIMENTS_HAVE_MKSTEMP
 	#include <rudiments/datetime.h>
-	#include <rudiments/randomnumber.h>
+	#include <rudiments/prng.h>
 	#include <rudiments/permissions.h>
 #endif
 
@@ -1627,14 +1627,14 @@ int32_t file::createTemporaryFile(char *templatefilename) {
 		// replace X's with random characters...
 
 		// seed the random number
-		uint32_t	seed=randomnumber::getSeed();
+		uint32_t	seed=prng::getSeed();
 
 		// for each of the 6 characters...
 		for (uint8_t i=0; i<6; i++) {
 
 			// get a random number, scale it to 0-60
-			seed=randomnumber::generate(seed);
-			char	ch=(char)randomnumber::scale(seed,0,59);
+			seed=prng::generate(seed);
+			char	ch=(char)prng::scale(seed,0,59);
 
 			// translate...
 			//  0-9  -> '0' - '9'

@@ -65,11 +65,15 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a34519e44dcc291b7120cd33aa68289f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab38768315ebdf3e95a9772eeb84c0919" id="r_ab38768315ebdf3e95a9772eeb84c0919"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab38768315ebdf3e95a9772eeb84c0919">clear</a> ()</td></tr>
 <tr class="separator:ab38768315ebdf3e95a9772eeb84c0919"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ce751467ed152647e3b04b919b3669a" id="r_a5ce751467ed152647e3b04b919b3669a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5ce751467ed152647e3b04b919b3669a">isSupported</a> ()</td></tr>
+<tr class="separator:a5ce751467ed152647e3b04b919b3669a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classhash"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_methods_classhash')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classhash.html">hash</a></td></tr>
 <tr class="memitem:ad000ceb3c5a6cf01af1f497275fc608c inherit pub_methods_classhash" id="r_ad000ceb3c5a6cf01af1f497275fc608c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhash.html#ad000ceb3c5a6cf01af1f497275fc608c">hash</a> ()</td></tr>
 <tr class="separator:ad000ceb3c5a6cf01af1f497275fc608c inherit pub_methods_classhash"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4864865d222af59729710355477e7953 inherit pub_methods_classhash" id="r_a4864865d222af59729710355477e7953"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classavltreenode.html">virtual</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhash.html#a4864865d222af59729710355477e7953">~hash</a> ()</td></tr>
 <tr class="separator:a4864865d222af59729710355477e7953 inherit pub_methods_classhash"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8edfa3f0a052cc0ec5ff437e868cd5b2 inherit pub_methods_classhash" id="r_a8edfa3f0a052cc0ec5ff437e868cd5b2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classavltreenode.html">virtual</a> <a class="el" href="classavltreenode.html">size_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhash.html#a8edfa3f0a052cc0ec5ff437e868cd5b2">getRequiredSaltSize</a> ()</td></tr>
+<tr class="separator:a8edfa3f0a052cc0ec5ff437e868cd5b2 inherit pub_methods_classhash"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7ca49af492aea8cebee7a56bd537083b inherit pub_methods_classhash" id="r_a7ca49af492aea8cebee7a56bd537083b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classavltreenode.html">virtual</a> <a class="el" href="classbool.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhash.html#a7ca49af492aea8cebee7a56bd537083b">setSalt</a> (<a class="el" href="classavltreenode.html">const</a> byte_t *<a class="el" href="classavltreenode.html">salt</a>, <a class="el" href="classavltreenode.html">size_t</a> <a class="el" href="classavltreenode.html">size</a>)</td></tr>
 <tr class="separator:a7ca49af492aea8cebee7a56bd537083b inherit pub_methods_classhash"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a139f40004d9650e8a23d80996108505a inherit pub_methods_classhash" id="r_a139f40004d9650e8a23d80996108505a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classavltreenode.html">virtual</a> <a class="el" href="classavltreenode.html">const</a> byte_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhash.html#a139f40004d9650e8a23d80996108505a">getSalt</a> ()</td></tr>
@@ -248,10 +252,38 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a5ce751467ed152647e3b04b919b3669a" name="a5ce751467ed152647e3b04b919b3669a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ce751467ed152647e3b04b919b3669a">&#9670;&#160;</a></span>isSupported()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classbool.html">bool</a> md5::isSupported </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns true if this platform supports <a class="el" href="classmd5.html">md5</a> and false otherwise. </p>
+
+<p>Implements <a class="el" href="classhash.html#a05c09d38c53a4a5d8906a8135581cbd6">hash</a>.</p>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Dec 3 2024 01:50:19 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.10.0
+Generated on Sat Aug 8 2026 19:56:14 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.10.0
 </small></address>
 </body>
 </html>

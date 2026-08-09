@@ -55,7 +55,7 @@ SRCS = aes128.wt \
 	propdom.wt \
 	propsax.wt \
 	protocolentry.wt \
-	randomnumber.wt \
+	prng.wt \
 	regularexpression.wt \
 	resourcepool.wt \
 	scalar.wt \
@@ -142,7 +142,7 @@ INS = aes128.html.in \
 	propdom.html.in \
 	propsax.html.in \
 	protocolentry.html.in \
-	randomnumber.html.in \
+	prng.html.in \
 	regularexpression.html.in \
 	resourcepool.html.in \
 	scalar.html.in \
@@ -229,7 +229,7 @@ WTOBJS = aes128.html.in \
 	propdom.html.in \
 	propsax.html.in \
 	protocolentry.html.in \
-	randomnumber.html.in \
+	prng.html.in \
 	regularexpression.html.in \
 	resourcepool.html.in \
 	scalar.html.in \
@@ -316,7 +316,7 @@ OBJS = aes128.html \
 	propdom.html \
 	propsax.html \
 	protocolentry.html \
-	randomnumber.html \
+	prng.html \
 	regularexpression.html \
 	resourcepool.html \
 	scalar.html \

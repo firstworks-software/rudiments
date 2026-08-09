@@ -4,7 +4,7 @@
 #include <rudiments/threadmutex.h>
 #include <rudiments/stringbuffer.h>
 #include <rudiments/charstring.h>
-#include <rudiments/randomnumber.h>
+#include <rudiments/prng.h>
 #include <rudiments/snooze.h>
 #include <rudiments/stdio.h>
 #include <rudiments/error.h>
@@ -34,7 +34,7 @@ void syncronize(void *args) {
 	// thread to go.  Actually, the wait is done before grabbing the mutex,
 	// but it's basically the same thing.  Primitive, but it works.
 
-	randomnumber	r;
+	prng	r;
 	r.setSeed(a->seed);
 
 	int32_t	ms;
@@ -120,7 +120,7 @@ int main(int argc, const char **argv) {
 		// environment class re. initializing envstrings.  This can be
 		// addressed by giving the environment class a mutext, but
 		// it's easier just to do this.
-		a[i].seed=randomnumber::getSeed();
+		a[i].seed=prng::getSeed();
 	}
 
 	// run threads

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.10.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Rudiments: /home/dmuse/src/fedora40x64/rudiments/include/rudiments/wastebasket.h Source File</title>
+<title>Rudiments: /home/dmuse/src/dev/rudiments/include/rudiments/wastebasket.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -52,7 +52,7 @@ $(function() { codefold.init(0); });
   <div class="headertitle"><div class="title">wastebasket.h</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">// Copyright (c) 1999-2018 David Muse</span></div>
+<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">// Copyright (c) David Muse</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment">// See the COPYING file for more information.</span></div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span> </div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#ifndef RUDIMENTS_WASTEBASKET_H</span></div>
@@ -98,13 +98,18 @@ $(function() { codefold.init(0); });
 <div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span> </div>
 <div class="line"><a id="l00122" name="l00122"></a><span class="lineno"><a class="line" href="classwastebasket.html#a7bee2a8284a13256d17287eecb15607e">  122</a></span>                <span class="keywordtype">void</span>    <a class="code hl_function" href="classwastebasket.html#a7bee2a8284a13256d17287eecb15607e">empty</a>();</div>
 <div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span> </div>
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span><span class="preprocessor">        #include &lt;rudiments/private/wastebasket.h&gt;</span></div>
-<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>};</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno"><a class="line" href="classwastebasket.html#a8e41d9c0f106490037132d78e03f1a85">  126</a></span>                ssize_t <a class="code hl_function" href="classwastebasket.html#a8e41d9c0f106490037132d78e03f1a85">write</a>();</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span> </div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno"><a class="line" href="classwastebasket.html#aef5414e73ea1df674d79700a3c06b947">  129</a></span>                ssize_t <a class="code hl_function" href="classwastebasket.html#aef5414e73ea1df674d79700a3c06b947">write</a>(<a class="code hl_class" href="classoutput.html">output</a> *out);</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span> </div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span><span class="preprocessor">        #include &lt;rudiments/private/wastebasket.h&gt;</span></div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>};</div>
 </div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span> </div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span> </div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span><span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aclassavltreenode_html"><div class="ttname"><a href="classavltreenode.html">avltreenode</a></div><div class="ttdef"><b>Definition</b> avltree.h:11</div></div>
 <div class="ttc" id="aclassobject_html"><div class="ttname"><a href="classobject.html">object</a></div><div class="ttdef"><b>Definition</b> object.h:10</div></div>
+<div class="ttc" id="aclassoutput_html"><div class="ttname"><a href="classoutput.html">output</a></div><div class="ttdef"><b>Definition</b> output.h:11</div></div>
 <div class="ttc" id="aclasswastebasket_html"><div class="ttname"><a href="classwastebasket.html">wastebasket</a></div><div class="ttdef"><b>Definition</b> wastebasket.h:55</div></div>
 <div class="ttc" id="aclasswastebasket_html_a03ae071fea2d7bc3115f564ed84eefce"><div class="ttname"><a href="classwastebasket.html#a03ae071fea2d7bc3115f564ed84eefce">wastebasket::attach</a></div><div class="ttdeci">void attach(wchar_t *value)</div></div>
 <div class="ttc" id="aclasswastebasket_html_a07a53ffb570ae1faeadedb731cbef437"><div class="ttname"><a href="classwastebasket.html#a07a53ffb570ae1faeadedb731cbef437">wastebasket::wastebasket</a></div><div class="ttdeci">wastebasket()</div></div>
@@ -119,14 +124,16 @@ $(function() { codefold.init(0); });
 <div class="ttc" id="aclasswastebasket_html_a836eb955955fb9845f51497f58ed03b7"><div class="ttname"><a href="classwastebasket.html#a836eb955955fb9845f51497f58ed03b7">wastebasket::attach</a></div><div class="ttdeci">void attach(uint32_t *value)</div></div>
 <div class="ttc" id="aclasswastebasket_html_a85b1d1d90cd02aeeff2ce3faba40638d"><div class="ttname"><a href="classwastebasket.html#a85b1d1d90cd02aeeff2ce3faba40638d">wastebasket::attach</a></div><div class="ttdeci">void attach(char *value)</div></div>
 <div class="ttc" id="aclasswastebasket_html_a8be8a9d09938881fddee7b8c771ae886"><div class="ttname"><a href="classwastebasket.html#a8be8a9d09938881fddee7b8c771ae886">wastebasket::attach</a></div><div class="ttdeci">void attach(object **o)</div></div>
+<div class="ttc" id="aclasswastebasket_html_a8e41d9c0f106490037132d78e03f1a85"><div class="ttname"><a href="classwastebasket.html#a8e41d9c0f106490037132d78e03f1a85">wastebasket::write</a></div><div class="ttdeci">ssize_t write()</div></div>
 <div class="ttc" id="aclasswastebasket_html_a94ecb063a4d11e2287d3b97907ac654d"><div class="ttname"><a href="classwastebasket.html#a94ecb063a4d11e2287d3b97907ac654d">wastebasket::attach</a></div><div class="ttdeci">void attach(double *value)</div></div>
 <div class="ttc" id="aclasswastebasket_html_a95a594565fd2a00e1c7ce2ea1f207a41"><div class="ttname"><a href="classwastebasket.html#a95a594565fd2a00e1c7ce2ea1f207a41">wastebasket::attach</a></div><div class="ttdeci">void attach(float *value)</div></div>
 <div class="ttc" id="aclasswastebasket_html_a9cf0b31a0c1ce88284efeceee585df70"><div class="ttname"><a href="classwastebasket.html#a9cf0b31a0c1ce88284efeceee585df70">wastebasket::attach</a></div><div class="ttdeci">void attach(uint16_t *value)</div></div>
 <div class="ttc" id="aclasswastebasket_html_ad7a457766cc3948df16be20fc47b4215"><div class="ttname"><a href="classwastebasket.html#ad7a457766cc3948df16be20fc47b4215">wastebasket::attach</a></div><div class="ttdeci">void attach(int64_t *value)</div></div>
+<div class="ttc" id="aclasswastebasket_html_aef5414e73ea1df674d79700a3c06b947"><div class="ttname"><a href="classwastebasket.html#aef5414e73ea1df674d79700a3c06b947">wastebasket::write</a></div><div class="ttdeci">ssize_t write(output *out)</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Dec 3 2024 01:50:18 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.10.0
+Generated on Sat Aug 8 2026 19:56:14 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.10.0
 </small></address>
 </body>
 </html>

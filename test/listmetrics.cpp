@@ -3,7 +3,7 @@
 
 #include <rudiments/linkedlist.h>
 #include <rudiments/singlylinkedlist.h>
-#include <rudiments/randomnumber.h>
+#include <rudiments/prng.h>
 #include <rudiments/datetime.h>
 #include <rudiments/process.h>
 #include <rudiments/stdio.h>
@@ -34,12 +34,12 @@ int main(int argc, char **argv) {
 	datetime	start;
 	datetime	finish;
 
-	uint32_t	seed=randomnumber::getSeed();
+	uint32_t	seed=prng::getSeed();
 	scaledvalues=new int32_t[listsize];
 	unscldvalues=new int32_t[listsize];
 	for (int32_t i=0; i<listsize; i++) {
-		seed=randomnumber::generate(seed);
-		scaledvalues[i]=randomnumber::scale(seed,0,10);
+		seed=prng::generate(seed);
+		scaledvalues[i]=prng::scale(seed,0,10);
 		unscldvalues[i]=seed;
 	}
 

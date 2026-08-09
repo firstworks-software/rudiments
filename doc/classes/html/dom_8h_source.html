@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.10.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Rudiments: /home/dmuse/src/fedora40x64/rudiments/include/rudiments/dom.h Source File</title>
+<title>Rudiments: /home/dmuse/src/dev/rudiments/include/rudiments/dom.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -52,7 +52,7 @@ $(function() { codefold.init(0); });
   <div class="headertitle"><div class="title">dom.h</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">// Copyright (c) 1999-2018 David Muse</span></div>
+<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">// Copyright (c) David Muse</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment">// See the COPYING file for more information.</span></div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span> </div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#ifndef RUDIMENTS_DOM_H</span></div>
@@ -82,45 +82,63 @@ $(function() { codefold.init(0); });
 <div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno"><a class="line" href="classdom.html#a47887d6d77a93cc7c46c31b7f478af96">   53</a></span>                <span class="keyword">virtual</span> <a class="code hl_class" href="classdomnode.html">domnode</a> *<a class="code hl_function" href="classdom.html#a47887d6d77a93cc7c46c31b7f478af96">getNullNode</a>();</div>
 <div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno"><a class="line" href="classdom.html#aae5f0ecdbc2dcb03c88fc261e98e9aaf">   57</a></span>                <span class="keyword">virtual</span> <span class="keywordtype">void</span>    <a class="code hl_function" href="classdom.html#aae5f0ecdbc2dcb03c88fc261e98e9aaf">createRootNode</a>();</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno"><a class="line" href="classdom.html#add105e6f686fc967a6dc09daac66e9ba">   61</a></span>                <span class="keyword">virtual</span> ssize_t <a class="code hl_function" href="classdom.html#add105e6f686fc967a6dc09daac66e9ba">writeFile</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *filename,</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>                                                mode_t perms);</div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span> </div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno"><a class="line" href="classdom.html#a4ceecc40285971257a78e907cecf7af1">   70</a></span>                <span class="keyword">virtual</span> ssize_t <a class="code hl_function" href="classdom.html#a4ceecc40285971257a78e907cecf7af1">writeFile</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *filename,</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>                                                mode_t perms,</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>                                                <span class="keywordtype">bool</span> indent);</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span> </div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno"><a class="line" href="classdom.html#a5b8b282f4491b25d4c9eb42193b97cbb">   76</a></span>                <span class="keyword">virtual</span> ssize_t <a class="code hl_function" href="classdom.html#a5b8b282f4491b25d4c9eb42193b97cbb">write</a>();</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno"><a class="line" href="classdom.html#a0018669368bb918e0424a4c354b81635">   63</a></span>                <span class="keyword">virtual</span> <a class="code hl_class" href="classdomnode.html">domnode</a> *<a class="code hl_function" href="classdom.html#a0018669368bb918e0424a4c354b81635">getChildByPath</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *path);</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span> </div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno"><a class="line" href="classdom.html#afeafaabbc208f2fcbaf40608bf9e1eea">   75</a></span>                <span class="keyword">virtual</span> <a class="code hl_class" href="classdomnode.html">domnode</a> *<a class="code hl_function" href="classdom.html#afeafaabbc208f2fcbaf40608bf9e1eea">getAttributeByPath</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *path,</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>                                                        uint64_t position);</div>
 <div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span> </div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno"><a class="line" href="classdom.html#a015b08b36ea3295b17f03ba35dae3a65">   84</a></span>                <span class="keyword">virtual</span> ssize_t <a class="code hl_function" href="classdom.html#a015b08b36ea3295b17f03ba35dae3a65">write</a>(<span class="keywordtype">bool</span> indent);</div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span> </div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno"><a class="line" href="classdom.html#a3db64548c80c95863058e80a687ec0d7">   87</a></span>                <span class="keyword">virtual</span> ssize_t <a class="code hl_function" href="classdom.html#a3db64548c80c95863058e80a687ec0d7">write</a>(<a class="code hl_class" href="classoutput.html">output</a> *out);</div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span> </div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno"><a class="line" href="classdom.html#aabee974fd62b41d701c8206efc82fbbb">   94</a></span>                <span class="keyword">virtual</span> ssize_t <a class="code hl_function" href="classdom.html#aabee974fd62b41d701c8206efc82fbbb">write</a>(<a class="code hl_class" href="classoutput.html">output</a> *out, <span class="keywordtype">bool</span> indent);</div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span> </div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno"><a class="line" href="classdom.html#aab205eef96a2484d08d748ad86a29780">   98</a></span>                <span class="keyword">virtual</span> ssize_t <a class="code hl_function" href="classdom.html#aab205eef96a2484d08d748ad86a29780">writeXml</a>();</div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span> </div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno"><a class="line" href="classdom.html#a196b6d0210c9029a129dd26adc32e564">  106</a></span>                <span class="keyword">virtual</span> ssize_t <a class="code hl_function" href="classdom.html#a196b6d0210c9029a129dd26adc32e564">writeXml</a>(<span class="keywordtype">bool</span> indent);</div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span> </div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno"><a class="line" href="classdom.html#a5f74910abcecde45edcb78a61d0718fe">  109</a></span>                <span class="keyword">virtual</span> ssize_t <a class="code hl_function" href="classdom.html#a5f74910abcecde45edcb78a61d0718fe">writeXml</a>(<a class="code hl_class" href="classoutput.html">output</a> *out);</div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span> </div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno"><a class="line" href="classdom.html#a6058156d2053bb76f0ca0eb6498ee296">  116</a></span>                <span class="keyword">virtual</span> ssize_t <a class="code hl_function" href="classdom.html#a6058156d2053bb76f0ca0eb6498ee296">writeXml</a>(<a class="code hl_class" href="classoutput.html">output</a> *out, <span class="keywordtype">bool</span> indent);</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno"><a class="line" href="classdom.html#a65613cec81d5d780781f7036442da6f7">   87</a></span>                <span class="keyword">virtual</span> <a class="code hl_class" href="classdomnode.html">domnode</a> *<a class="code hl_function" href="classdom.html#a65613cec81d5d780781f7036442da6f7">getAttributeByPath</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *path,</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>                                                        <span class="keyword">const</span> <span class="keywordtype">char</span> *name);</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span> </div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno"><a class="line" href="classdom.html#a6830ae4831f8c86a4d93ee6b1354af7e">  100</a></span>                <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>      *<a class="code hl_function" href="classdom.html#a6830ae4831f8c86a4d93ee6b1354af7e">getAttributeValueByPath</a>(</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>                                                        <span class="keyword">const</span> <span class="keywordtype">char</span> *path,</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>                                                        uint64_t position);</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span> </div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno"><a class="line" href="classdom.html#a2591c6765ce8f8bb73bcf18959499a39">  114</a></span>                <span class="keyword">virtual</span> <span class="keyword">const</span> <span class="keywordtype">char</span>      *<a class="code hl_function" href="classdom.html#a2591c6765ce8f8bb73bcf18959499a39">getAttributeValueByPath</a>(</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>                                                        <span class="keyword">const</span> <span class="keywordtype">char</span> *path,</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>                                                        <span class="keyword">const</span> <span class="keywordtype">char</span> *name);</div>
 <div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span> </div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno"><a class="line" href="classdom.html#a01efefc5d603dbd33b15a1b225739c8b">  120</a></span>                <span class="keywordtype">bool</span>    <a class="code hl_function" href="classdom.html#a01efefc5d603dbd33b15a1b225739c8b">getStringCacheEnabled</a>();</div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno"><a class="line" href="classdom.html#aae5f0ecdbc2dcb03c88fc261e98e9aaf">  120</a></span>                <span class="keyword">virtual</span> <span class="keywordtype">void</span>    <a class="code hl_function" href="classdom.html#aae5f0ecdbc2dcb03c88fc261e98e9aaf">createRootNode</a>();</div>
 <div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span> </div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span><span class="preprocessor">        #include &lt;rudiments/private/dom.h&gt;</span></div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>};</div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno"><a class="line" href="classdom.html#add105e6f686fc967a6dc09daac66e9ba">  124</a></span>                <span class="keyword">virtual</span> ssize_t <a class="code hl_function" href="classdom.html#add105e6f686fc967a6dc09daac66e9ba">writeFile</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *filename,</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>                                                mode_t perms);</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span> </div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno"><a class="line" href="classdom.html#a4ceecc40285971257a78e907cecf7af1">  133</a></span>                <span class="keyword">virtual</span> ssize_t <a class="code hl_function" href="classdom.html#a4ceecc40285971257a78e907cecf7af1">writeFile</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *filename,</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>                                                mode_t perms,</div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>                                                <span class="keywordtype">bool</span> indent);</div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span> </div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno"><a class="line" href="classdom.html#a5b8b282f4491b25d4c9eb42193b97cbb">  139</a></span>                <span class="keyword">virtual</span> ssize_t <a class="code hl_function" href="classdom.html#a5b8b282f4491b25d4c9eb42193b97cbb">write</a>();</div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span> </div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno"><a class="line" href="classdom.html#a015b08b36ea3295b17f03ba35dae3a65">  147</a></span>                <span class="keyword">virtual</span> ssize_t <a class="code hl_function" href="classdom.html#a015b08b36ea3295b17f03ba35dae3a65">write</a>(<span class="keywordtype">bool</span> indent);</div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span> </div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno"><a class="line" href="classdom.html#a3db64548c80c95863058e80a687ec0d7">  150</a></span>                <span class="keyword">virtual</span> ssize_t <a class="code hl_function" href="classdom.html#a3db64548c80c95863058e80a687ec0d7">write</a>(<a class="code hl_class" href="classoutput.html">output</a> *out);</div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span> </div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno"><a class="line" href="classdom.html#aabee974fd62b41d701c8206efc82fbbb">  157</a></span>                <span class="keyword">virtual</span> ssize_t <a class="code hl_function" href="classdom.html#aabee974fd62b41d701c8206efc82fbbb">write</a>(<a class="code hl_class" href="classoutput.html">output</a> *out, <span class="keywordtype">bool</span> indent);</div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span> </div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno"><a class="line" href="classdom.html#aab205eef96a2484d08d748ad86a29780">  161</a></span>                <span class="keyword">virtual</span> ssize_t <a class="code hl_function" href="classdom.html#aab205eef96a2484d08d748ad86a29780">writeXml</a>();</div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span> </div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno"><a class="line" href="classdom.html#a196b6d0210c9029a129dd26adc32e564">  169</a></span>                <span class="keyword">virtual</span> ssize_t <a class="code hl_function" href="classdom.html#a196b6d0210c9029a129dd26adc32e564">writeXml</a>(<span class="keywordtype">bool</span> indent);</div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span> </div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno"><a class="line" href="classdom.html#a5f74910abcecde45edcb78a61d0718fe">  172</a></span>                <span class="keyword">virtual</span> ssize_t <a class="code hl_function" href="classdom.html#a5f74910abcecde45edcb78a61d0718fe">writeXml</a>(<a class="code hl_class" href="classoutput.html">output</a> *out);</div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span> </div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno"><a class="line" href="classdom.html#a6058156d2053bb76f0ca0eb6498ee296">  179</a></span>                <span class="keyword">virtual</span> ssize_t <a class="code hl_function" href="classdom.html#a6058156d2053bb76f0ca0eb6498ee296">writeXml</a>(<a class="code hl_class" href="classoutput.html">output</a> *out, <span class="keywordtype">bool</span> indent);</div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span> </div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno"><a class="line" href="classdom.html#a01efefc5d603dbd33b15a1b225739c8b">  183</a></span>                <span class="keywordtype">bool</span>    <a class="code hl_function" href="classdom.html#a01efefc5d603dbd33b15a1b225739c8b">getStringCacheEnabled</a>();</div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span> </div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span><span class="preprocessor">        #include &lt;rudiments/private/dom.h&gt;</span></div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>};</div>
 </div>
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span> </div>
-<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span> </div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span><span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aclasscollection_html"><div class="ttname"><a href="classcollection.html">collection</a></div><div class="ttdef"><b>Definition</b> collection.h:11</div></div>
 <div class="ttc" id="aclassdom_html"><div class="ttname"><a href="classdom.html">dom</a></div><div class="ttdef"><b>Definition</b> dom.h:10</div></div>
+<div class="ttc" id="aclassdom_html_a0018669368bb918e0424a4c354b81635"><div class="ttname"><a href="classdom.html#a0018669368bb918e0424a4c354b81635">dom::getChildByPath</a></div><div class="ttdeci">virtual domnode * getChildByPath(const char *path)</div></div>
 <div class="ttc" id="aclassdom_html_a015b08b36ea3295b17f03ba35dae3a65"><div class="ttname"><a href="classdom.html#a015b08b36ea3295b17f03ba35dae3a65">dom::write</a></div><div class="ttdeci">virtual ssize_t write(bool indent)</div></div>
 <div class="ttc" id="aclassdom_html_a01efefc5d603dbd33b15a1b225739c8b"><div class="ttname"><a href="classdom.html#a01efefc5d603dbd33b15a1b225739c8b">dom::getStringCacheEnabled</a></div><div class="ttdeci">bool getStringCacheEnabled()</div></div>
 <div class="ttc" id="aclassdom_html_a059f064bfddeec33257c65e4f4c99aa2"><div class="ttname"><a href="classdom.html#a059f064bfddeec33257c65e4f4c99aa2">dom::dom</a></div><div class="ttdeci">dom(bool stringcacheenabled)</div></div>
 <div class="ttc" id="aclassdom_html_a0e73b7442186fd443a385e4229fc09e3"><div class="ttname"><a href="classdom.html#a0e73b7442186fd443a385e4229fc09e3">dom::parseString</a></div><div class="ttdeci">virtual bool parseString(const char *string)=0</div></div>
 <div class="ttc" id="aclassdom_html_a196b6d0210c9029a129dd26adc32e564"><div class="ttname"><a href="classdom.html#a196b6d0210c9029a129dd26adc32e564">dom::writeXml</a></div><div class="ttdeci">virtual ssize_t writeXml(bool indent)</div></div>
+<div class="ttc" id="aclassdom_html_a2591c6765ce8f8bb73bcf18959499a39"><div class="ttname"><a href="classdom.html#a2591c6765ce8f8bb73bcf18959499a39">dom::getAttributeValueByPath</a></div><div class="ttdeci">virtual const char * getAttributeValueByPath(const char *path, const char *name)</div></div>
 <div class="ttc" id="aclassdom_html_a3db64548c80c95863058e80a687ec0d7"><div class="ttname"><a href="classdom.html#a3db64548c80c95863058e80a687ec0d7">dom::write</a></div><div class="ttdeci">virtual ssize_t write(output *out)</div></div>
 <div class="ttc" id="aclassdom_html_a47887d6d77a93cc7c46c31b7f478af96"><div class="ttname"><a href="classdom.html#a47887d6d77a93cc7c46c31b7f478af96">dom::getNullNode</a></div><div class="ttdeci">virtual domnode * getNullNode()</div></div>
 <div class="ttc" id="aclassdom_html_a4b50ea2dfd656446e4220c5624d274d8"><div class="ttname"><a href="classdom.html#a4b50ea2dfd656446e4220c5624d274d8">dom::parse</a></div><div class="ttdeci">virtual bool parse(input *in)=0</div></div>
@@ -128,7 +146,9 @@ $(function() { codefold.init(0); });
 <div class="ttc" id="aclassdom_html_a5b8b282f4491b25d4c9eb42193b97cbb"><div class="ttname"><a href="classdom.html#a5b8b282f4491b25d4c9eb42193b97cbb">dom::write</a></div><div class="ttdeci">virtual ssize_t write()</div></div>
 <div class="ttc" id="aclassdom_html_a5f74910abcecde45edcb78a61d0718fe"><div class="ttname"><a href="classdom.html#a5f74910abcecde45edcb78a61d0718fe">dom::writeXml</a></div><div class="ttdeci">virtual ssize_t writeXml(output *out)</div></div>
 <div class="ttc" id="aclassdom_html_a6058156d2053bb76f0ca0eb6498ee296"><div class="ttname"><a href="classdom.html#a6058156d2053bb76f0ca0eb6498ee296">dom::writeXml</a></div><div class="ttdeci">virtual ssize_t writeXml(output *out, bool indent)</div></div>
+<div class="ttc" id="aclassdom_html_a65613cec81d5d780781f7036442da6f7"><div class="ttname"><a href="classdom.html#a65613cec81d5d780781f7036442da6f7">dom::getAttributeByPath</a></div><div class="ttdeci">virtual domnode * getAttributeByPath(const char *path, const char *name)</div></div>
 <div class="ttc" id="aclassdom_html_a66949718653db3acf16e5ca7bf6014ad"><div class="ttname"><a href="classdom.html#a66949718653db3acf16e5ca7bf6014ad">dom::parseFile</a></div><div class="ttdeci">virtual bool parseFile(const char *filename)=0</div></div>
+<div class="ttc" id="aclassdom_html_a6830ae4831f8c86a4d93ee6b1354af7e"><div class="ttname"><a href="classdom.html#a6830ae4831f8c86a4d93ee6b1354af7e">dom::getAttributeValueByPath</a></div><div class="ttdeci">virtual const char * getAttributeValueByPath(const char *path, uint64_t position)</div></div>
 <div class="ttc" id="aclassdom_html_a7a50f738232eb27fd6595555e0003584"><div class="ttname"><a href="classdom.html#a7a50f738232eb27fd6595555e0003584">dom::getRootNode</a></div><div class="ttdeci">virtual domnode * getRootNode()</div></div>
 <div class="ttc" id="aclassdom_html_a8515ab92624c1a7d561fe1995691a646"><div class="ttname"><a href="classdom.html#a8515ab92624c1a7d561fe1995691a646">dom::getType</a></div><div class="ttdeci">virtual const char * getType()</div></div>
 <div class="ttc" id="aclassdom_html_aaab27551398c9ab1b7a0952fd6759a77"><div class="ttname"><a href="classdom.html#aaab27551398c9ab1b7a0952fd6759a77">dom::~dom</a></div><div class="ttdeci">virtual ~dom()</div></div>
@@ -137,13 +157,14 @@ $(function() { codefold.init(0); });
 <div class="ttc" id="aclassdom_html_aac3a1a7eac64e5a5cbcdca7f9511bb38"><div class="ttname"><a href="classdom.html#aac3a1a7eac64e5a5cbcdca7f9511bb38">dom::dom</a></div><div class="ttdeci">dom()</div></div>
 <div class="ttc" id="aclassdom_html_aae5f0ecdbc2dcb03c88fc261e98e9aaf"><div class="ttname"><a href="classdom.html#aae5f0ecdbc2dcb03c88fc261e98e9aaf">dom::createRootNode</a></div><div class="ttdeci">virtual void createRootNode()</div></div>
 <div class="ttc" id="aclassdom_html_add105e6f686fc967a6dc09daac66e9ba"><div class="ttname"><a href="classdom.html#add105e6f686fc967a6dc09daac66e9ba">dom::writeFile</a></div><div class="ttdeci">virtual ssize_t writeFile(const char *filename, mode_t perms)</div></div>
+<div class="ttc" id="aclassdom_html_afeafaabbc208f2fcbaf40608bf9e1eea"><div class="ttname"><a href="classdom.html#afeafaabbc208f2fcbaf40608bf9e1eea">dom::getAttributeByPath</a></div><div class="ttdeci">virtual domnode * getAttributeByPath(const char *path, uint64_t position)</div></div>
 <div class="ttc" id="aclassdomnode_html"><div class="ttname"><a href="classdomnode.html">domnode</a></div><div class="ttdef"><b>Definition</b> domnode.h:122</div></div>
 <div class="ttc" id="aclassinput_html"><div class="ttname"><a href="classinput.html">input</a></div><div class="ttdef"><b>Definition</b> input.h:11</div></div>
 <div class="ttc" id="aclassoutput_html"><div class="ttname"><a href="classoutput.html">output</a></div><div class="ttdef"><b>Definition</b> output.h:11</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Dec 3 2024 01:50:18 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.10.0
+Generated on Sat Aug 8 2026 19:56:13 for Rudiments by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.10.0
 </small></address>
 </body>
 </html>
