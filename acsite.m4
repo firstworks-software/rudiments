@@ -137,6 +137,12 @@ then
 		FW_TRY_LINK([#include <openssl/ssl.h>],[const SSL_METHOD *a=SSLv2_method();],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_SSLV2_METHOD,1,SSL has SSLv2_method) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 		FW_RESTORE_WERROR
 
+		AC_MSG_CHECKING(for SSL_CTX_set_min_proto_version and SSL_CTX_set_max_proto_version)
+		FW_TRY_LINK([#include <openssl/ssl.h>],[SSL_CTX *ctx=0; SSL_CTX_set_min_proto_version(ctx,0); SSL_CTX_set_max_proto_version(ctx,0);],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_SSL_CTX_SET_MIN_MAX_PROTO_VERSION,1,SSL has SSL_CTX_set_min_proto_version and SSL_CTX_set_max_proto_version) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+
+		AC_MSG_CHECKING(for TLS1_3_VERSION)
+		FW_TRY_LINK([#include <openssl/ssl.h>],[int a=TLS1_3_VERSION;],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_TLS1_3_VERSION,1,SSL has TLS1_3_VERSION) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+
 		AC_MSG_CHECKING(for dNSName)
 		FW_TRY_LINK([#include <openssl/x509v3.h>],[GENERAL_NAME g; g.d.dNSName=0;],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_SSL_DNSNAME,1,SSL has dNSName) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 

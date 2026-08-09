@@ -32,10 +32,27 @@ class RUDIMENTS_DLLSPEC tlscontext : public securitycontext {
 		/** Sets the protocol version to use during the next call to
 		 *  connect() or accept().
 		 *
-		 *  Valid values include SSL2, SSL3, TLS1, TLS1.1, TLS1.2 or
-		 *  any more recent version of TLS, as supported by and enabled
-		 *  in the underlying TLS/SSL library.  If left blank or empty
-		 *  then the highest supported version will be negotiated. */
+		 *  Valid values include SSL2, SSL3, TLS1, TLS1.1, TLS1.2 and
+		 *  TLS1.3, or any more recent version of TLS, as supported by
+		 *  and enabled in the underlying TLS/SSL library.  If left
+		 *  blank or empty then the highest supported version will be
+		 *  negotiated.
+		 *
+		 *  TLS1.3 requires OpenSSL 1.1.1 or later, or, on Windows, a
+		 *  Windows 10 SDK of 10.0.17763 or later.  On an older build,
+		 *  requesting TLS1.3 fails the next call to connect() or
+		 *  accept(); getError() and getErrorString() report why.
+		 *
+		 *  On OpenSSL, SSLv2, SSLv3, TLSv1, TLSv1.1, TLSv1.2 and
+		 *  TLSv1.3 are also accepted as aliases for the corresponding
+		 *  values above, and requesting a version this build's
+		 *  OpenSSL genuinely can't honor (e.g. SSL3 against an
+		 *  OpenSSL built without it) fails the same way TLS1.3 does
+		 *  above, rather than silently negotiating a different
+		 *  version.  On Windows, only the un-aliased SSL2 through
+		 *  TLS1.2 spellings are recognized, and requesting one this
+		 *  build's SChannel doesn't support still falls back to
+		 *  negotiating any available version. */
 		void	setProtocolVersion(const char *version);
 
 		/** Returns the protocol version that will be used during the

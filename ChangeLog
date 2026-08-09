@@ -1,4 +1,31 @@
-2.3.0 - tlscontext now binds openssl's BIO to a custom BIO_METHOD instead of
+2.3.0 - fixed tlscontext::setProtocolVersion() being a silent no-op on openssl
+	1.1.0+ - the exact-version method functions it called (TLSv1_2_method()
+	etc) are deprecated there, so the configure probe that gates them fails
+	under -Werror=deprecated-declarations and the pin has nothing to call,
+	silently falling back to negotiating whatever version the peer offered;
+	found while implementing SQL Relay #8848 (tds protocol tls support),
+	which needs a hard TLS1.2 ceiling because freetds 1.3.3's gnutls build
+	has no post-handshake flush and a TLS1.3 handshake corrupts the stream
+	that follows (#9257); configure now also probes for
+	SSL_CTX_set_min_proto_version()/SSL_CTX_set_max_proto_version()
+	(available since openssl 1.1.0, not deprecated) and for TLS1_3_VERSION
+	(openssl 1.1.1+), and setProtocolVersion() pins through those when
+	present instead of the deprecated exact-method calls; TLS1.3/TLSv1.3 is
+	now a recognized version string too - there was never a TLSv1_3_method()
+	to call, so it was previously unreachable on openssl at all; older
+	openssl (1.0.2 and earlier) keeps using the exact-method functions, and
+	on openssl a recognized-but-unhonorable version request now fails
+	outright, reported via getError()/getErrorString() from connect() or
+	accept(), instead of silently negotiating a different version than the
+	one pinned - that silent fallback was the actual bug; on windows, TLS1.3
+	needs the newer SCH_CREDENTIALS/TLS_PARAMETERS credential struct instead
+	of the legacy SCHANNEL_CRED.grbitEnabledProtocols bitmask, which can't
+	express TLS1.3 at all, so that's added too, gated on the windows 10 sdk
+	(10.0.17763+) defining SCH_CREDENTIALS_VERSION, so an older sdk fails a
+	TLS1.3 request cleanly instead of silently falling back to any version;
+	windows' other version strings (SSL2 through TLS1.2) are unaliased and
+	still fall back to negotiating any version if unsupported, unchanged
+	tlscontext now binds openssl's BIO to a custom BIO_METHOD instead of
 	BIO_s_fd(), so its read/write callbacks go through filedescriptor's
 	lowLevelRead()/lowLevelWrite() virtuals instead of openssl making raw
 	read(2)/write(2) syscalls directly on the file descriptor - a

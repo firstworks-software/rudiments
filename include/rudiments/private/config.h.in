@@ -288,6 +288,9 @@
 /* SSL has SSLv3_method */
 #undef RUDIMENTS_HAS_SSLV3_METHOD
 
+/* SSL has SSL_CTX_set_min_proto_version and SSL_CTX_set_max_proto_version */
+#undef RUDIMENTS_HAS_SSL_CTX_SET_MIN_MAX_PROTO_VERSION
+
 /* SSL has dNSName */
 #undef RUDIMENTS_HAS_SSL_DNSNAME
 
@@ -299,6 +302,9 @@
 
 /* Some systems have timezone */
 #undef RUDIMENTS_HAS_TIMEZONE
+
+/* SSL has TLS1_3_VERSION */
+#undef RUDIMENTS_HAS_TLS1_3_VERSION
 
 /* SSL has TLSv1_1_method */
 #undef RUDIMENTS_HAS_TLSV1_1_METHOD

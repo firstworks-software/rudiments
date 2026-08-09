@@ -116,6 +116,10 @@ class tlscontextprivate {
 			DWORD		_cctxcount;
 			PCCERT_CONTEXT	*_cctx;
 			SCHANNEL_CRED	_scred;
+			#ifdef SCH_CREDENTIALS_VERSION
+			SCH_CREDENTIALS	_schcred;
+			TLS_PARAMETERS	_tlsparams;
+			#endif
 			DWORD		_algidcount;
 			ALG_ID		*_algids;
 			HCERTSTORE	_castore;
@@ -190,6 +194,10 @@ void tlscontext::initContext() {
 		pvt->_peercert=NULL;
 
 		bytestring::zero(&pvt->_scred,sizeof(pvt->_scred));
+		#ifdef SCH_CREDENTIALS_VERSION
+		bytestring::zero(&pvt->_schcred,sizeof(pvt->_schcred));
+		bytestring::zero(&pvt->_tlsparams,sizeof(pvt->_tlsparams));
+		#endif
 
 		pvt->_gmech.open(UNISP_NAME_A);
 
@@ -1049,66 +1057,114 @@ bool tlscontext::reInit(bool isclient) {
 		//   is it clear whether any method to do it is consistent
 		//   across openssl versions or other ssl implementations.
 
-		// decide on the protocol version
+		// decide on the protocol version...
+		//
+		// Newer OpenSSL versions want you to create the context from
+		// the generic method, then pin the version by setting the
+		// min/max protocol versions on the context.  Older versions
+		// only have the (now deprecated) exact XXX_client/server_method
+		// functions.  So, decide on a min/max version pair if we can,
+		// and on an exact method otherwise.
 		const SSL_METHOD	*method=NULL;
+		#if defined(RUDIMENTS_HAS_SSL_CTX_SET_MIN_MAX_PROTO_VERSION)
+			int	minversion=0;
+			int	maxversion=0;
+		#endif
+		bool	versionsupported=true;
 		if (!charstring::compareIgnoringCase(
 					pvt->_version,"SSL2") ||
 			!charstring::compareIgnoringCase(
 					pvt->_version,"SSLv2")) {
+			// (there is no SSL2 min/max version constant)
 			#if defined(RUDIMENTS_HAS_SSLV2_METHOD)
 			if (isclient) {
 				method=SSLv2_client_method();
 			} else {
 				method=SSLv2_server_method();
 			}
+			#else
+			versionsupported=false;
 			#endif
 		} else if (!charstring::compareIgnoringCase(
 					pvt->_version,"SSL3") ||
 			!charstring::compareIgnoringCase(
 					pvt->_version,"SSLv3")) {
-			#if defined(RUDIMENTS_HAS_SSLV3_METHOD)
+			#if defined(RUDIMENTS_HAS_SSL_CTX_SET_MIN_MAX_PROTO_VERSION)
+			minversion=SSL3_VERSION;
+			maxversion=SSL3_VERSION;
+			#elif defined(RUDIMENTS_HAS_SSLV3_METHOD)
 			if (isclient) {
 				method=SSLv3_client_method();
 			} else {
 				method=SSLv3_server_method();
 			}
+			#else
+			versionsupported=false;
 			#endif
 		} else if (!charstring::compareIgnoringCase(
 					pvt->_version,"TLS1") ||
 			!charstring::compareIgnoringCase(
 					pvt->_version,"TLSv1")) {
-			#if defined(RUDIMENTS_HAS_TLSV1_METHOD)
+			#if defined(RUDIMENTS_HAS_SSL_CTX_SET_MIN_MAX_PROTO_VERSION)
+			minversion=TLS1_VERSION;
+			maxversion=TLS1_VERSION;
+			#elif defined(RUDIMENTS_HAS_TLSV1_METHOD)
 			if (isclient) {
 				method=TLSv1_client_method();
 			} else {
 				method=TLSv1_server_method();
 			}
+			#else
+			versionsupported=false;
 			#endif
 		} else if (!charstring::compareIgnoringCase(
 					pvt->_version,"TLS1.1") ||
 			!charstring::compareIgnoringCase(
 					pvt->_version,"TLSv1.1")) {
-			#if defined(RUDIMENTS_HAS_TLSV1_1_METHOD)
+			#if defined(RUDIMENTS_HAS_SSL_CTX_SET_MIN_MAX_PROTO_VERSION)
+			minversion=TLS1_1_VERSION;
+			maxversion=TLS1_1_VERSION;
+			#elif defined(RUDIMENTS_HAS_TLSV1_1_METHOD)
 			if (isclient) {
 				method=TLSv1_1_client_method();
 			} else {
 				method=TLSv1_1_server_method();
 			}
+			#else
+			versionsupported=false;
 			#endif
 		} else if (!charstring::compareIgnoringCase(
 					pvt->_version,"TLS1.2") ||
 			!charstring::compareIgnoringCase(
 					pvt->_version,"TLSv1.2")) {
-			#if defined(RUDIMENTS_HAS_TLSV1_2_METHOD)
+			#if defined(RUDIMENTS_HAS_SSL_CTX_SET_MIN_MAX_PROTO_VERSION)
+			minversion=TLS1_2_VERSION;
+			maxversion=TLS1_2_VERSION;
+			#elif defined(RUDIMENTS_HAS_TLSV1_2_METHOD)
 			if (isclient) {
 				method=TLSv1_2_client_method();
 			} else {
 				method=TLSv1_2_server_method();
 			}
+			#else
+			versionsupported=false;
+			#endif
+		} else if (!charstring::compareIgnoringCase(
+					pvt->_version,"TLS1.3") ||
+			!charstring::compareIgnoringCase(
+					pvt->_version,"TLSv1.3")) {
+			// (TLSv1_3_xxx_method() never existed, so the
+			// min/max version pair is the only way to get TLS1.3)
+			#if defined(RUDIMENTS_HAS_SSL_CTX_SET_MIN_MAX_PROTO_VERSION) && \
+				defined(RUDIMENTS_HAS_TLS1_3_VERSION)
+			minversion=TLS1_3_VERSION;
+			maxversion=TLS1_3_VERSION;
+			#else
+			versionsupported=false;
 			#endif
 		}
 
-		// NOTE: the above XXX_client/server_method calls are
+		// NOTE: the XXX_client/server_method calls above are
 		// deprecated.  Eg. TLSv1_3_xxx_method() doesn't exist at all.
 		//
 		// OpenSSL wants you to call whichever of the methods below
@@ -1124,8 +1180,17 @@ bool tlscontext::reInit(bool isclient) {
 		// highest TLS method available, despite specifically
 		// requesting SSL3, and working as expected on the older
 		// platform.
+		//
+		// That's why, when we can pin the version with the min/max
+		// protocol versions, we do that instead, and fail outright
+		// when a requested version can't be pinned at all.
 
-		if (!method) {
+		if (!versionsupported) {
+			setError(-1,"unsupported protocol version");
+			retval=false;
+		}
+
+		if (retval && !method) {
 			if (isclient) {
 				#if defined(RUDIMENTS_HAS_TLS_METHOD)
 					method=TLS_client_method()
@@ -1149,17 +1214,38 @@ bool tlscontext::reInit(bool isclient) {
 
 		// create the context
 		// (some versions take a non-const SSL_METHOD *)
-		pvt->_ctx=SSL_CTX_new((SSL_METHOD *)method);
+		if (retval) {
+			pvt->_ctx=SSL_CTX_new((SSL_METHOD *)method);
+			if (!pvt->_ctx) {
+				setError(0);
+				retval=false;
+			}
+		}
+
+		// pin the protocol version
+		#if defined(RUDIMENTS_HAS_SSL_CTX_SET_MIN_MAX_PROTO_VERSION)
+		if (retval && minversion) {
+			if (SSL_CTX_set_min_proto_version(
+						pvt->_ctx,minversion)!=1 ||
+				SSL_CTX_set_max_proto_version(
+						pvt->_ctx,maxversion)!=1) {
+				setError(0);
+				retval=false;
+			}
+		}
+		#endif
 
 		// set auto-retry mode
-		SSL_CTX_set_mode(pvt->_ctx,SSL_MODE_AUTO_RETRY);
+		if (retval) {
+			SSL_CTX_set_mode(pvt->_ctx,SSL_MODE_AUTO_RETRY);
+		}
 
 		// load certificate chain file and private key,
 		// using a password, if supplied
 		#ifdef DEBUG_TLS
 		bool	certloaded=false;
 		#endif
-		if (!charstring::isNullOrEmpty(pvt->_cert)) {
+		if (retval && !charstring::isNullOrEmpty(pvt->_cert)) {
 			if (pvt->_pkpwd) {
 				SSL_CTX_set_default_passwd_cb(
 					pvt->_ctx,passwdCallback);
@@ -1192,7 +1278,9 @@ bool tlscontext::reInit(bool isclient) {
 		}
 
 		// use ephemeral diffie-hellman key exchange
-		SSL_CTX_set_options(pvt->_ctx,SSL_OP_SINGLE_DH_USE);
+		if (retval) {
+			SSL_CTX_set_options(pvt->_ctx,SSL_OP_SINGLE_DH_USE);
+		}
 
 		// set the certificate authority
 		if (retval && !charstring::isNullOrEmpty(pvt->_ca)) {
@@ -1283,7 +1371,14 @@ bool tlscontext::reInit(bool isclient) {
 						ASC_REQ_STREAM);
 
 		// decide on the protocol version
+		//
+		// TLS 1.3 can't be requested through the
+		// grbitEnabledProtocols bitmask below at all.  SChannel
+		// only negotiates it if a structurally different credential
+		// struct is used, so it gets flagged here and handled
+		// separately below.
 		DWORD	method=0;
+		bool	tls13=false;
 		if (!charstring::compareIgnoringCase(
 					pvt->_version,"SSL2")) {
 			if (isclient) {
@@ -1339,8 +1434,13 @@ bool tlscontext::reInit(bool isclient) {
 				method=SP_PROT_TLS1_2_SERVER;
 				#endif
 			}
+		} else if (!charstring::compareIgnoringCase(
+					pvt->_version,"TLS1.3") ||
+			!charstring::compareIgnoringCase(
+					pvt->_version,"TLSv1.3")) {
+			tls13=true;
 		}
-		if (!method) {
+		if (!method && !tls13) {
 			if (isclient) {
 				method=
 				(0
@@ -1675,18 +1775,112 @@ bool tlscontext::reInit(bool isclient) {
 			stdoutput.printf("  ca: %s\n",pvt->_ca);
 		#endif
 
-		// build schannel creds and acquire credentials...
+		// build schannel creds...
+		//
+		// Every version through TLS 1.2 is selected by turning its
+		// bit on in SCHANNEL_CRED.grbitEnabledProtocols.  TLS 1.3
+		// can't be selected that way at all, no matter what bit is
+		// set.  SChannel only offers it if the credentials are
+		// handed over in the newer SCH_CREDENTIALS struct, which
+		// replaces the allow-list with a TLS_PARAMETERS deny-list of
+		// the versions to refuse.  It also drops the ALG_ID cipher
+		// list, so the ciphers set above don't apply to TLS 1.3.
 		if (retval) {
 
-			// configure schannel creds
-			bytestring::zero(&pvt->_scred,sizeof(pvt->_scred));
-			pvt->_scred.dwVersion=SCHANNEL_CRED_VERSION;
-			pvt->_scred.cCreds=pvt->_cctxcount;
-			pvt->_scred.paCred=pvt->_cctx;
-			pvt->_scred.cSupportedAlgs=pvt->_algidcount;
-			pvt->_scred.palgSupportedAlgs=pvt->_algids;
-			pvt->_scred.grbitEnabledProtocols=method;
-			pvt->_scred.dwFlags=credflags;
+			if (tls13) {
+
+				#ifdef SCH_CREDENTIALS_VERSION
+
+				// disable everything but TLS 1.3
+				bytestring::zero(&pvt->_tlsparams,
+						sizeof(pvt->_tlsparams));
+				pvt->_tlsparams.grbitDisabledProtocols=
+					(isclient)?
+					(0
+					#ifdef SP_PROT_SSL2_CLIENT
+						|SP_PROT_SSL2_CLIENT
+					#endif
+					#ifdef SP_PROT_SSL3_CLIENT
+						|SP_PROT_SSL3_CLIENT
+					#endif
+					#ifdef SP_PROT_TLS1_CLIENT
+						|SP_PROT_TLS1_CLIENT
+					#endif
+					#ifdef SP_PROT_TLS1_1_CLIENT
+						|SP_PROT_TLS1_1_CLIENT
+					#endif
+					#ifdef SP_PROT_TLS1_2_CLIENT
+						|SP_PROT_TLS1_2_CLIENT
+					#endif
+					#ifdef SP_PROT_PCT1_CLIENT
+						|SP_PROT_PCT1_CLIENT
+					#endif
+					):
+					(0
+					#ifdef SP_PROT_SSL2_SERVER
+						|SP_PROT_SSL2_SERVER
+					#endif
+					#ifdef SP_PROT_SSL3_SERVER
+						|SP_PROT_SSL3_SERVER
+					#endif
+					#ifdef SP_PROT_TLS1_SERVER
+						|SP_PROT_TLS1_SERVER
+					#endif
+					#ifdef SP_PROT_TLS1_1_SERVER
+						|SP_PROT_TLS1_1_SERVER
+					#endif
+					#ifdef SP_PROT_TLS1_2_SERVER
+						|SP_PROT_TLS1_2_SERVER
+					#endif
+					#ifdef SP_PROT_PCT1_SERVER
+						|SP_PROT_PCT1_SERVER
+					#endif
+					);
+
+				// configure schannel creds
+				bytestring::zero(&pvt->_schcred,
+						sizeof(pvt->_schcred));
+				pvt->_schcred.dwVersion=
+						SCH_CREDENTIALS_VERSION;
+				pvt->_schcred.cCreds=pvt->_cctxcount;
+				pvt->_schcred.paCred=pvt->_cctx;
+				pvt->_schcred.dwFlags=credflags;
+				pvt->_schcred.cTlsParameters=1;
+				pvt->_schcred.pTlsParameters=
+						&pvt->_tlsparams;
+
+				// hand the new creds to sspi
+				pvt->_gcred.setPackageSpecificData(
+						&pvt->_schcred);
+
+				#else
+
+				setError(-1,"unsupported protocol version");
+				retval=false;
+
+				#endif
+
+			} else {
+
+				// configure schannel creds
+				bytestring::zero(&pvt->_scred,
+						sizeof(pvt->_scred));
+				pvt->_scred.dwVersion=SCHANNEL_CRED_VERSION;
+				pvt->_scred.cCreds=pvt->_cctxcount;
+				pvt->_scred.paCred=pvt->_cctx;
+				pvt->_scred.cSupportedAlgs=pvt->_algidcount;
+				pvt->_scred.palgSupportedAlgs=pvt->_algids;
+				pvt->_scred.grbitEnabledProtocols=method;
+				pvt->_scred.dwFlags=credflags;
+
+				// hand the legacy creds to sspi
+				pvt->_gcred.setPackageSpecificData(
+						&pvt->_scred);
+			}
+		}
+
+		// acquire credentials...
+		if (retval) {
 
 			// set file descriptor
 			pvt->_gctx.setFileDescriptor(pvt->_fd);
