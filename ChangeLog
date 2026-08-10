@@ -1,121 +1,89 @@
-2.3.0 - fixed tlscontext::setProtocolVersion() being a silent no-op on openssl
-	1.1.0+ - the exact-version method functions it called (TLSv1_2_method()
-	etc) are deprecated there, so the configure probe that gates them fails
-	under -Werror=deprecated-declarations and the pin has nothing to call,
-	silently falling back to negotiating whatever version the peer offered;
-	found while implementing SQL Relay #8848 (tds protocol tls support),
-	which needs a hard TLS1.2 ceiling because freetds 1.3.3's gnutls build
-	has no post-handshake flush and a TLS1.3 handshake corrupts the stream
-	that follows (#9257); configure now also probes for
-	SSL_CTX_set_min_proto_version()/SSL_CTX_set_max_proto_version()
-	(available since openssl 1.1.0, not deprecated) and for TLS1_3_VERSION
-	(openssl 1.1.1+), and setProtocolVersion() pins through those when
-	present instead of the deprecated exact-method calls; TLS1.3/TLSv1.3 is
-	now a recognized version string too - there was never a TLSv1_3_method()
-	to call, so it was previously unreachable on openssl at all; older
-	openssl (1.0.2 and earlier) keeps using the exact-method functions, and
-	on openssl a recognized-but-unhonorable version request now fails
-	outright, reported via getError()/getErrorString() from connect() or
-	accept(), instead of silently negotiating a different version than the
-	one pinned - that silent fallback was the actual bug; on windows, TLS1.3
-	needs the newer SCH_CREDENTIALS/TLS_PARAMETERS credential struct instead
-	of the legacy SCHANNEL_CRED.grbitEnabledProtocols bitmask, which can't
-	express TLS1.3 at all, so that's added too, gated on the windows 10 sdk
-	(10.0.17763+) defining SCH_CREDENTIALS_VERSION, so an older sdk fails a
-	TLS1.3 request cleanly instead of silently falling back to any version;
-	windows' other version strings (SSL2 through TLS1.2) are unaliased and
-	still fall back to negotiating any version if unsupported, unchanged
-	tlscontext now binds openssl's BIO to a custom BIO_METHOD instead of
-	BIO_s_fd(), so its read/write callbacks go through filedescriptor's
-	lowLevelRead()/lowLevelWrite() virtuals instead of openssl making raw
-	read(2)/write(2) syscalls directly on the file descriptor - a
-	filedescriptor subclass can now interpose a layer (framing,
-	tunnelling, etc.) between the tls engine and the socket, which
-	nothing could do before; retry flags are set from the same
-	EAGAIN/EWOULDBLOCK/EINTR conditions the old BIO_s_fd handled, so
-	blocking and non-blocking sockets behave the same as before; SQL
-	Relay's tds protocol module needs this to tunnel its TLS handshake
-	inside TDS packet framing
-	added an rng abstract base class, and renamed randomnumber to prng and
-	csrandomnumber to csprng - rng declares the 7 instance methods
-	(setSeed(), generate(uint32_t*), generate(int32_t*,lower,upper), and
-	the four generateBytes() overloads) that prng and csprng each
-	implement, so code that only needs to generate numbers can be
-	written against rng and swap either implementation in; static
-	methods aren't part of the interface, since c++ doesn't allow
-	virtual statics; prng and csprng keep their prior behavior exactly,
-	but csprng, which has no seed concept, now also carries degenerate
-	versions of every method rng/prng expose that it previously lacked -
-	setSeed() is a no-op that returns true, getSeed() returns a
-	meaningless placeholder, the seeded static generate()/generateBytes()
-	overloads ignore the seed and draw a real cryptographically secure
-	value instead of a reproducible one, and getNeedsMutex()/setMutex()
-	are a no-op pair reflecting that none of csprng's backends
-	(openssl's RAND_bytes(), a per-instance CryptGenRandom() handle, or
-	a per-instance /dev/urandom device) ever holds shared mutable
-	state - these exist only so csprng presents the same interface as
-	prng/rng and can be used interchangeably with them; this is a
-	breaking rename - randomnumber and csrandomnumber are gone, not kept
-	as aliases - so SQL Relay and other dependents need a follow-up
-	update to the new names
-	fixed randomnumber::scale() to clamp its result to "upper" - float only
-	carries 24 bits of precision, so for a "number" near getRandMax(), the
-	scaled value could round up to exactly 1.0 and push the result one
-	past "upper"; callers that use scale() to index a fixed-size array,
-	such as file::createTemporaryFile() and
-	directory::createTemporaryDirectory(), could read one element past
-	the end
-	added csrandomnumber::scale(), getRandMax(), and static generate()/generate(lower,upper) - scale() and getRandMax() give csrandomnumber the same number-range helpers randomnumber already has, and the static generate() overloads let a one-off cryptographically secure draw be made without keeping an instance around, mirroring randomnumber's seeded static generate(), except csrandomnumber's isn't seeded, since a reproducible sequence is exactly what "cryptographically secure" rules out - there's no static generateBytes() to go with them, since unlike generate(), it would need the same parameter list as the instance overloads, with no seed to distinguish it by, which c++ doesn't allow
-	added randomnumber's seed-first static generateBytes() overloads - four overloads mirroring the existing instance generateBytes() shapes but taking a seed first, so a reproducible byte sequence can be generated without keeping an instance around, the same way the existing static generate(seed,...) family already could for single numbers - generateBytes(seed,size) allocates and returns a byte_t*, two overloads fill a caller-supplied buffer, and one appends to a bytebuffer
-	added a csrandomnumber class, a cryptographically secure counterpart to randomnumber - it offers the same generate(uint32_t*), generate(int32_t*,lower,upper) and generateBytes() shapes, but no setSeed()/getSeed() or seed-driven generate(), since a reproducible sequence is exactly what "cryptographically secure" rules out - SQL Relay's oracle_userlist.cpp needs unpredictable bytes for O5LOGON session keys and salts (SQL Relay #9206) and had to reach past rudiments to openssl's RAND_bytes() directly, because nothing in rudiments filled that role; it uses RAND_bytes() when openssl is available, CryptGenRandom() on windows, and /dev/urandom otherwise, and isSupported() reports whether a backend is compiled in
-	added randomnumber::generateBytes(), four overloads for filling a
-	buffer of raw random bytes in one call instead of one uint32_t at a
-	time - generateBytes(size_t) allocates and returns a byte_t* of that
-	many random bytes, two overloads fill a caller-supplied buffer, and
-	one appends to a bytebuffer
-	added a sha512 class, aes192 and aes256 classes, and encryption::setUsePadding(bool) - sha512 fills the gap next to sha256/md5/sha1 (the RUDIMENTS_HAS_SHA512_CTX probe already existed for pbkdf2's use, but nothing implemented plain sha512 hashing; the non-openssl build now carries its own reference implementation, written from FIPS 180-4/RFC 6234), aes192/aes256 extend aes128 to the two longer key sizes (the bundled non-openssl rijndael implementation already supported both, only the openssl arm and getKeySize() needed cloning), and setUsePadding(bool), defaulting to true, lets an aes128/aes192/aes256 cipher be used as a raw block transform with no CMS/PKCS#7 padding added or removed, for protocols like Oracle's O5LOGON that need AES-CBC over already block-aligned data - SQL Relay #8976 needed all three and had to reach past rudiments to openssl directly to get them
-	fixed FW_FIX_LIBTOOL and the chmod of bin/rudiments-config, which ran as plain shell after AC_OUTPUT in configure.in, so neither was part of config.status - a bare ./config.status, an ordinary way to refresh generated files, silently reverted libtool to its unpatched form on netbsd, macos, sco unixware and sco osr5, and left bin/rudiments-config non-executable everywhere - both are attached to AC_CONFIG_FILES/AC_CONFIG_COMMANDS now, so config.status carries them regardless of how it's invoked
-	fixed collection::writeValue() and writeJsonValue() printing pointers with %08x, which only consumes 4 bytes, so on LP64 half of a 64-bit pointer was silently dropped and two distinct objects could print as the same value - the ten sites in include/rudiments/private/collectioninlines.h now use %p, which is correct at every pointer width
-	fixed buffer overflow when unix socket file name is too long
-	fixed segfault in file::getBaseName(filename,ext) when the base name doesn't end in ext, when either argument is NULL, or when the base name is entirely the extension - it now truncates ext only if the base name ends with it and returns the base name unmodified otherwise
-	added PCRE2 support - configure now prefers PCRE2, falls back to PCRE1, then POSIX regex, so regularexpression still uses PCRE on distros that have dropped PCRE1 (debian 13, el10)
-	fixed double free in regularexpression::clear() on builds without PCRE (POSIX regex or the built-in regex, which is what windows uses) - clear() left its string copy dangling, so clear() followed by the destructor, a second clear(), or another match() aborted
-	removed regularexpression::clear(), which was public but undocumented and never appeared in the api reference - the destructor does its work now, so the object can no longer be left holding pointers to memory it just freed
-	added an alloca check to configure, which builds that use the built-in regex need on a non-GNU compiler (windows uses the built-in regex, and so does --enable-built-in-regex) - the bundled glibc engine allocates with alloca unless REGEX_MALLOC is defined, and it includes alloca.h only when HAVE_ALLOCA_H is defined, which nothing in this tree ever defined - gcc and clang were never affected, since they define alloca to a builtin, and neither was windows, since the engine always defines REGEX_MALLOC there, but a compiler with neither would have been left with whatever stdlib.h happened to declare, which may be nothing - AC_FUNC_ALLOCA now defines HAVE_ALLOCA_H, so that arm gets the include
-	fixed hash::reset(), which cleared the appended data and the salt but never the hash itself - sha1, sha256 and md5 each keep their digest context in their own private data and none of them overrides reset(), so the base implementation was the only one they got and it never touched that context - after reset() the context was still mid-stream, so the next append() continued the old digest instead of starting a new one and the caller got a silently wrong answer rather than an error - clear() is the method that already worked, and the two are close enough in name that reaching for the wrong one was easy - include/rudiments/hash.h has documented reset() as clearing the current hash all along, and its doc comment even anticipated the fix by saying a child class may override the method - rather than overriding it in each of them, reset() now calls the virtual clear(), so any hash class gets its hash cleared without overriding reset() at all, including one added later, and reset() now returns what clear() returned instead of always returning true
-	fixed pbkdf2::reset(), which cleared the hash but never the salt - it called clear() and put its algorithm, iteration count and key size back to defaults, but never chained to hash::reset(), which is what deletes the salt, so a salt set by an earlier setSalt() survived - include/rudiments/pbkdf2.h documents the method as setting the salt to a default, and include/rudiments/hash.h documents reset() as clearing the salt, so it matched neither - it calls hash::reset() now, which also picks up the clear() fix above
-	the website's server-side includes are expanded at build time now instead of by apache - the 101 pages that used them are .html.in files, and the new ssi.sh and ssi.vbs scripts expand them into .html, so the site can be served by any web server, on unix or windows, and doc/.htaccess is gone
-	the website's html files aren't executable anymore - the execute bit was only there for apache's XBitHack, which went away with the server-side includes, so they're installed 644 now like the css and js already were
-	regenerated doc/programming/charstring.html and doc/programming/xmlsax.html, which had gone stale against their .wt sources - the pages showed charstring::contains where the source has charstring::containsIgnoringCase, and an xml example the source had replaced
-	regenerated five website pages that wt had been truncating - dictionary, linkedlist, scalar, singlylinkedlist and table under doc/programming each stopped mid-sentence at "deleted using delete[]", losing a code example and everything after it including the page footer, because an empty bracket pair made wt drop the rest of the file (fixed under #8966)
-	fixed md5::getHash() on builds against an openssl whose MD5_Final() returns int, which is the common case on a current openssl - when MD5_Final() failed it returned a pointer to a one-byte string literal rather than NULL, so a caller that made the documented NULL check saw a non-NULL pointer and went on to read getHashSize() bytes, 16 of them, out of a one-byte literal in read-only memory - a clean error turned into a 15-byte overread - include/rudiments/hash.h and include/rudiments/md5.h have both documented getHash() as returning NULL on failure all along, and sha1::getHash(), sha256::getHash(), des::getHash() and pbkdf2::getHash() all already did, so md5 was the only one of the five that didn't - reaching it takes an MD5_Final() failure, which nothing in the rudiments api can provoke, so this was a latent wild read rather than one anybody has hit
-	fixed sha1::getError() on builds without openssl (which is what windows uses), which reported every error as a success - the switch in sha1::setError() had no break statements, so whichever case matched, control fell through the rest of them and the default overwrote the real error with HASH_ERROR_SUCCESS - the reachable one is the state error an append() after getHash() with no clear() in between raises, where append() returned false while getError() said the call had succeeded - -Wimplicit-fallthrough would have caught it, but it is in -Wextra rather than the -Wall -Werror the build uses - the default case now reports HASH_ERROR_NULL instead of success, since reaching it means an error code the switch doesn't recognize, although the four cases above it cover every value the bundled rfc 3174 implementation returns
-	fixed sha256::clear() on builds without openssl (which is what windows uses), which always reported failure even though it succeeded - it zeroed the hash, re-initialized the context, and then returned false, so the same successful call reported opposite results depending on how the library was configured, and a caller that checked the return value saw a failure that never happened, while include/rudiments/sha256.h has documented it as returning true on success all along
-	removed the bundled md5 reference implementation from the librudiments export list on builds without openssl, which was the last bundled implementation still exporting its internals - its ten symbols were mangled and scoped to a class MD5, so they couldn't collide with libc or with libcrypto's MD5_Init(), but MD5 is a global-namespace name, so another c++ translation unit that bundled the same rfc 1321 reference source and wrapped it the same way produced the same mangled names, and two copies disagreeing about the layout of the context struct is a silent odr violation rather than a link error - none of the ten was declared in any installed header, and the default build, which uses openssl, exported none of them either way
-	removed the obsolete AIX "#pragma alloca" from the bundled glibc engine, which builds that use the built-in regex compile (windows uses it, and so does --enable-built-in-regex) - it is documented C-only on classic xlC, whose C++ compiler ignored it with a message, and is not supported at all on Open XL C/C++ 17, so on a current AIX toolchain it would be rejected as an unknown pragma under the -Wall -Werror the build uses by default and break that arm rather than help it - upstream glibc dropped the pragma in 2.3, and the comment above it, claiming it had to be the first thing in the file, was never true in this tree
-	removed the bundled sha-1, sha-256 and aes-128 reference implementations from the librudiments export list on builds without openssl - the four rijndael tables the build compiles were exported unmangled under their standard reference names, Te0, Td0, Td4s and rcons, so any other copy of the same lineage in the process could bind to rudiments' instead, and the five sha-1 and three sha-256 reference functions were exported too, mangled, which limits them to colliding with another c++ translation unit that vendored the same rfc sources - none of the twelve was declared in any installed header
-	removed the bundled regex engine from the librudiments export list on builds that use the built-in regex (which is what windows uses) - regcomp(), regexec(), regfree() and the gnu re_* api were exported under their standard names, so other code in the process calling regcomp() could bind to rudiments' pre-2.4 glibc copy rather than the platform's, depending on link and load order, and the two engines don't agree in the details - the eight compatibility entry points nothing in rudiments called, re_comp(), re_exec(), regerror(), re_match(), re_match_2(), re_compile_pattern(), re_set_registers() and re_set_syntax(), were deleted along with re_syntax_options, which only they read, and the six still in use became internal, as did re_max_failures - no installed header ever declared any of the sixteen, and the default build, which uses PCRE2, exported none of them either way
-	fixed memory leaks in regularexpression::setPattern() on builds that use the built-in regex (which is what windows uses) - when an allocation failed partway through compiling a pattern, the compiler grew three of its buffers by reallocating a pointer into itself, so the failed grow dropped the only reference to the block it already had, losing either the compiled pattern buffer, up to 64k of it, or the compiler's own stack, 1280 bytes - it takes a machine already out of memory to reach, unlike the leak below, which needs only a big enough pattern
-	fixed memory leak in regularexpression::setPattern() on builds that use the built-in regex (which is what windows uses) - a pattern too big to compile, more than 64k once compiled, leaked the compiler's own stack, 1280 bytes per pattern, and unlike the leak fixed under #8928 this one needed no failed allocation to reach - any process compiling patterns from configuration or user input accumulated it
-	fixed regularexpression::match(str,length,offset) on builds without PCRE (POSIX regex or the built-in regex, which is what windows uses) so an offset past the end of the subject, or a negative one, no longer copies the whole subject before rejecting it - the call failed either way, it just allocated and freed the subject for nothing first
-	fixed the build of the built-in regex, which is what windows uses - two locals in the bundled glibc engine are read only by its debug prints, so -Wall -Werror rejected them as set but never used, and that arm had to be built with --disable-werror
-	added \g<number> and \g<name> backrefs to charstring::replace(str,regularexpression,to,global) - the single-digit form could only reach the first 9 capture groups, out of the 128 a pattern can have, so \g<12> now refers to a group by number and \g<name> to one by name - a group the pattern doesn't have, a group that didn't participate, and a name no group has all expand to nothing, and named groups are a PCRE feature, so \g<name> expands to nothing on builds that fall back to POSIX regex
-	fixed memory leak in regularexpression::setPattern() on builds that use the built-in regex (which is what windows uses) - a pattern that failed to compile leaked everything regcomp() had allocated for it, 288 bytes per failed compile and 544 with the case-insensitive option, so a long-running process compiling patterns from configuration or user input accumulated it
-	added regularexpression::matchNext(), which resumes matching after the previous match, so calling match() and then matchNext() over and over reports every match in the subject rather than only the first - matching "Dave" against "Dave, Dave, Dave!" now reaches all three, and matching "(\w+) (\w+)" against "hello world hello world" reports both matches with their own capture groups instead of repeating the first - an empty match is reported like any other, including one at the end of the subject, which is what perl's /g gives, while charstring::replace() still skips them
-	fixed charstring::replace(str,regularexpression,to,global) so it steps over an empty match from where the match was found rather than from the resume point - an empty match reported ahead of the resume point made it re-run the whole expression once per character to arrive at the same match, so (?=b) against "aaaab" cost 5 matches where 1 would do - the result was correct either way
-	added backref expansion to charstring::replace(str,regularexpression,to,global) - \0 through \9 in the replacement expand to what those capture groups matched, so a substitution like s/([a-z]+) ([a-z]+)/\2 \1/ can be written, and \\ is a literal backslash
-	fixed charstring::replace(str,regularexpression,to,global) so a global substitution resumes at an offset into the subject rather than at a pointer into the middle of it - the engine no longer thinks each resume point is the start of the subject, so ^ only matches at the real start of the subject on every build, and on PCRE builds \b and lookbehind also see what precedes the resume point
-	added regularexpression::setPattern(pattern,options), which compiles the pattern case-insensitively, multiline, or dot-all - the options were hardcoded before, so case folding had to be written into the pattern itself - an option the platform's engine can't honor is ignored rather than failing the compile
-	added regularexpression::getSubstringIndex(name), which looks up a named capture group, plus name-taking overloads of getSubstringStart(), getSubstringEnd(), getSubstringStartOffset(), and getSubstringEndOffset() - named groups are a PCRE feature, so these report nothing on builds that fall back to POSIX regex
-	added regularexpression::match(str,length,offset), which resumes matching partway through the subject rather than making the engine believe the resume point is the start of the subject - so ^ doesn't match there, and lookbehind can see what precedes it, which is what a global regex substitution needs
-	fixed regularexpression::getSubstringStart() and getSubstringEnd() on builds without PCRE so they return pointers into the string passed to match(str,length) rather than into the copy of it that the POSIX regex arms make
-	fixed regularexpression::getSubstringCount() so a capture group that didn't participate in the match no longer hides the groups after it - the count now comes from the compiled pattern rather than from a scan of the match array, so (a)?(b) against "b" reports 3 substrings on every build, not just the PCRE ones
-	fixed charstring::replace(str,regularexpression,to,global) so it replaces the whole match rather than the pattern's last capture group - for pattern (a)(b) against "ab" it replaced only "b"
-	fixed datetime::parse() so fractional seconds followed by an am/pm meridian scale correctly - the fraction was measured with its meridian attached, so "01:01:01:123PM" was scaled as a 5-digit fraction and yielded 1230 microseconds instead of 123000
-	bumped the soname from librudiments.so.12 to librudiments.so.13 - this release removes exported symbols rather than only adding them, which is the case libtool's rules say has to move the soname, so anything linked against .so.12 has to be rebuilt against .so.13
-	fixed the debian packaging, which built librudiments-apache and then dropped it - debian/control build-depends on apache2-dev, so the apache library was always built and installed, but neither .install file matched it, since usr/lib/*/librudiments.so.* and usr/lib/*/librudiments.so need "librudiments.so" literally and the file is librudiments-apache.so - it appeared in no deb at all, while the rpm has listed both libraries all along, and debian/compat is 10, where dh_install drops an unmatched file silently rather than failing
-	the deb build doesn't compile static archives anymore - debian/rules passes --disable-static now, the way rudiments.spec always has, so librudiments.a and librudiments-apache.a aren't built just to be thrown away, since no package ships them
-	the deb build doesn't warn about the apache library's undefined symbols anymore - dh_shlibdeps skips librudiments-apache, which takes its ap_ and apr_ symbols from the httpd process it's loaded into and links no apache library, so scanning it produced 14 unresolvable-symbol warnings once it started being packaged
+2.3.0 - fixed buffer overflow when unix socket file name is too long
+	fixed segfault in file::getBaseName(filename,ext) when the base
+		name doesn't end in ext, on NULL arguments, or when the base
+		name is entirely the extension
+	added PCRE2 support, configure now prefers PCRE2, then PCRE1, then
+		POSIX regex
+	fixed double free in regularexpression::clear() on builds without
+		PCRE (POSIX regex or built-in regex)
+	removed regularexpression::clear() - the destructor does its work
+		now
+	added an alloca check to configure for built-in-regex builds on
+		non-GNU compilers
+	fixed hash::reset() not clearing the hash itself
+	fixed pbkdf2::reset() not clearing the salt
+	website ssi expanded at build time instead of by apache
+	website html files not executable anymore
+	regenerated doc/programming/charstring.html and xmlsax.html, which
+		had gone stale against their .wt sources
+	regenerated five doc/programming pages (dictionary, linkedlist,
+		scalar, singlylinkedlist, table) that wt had been truncating
+		(fixed under #8966)
+	fixed md5::getHash() overread when built against an openssl whose
+		MD5_Final() returns int
+	fixed sha1::getError() fallthrough (non-openssl builds) reporting
+		success on error
+	fixed sha256::clear() reporting failure on success, non-openssl
+		builds
+	removed the bundled md5 reference implementation from the export
+		list, non-openssl builds
+	removed obsolete AIX "#pragma alloca" from the bundled glibc regex
+		engine, built-in-regex builds
+	removed bundled sha-1/sha-256/aes-128 reference implementations
+		from the export list, non-openssl builds
+	removed bundled regex engine from the export list on built-in-regex
+		builds
+	fixed memory leaks in regularexpression::setPattern() on realloc
+		failure, built-in-regex builds
+	fixed memory leak in regularexpression::setPattern() on a too-big
+		pattern, built-in-regex builds - unlike the leak fixed under
+		#8928, this one needs no failed allocation to reach
+	fixed regularexpression::match(str,length,offset) copying the whole
+		subject before rejecting a bad offset, non-PCRE builds
+	fixed built-in regex build warning, unused locals under -Wall
+		-Werror
+	added \g<number> and \g<name> backrefs to charstring::replace()
+	fixed memory leak in regularexpression::setPattern() on failed
+		compile, built-in-regex builds
+	added regularexpression::matchNext()
+	fixed charstring::replace() empty-match stepping from wrong point
+	added backref expansion (\0-\9, \\) to charstring::replace()
+	fixed charstring::replace() global substitution resume offset
+	added regularexpression::setPattern(pattern,options) for
+		case-insensitive/multiline/dotall
+	added regularexpression::getSubstringIndex(name) and name-taking
+		overloads
+	added regularexpression::match(str,length,offset) resuming
+		mid-subject
+	fixed regularexpression::getSubstringStart/End() pointer targets on
+		non-PCRE builds
+	fixed regularexpression::getSubstringCount() hiding groups after a
+		non-participating one
+	fixed charstring::replace() replacing only the last capture group
+		instead of the whole match
+	fixed datetime::parse() fractional seconds before an am/pm meridian
+	bumped soname librudiments.so.12 to .so.13
+	fixed debian packaging dropping librudiments-apache
+	stopped compiling static archives in the deb build
+	stopped warning about the apache library's undefined symbols in the
+		deb build
+	fixed collection::writeValue()/writeJsonValue() printing pointers
+		with %08x, truncating on LP64
+	fixed FW_FIX_LIBTOOL and chmod of bin/rudiments-config not running
+		via config.status
+	added sha512, aes192, aes256 classes and
+		encryption::setUsePadding(bool) (SQL Relay #8976)
+	added randomnumber::generateBytes() four overloads
+	added a csrandomnumber class (SQL Relay #9206)
+	added randomnumber's seed-first static generateBytes() overloads
+	added csrandomnumber::scale(), getRandMax(), and static
+		generate()/generate(lower,upper)
+	fixed randomnumber::scale() to clamp its result to "upper"
+	added an rng base class, renamed randomnumber to prng and
+		csrandomnumber to csprng, added generateBytes() methods to each
+	tls class sets BIO to use lowLevelRead/Write now, when using openssl
+	tls class uses SSL_CTX_set_min/max_proto_version to pin tls version when
+		using openssl, if available
 
 2.2.0 - added isSupported() to encryption/hash
 	added block cipher modes to encryption and aes128
@@ -134,8 +102,10 @@
 	fixed dh class build on modern LibreSSL (opaque DH struct)
 	fixed statfs-style detection so NetBSD 2.x is not mis-detected as old FreeBSD (filesystem.cpp getTypeName failed to compile)
 	added Mon (mixed-case month abbreviation) format string to datetime::formatAs()
-	fixed pthread detection on FreeBSD 15 (configure left PTHREADLIB empty because the probe only link-tested pthread_exit, which libc resolves with a weak stub; now it also tests pthread_create and links -lpthread, which libtool keeps, so librudiments.so needs libthr)
-	added a README.md, for the github mirror at github.com/firstworks-software/rudiments, which otherwise shows a bare file listing as its front page
+	fixed pthread detection on FreeBSD 15 (probe now also link-tests
+		pthread_create, not just pthread_exit)
+	added a README.md for the github mirror at
+		github.com/firstworks-software/rudiments
 
 2.1.1 - added test for link.h and added link.h to dynamiclib.cpp
 	updated default timeout for curl_multi_timeout
