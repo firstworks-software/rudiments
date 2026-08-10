@@ -347,9 +347,6 @@ bool regularexpression::matchNext() {
 	return runMatch((fromend>fromstart)?fromend:fromstart+1);
 }
 
-// Runs the engine against the subject that the last match() was given,
-// starting at "offset".  match() and matchNext() differ only in that offset,
-// so this is the one place the engine is actually called.
 bool regularexpression::runMatch(int32_t offset) {
 
 	pvt->_matchcount=0;

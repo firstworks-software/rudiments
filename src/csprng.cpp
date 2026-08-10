@@ -175,10 +175,8 @@ bool csprng::generateBytes(uint32_t seed, bytebuffer *buffer, size_t size) {
 }
 
 int32_t csprng::scale(uint32_t number, int32_t lower, int32_t upper) {
-	// scale "number" from its full 0..2^32-1 range to lower..upper, the
-	// same approach prng::scale() uses, but against a fixed
-	// 2^32 range since generate(uint32_t*) always spans the full
-	// range, regardless of which backend is in use
+	// the same approach prng::scale() uses, but against a fixed
+	// 2^32 range, since generate(uint32_t*) always spans the full range
 	float	originalrange=(int64_t)getRandMax()+1;
 	float	newrange=(float)abs(upper-lower)+1.0f;
 	float	shrunk=((float)number)/originalrange;
@@ -205,10 +203,8 @@ void csprng::setMutex(threadmutex *mtx) {
 }
 
 bool csprng::isSupported() {
-	// openssl and CryptGenRandom are both real CSPRNGs, and when
-	// neither is available, the fallback below reads /dev/urandom,
-	// which is itself a legitimate cryptographically secure source on
-	// POSIX systems (not a degraded fallback like prng would
-	// be), so a backend is always available
+	// openssl, CryptGenRandom and /dev/urandom are all legitimate
+	// cryptographically secure sources, unlike prng's epoch-time
+	// fallback, so a backend is always available
 	return true;
 }

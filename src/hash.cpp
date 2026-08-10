@@ -102,7 +102,5 @@ bool hash::reset() {
 	pvt->_out.clear();
 	delete[] pvt->_salt;
 	construct();
-	// A child class keeps its hash in its own pvt, so nothing above this
-	// line touches it.  clear() is the hook that does.
 	return clear();
 }

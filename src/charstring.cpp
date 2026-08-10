@@ -476,9 +476,9 @@ char *charstring::replaceIgnoringCase(const char *str,
 	return newstring.detachString();
 }
 
-// appends the "index"'th substring that "from" matched to "newstring".  A
+// appends the "index"'th substring that "from" matched to "newstring" - a
 // group that didn't participate in the match, or that the pattern doesn't
-// have at all, contributes nothing.
+// have at all, contributes nothing
 static void appendSubstring(stringbuffer *newstring,
 					regularexpression *from,
 					int32_t index) {
@@ -564,8 +564,8 @@ static void appendExpandingBackrefs(stringbuffer *newstring,
 			}
 
 			// an unterminated form is kept as it was, like any
-			// other escape this method doesn't know.  The rest
-			// of it is appended by the normal path.
+			// other escape this method doesn't know - the rest
+			// of it is appended by the normal path
 			if (!*bodyend) {
 				newstring->append('\\')->append(*ptr);
 				continue;

@@ -239,9 +239,9 @@ int tlscontext::bioRead(struct bio_st *b, char *buf, int len) {
 
 	int	ret=(int)fd->lowLevelRead(buf,(size_t)len);
 
-	// openssl needs the retry flag to tell a would-block from a
-	// hard error, and needs the error number that the read left
-	// behind, so don't do anything else in between
+	// openssl tells a would-block from a hard error by the retry
+	// flag, so check the error number right after the read, before
+	// anything else can clobber it
 	if (ret<0) {
 		int32_t	err=error::getErrorNumber();
 		if (err==EAGAIN || err==EWOULDBLOCK || err==EINTR) {
@@ -356,9 +356,6 @@ void tlscontext::initSubContext() {
 			_biomethodmutex.unlock();
 
 			// create bio and set the filedescriptor
-			// (the filedescriptor itself, rather than the
-			// raw file descriptor, so reads and writes go
-			// through it, and can be overridden)
 			#if defined(RUDIMENTS_HAS_BIO_METH_NEW)
 			pvt->_bio=(_biomethod)?BIO_new(_biomethod):NULL;
 			if (pvt->_bio) {
@@ -1371,12 +1368,9 @@ bool tlscontext::reInit(bool isclient) {
 						ASC_REQ_STREAM);
 
 		// decide on the protocol version
-		//
-		// TLS 1.3 can't be requested through the
-		// grbitEnabledProtocols bitmask below at all.  SChannel
-		// only negotiates it if a structurally different credential
-		// struct is used, so it gets flagged here and handled
-		// separately below.
+		// (TLS 1.3 can't be selected through the
+		// grbitEnabledProtocols bitmask below, so it gets flagged
+		// here and handled separately)
 		DWORD	method=0;
 		bool	tls13=false;
 		if (!charstring::compareIgnoringCase(
