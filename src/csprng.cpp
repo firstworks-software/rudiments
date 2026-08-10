@@ -203,8 +203,9 @@ void csprng::setMutex(threadmutex *mtx) {
 }
 
 bool csprng::isSupported() {
-	// openssl, CryptGenRandom and /dev/urandom are all legitimate
-	// cryptographically secure sources, unlike prng's epoch-time
-	// fallback, so a backend is always available
+	// the arms above are an exhaustive #if/#elif/#else, so one
+	// backend is always compiled in - whether it actually
+	// initializes for a given instance is a separate, runtime
+	// question that generateBytes() answers instead
 	return true;
 }

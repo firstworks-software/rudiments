@@ -1,4 +1,7 @@
-2.3.0 - fixed buffer overflow when unix socket file name is too long
+2.3.0 - clarified csprng::isSupported() doc comment - it reports whether a
+		backend is compiled in, not whether one initialized for a
+		given instance
+	fixed buffer overflow when unix socket file name is too long
 	fixed segfault in file::getBaseName(filename,ext) when the base
 		name doesn't end in ext, on NULL arguments, or when the base
 		name is entirely the extension
