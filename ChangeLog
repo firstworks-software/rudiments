@@ -96,12 +96,16 @@
 	added hash::getRequiredSaltSize()
 	fixed debugprintf macros to use updated methods
 	made pbkdf2 build against pre-1.0.0 openssl (falls back to sha-1)
-	fixed iconvert crash (iconv_close(-1)) when iconv_open() fails (e.g. native solaris iconv)
-	added dynamiclib::getNextSymbol() (portable RTLD_NEXT/dlvsym symbol wrapper)
+	fixed iconvert crash (iconv_close(-1)) when iconv_open() fails (e.g.
+		native solaris iconv)
+	added dynamiclib::getNextSymbol() (portable RTLD_NEXT/dlvsym symbol
+		wrapper)
 	added dependency info to the debian/ubuntu package control file
 	fixed dh class build on modern LibreSSL (opaque DH struct)
-	fixed statfs-style detection so NetBSD 2.x is not mis-detected as old FreeBSD (filesystem.cpp getTypeName failed to compile)
-	added Mon (mixed-case month abbreviation) format string to datetime::formatAs()
+	fixed statfs-style detection so NetBSD 2.x is not mis-detected as old
+		FreeBSD (filesystem.cpp getTypeName failed to compile)
+	added Mon (mixed-case month abbreviation) format string to
+		datetime::formatAs()
 	fixed pthread detection on FreeBSD 15 (probe now also link-tests
 		pthread_create, not just pthread_exit)
 	added a README.md for the github mirror at
