@@ -224,6 +224,10 @@ static char		_biomethodname[]="rudiments filedescriptor";
 	static bool		_biomethodinit=false;
 #endif
 
+// bioRead() and bioWrite() below must check the error number right
+// after the low-level read or write, before anything else can
+// clobber it. Openssl tells a would-block from a hard error by the
+// retry flag, which is set from that error number.
 int tlscontext::bioRead(struct bio_st *b, char *buf, int len) {
 
 	#if defined(RUDIMENTS_HAS_BIO_METH_NEW)
@@ -239,9 +243,6 @@ int tlscontext::bioRead(struct bio_st *b, char *buf, int len) {
 
 	int	ret=(int)fd->lowLevelRead(buf,(size_t)len);
 
-	// openssl tells a would-block from a hard error by the retry
-	// flag, so check the error number right after the read, before
-	// anything else can clobber it
 	if (ret<0) {
 		int32_t	err=error::getErrorNumber();
 		if (err==EAGAIN || err==EWOULDBLOCK || err==EINTR) {
