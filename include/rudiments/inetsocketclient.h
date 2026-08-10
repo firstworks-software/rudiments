@@ -46,7 +46,7 @@ class RUDIMENTS_DLLSPEC inetsocketclient :
  		 *  platforms or environments. */
 		void	randomizeAddresses(bool randomize);
 
-		/** Sets thte seed used when randomizing addresses to "seed".
+		/** Sets the seed used when randomizing addresses to "seed".
 		 *  
 		 *  By default the random number generator used internally is
 		 *  seeded using prng::getSeed().  This may or may not
