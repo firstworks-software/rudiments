@@ -30,6 +30,7 @@ srcs="winsock.cpp "+_
 	"encryption.cpp "+_
 	"aes128.cpp "+_
 	"pbkdf2.cpp "+_
+	"arc4.cpp "+_
 	"output.cpp "+_
 	"input.cpp "+_
 	"wastebasket.cpp "+_
@@ -137,6 +138,7 @@ lobjs="winsock.obj "+_
 	"encryption.obj "+_
 	"aes128.obj "+_
 	"pbkdf2.obj "+_
+	"arc4.obj "+_
 	"output.obj "+_
 	"input.obj "+_
 	"wastebasket.obj "+_
@@ -297,6 +299,7 @@ headers2="dictionary.h "+_
 	"encryption.h "+_
 	"aes128.h "+_
 	"pbkdf2.h "+_
+	"arc4.h "+_
 	"parameterstring.h "+_
 	"userentry.h "+_
 	"permissions.h "+_
@@ -516,6 +519,8 @@ privateheaders5="dictionary.h "+_
 	"aes128includes.h "+_
 	"pbkdf2.h "+_
 	"pbkdf2includes.h "+_
+	"arc4.h "+_
+	"arc4includes.h "+_
 	"server.h "+_
 	"serverincludes.h "+_
 	"serviceentry.h "+_
