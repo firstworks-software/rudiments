@@ -16,6 +16,8 @@ Arithmetic follows the same rules as the native C++ integer types: division trun
 
 The bitwise operators (&, |, ^, and ~) behave as if each operand were an infinitely wide two's complement value, which is the same behavior that Java's !BigInteger and Python's int provide.  In particular, ~x is defined as -x-1.
 
+bignumber also provides a family of modular arithmetic methods - nonNegativeModulo(), modAdd(), modSub(), modMul(), modPow(), modInverse(), and the related gcd() - useful for implementing public-key protocols like Diffie-Hellman, RSA, and SRP.  Unlike modulo() and operator%(), which take the sign of the dividend, these methods always give a non-negative result, in the range 0 through the modulus minus 1.  For example, modulo() on -7 with 3 gives -1, while nonNegativeModulo() on -7 with 3 gives 2.  modPow() computes modular exponentiation efficiently, without ever materializing the full, unreduced power, and modInverse() computes the modular multiplicative inverse, failing when none exists.
+
 Operations that can fail - parsing a malformed string, dividing by zero, or converting a value that's too large to a native integer type - don't throw exceptions.  They report failure through their return value, and getError() returns the reason.
 
 When available, this class uses !OpenSSL's BIGNUM implementation internally.  Otherwise it falls back to a built-in implementation, so isSupported() always returns true.

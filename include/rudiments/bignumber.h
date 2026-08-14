@@ -15,7 +15,10 @@ enum bignumbererror_t {
 	BIGNUMBER_ERROR_DIVIDE_BY_ZERO,
 	BIGNUMBER_ERROR_OVERFLOW,
 	BIGNUMBER_ERROR_BUFFER_TOO_SMALL,
-	BIGNUMBER_ERROR_OUT_OF_MEMORY
+	BIGNUMBER_ERROR_OUT_OF_MEMORY,
+	BIGNUMBER_ERROR_INVALID_MODULUS,
+	BIGNUMBER_ERROR_NEGATIVE_EXPONENT,
+	BIGNUMBER_ERROR_NO_INVERSE
 };
 
 /** The bignumber class provides an arbitrary-precision signed integer.
@@ -36,6 +39,17 @@ enum bignumbererror_t {
  *
  *  So, for example, -7/2 is -3 and -7%2 is -1, while 7/-2 is -3 and
  *  7%-2 is 1.
+ *
+ *  The modular arithmetic methods - nonNegativeModulo(), modAdd(),
+ *  modSub(), modMul(), modPow(), and modInverse() - follow the rules of
+ *  modular arithmetic rather than the rules of the native C++ integer
+ *  types.  Their results are always non-negative, in the range 0 through
+ *  the magnitude of the modulus minus 1, no matter what the signs of the
+ *  operands are.  This is unlike modulo() and operator%(), whose result
+ *  takes the sign of the dividend.  For example, modulo() on -7 with 2
+ *  gives -1, while nonNegativeModulo() on -7 with 2 gives 1.  The
+ *  companion method gcd() computes the greatest common divisor, which is
+ *  also always non-negative.
  *
  *  The bitwise operators (&, |, ^, and ~) behave as if each operand were
  *  an infinitely wide two's complement value, which is the same behavior
@@ -402,6 +416,173 @@ class RUDIMENTS_DLLSPEC bignumber {
 		 *  is left unmodified and getError() will return the
 		 *  reason. */
 		bool	modulo(const bignumber &divisor);
+
+		/** Replaces this instance with this instance modulo
+		 *  "modulus", in place, using the non-negative
+		 *  remainder that modular arithmetic uses, rather than
+		 *  the remainder that the native C++ % operator gives.
+		 *
+		 *  The result is always in the range 0 through the
+		 *  magnitude of "modulus" minus 1, no matter what the
+		 *  signs of this instance and "modulus" are.  For
+		 *  example, -7 modulo 2 is 1, and not the -1 that
+		 *  modulo() gives, and -7 modulo -2 is also 1.
+		 *
+		 *  A negative "modulus" is allowed.  Its magnitude is
+		 *  used and its sign is ignored, so the result is the
+		 *  same as it would be for the absolute value of
+		 *  "modulus".
+		 *
+		 *  Returns true on success, or false if "modulus" is 0
+		 *  or if an error occurred.  If "modulus" is 0, then
+		 *  getError() will return
+		 *  BIGNUMBER_ERROR_DIVIDE_BY_ZERO, matching modulo().
+		 *  On failure, this instance is left unmodified and
+		 *  getError() will return the reason. */
+		bool	nonNegativeModulo(const bignumber &modulus);
+
+		/** Replaces this instance with the sum of this instance
+		 *  and "addend", modulo "modulus", in place.
+		 *
+		 *  The result is always non-negative, in the range 0
+		 *  through "modulus" minus 1, no matter what the signs
+		 *  of this instance and "addend" are, as
+		 *  nonNegativeModulo() describes.
+		 *
+		 *  "modulus" must be positive.  Returns true on
+		 *  success, or false if "modulus" is 0 or negative, or
+		 *  if an error occurred.  If "modulus" is 0 or
+		 *  negative, then getError() will return
+		 *  BIGNUMBER_ERROR_INVALID_MODULUS.  On failure, this
+		 *  instance is left unmodified and getError() will
+		 *  return the reason. */
+		bool	modAdd(const bignumber &addend,
+					const bignumber &modulus);
+
+		/** Replaces this instance with the difference of this
+		 *  instance and "subtrahend", modulo "modulus", in
+		 *  place.
+		 *
+		 *  The result is always non-negative, in the range 0
+		 *  through "modulus" minus 1, no matter what the signs
+		 *  of this instance and "subtrahend" are, as
+		 *  nonNegativeModulo() describes.  In particular, a
+		 *  difference that is mathematically negative wraps
+		 *  around, rather than staying negative.  For example,
+		 *  3 minus 5, modulo 7, is 5.
+		 *
+		 *  "modulus" must be positive.  Returns true on
+		 *  success, or false if "modulus" is 0 or negative, or
+		 *  if an error occurred.  If "modulus" is 0 or
+		 *  negative, then getError() will return
+		 *  BIGNUMBER_ERROR_INVALID_MODULUS.  On failure, this
+		 *  instance is left unmodified and getError() will
+		 *  return the reason. */
+		bool	modSub(const bignumber &subtrahend,
+					const bignumber &modulus);
+
+		/** Replaces this instance with the product of this
+		 *  instance and "multiplier", modulo "modulus", in
+		 *  place.
+		 *
+		 *  The result is always non-negative, in the range 0
+		 *  through "modulus" minus 1, no matter what the signs
+		 *  of this instance and "multiplier" are, as
+		 *  nonNegativeModulo() describes.
+		 *
+		 *  "modulus" must be positive.  Returns true on
+		 *  success, or false if "modulus" is 0 or negative, or
+		 *  if an error occurred.  If "modulus" is 0 or
+		 *  negative, then getError() will return
+		 *  BIGNUMBER_ERROR_INVALID_MODULUS.  On failure, this
+		 *  instance is left unmodified and getError() will
+		 *  return the reason. */
+		bool	modMul(const bignumber &multiplier,
+					const bignumber &modulus);
+
+		/** Replaces this instance with this instance raised to
+		 *  the power of "exponent", modulo "modulus", in place.
+		 *
+		 *  The result is always non-negative, in the range 0
+		 *  through "modulus" minus 1.  A negative base is
+		 *  well defined and also gives a non-negative result.
+		 *  For example, -3 raised to the power of 3, modulo 7,
+		 *  is 1, and not -6.
+		 *
+		 *  If "exponent" is 0, then the result is 1, except
+		 *  that if "modulus" is 1 then the result is 0, since
+		 *  every value is 0 modulo 1.
+		 *
+		 *  "exponent" must not be negative.  A negative
+		 *  exponent would call for the modular inverse of the
+		 *  base, which this method does not compute.  Use
+		 *  modInverse() and then modPow() with the
+		 *  corresponding positive exponent instead.
+		 *
+		 *  "modulus" must be positive.
+		 *
+		 *  Returns true on success, or false if "exponent" is
+		 *  negative, if "modulus" is 0 or negative, or if an
+		 *  error occurred.  If "exponent" is negative, then
+		 *  getError() will return
+		 *  BIGNUMBER_ERROR_NEGATIVE_EXPONENT.  If "modulus" is
+		 *  0 or negative, then getError() will return
+		 *  BIGNUMBER_ERROR_INVALID_MODULUS.  On failure, this
+		 *  instance is left unmodified and getError() will
+		 *  return the reason. */
+		bool	modPow(const bignumber &exponent,
+					const bignumber &modulus);
+
+		/** Replaces this instance with its modular
+		 *  multiplicative inverse, modulo "modulus", in place.
+		 *  That is, this instance is replaced with the value x
+		 *  for which this instance times x, modulo "modulus",
+		 *  is 1.
+		 *
+		 *  The result is always non-negative, in the range 0
+		 *  through "modulus" minus 1.  A negative value has an
+		 *  inverse too, and it is non-negative as well.  For
+		 *  example, the inverse of -3, modulo 7, is 2.
+		 *
+		 *  The inverse exists only if this instance and
+		 *  "modulus" are relatively prime, that is, only if
+		 *  their greatest common divisor is 1.  For example, 6
+		 *  has no inverse modulo 9, since their greatest common
+		 *  divisor is 3.  If the inverse does not exist, then
+		 *  this method fails and getError() will return
+		 *  BIGNUMBER_ERROR_NO_INVERSE.  This is a normal,
+		 *  well defined outcome, rather than an internal error.
+		 *
+		 *  If "modulus" is 1, then the result is 0, by
+		 *  convention, since every value is 0 modulo 1.
+		 *
+		 *  "modulus" must be positive.
+		 *
+		 *  Returns true on success, or false if the inverse
+		 *  does not exist, if "modulus" is 0 or negative, or if
+		 *  an error occurred.  If "modulus" is 0 or negative,
+		 *  then getError() will return
+		 *  BIGNUMBER_ERROR_INVALID_MODULUS.  On failure, this
+		 *  instance is left unmodified and getError() will
+		 *  return the reason. */
+		bool	modInverse(const bignumber &modulus);
+
+		/** Replaces this instance with the greatest common
+		 *  divisor of the magnitudes of this instance and
+		 *  "value", in place.
+		 *
+		 *  The signs of this instance and "value" are ignored
+		 *  and the result is always non-negative.  For example,
+		 *  the greatest common divisor of -12 and 18 is 6.
+		 *
+		 *  If both this instance and "value" are 0, then the
+		 *  result is 0.  If exactly one of them is 0, then the
+		 *  result is the magnitude of the other one.
+		 *
+		 *  Returns true on success, or false if an error
+		 *  occurred.  On failure, this instance is left
+		 *  unmodified and getError() will return the reason. */
+		bool	gcd(const bignumber &value);
 
 		/** Negates this instance, in place.  Negating 0 leaves
 		 *  it 0.

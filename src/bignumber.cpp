@@ -26,6 +26,7 @@ class bignumberprivate {
 		void	zero();
 		void	setNegative(bool negative);
 		bool	isZero();
+		bool	isNegative();
 		#if defined(RUDIMENTS_HAS_SSL)
 			BN_CTX	*getContext();
 		#endif
@@ -73,6 +74,14 @@ bool bignumberprivate::isZero() {
 		return (BN_is_zero(_bn))?true:false;
 	#else
 		return bignumberscratchiszero(_bn);
+	#endif
+}
+
+bool bignumberprivate::isNegative() {
+	#if defined(RUDIMENTS_HAS_SSL)
+		return (BN_is_negative(_bn))?true:false;
+	#else
+		return bignumberscratchisnegative(_bn);
 	#endif
 }
 
@@ -527,11 +536,7 @@ int32_t bignumber::getSign() {
 }
 
 bool bignumber::isNegative() {
-	#if defined(RUDIMENTS_HAS_SSL)
-		return (BN_is_negative(pvt->_bn))?true:false;
-	#else
-		return bignumberscratchisnegative(pvt->_bn);
-	#endif
+	return pvt->isNegative();
 }
 
 bool bignumber::isZero() {
@@ -654,6 +659,379 @@ bool bignumber::modulo(const bignumber &divisor) {
 	}
 
 	setValue(remainder);
+
+	return true;
+}
+
+bool bignumber::nonNegativeModulo(const bignumber &modulus) {
+
+	setError(BIGNUMBER_ERROR_SUCCESS);
+
+	// libcrypto reports a zero modulus through its error queue, but the
+	// class reports it directly, so it's caught before the operation
+	if (modulus.pvt->isZero()) {
+		setError(BIGNUMBER_ERROR_DIVIDE_BY_ZERO);
+		return false;
+	}
+
+	// the result is built up separately, so that this instance is left
+	// alone if the operation fails
+	bignumber	result;
+
+	#if defined(RUDIMENTS_HAS_SSL)
+		BN_CTX	*ctx=pvt->getContext();
+		if (!ctx || !BN_nnmod(result.pvt->_bn,pvt->_bn,
+						modulus.pvt->_bn,ctx)) {
+			setError(BIGNUMBER_ERROR_OUT_OF_MEMORY);
+			bignumberclearsslerror();
+			return false;
+		}
+	#else
+		// modulo() gives a remainder with the sign of the dividend, so
+		// a negative remainder is brought into range by adding the
+		// magnitude of the modulus to it.  That works for a negative
+		// modulus too, as the remainder is always smaller than the
+		// modulus in magnitude.
+		result.setValue(*this);
+		if (!result.modulo(modulus)) {
+			setError(result.getError());
+			return false;
+		}
+		if (result.isNegative()) {
+			bignumber	absmodulus(modulus);
+			absmodulus.absoluteValue();
+			if (!result.add(absmodulus)) {
+				setError(result.getError());
+				return false;
+			}
+		}
+	#endif
+
+	setValue(result);
+
+	return true;
+}
+
+// add() followed by nonNegativeModulo(), which both backends share
+bool bignumber::modAdd(const bignumber &addend, const bignumber &modulus) {
+
+	setError(BIGNUMBER_ERROR_SUCCESS);
+
+	// unlike nonNegativeModulo(), the modulus has to be positive here
+	if (modulus.pvt->isZero() || modulus.pvt->isNegative()) {
+		setError(BIGNUMBER_ERROR_INVALID_MODULUS);
+		return false;
+	}
+
+	// the result is built up separately, so that this instance is left
+	// alone if the operation fails
+	bignumber	result(*this);
+	if (!result.add(addend) || !result.nonNegativeModulo(modulus)) {
+		setError(result.getError());
+		return false;
+	}
+
+	setValue(result);
+
+	return true;
+}
+
+// subtract() followed by nonNegativeModulo(), which both backends share
+bool bignumber::modSub(const bignumber &subtrahend, const bignumber &modulus) {
+
+	setError(BIGNUMBER_ERROR_SUCCESS);
+
+	// unlike nonNegativeModulo(), the modulus has to be positive here
+	if (modulus.pvt->isZero() || modulus.pvt->isNegative()) {
+		setError(BIGNUMBER_ERROR_INVALID_MODULUS);
+		return false;
+	}
+
+	// the result is built up separately, so that this instance is left
+	// alone if the operation fails
+	bignumber	result(*this);
+	if (!result.subtract(subtrahend) ||
+			!result.nonNegativeModulo(modulus)) {
+		setError(result.getError());
+		return false;
+	}
+
+	setValue(result);
+
+	return true;
+}
+
+bool bignumber::modMul(const bignumber &multiplier, const bignumber &modulus) {
+
+	setError(BIGNUMBER_ERROR_SUCCESS);
+
+	// unlike nonNegativeModulo(), the modulus has to be positive here
+	if (modulus.pvt->isZero() || modulus.pvt->isNegative()) {
+		setError(BIGNUMBER_ERROR_INVALID_MODULUS);
+		return false;
+	}
+
+	// the result is built up separately, so that this instance is left
+	// alone if the operation fails
+	bignumber	result;
+
+	#if defined(RUDIMENTS_HAS_SSL)
+		BN_CTX	*ctx=pvt->getContext();
+		if (!ctx || !BN_mod_mul(result.pvt->_bn,pvt->_bn,
+						multiplier.pvt->_bn,
+						modulus.pvt->_bn,ctx)) {
+			setError(BIGNUMBER_ERROR_OUT_OF_MEMORY);
+			bignumberclearsslerror();
+			return false;
+		}
+	#else
+		// multiply first and reduce afterward, which can leave a large
+		// intermediate value, but keeps the implementation simple
+		result.setValue(*this);
+		if (!result.multiply(multiplier) ||
+				!result.nonNegativeModulo(modulus)) {
+			setError(result.getError());
+			return false;
+		}
+	#endif
+
+	setValue(result);
+
+	return true;
+}
+
+bool bignumber::modPow(const bignumber &exponent, const bignumber &modulus) {
+
+	setError(BIGNUMBER_ERROR_SUCCESS);
+
+	if (modulus.pvt->isZero() || modulus.pvt->isNegative()) {
+		setError(BIGNUMBER_ERROR_INVALID_MODULUS);
+		return false;
+	}
+
+	// libcrypto quietly uses the magnitude of a negative exponent, rather
+	// than rejecting it, so it's caught here instead
+	if (exponent.pvt->isNegative()) {
+		setError(BIGNUMBER_ERROR_NEGATIVE_EXPONENT);
+		return false;
+	}
+
+	// the result is built up separately, so that this instance is left
+	// alone if the operation fails
+	bignumber	result;
+
+	#if defined(RUDIMENTS_HAS_SSL)
+		// An exponent of 0 needs no special case here.  BN_mod_exp()
+		// gives 1 for it already, and 0 for it when the modulus is 1.
+		BN_CTX	*ctx=pvt->getContext();
+		if (!ctx || !BN_mod_exp(result.pvt->_bn,pvt->_bn,
+						exponent.pvt->_bn,
+						modulus.pvt->_bn,ctx)) {
+			setError(BIGNUMBER_ERROR_OUT_OF_MEMORY);
+			bignumberclearsslerror();
+			return false;
+		}
+	#else
+		// square-and-multiply...
+		//
+		// The base is reduced up front, and again after every squaring,
+		// so the intermediate values never grow beyond the modulus.
+		result.setValue((int64_t)1);
+
+		bignumber	base(*this);
+		if (!base.nonNegativeModulo(modulus)) {
+			setError(base.getError());
+			return false;
+		}
+
+		// the bits of the exponent are taken from its magnitude, least
+		// significant bit first
+		bignumber	e(exponent);
+		size_t		bits=e.getBitCount();
+		size_t		size=e.getMagnitudeSize();
+		byte_t		*magnitude=new byte_t[size];
+
+		bignumbererror_t	err=BIGNUMBER_ERROR_SUCCESS;
+		if (!e.getMagnitude(magnitude,size)) {
+			err=e.getError();
+		}
+		for (size_t i=0; err==BIGNUMBER_ERROR_SUCCESS && i<bits; i++) {
+			if (magnitude[size-1-i/8]&((byte_t)(1<<(i%8)))) {
+				if (!result.modMul(base,modulus)) {
+					err=result.getError();
+					break;
+				}
+			}
+			if (i+1<bits && !base.modMul(base,modulus)) {
+				err=base.getError();
+				break;
+			}
+		}
+
+		delete[] magnitude;
+
+		if (err!=BIGNUMBER_ERROR_SUCCESS) {
+			setError(err);
+			return false;
+		}
+
+		// An exponent of 0 skips the loop entirely, leaving the result
+		// 1, which still has to be reduced, as every value is 0 modulo
+		// 1.
+		if (!result.nonNegativeModulo(modulus)) {
+			setError(result.getError());
+			return false;
+		}
+	#endif
+
+	setValue(result);
+
+	return true;
+}
+
+bool bignumber::modInverse(const bignumber &modulus) {
+
+	setError(BIGNUMBER_ERROR_SUCCESS);
+
+	if (modulus.pvt->isZero() || modulus.pvt->isNegative()) {
+		setError(BIGNUMBER_ERROR_INVALID_MODULUS);
+		return false;
+	}
+
+	// every value is 0 modulo 1, and libcrypto fails outright for that
+	// case, rather than giving 0, so it's handled here instead
+	bignumber	one((int64_t)1);
+	if (!one.compare(modulus)) {
+		setValue((int64_t)0);
+		return true;
+	}
+
+	// The inverse exists only if this instance and the modulus are
+	// relatively prime.  libcrypto reports that case and an allocation
+	// failure the same way, so the two are told apart by checking for it
+	// up front.
+	bignumber	divisor(*this);
+	if (!divisor.gcd(modulus)) {
+		setError(divisor.getError());
+		return false;
+	}
+	if (divisor.compare(one)) {
+		setError(BIGNUMBER_ERROR_NO_INVERSE);
+		return false;
+	}
+
+	// the result is built up separately, so that this instance is left
+	// alone if the operation fails
+	bignumber	result;
+
+	#if defined(RUDIMENTS_HAS_SSL)
+		BN_CTX	*ctx=pvt->getContext();
+		if (!ctx || !BN_mod_inverse(result.pvt->_bn,pvt->_bn,
+						modulus.pvt->_bn,ctx)) {
+			setError(BIGNUMBER_ERROR_OUT_OF_MEMORY);
+			bignumberclearsslerror();
+			return false;
+		}
+	#else
+		// extended euclidean algorithm...
+		//
+		// The remainders r0 and r1 run the plain euclidean algorithm,
+		// while s0 and s1 track the coefficient of this instance in
+		// r=s*this+t*modulus.  The corresponding t is never needed.
+		// When the algorithm ends, r0 is the greatest common divisor,
+		// which is known to be 1 here, and s0 is the inverse.
+		bignumber	r0(modulus);
+		bignumber	r1(*this);
+		bignumber	s0((int64_t)0);
+		bignumber	s1((int64_t)1);
+
+		// reducing this instance up front keeps every value in the
+		// loop non-negative, even if this instance is negative
+		if (!r1.nonNegativeModulo(modulus)) {
+			setError(r1.getError());
+			return false;
+		}
+
+		while (!r1.isZero()) {
+
+			bignumber	quotient(r0);
+			bignumber	remainder;
+			if (!quotient.divide(r1,&remainder)) {
+				setError(quotient.getError());
+				return false;
+			}
+			r0.setValue(r1);
+			r1.setValue(remainder);
+
+			bignumber	product(quotient);
+			bignumber	news1(s0);
+			if (!product.multiply(s1)) {
+				setError(product.getError());
+				return false;
+			}
+			if (!news1.subtract(product)) {
+				setError(news1.getError());
+				return false;
+			}
+			s0.setValue(s1);
+			s1.setValue(news1);
+		}
+
+		// the coefficient can come out negative, so it's brought into
+		// the range 0 through the modulus minus 1 here
+		result.setValue(s0);
+		if (!result.nonNegativeModulo(modulus)) {
+			setError(result.getError());
+			return false;
+		}
+	#endif
+
+	setValue(result);
+
+	return true;
+}
+
+bool bignumber::gcd(const bignumber &value) {
+
+	setError(BIGNUMBER_ERROR_SUCCESS);
+
+	// the result is built up separately, so that this instance is left
+	// alone if the operation fails
+	bignumber	result;
+
+	#if defined(RUDIMENTS_HAS_SSL)
+		// BN_gcd() ignores the signs and gives a non-negative result
+		// already, including 0 when both values are 0
+		BN_CTX	*ctx=pvt->getContext();
+		if (!ctx || !BN_gcd(result.pvt->_bn,pvt->_bn,
+						value.pvt->_bn,ctx)) {
+			setError(BIGNUMBER_ERROR_OUT_OF_MEMORY);
+			bignumberclearsslerror();
+			return false;
+		}
+	#else
+		// The euclidean algorithm, run on the magnitudes, so the signs
+		// are ignored and the result is non-negative.  Two zeros give
+		// 0, and one zero gives the magnitude of the other value, as
+		// the first pass through the loop swaps them.
+		result.setValue(*this);
+		result.absoluteValue();
+
+		bignumber	divisor(value);
+		divisor.absoluteValue();
+
+		while (!divisor.isZero()) {
+			bignumber	remainder;
+			if (!result.divide(divisor,&remainder)) {
+				setError(result.getError());
+				return false;
+			}
+			result.setValue(divisor);
+			divisor.setValue(remainder);
+		}
+	#endif
+
+	setValue(result);
 
 	return true;
 }

@@ -48,6 +48,8 @@
 
 <p>The bitwise operators (&, |, ^, and ~) behave as if each operand were an infinitely wide two's complement value, which is the same behavior that Java's BigInteger and Python's int provide.  In particular, ~x is defined as -x-1.</p>
 
+<p>bignumber also provides a family of modular arithmetic methods - nonNegativeModulo(), modAdd(), modSub(), modMul(), modPow(), modInverse(), and the related gcd() - useful for implementing public-key protocols like Diffie-Hellman, RSA, and SRP.  Unlike modulo() and operator%(), which take the sign of the dividend, these methods always give a non-negative result, in the range 0 through the modulus minus 1.  For example, modulo() on -7 with 3 gives -1, while nonNegativeModulo() on -7 with 3 gives 2.  modPow() computes modular exponentiation efficiently, without ever materializing the full, unreduced power, and modInverse() computes the modular multiplicative inverse, failing when none exists.</p>
+
 <p>Operations that can fail - parsing a malformed string, dividing by zero, or converting a value that's too large to a native integer type - don't throw exceptions.  They report failure through their return value, and getError() returns the reason.</p>
 
 <p>When available, this class uses OpenSSL's BIGNUM implementation internally.  Otherwise it falls back to a built-in implementation, so isSupported() always returns true.</p>
@@ -101,6 +103,25 @@ http://www.gnu.org/software/src-highlite -->
 	<font color="#009900">char</font>		<font color="#990000">*</font>decimal<font color="#990000">=</font>charstring<font color="#990000">::</font><b><font color="#000000">duplicate</font></b><font color="#990000">(</font>c<font color="#990000">.</font><b><font color="#000000">getString</font></b><font color="#990000">());</font>
 	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"c = %s (0x%s)</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>decimal<font color="#990000">,</font>c<font color="#990000">.</font><b><font color="#000000">getString</font></b><font color="#990000">(</font><font color="#993399">16</font><font color="#990000">));</font>
 	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> decimal<font color="#990000">;</font>
+
+
+	<i><font color="#9A1900">// modular exponentiation, useful for diffie-hellman, rsa, and other</font></i>
+	<i><font color="#9A1900">// public-key protocols</font></i>
+	<font color="#008080">bignumber</font>	<b><font color="#000000">base</font></b><font color="#990000">(</font><font color="#993399">3</font><font color="#990000">);</font>
+	base<font color="#990000">.</font><b><font color="#000000">modPow</font></b><font color="#990000">(</font><b><font color="#000000">bignumber</font></b><font color="#990000">(</font><font color="#993399">5</font><font color="#990000">),</font><b><font color="#000000">bignumber</font></b><font color="#990000">(</font><font color="#993399">7</font><font color="#990000">));</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"3^5 mod 7 = %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>base<font color="#990000">.</font><b><font color="#000000">getString</font></b><font color="#990000">());</font>
+
+
+	<i><font color="#9A1900">// the modular arithmetic methods always return a non-negative</font></i>
+	<i><font color="#9A1900">// result, in place, unlike modulo() and operator%()</font></i>
+	<font color="#008080">bignumber</font>	<b><font color="#000000">dividend</font></b><font color="#990000">(-</font><font color="#993399">7</font><font color="#990000">);</font>
+	<font color="#008080">bignumber</font>	<b><font color="#000000">nonnegative</font></b><font color="#990000">(</font>dividend<font color="#990000">);</font>
+	nonnegative<font color="#990000">.</font><b><font color="#000000">nonNegativeModulo</font></b><font color="#990000">(</font><b><font color="#000000">bignumber</font></b><font color="#990000">(</font><font color="#993399">3</font><font color="#990000">));</font>
+	<font color="#009900">char</font>		<font color="#990000">*</font>nonnegativestr<font color="#990000">=</font>charstring<font color="#990000">::</font><b><font color="#000000">duplicate</font></b><font color="#990000">(</font>
+						nonnegative<font color="#990000">.</font><b><font color="#000000">getString</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"-7 nonNegativeModulo 3 = %s (-7%%3 is %s)</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+			nonnegativestr<font color="#990000">,(</font>dividend<font color="#990000">%</font><b><font color="#000000">bignumber</font></b><font color="#990000">(</font><font color="#993399">3</font><font color="#990000">)).</font><b><font color="#000000">getString</font></b><font color="#990000">());</font>
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> nonnegativestr<font color="#990000">;</font>
 
 	<b><font color="#0000FF">return</font></b> <font color="#993399">0</font><font color="#990000">;</font>
 <font color="#FF0000">}</font>

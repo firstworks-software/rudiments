@@ -41,5 +41,24 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("c = %s (0x%s)\n",decimal,c.getString(16));
 	delete[] decimal;
 
+
+	// modular exponentiation, useful for diffie-hellman, rsa, and other
+	// public-key protocols
+	bignumber	base(3);
+	base.modPow(bignumber(5),bignumber(7));
+	stdoutput.printf("3^5 mod 7 = %s\n",base.getString());
+
+
+	// the modular arithmetic methods always return a non-negative
+	// result, in place, unlike modulo() and operator%()
+	bignumber	dividend(-7);
+	bignumber	nonnegative(dividend);
+	nonnegative.nonNegativeModulo(bignumber(3));
+	char		*nonnegativestr=charstring::duplicate(
+						nonnegative.getString());
+	stdoutput.printf("-7 nonNegativeModulo 3 = %s (-7%%3 is %s)\n",
+			nonnegativestr,(dividend%bignumber(3)).getString());
+	delete[] nonnegativestr;
+
 	return 0;
 }

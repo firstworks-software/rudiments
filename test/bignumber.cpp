@@ -852,6 +852,423 @@ int main(int argc, const char **argv) {
 	}
 
 
+	// nonNegativeModulo
+	{
+		// the same inputs that modulo() gives -1 for
+		bignumber	m((int64_t)-7);
+		test("nonNegativeModulo: -7 nnmod 3 succeeds",
+			m.nonNegativeModulo(bignumber((int64_t)3)));
+		test("nonNegativeModulo: -7 nnmod 3 is 2",decis(&m,"2"));
+
+		bignumber	n((int64_t)-7);
+		test("modulo: -7%3 is -1, unlike nonNegativeModulo",
+			n.modulo(bignumber((int64_t)3)) && decis(&n,"-1"));
+	}
+	{
+		bignumber	m((int64_t)7);
+		test("nonNegativeModulo: 7 nnmod 3 is 1",
+			m.nonNegativeModulo(bignumber((int64_t)3)) &&
+							decis(&m,"1"));
+		m.setValue((int64_t)-7);
+		test("nonNegativeModulo: -7 nnmod -3 is 2",
+			m.nonNegativeModulo(bignumber((int64_t)-3)) &&
+							decis(&m,"2"));
+		m.setValue((int64_t)7);
+		test("nonNegativeModulo: 7 nnmod -3 is 1",
+			m.nonNegativeModulo(bignumber((int64_t)-3)) &&
+							decis(&m,"1"));
+	}
+	{
+		bignumber	m;
+		test("nonNegativeModulo: 0 nnmod 5 is 0",
+			m.nonNegativeModulo(bignumber((int64_t)5)) &&
+							m.isZero());
+	}
+	{
+		// a large negative dividend and a smaller modulus
+		bignumber	m("-123456789012345678901234567890");
+		test("nonNegativeModulo: large negative dividend succeeds",
+			m.nonNegativeModulo(bignumber(bigdec2)));
+		test("nonNegativeModulo: large negative dividend result",
+			decis(&m,"38580246902623456800"));
+		test("nonNegativeModulo: large negative dividend result "
+			"is not negative",!m.isNegative());
+	}
+	{
+		bignumber	m((int64_t)-7);
+		bignumber	zero;
+		test("nonNegativeModulo by zero: fails",
+					!m.nonNegativeModulo(zero));
+		test("nonNegativeModulo by zero: error",
+			m.getError()==BIGNUMBER_ERROR_DIVIDE_BY_ZERO);
+		test("nonNegativeModulo by zero: instance unmodified",
+							decis(&m,"-7"));
+	}
+
+
+	// modAdd and modSub
+	{
+		bignumber	a((int64_t)5);
+		test("modAdd: (5+4) mod 7 succeeds",
+			a.modAdd(bignumber((int64_t)4),
+					bignumber((int64_t)7)));
+		test("modAdd: (5+4) mod 7 is 2",decis(&a,"2"));
+
+		// the same thing, composed by hand
+		bignumber	b((int64_t)5);
+		test("modAdd: matches add() plus nonNegativeModulo()",
+			b.add(bignumber((int64_t)4)) &&
+			b.nonNegativeModulo(bignumber((int64_t)7)) &&
+			b==a);
+	}
+	{
+		bignumber	a((int64_t)-5);
+		test("modAdd: (-5+4) mod 7 is 6",
+			a.modAdd(bignumber((int64_t)4),
+					bignumber((int64_t)7)) &&
+							decis(&a,"6"));
+		test("modAdd: negative addend result is not negative",
+							!a.isNegative());
+		a.setValue((int64_t)-5);
+		test("modAdd: (-5+-4) mod 7 is 5",
+			a.modAdd(bignumber((int64_t)-4),
+					bignumber((int64_t)7)) &&
+							decis(&a,"5"));
+	}
+	{
+		bignumber	a((int64_t)5);
+		test("modAdd: modulus 1 gives 0",
+			a.modAdd(bignumber((int64_t)4),
+					bignumber((int64_t)1)) &&
+							a.isZero());
+	}
+	{
+		bignumber	a((int64_t)3);
+		test("modSub: (3-5) mod 7 is 5",
+			a.modSub(bignumber((int64_t)5),
+					bignumber((int64_t)7)) &&
+							decis(&a,"5"));
+		a.setValue((int64_t)5);
+		test("modSub: (5-3) mod 7 is 2",
+			a.modSub(bignumber((int64_t)3),
+					bignumber((int64_t)7)) &&
+							decis(&a,"2"));
+		a.setValue((int64_t)-3);
+		test("modSub: (-3-5) mod 7 is 6",
+			a.modSub(bignumber((int64_t)5),
+					bignumber((int64_t)7)) &&
+							decis(&a,"6"));
+		test("modSub: negative difference result is not negative",
+							!a.isNegative());
+		a.setValue((int64_t)3);
+		test("modSub: modulus 1 gives 0",
+			a.modSub(bignumber((int64_t)5),
+					bignumber((int64_t)1)) &&
+							a.isZero());
+	}
+	{
+		bignumber	a((int64_t)5);
+		bignumber	four((int64_t)4);
+		bignumber	zero;
+		bignumber	neg((int64_t)-7);
+		test("modAdd: zero modulus fails",!a.modAdd(four,zero));
+		test("modAdd: zero modulus error",
+			a.getError()==BIGNUMBER_ERROR_INVALID_MODULUS);
+		test("modAdd: zero modulus instance unmodified",
+							decis(&a,"5"));
+		test("modAdd: negative modulus fails",!a.modAdd(four,neg));
+		test("modAdd: negative modulus error",
+			a.getError()==BIGNUMBER_ERROR_INVALID_MODULUS);
+		test("modAdd: negative modulus instance unmodified",
+							decis(&a,"5"));
+		test("modSub: zero modulus fails",!a.modSub(four,zero));
+		test("modSub: zero modulus error",
+			a.getError()==BIGNUMBER_ERROR_INVALID_MODULUS);
+		test("modSub: zero modulus instance unmodified",
+							decis(&a,"5"));
+		test("modSub: negative modulus fails",!a.modSub(four,neg));
+		test("modSub: negative modulus error",
+			a.getError()==BIGNUMBER_ERROR_INVALID_MODULUS);
+		test("modSub: negative modulus instance unmodified",
+							decis(&a,"5"));
+	}
+
+
+	// modMul
+	{
+		bignumber	a((int64_t)6);
+		test("modMul: (6*7) mod 5 succeeds",
+			a.modMul(bignumber((int64_t)7),
+					bignumber((int64_t)5)));
+		test("modMul: (6*7) mod 5 is 2",decis(&a,"2"));
+
+		a.setValue((int64_t)-6);
+		test("modMul: (-6*7) mod 5 is 3",
+			a.modMul(bignumber((int64_t)7),
+					bignumber((int64_t)5)) &&
+							decis(&a,"3"));
+		a.setValue((int64_t)-6);
+		test("modMul: (-6*-7) mod 5 is 2",
+			a.modMul(bignumber((int64_t)-7),
+					bignumber((int64_t)5)) &&
+							decis(&a,"2"));
+		a.setValue((int64_t)6);
+		test("modMul: modulus 1 gives 0",
+			a.modMul(bignumber((int64_t)7),
+					bignumber((int64_t)1)) &&
+							a.isZero());
+	}
+	{
+		// modMul(a,b,m) matches multiply() plus nonNegativeModulo()
+		bignumber	m("1000000007");
+		bignumber	a(bigdec);
+		test("modMul: large values succeed",
+					a.modMul(bignumber(bigdec2),m));
+		test("modMul: large values result",decis(&a,"933239201"));
+
+		bignumber	b(bigdec);
+		test("modMul: large values match multiply() plus "
+			"nonNegativeModulo()",
+			b.multiply(bignumber(bigdec2)) &&
+			b.nonNegativeModulo(m) && b==a);
+	}
+	{
+		bignumber	a((int64_t)6);
+		bignumber	seven((int64_t)7);
+		bignumber	zero;
+		bignumber	neg((int64_t)-5);
+		test("modMul: zero modulus fails",!a.modMul(seven,zero));
+		test("modMul: zero modulus error",
+			a.getError()==BIGNUMBER_ERROR_INVALID_MODULUS);
+		test("modMul: zero modulus instance unmodified",
+							decis(&a,"6"));
+		test("modMul: negative modulus fails",!a.modMul(seven,neg));
+		test("modMul: negative modulus error",
+			a.getError()==BIGNUMBER_ERROR_INVALID_MODULUS);
+		test("modMul: negative modulus instance unmodified",
+							decis(&a,"6"));
+	}
+
+
+	// modPow
+	{
+		bignumber	a((int64_t)3);
+		test("modPow: 3^5 mod 7 succeeds",
+			a.modPow(bignumber((int64_t)5),
+					bignumber((int64_t)7)));
+		test("modPow: 3^5 mod 7 is 5",decis(&a,"5"));
+	}
+	{
+		bignumber	a((int64_t)-3);
+		test("modPow: negative base (-3)^3 mod 7 is 1",
+			a.modPow(bignumber((int64_t)3),
+					bignumber((int64_t)7)) &&
+							decis(&a,"1"));
+		test("modPow: negative base result is not negative",
+							!a.isNegative());
+		a.setValue((int64_t)-2);
+		test("modPow: negative base (-2)^2 mod 5 is 4",
+			a.modPow(bignumber((int64_t)2),
+					bignumber((int64_t)5)) &&
+							decis(&a,"4"));
+	}
+	{
+		bignumber	a((int64_t)5);
+		test("modPow: exponent 0, 5^0 mod 7 is 1",
+			a.modPow(bignumber((int64_t)0),
+					bignumber((int64_t)7)) &&
+							decis(&a,"1"));
+		a.setValue((int64_t)5);
+		test("modPow: exponent 0 and modulus 1, 5^0 mod 1 is 0",
+			a.modPow(bignumber((int64_t)0),
+					bignumber((int64_t)1)) &&
+							a.isZero());
+		a.setValue((int64_t)9);
+		test("modPow: exponent 1, 9^1 mod 7 is 2",
+			a.modPow(bignumber((int64_t)1),
+					bignumber((int64_t)7)) &&
+							decis(&a,"2"));
+		a.setValue((int64_t)5);
+		test("modPow: modulus 1 gives 0",
+			a.modPow(bignumber((int64_t)3),
+					bignumber((int64_t)1)) &&
+							a.isZero());
+	}
+	{
+		bignumber	a((int64_t)3);
+		bignumber	five((int64_t)5);
+		bignumber	zero;
+		bignumber	neg((int64_t)-7);
+		test("modPow: negative exponent fails",
+			!a.modPow(bignumber((int64_t)-5),
+					bignumber((int64_t)7)));
+		test("modPow: negative exponent error",
+			a.getError()==BIGNUMBER_ERROR_NEGATIVE_EXPONENT);
+		test("modPow: negative exponent instance unmodified",
+							decis(&a,"3"));
+		test("modPow: zero modulus fails",!a.modPow(five,zero));
+		test("modPow: zero modulus error",
+			a.getError()==BIGNUMBER_ERROR_INVALID_MODULUS);
+		test("modPow: zero modulus instance unmodified",
+							decis(&a,"3"));
+		test("modPow: negative modulus fails",!a.modPow(five,neg));
+		test("modPow: negative modulus error",
+			a.getError()==BIGNUMBER_ERROR_INVALID_MODULUS);
+		test("modPow: negative modulus instance unmodified",
+							decis(&a,"3"));
+	}
+	{
+		// 2 raised to a 60 digit exponent, modulo the 1536 bit
+		// RFC 3526 MODP group 5 prime
+		const char	*modp1536=
+		"FFFFFFFFFFFFFFFFC90FDAA22168C234C4C6628B80DC1CD129024E088A67CC74"
+		"020BBEA63B139B22514A08798E3404DDEF9519B3CD3A431B302B0A6DF25F1437"
+		"4FE1356D6D51C245E485B576625E7EC6F44C42E9A637ED6B0BFF5CB6F406B7ED"
+		"EE386BFB5A899FA5AE9F24117C4B1FE649286651ECE45B3DC2007CB8A163BF05"
+		"98DA48361C55D39A69163FA8FD24CF5F83655D23DCA3AD961C62F356208552BB"
+		"9ED529077096966D670C354E4ABC9804F1746C08CA237327FFFFFFFFFFFFFFFF";
+		const char	*expected=
+		"2324447750807766656083122566593316264886246924809553970330963999"
+		"3914098622585632917786463542173334888984065997806879174144336018"
+		"4217739580544940564217491613893854063274313281284056070539982065"
+		"3142568348993059943090218971740152429148640413544396297976357423"
+		"8178369746003729594904043725848895490713853176189517553430940147"
+		"5234263797745514751736298321077910249616804340004526731950628350"
+		"0099037356118372822683838509678728795360201715233784262768295619"
+		"346238558316748";
+
+		bignumber	modulus(modp1536,16);
+		bignumber	exponent(
+		"123456789012345678901234567890123456789012345678901234567890");
+		bignumber	a((int64_t)2);
+		test("modPow: 1536 bit modulus succeeds",
+					a.modPow(exponent,modulus));
+		test("modPow: 1536 bit modulus result",decis(&a,expected));
+	}
+
+
+	// modInverse
+	{
+		bignumber	a((int64_t)3);
+		bignumber	eleven((int64_t)11);
+		test("modInverse: 3 mod 11 succeeds",a.modInverse(eleven));
+		test("modInverse: 3 mod 11 is 4",decis(&a,"4"));
+
+		bignumber	check(a);
+		test("modInverse: 3 mod 11 round trip",
+			check.modMul(bignumber((int64_t)3),eleven) &&
+							decis(&check,"1"));
+	}
+	{
+		// the classic RSA example
+		bignumber	a((int64_t)17);
+		bignumber	m((int64_t)3120);
+		test("modInverse: 17 mod 3120 succeeds",a.modInverse(m));
+		test("modInverse: 17 mod 3120 is 2753",decis(&a,"2753"));
+
+		bignumber	check(a);
+		test("modInverse: 17 mod 3120 round trip",
+			check.modMul(bignumber((int64_t)17),m) &&
+							decis(&check,"1"));
+	}
+	{
+		bignumber	a((int64_t)-3);
+		bignumber	seven((int64_t)7);
+		test("modInverse: -3 mod 7 succeeds",a.modInverse(seven));
+		test("modInverse: -3 mod 7 is 2",decis(&a,"2"));
+		test("modInverse: -3 mod 7 result is not negative",
+							!a.isNegative());
+
+		bignumber	check(a);
+		test("modInverse: -3 mod 7 round trip",
+			check.modMul(bignumber((int64_t)-3),seven) &&
+							decis(&check,"1"));
+	}
+	{
+		bignumber	a((int64_t)6);
+		test("modInverse: 6 mod 9 has no inverse",
+				!a.modInverse(bignumber((int64_t)9)));
+		test("modInverse: 6 mod 9 error",
+			a.getError()==BIGNUMBER_ERROR_NO_INVERSE);
+		test("modInverse: 6 mod 9 instance unmodified",decis(&a,"6"));
+
+		bignumber	b((int64_t)4);
+		test("modInverse: 4 mod 8 has no inverse",
+				!b.modInverse(bignumber((int64_t)8)));
+		test("modInverse: 4 mod 8 error",
+			b.getError()==BIGNUMBER_ERROR_NO_INVERSE);
+		test("modInverse: 4 mod 8 instance unmodified",decis(&b,"4"));
+
+		bignumber	c;
+		test("modInverse: 0 mod 7 has no inverse",
+				!c.modInverse(bignumber((int64_t)7)));
+		test("modInverse: 0 mod 7 error",
+			c.getError()==BIGNUMBER_ERROR_NO_INVERSE);
+		test("modInverse: 0 mod 7 instance unmodified",c.isZero());
+	}
+	{
+		bignumber	a((int64_t)5);
+		test("modInverse: modulus 1 gives 0",
+			a.modInverse(bignumber((int64_t)1)) && a.isZero());
+	}
+	{
+		bignumber	a((int64_t)3);
+		bignumber	zero;
+		bignumber	neg((int64_t)-11);
+		test("modInverse: zero modulus fails",!a.modInverse(zero));
+		test("modInverse: zero modulus error",
+			a.getError()==BIGNUMBER_ERROR_INVALID_MODULUS);
+		test("modInverse: zero modulus instance unmodified",
+							decis(&a,"3"));
+		test("modInverse: negative modulus fails",!a.modInverse(neg));
+		test("modInverse: negative modulus error",
+			a.getError()==BIGNUMBER_ERROR_INVALID_MODULUS);
+		test("modInverse: negative modulus instance unmodified",
+							decis(&a,"3"));
+	}
+
+
+	// gcd
+	{
+		bignumber	a((int64_t)12);
+		test("gcd: 12 and 18 succeeds",
+				a.gcd(bignumber((int64_t)18)));
+		test("gcd: 12 and 18 is 6",decis(&a,"6"));
+
+		a.setValue((int64_t)17);
+		test("gcd: 17 and 5 is 1",
+			a.gcd(bignumber((int64_t)5)) && decis(&a,"1"));
+	}
+	{
+		bignumber	a;
+		test("gcd: 0 and 5 is 5",
+			a.gcd(bignumber((int64_t)5)) && decis(&a,"5"));
+		a.setValue((int64_t)5);
+		test("gcd: 5 and 0 is 5",
+			a.gcd(bignumber((int64_t)0)) && decis(&a,"5"));
+		a.setValue((int64_t)0);
+		test("gcd: 0 and 0 is 0",
+			a.gcd(bignumber((int64_t)0)) && a.isZero());
+	}
+	{
+		bignumber	a((int64_t)-12);
+		test("gcd: -12 and 18 is 6",
+			a.gcd(bignumber((int64_t)18)) && decis(&a,"6"));
+		a.setValue((int64_t)-12);
+		test("gcd: -12 and -18 is 6",
+			a.gcd(bignumber((int64_t)-18)) && decis(&a,"6"));
+		a.setValue((int64_t)12);
+		test("gcd: 12 and -18 is 6",
+			a.gcd(bignumber((int64_t)-18)) && decis(&a,"6"));
+		test("gcd: result is not negative",!a.isNegative());
+	}
+	{
+		bignumber	a(bigdec);
+		test("gcd: large values succeeds",a.gcd(bignumber(bigdec2)));
+		test("gcd: large values result",decis(&a,"90"));
+	}
+
+
 	// negation and absolute value
 	{
 		bignumber	b((int64_t)5);

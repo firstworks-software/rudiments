@@ -2,10 +2,12 @@
 		integer arithmetic, wrapping OpenSSL's BIGNUM functions
 		when they're built in and usable and falling back to a
 		built-in implementation otherwise
+	added modular arithmetic to bignumber - nonNegativeModulo(),
+		modAdd(), modSub(), modMul(), modPow(), modInverse(), and gcd()
 	added an arc4 class, providing the RC4 stream cipher, using OpenSSL
 		when it's built in and usable and falling back to a built-in
 		implementation otherwise
-		clarified csprng::isSupported() doc comment - it reports whether a
+	clarified csprng::isSupported() doc comment - it reports whether a
 		backend is compiled in, not whether one initialized for a
 		given instance
 	fixed buffer overflow when unix socket file name is too long
