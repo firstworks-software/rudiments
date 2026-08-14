@@ -26,6 +26,7 @@ for program in \
 	dictionary \
 	directory \
 	domevents \
+	domnode \
 	dynamicarray \
 	dynamiclib \
 	environment \

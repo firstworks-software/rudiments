@@ -320,7 +320,7 @@ ssize_t inidom::writeNode(domnode *dn, output *out,
 			const char	*key=NULL;
 			ssize_t		klen=0;
 			const char	*val=dn->getAttributeValue("v");
-			ssize_t		vlen=charstring::getLength(val);
+			ssize_t		vlen=dn->getAttributeValueLength("v");
 			switch (*name) {
 				case 'c':
 					if (!incOrErr(&retval,
@@ -363,7 +363,7 @@ ssize_t inidom::writeNode(domnode *dn, output *out,
 					break;
 				case 'k':
 					key=dn->getAttributeValue("k");
-					klen=charstring::getLength(key);
+					klen=dn->getAttributeValueLength("k");
 					if (!incOrErr(&retval,
 							out->write(key,klen),
 							klen) ||
@@ -381,7 +381,7 @@ ssize_t inidom::writeNode(domnode *dn, output *out,
 		case TEXT_DOMNODETYPE:
 			{
 			const char	*val=dn->getValue();
-			ssize_t		vlen=charstring::getLength(val);
+			ssize_t		vlen=dn->getValueLength();
 			if (!incOrErr(&retval,out->write(val,vlen),vlen)) {
 				return retval;
 			}

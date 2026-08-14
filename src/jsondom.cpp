@@ -408,11 +408,17 @@ ssize_t jsondom::writeNode(domnode *dn, output *out,
 			if (!incOrErr(&retval,out->write('"'),1)) {
 				return retval;
 			}
-			const char *val=getValue(dn);
+			size_t	vallen=0;
+			const char *val=getValue(dn,&vallen);
 			if (val) {
-				for (;;) {
+				for (size_t i=0; i<vallen; i++) {
 					if (*val=='\0') {
-						break;
+						if (!incOrErr(&retval,
+							out->write("\\u0000",
+									6),
+							6)) {
+							return retval;
+						}
 					} else if (*val=='\b') {
 						if (!incOrErr(&retval,
 							out->write("\\b",2),
@@ -459,9 +465,10 @@ ssize_t jsondom::writeNode(domnode *dn, output *out,
 			break;
 		case 'n':
 			{
-			const char	*v=getValue(dn);
-			if (!charstring::isNullOrEmpty(v)) {
-				ssize_t	len=charstring::getLength(v);
+			size_t		vlen=0;
+			const char	*v=getValue(dn,&vlen);
+			if (!charstring::isNullOrEmpty(v) || vlen) {
+				ssize_t	len=(ssize_t)vlen;
 				if (!incOrErr(&retval,out->write(v,len),len)) {
 					return retval;
 				}
@@ -595,14 +602,18 @@ const char *jsondom::getType(domnode *dn) {
 
 	// if the type isn't provided, then try to derive it from the value
 	if (charstring::isNullOrEmpty(type)) {
-		const char	*v=getValue(dn);
-		if (charstring::isNullOrEmpty(v)) {
+		size_t		vlen=0;
+		const char	*v=getValue(dn,&vlen);
+		if (charstring::isNullOrEmpty(v) && !vlen) {
 			// FIXME: actually, it could also be an array,
 			// see if there are multiple children with the
 			// same name...
 			// of course, it could be an array with 1 member or
 			// an empty array...
 			type="o";
+		} else if (vlen!=charstring::getLength(v)) {
+			// a value with an embedded null can only be a string
+			type="s";
 		} else if (!charstring::compare(v,"true")) {
 			type="t";
 		} else if (!charstring::compare(v,"false")) {
@@ -620,13 +631,22 @@ const char *jsondom::getType(domnode *dn) {
 }
 
 const char *jsondom::getValue(domnode *dn) {
+	size_t	valuelength;
+	return getValue(dn,&valuelength);
+}
+
+const char *jsondom::getValue(domnode *dn, size_t *valuelength) {
 
 	// first try attribute "v"
 	const char	*value=dn->getAttributeValue("v");
+	*valuelength=dn->getAttributeValueLength("v");
 
 	// then try attribute "value"
-	if (charstring::isNullOrEmpty(value)) {
+	// (a value with a leading embedded null looks empty, so
+	// consider the length too)
+	if (charstring::isNullOrEmpty(value) && !*valuelength) {
 		value=dn->getAttributeValue("value");
+		*valuelength=dn->getAttributeValueLength("value");
 	}
 
 	// FIXME: then fall back to the immediate text node

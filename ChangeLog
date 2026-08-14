@@ -1,4 +1,18 @@
-2.3.0 - added csvsax::field(value,length,quoted) and
+2.3.0 - added domnode::setValue(value,length) and
+		domnode::setAttributeValue(name,value,length) overloads, and
+		domnode::getValueLength()/getAttributeValueLength(), so a
+		node or attribute value containing an embedded null byte
+		can be stored and retrieved intact instead of being
+		truncated; jsondom, xmldom, csvdom, inidom, and propdom now
+		use the stored length rather than scanning for a null byte
+		when serializing a value, and csvdom builds tree nodes
+		using the length-aware csvsax field()/column() hooks so a
+		parsed field or column value with an embedded null survives
+		into the tree; jsondom escapes an embedded null as a JSON
+		unicode escape; xmldom writes an embedded null through
+		as-is, which XML 1.0 cannot represent, so the resulting
+		document is not well-formed in that case
+	added csvsax::field(value,length,quoted) and
 		csvsax::column(name,length,quoted) overloads, and
 		sax::parseString(string,length), so a field or column
 		value containing an embedded null byte can reach the

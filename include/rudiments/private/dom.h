@@ -29,6 +29,9 @@
 					uint16_t indent);
 		virtual	ssize_t	safeWrite(output *out,
 					const char *str);
+		virtual	ssize_t	safeWrite(output *out,
+					const char *str,
+					size_t length);
 
 	private:
 		domprivate	*pvt;

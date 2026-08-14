@@ -2,9 +2,11 @@
 // See the file COPYING for more information
 
 #include <rudiments/csvdom.h>
+#include <rudiments/domnode.h>
 #include <rudiments/file.h>
 #include <rudiments/permissions.h>
 #include <rudiments/stdio.h>
+#include <rudiments/bytestring.h>
 #include "test.cpp"
 
 const char normal[]=
@@ -734,6 +736,48 @@ int main() {
 		}
 	}
 	
+	// SQL Relay #8872-style case: a csvdom tree built programmatically
+	// (not parsed from text), with a quoted field value containing an
+	// embedded null, must not have that value silently truncated when
+	// written.
+	{
+		stdoutput.printf("embedded null, built programmatically...\n");
+
+		const char	value[]="ab\0cd";
+		const size_t	valuelength=5;
+
+		csvdom	built;
+		built.createRootNode();
+		domnode	*root=built.getRootNode();
+		domnode	*hdr=root->appendTag("h");
+		domnode	*col=hdr->appendTag("c");
+		col->setAttributeValue("v","field1");
+		col->setAttributeValue("q","n");
+		domnode	*rec=root->appendTag("r");
+		domnode	*fld=rec->appendTag("f");
+		fld->setAttributeValue("v",value,valuelength);
+		fld->setAttributeValue("q","y");
+
+		built.writeFile("embedded null.csv",
+				permissions::parsePermString("rw-r--r--"));
+
+		file		f;
+		byte_t		*contents=NULL;
+		size_t		contentslength=0;
+		ssize_t		bytesread=f.getContents("embedded null.csv",
+						&contents,&contentslength);
+
+		test("value not truncated, contains bytes before null",
+			bytesread>0 && bytestring::findFirst(
+				contents,contentslength,"ab",2));
+		test("value not truncated, contains bytes after null",
+			bytesread>0 && bytestring::findFirst(
+				contents,contentslength,"cd",2));
+
+		delete[] contents;
+		file::remove("embedded null.csv");
+	}
+
 	stdoutput.printf("\n");
 
 	return 0;

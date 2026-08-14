@@ -11,6 +11,14 @@
  *  It parses a file or string of XML-formatted data and produces a dom tree
  *  representing the data.
  *
+ *  Node and attribute values may contain embedded null characters (see
+ *  domnode::getValueLength()) and writeXml() will write those bytes through
+ *  as-is.  However, XML 1.0 has no valid character reference for a literal
+ *  NUL, so a value containing one cannot be represented in well-formed XML.
+ *  This is a known, deliberate limitation, not a bug: if a document's
+ *  values may contain embedded nulls, XML is not a suitable output format
+ *  for it.
+ *
  *  See the "domnode" class for more detail. */
 class RUDIMENTS_DLLSPEC xmldom : public xmlsax, public dom {
 	public:

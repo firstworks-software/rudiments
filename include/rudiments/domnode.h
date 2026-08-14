@@ -181,6 +181,13 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 		/** Returns the value of node. */
 		virtual	const char	*getValue();
 
+		/** Returns the length, in bytes, of the value of the
+		 *  node, not including the terminating null.  If the
+		 *  value was set using a length-aware method then it
+		 *  may contain embedded nulls, and this is the only
+		 *  reliable way to get its length. */
+		virtual	size_t		getValueLength();
+
 
 		/** Returns a pointer to the tree that this node is
 		 *  attached to or NULL if it isn't attached to any tree. */
@@ -719,6 +726,16 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 		 *  found. */
 		const char	*getAttributeValue(uint64_t position);
 
+		/** Returns the length, in bytes, of the value of the
+		 *  attribute named "name", not including the
+		 *  terminating null, or 0 if not found. */
+		size_t		getAttributeValueLength(const char *name);
+
+		/** Returns the length, in bytes, of the value of the
+		 *  attribute node at index "position", not including
+		 *  the terminating null, or 0 if not found. */
+		size_t		getAttributeValueLength(uint64_t position);
+
 		/** Returns the attribute names and values in
 		 *  a dictionary.  The dictionary is allocated
 		 *  internally and must be deleted by the
@@ -731,6 +748,16 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 		 *  "name" to "value".  Creates attribute
 		 *  "name" if it didn't previously exist. */
 		void	setAttributeValue(const char *name, const char *value);
+
+		/** Sets the value of the attribute named
+		 *  "name" to the first "valuelength" bytes of
+		 *  "value".  Creates attribute "name" if it didn't
+		 *  previously exist.  The value may contain embedded
+		 *  nulls, and it always bypasses the dom's string
+		 *  cache. */
+		void	setAttributeValue(const char *name,
+						const char *value,
+						size_t valuelength);
 
 		/** Sets the value of the attribute named
 		 *  "name" to "value".  Creates attribute
@@ -764,6 +791,15 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 
 		/** Sets the node value to "value". */
 		virtual	void	setValue(const char *value);
+
+		/** Sets the node value to the first "valuelength"
+		 *  bytes of "value".  The value is stored as a
+		 *  length-carrying buffer, so it may contain embedded
+		 *  nulls, though a terminating null is added as well.
+		 *  Values set this way always bypass the dom's string
+		 *  cache, whether the cache is enabled or not. */
+		virtual	void	setValue(const char *value,
+						size_t valuelength);
 
 		/** Sets the parent of the node to "parent". */
 		virtual	void	setParent(domnode *parent);
@@ -1139,9 +1175,27 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 		 *  (and all successive siblings) is incremented. */
 		bool	insertText(const char *value, uint64_t position);
 
+		/** Inserts a child node of type TEXT_DOMNODE with
+		 *  a value consisting of the first "valuelength"
+		 *  bytes of "value" into the list of child nodes at
+		 *  "position".  The position of the next sibling
+		 *  (and all successive siblings) is incremented.
+		 *  The value may contain embedded nulls, and it
+		 *  always bypasses the dom's string cache. */
+		bool	insertText(const char *value,
+					size_t valuelength,
+					uint64_t position);
+
 		/** Appends a child node of type TEXT_DOMNODE with
 		 *  value "value" to the list of child nodes. */
 		bool	appendText(const char *value);
+
+		/** Appends a child node of type TEXT_DOMNODE with
+		 *  a value consisting of the first "valuelength"
+		 *  bytes of "value" to the list of child nodes.
+		 *  The value may contain embedded nulls, and it
+		 *  always bypasses the dom's string cache. */
+		bool	appendText(const char *value, size_t valuelength);
 
 		/** Inserts "attribute" into the list of attributes at
 		 *  "position".  The position of the next attribute
@@ -1159,9 +1213,30 @@ class RUDIMENTS_DLLSPEC domnode : virtual public object {
 		bool	insertAttribute(const char *name, const char *value,
 							uint64_t position);
 
+		/** Creates an attribute node with "name" and a value
+		 *  consisting of the first "valuelength" bytes of
+		 *  "value" and inserts it into the list of attributes
+		 *  at "position".  The position of the next attribute
+		 *  (and all successive attributes) is incremented.
+		 *  The value may contain embedded nulls, and it
+		 *  always bypasses the dom's string cache. */
+		bool	insertAttribute(const char *name,
+						const char *value,
+						size_t valuelength,
+						uint64_t position);
+
 		/** Creates an attribute node with "name" and "value"
 		 *  and appends it to the list of attributes. */
 		bool	appendAttribute(const char *name, const char *value);
+
+		/** Creates an attribute node with "name" and a value
+		 *  consisting of the first "valuelength" bytes of
+		 *  "value" and appends it to the list of attributes.
+		 *  The value may contain embedded nulls, and it
+		 *  always bypasses the dom's string cache. */
+		bool	appendAttribute(const char *name,
+						const char *value,
+						size_t valuelength);
 
 		/** Deletes the attribute at "position".  The position
 		 *  of the next attribute (and all successive attributes)

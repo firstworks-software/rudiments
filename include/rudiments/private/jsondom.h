@@ -31,5 +31,6 @@
 		domnode	*whichNode();
 		const char	*getType(domnode *dn);
 		const char	*getValue(domnode *dn);
+		const char	*getValue(domnode *dn, size_t *valuelength);
 
 		jsondomprivate	*pvt;

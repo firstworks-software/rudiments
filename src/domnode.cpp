@@ -3,6 +3,7 @@
 
 #include <rudiments/domnode.h>
 #include <rudiments/charstring.h>
+#include <rudiments/bytestring.h>
 #include <rudiments/dom.h>
 #include <rudiments/stdio.h>
 
@@ -20,6 +21,11 @@ class domnodeprivate {
 		const char	*_namespace;
 		const char	*_name;
 		const char	*_value;
+		size_t		_valuelength;
+
+		bool		_namespacecached;
+		bool		_namecached;
+		bool		_valuecached;
 
 		domnode		*_parent;
 		domnode		*_next;
@@ -81,6 +87,10 @@ void domnode::construct(dom *dom) {
 	pvt->_namespace=NULL;
 	pvt->_name=NULL;
 	pvt->_value=NULL;
+	pvt->_valuelength=0;
+	pvt->_namespacecached=false;
+	pvt->_namecached=false;
+	pvt->_valuecached=false;
 	pvt->_data=NULL;
 	pvt->_privatedata=NULL;
 }
@@ -102,13 +112,19 @@ domnode::~domnode() {
 		delete current;
 		current=pvt->_lastattribute;
 	}
-	if (pvt->_dom->getStringCacheEnabled()) {
+	if (pvt->_namespacecached) {
 		pvt->_dom->unCacheString(pvt->_namespace);
-		pvt->_dom->unCacheString(pvt->_name);
-		pvt->_dom->unCacheString(pvt->_value);
 	} else {
 		delete[] (char *)pvt->_namespace;
+	}
+	if (pvt->_namecached) {
+		pvt->_dom->unCacheString(pvt->_name);
+	} else {
 		delete[] (char *)pvt->_name;
+	}
+	if (pvt->_valuecached) {
+		pvt->_dom->unCacheString(pvt->_value);
+	} else {
 		delete[] (char *)pvt->_value;
 	}
 	delete pvt;
@@ -672,11 +688,38 @@ bool domnode::insertText(const char *value, uint64_t position) {
 				&pvt->_childcount);
 }
 
+bool domnode::insertText(const char *value,
+					size_t valuelength,
+					uint64_t position) {
+	domnode	*text=new domnode(pvt->_dom);
+	text->setName("text");
+	text->setValue(value,valuelength);
+	return insertNode(text,position,
+				TEXT_DOMNODETYPE,
+				&pvt->_firstchild,
+				&pvt->_lastchild,
+				&pvt->_childcount);
+}
+
 bool domnode::insertAttribute(const char *name, const char *value,
 							uint64_t position) {
 	domnode	*attribute=new domnode(pvt->_dom);
 	attribute->setName(name);
 	attribute->setValue(value);
+	return insertNode(attribute,position,
+				ATTRIBUTE_DOMNODETYPE,
+				&pvt->_firstattribute,
+				&pvt->_lastattribute,
+				&pvt->_attributecount);
+}
+
+bool domnode::insertAttribute(const char *name,
+					const char *value,
+					size_t valuelength,
+					uint64_t position) {
+	domnode	*attribute=new domnode(pvt->_dom);
+	attribute->setName(name);
+	attribute->setValue(value,valuelength);
 	return insertNode(attribute,position,
 				ATTRIBUTE_DOMNODETYPE,
 				&pvt->_firstattribute,
@@ -873,12 +916,22 @@ bool domnode::appendText(const char *value) {
 	return insertText(value,getChildCount());
 }
 
+bool domnode::appendText(const char *value, size_t valuelength) {
+	return insertText(value,valuelength,getChildCount());
+}
+
 bool domnode::appendAttribute(domnode *attribute) {
 	return insertAttribute(attribute,getAttributeCount());
 }
 
 bool domnode::appendAttribute(const char *name, const char *value) {
 	return insertAttribute(name,value,getAttributeCount());
+}
+
+bool domnode::appendAttribute(const char *name,
+					const char *value,
+					size_t valuelength) {
+	return insertAttribute(name,value,valuelength,getAttributeCount());
 }
 
 dictionary<const char *, const char *> *domnode::getAttributes() {
@@ -908,6 +961,20 @@ void domnode::setAttributeValue(const char *name, const char *value) {
 	}
 }
 
+void domnode::setAttributeValue(const char *name,
+					const char *value,
+					size_t valuelength) {
+	if (isNullNode()) {
+		return;
+	}
+	domnode	*attr=getAttribute(name);
+	if (!attr->isNullNode()) {
+		attr->setValue(value,valuelength);
+	} else {
+		appendAttribute(name,value,valuelength);
+	}
+}
+
 void domnode::setAttributeValue(const char *name, int64_t value) {
 	char	*valuestr=charstring::parseNumber(value);
 	setAttributeValue(name,valuestr);
@@ -934,6 +1001,10 @@ const char *domnode::getName() {
 
 const char *domnode::getValue() {
 	return pvt->_value;
+}
+
+size_t domnode::getValueLength() {
+	return pvt->_valuelength;
 }
 
 dom *domnode::getTree() {
@@ -1040,27 +1111,45 @@ const char *domnode::getAttributeValue(const char *name) {
 	return getAttribute(name)->getValue();
 }
 
+size_t domnode::getAttributeValueLength(uint64_t position) {
+	return getAttribute(position)->getValueLength();
+}
+
+size_t domnode::getAttributeValueLength(const char *name) {
+	return getAttribute(name)->getValueLength();
+}
+
 void domnode::setType(domnodetype type) {
 	pvt->_type=type;
 }
 
 void domnode::setNamespace(const char *ns) {
-	if (pvt->_dom->getStringCacheEnabled()) {
+	if (pvt->_namespacecached) {
 		pvt->_dom->unCacheString(pvt->_namespace);
-		pvt->_namespace=pvt->_dom->cacheString(ns);
 	} else {
 		delete[] (char *)pvt->_namespace;
+	}
+	if (pvt->_dom->getStringCacheEnabled()) {
+		pvt->_namespace=pvt->_dom->cacheString(ns);
+		pvt->_namespacecached=true;
+	} else {
 		pvt->_namespace=charstring::duplicate(ns);
+		pvt->_namespacecached=false;
 	}
 }
 
 void domnode::setName(const char *name) {
-	if (pvt->_dom->getStringCacheEnabled()) {
+	if (pvt->_namecached) {
 		pvt->_dom->unCacheString(pvt->_name);
-		pvt->_name=pvt->_dom->cacheString(name);
 	} else {
 		delete[] (char *)pvt->_name;
+	}
+	if (pvt->_dom->getStringCacheEnabled()) {
+		pvt->_name=pvt->_dom->cacheString(name);
+		pvt->_namecached=true;
+	} else {
 		pvt->_name=charstring::duplicate(name);
+		pvt->_namecached=false;
 	}
 }
 
@@ -1070,13 +1159,38 @@ void domnode::setName(const char *ns, const char *name) {
 }
 
 void domnode::setValue(const char *value) {
-	if (pvt->_dom->getStringCacheEnabled()) {
+	if (pvt->_valuecached) {
 		pvt->_dom->unCacheString(pvt->_value);
-		pvt->_value=pvt->_dom->cacheString(value);
 	} else {
 		delete[] (char *)pvt->_value;
-		pvt->_value=charstring::duplicate(value);
 	}
+	if (pvt->_dom->getStringCacheEnabled()) {
+		pvt->_value=pvt->_dom->cacheString(value);
+		pvt->_valuecached=true;
+	} else {
+		pvt->_value=charstring::duplicate(value);
+		pvt->_valuecached=false;
+	}
+	pvt->_valuelength=(value)?charstring::getLength(value):0;
+}
+
+void domnode::setValue(const char *value, size_t valuelength) {
+	if (pvt->_valuecached) {
+		pvt->_dom->unCacheString(pvt->_value);
+	} else {
+		delete[] (char *)pvt->_value;
+	}
+	if (value) {
+		char	*newvalue=new char[valuelength+1];
+		bytestring::copy(newvalue,value,valuelength);
+		newvalue[valuelength]='\0';
+		pvt->_value=newvalue;
+	} else {
+		pvt->_value=NULL;
+		valuelength=0;
+	}
+	pvt->_valuecached=false;
+	pvt->_valuelength=valuelength;
 }
 
 void domnode::setParent(domnode *parent) {
@@ -1882,12 +1996,15 @@ domnode *domnode::clone(dom *dom) {
 
 	// clone this node
 	domnode	*clonednode=new domnode(dom,getType(),getNamespace(),
-						getName(),getValue());
+						getName(),NULL);
+	clonednode->setValue(getValue(),getValueLength());
 
 	// clone attributes
 	for (uint64_t i=0; i<getAttributeCount(); i++) {
-		clonednode->setAttributeValue(getAttribute(i)->getName(),
-						getAttribute(i)->getValue());
+		clonednode->setAttributeValue(
+				getAttribute(i)->getName(),
+				getAttribute(i)->getValue(),
+				getAttribute(i)->getValueLength());
 	}
 
 	// clone children

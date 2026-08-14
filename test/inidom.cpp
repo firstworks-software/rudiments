@@ -2,9 +2,11 @@
 // See the file COPYING for more information
 
 #include <rudiments/inidom.h>
+#include <rudiments/domnode.h>
 #include <rudiments/stdio.h>
 #include <rudiments/file.h>
 #include <rudiments/permissions.h>
+#include <rudiments/bytestring.h>
 #include "test.cpp"
 
 struct test {
@@ -157,6 +159,42 @@ int main() {
 		delete[] contents;
 		test("parse file",i.parseFile(filename.getString()));
 		file::remove(filename.getString());
+	}
+
+	// SQL Relay #8872-style case: an inidom tree built programmatically
+	// (not parsed from text), with a key's value containing an embedded
+	// null, must not have that value silently truncated when written.
+	{
+		stdoutput.printf("\nembedded null, built programmatically...\n");
+
+		const char	value[]="ab\0cd";
+		const size_t	valuelength=5;
+
+		inidom	built;
+		built.createRootNode();
+		domnode	*root=built.getRootNode();
+		domnode	*key=root->appendTag("k");
+		key->setAttributeValue("k","key1");
+		key->setAttributeValue("v",value,valuelength);
+
+		built.writeFile("embedded null.ini",
+				permissions::parsePermString("rw-r--r--"));
+
+		file		f;
+		byte_t		*contents=NULL;
+		size_t		contentslength=0;
+		ssize_t		bytesread=f.getContents("embedded null.ini",
+						&contents,&contentslength);
+
+		test("value not truncated, contains bytes before null",
+			bytesread>0 && bytestring::findFirst(
+				contents,contentslength,"ab",2));
+		test("value not truncated, contains bytes after null",
+			bytesread>0 && bytestring::findFirst(
+				contents,contentslength,"cd",2));
+
+		delete[] contents;
+		file::remove("embedded null.ini");
 	}
 
 	stdoutput.printf("\n");

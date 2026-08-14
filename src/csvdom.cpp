@@ -242,6 +242,12 @@ void csvdom::setValue(domnode *node, const char *name, bool quoted) {
 	node->setAttributeValue("q",(quoted)?"y":"n");
 }
 
+void csvdom::setValue(domnode *node, const char *name,
+					size_t namelength, bool quoted) {
+	node->setAttributeValue("v",name,namelength);
+	node->setAttributeValue("q",(quoted)?"y":"n");
+}
+
 bool csvdom::renameColumn(const char *oldname,
 				uint64_t position, bool useposition,
 				const char *name, bool quoted) {
@@ -722,11 +728,12 @@ ssize_t csvdom::writeNode(domnode *dn, output *out,
 ssize_t csvdom::writeValue(output *out, domnode *value) {
 	ssize_t		retval=0;
 	const char	*v=value->getAttributeValue("v");
+	size_t		vlen=value->getAttributeValueLength("v");
 	if (value->getAttributeValue("q")[0]=='y') {
 		if (!incOrErr(&retval,out->write(getQuote()),1)) {
 			return retval;
 		}
-		for (const char *ptr=v; *ptr; ptr++) {
+		for (const char *ptr=v; ptr<v+vlen; ptr++) {
 			if (*ptr==getQuote()) {
 				if (!incOrErr(&retval,out->write(*ptr),1)) {
 					return retval;
@@ -738,8 +745,7 @@ ssize_t csvdom::writeValue(output *out, domnode *value) {
 		}
 		incOrErr(&retval,out->write(getQuote()),1);
 	} else {
-		size_t	len=charstring::getLength(v);
-		incOrErr(&retval,out->write(v,len),len);
+		incOrErr(&retval,out->write(v,vlen),vlen);
 	}
 	return retval;
 }
@@ -757,6 +763,13 @@ bool csvdom::headerStart() {
 bool csvdom::column(const char *name, bool quoted) {
 	domnode	*columnnode=new domnode(this,TAG_DOMNODETYPE,NULL,"c",NULL);
 	setValue(columnnode,name,quoted);
+	pvt->_currentparent->appendChild(columnnode);
+	return true;
+}
+
+bool csvdom::column(const char *name, size_t namelength, bool quoted) {
+	domnode	*columnnode=new domnode(this,TAG_DOMNODETYPE,NULL,"c",NULL);
+	setValue(columnnode,name,namelength,quoted);
 	pvt->_currentparent->appendChild(columnnode);
 	return true;
 }
@@ -780,6 +793,13 @@ bool csvdom::recordStart() {
 bool csvdom::field(const char *value, bool quoted) {
 	domnode	*fieldnode=new domnode(this,TAG_DOMNODETYPE,NULL,"f",NULL);
 	setValue(fieldnode,value,quoted);
+	pvt->_currentparent->appendChild(fieldnode);
+	return true;
+}
+
+bool csvdom::field(const char *value, size_t valuelength, bool quoted) {
+	domnode	*fieldnode=new domnode(this,TAG_DOMNODETYPE,NULL,"f",NULL);
+	setValue(fieldnode,value,valuelength,quoted);
 	pvt->_currentparent->appendChild(fieldnode);
 	return true;
 }

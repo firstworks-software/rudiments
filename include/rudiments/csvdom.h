@@ -90,10 +90,8 @@ class RUDIMENTS_DLLSPEC csvdom : public csvsax, public dom {
 		bool	parseString(const char *string);
 
 		/** Parses "length" bytes of "string" and generates a DOM tree.
-		 *  Note that DOM node values are stored as null-terminated
-		 *  strings, so a field containing an embedded null byte will
-		 *  still be truncated in the resulting tree.  Use csvsax
-		 *  directly to preserve embedded null bytes. */
+		 *  Fields and column names containing embedded null bytes
+		 *  are preserved in full in the resulting tree. */
 		bool	parseString(const char *string, size_t length);
 
 		/** Creates a new root node.  This is useful for building a
@@ -113,7 +111,15 @@ class RUDIMENTS_DLLSPEC csvdom : public csvsax, public dom {
 		bool	getColumnPosition(const char *name, uint64_t *position);
 
 		/** Upper-cases the name of the column at "position".  Returns
-		 *  true on success and false if "position" doesn't exist. */
+		 *  true on success and false if "position" doesn't exist.
+		 *
+		 *  Note: this and the other case- and trim-related methods
+		 *  below (upperCaseColumn(s), lowerCaseColumn(s),
+		 *  rightTrimColumn(s), leftTrimColumn(s), and the
+		 *  corresponding Field methods) are not embedded-null-safe -
+		 *  a column or field value containing an embedded null byte
+		 *  gets truncated at the null when case-folded or
+		 *  trimmed. */
 		bool	upperCaseColumn(uint64_t position);
 
 		/** Upper-cases the name of the column "name".  Returns true on
@@ -384,6 +390,14 @@ class RUDIMENTS_DLLSPEC csvdom : public csvsax, public dom {
 		/** Gets called when a column name is parsed. */
 		virtual	bool	column(const char *name, bool quoted);
 
+		/** Gets called when a column name is parsed.  "namelength" is
+		 *  the exact number of bytes in "name" and may be greater
+		 *  than charstring::getLength(name) if "name" contains
+		 *  embedded null bytes.  Builds the "c" node using the exact
+		 *  length, preserving any embedded null bytes. */
+		virtual	bool	column(const char *name, size_t namelength,
+								bool quoted);
+
 		/** Gets called when the end of the header is encountered. */
 		virtual	bool	headerEnd();
 
@@ -395,6 +409,14 @@ class RUDIMENTS_DLLSPEC csvdom : public csvsax, public dom {
 
 		/** Gets called when a field is parsed. */
 		virtual	bool	field(const char *value, bool quoted);
+
+		/** Gets called when a field is parsed.  "valuelength" is the
+		 *  exact number of bytes in "value" and may be greater than
+		 *  charstring::getLength(value) if "value" contains embedded
+		 *  null bytes.  Builds the "f" node using the exact length,
+		 *  preserving any embedded null bytes. */
+		virtual	bool	field(const char *value, size_t valuelength,
+								bool quoted);
 
 		/** Gets called when the end of a record is encountered. */
 		virtual	bool	recordEnd();

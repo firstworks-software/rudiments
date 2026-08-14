@@ -226,8 +226,9 @@ static bool isIgnorableWhitespace(domnode *dn) {
 	if (!value) {
 		return true;
 	}
-	for (const char *c=value; *c; c++) {
-		if (!character::isWhitespace(*c)) {
+	size_t	length=dn->getValueLength();
+	for (size_t i=0; i<length; i++) {
+		if (!character::isWhitespace(value[i])) {
 			return false;
 		}
 	}
@@ -400,31 +401,36 @@ ssize_t dom::writeNode(domnode *dn, output *out,
 			}
 			break;
 		case TEXT_DOMNODETYPE:
-			incOrErr(&retval,safeWrite(out,dn->getValue()));
+			incOrErr(&retval,safeWrite(out,dn->getValue(),
+						dn->getValueLength()));
 			break;
 		case ATTRIBUTE_DOMNODETYPE:
 			currentvalue=dn->getValue();
 			if (dn->getParent()->getName()[0]=='!') {
 				incOrErr(&retval,out->write('"'),1) &&
 				incOrErr(&retval,
-					safeWrite(out,currentvalue)) &&
+					safeWrite(out,currentvalue,
+						dn->getValueLength())) &&
 				incOrErr(&retval,out->write('"'),1);
 			} else {
 				incOrErr(&retval,
 					safeWrite(out,dn->getName())) &&
 				incOrErr(&retval,out->write("=\"",2),2) &&
-				incOrErr(&retval,safeWrite(out,currentvalue)) &&
+				incOrErr(&retval,safeWrite(out,currentvalue,
+						dn->getValueLength())) &&
 				incOrErr(&retval,out->write('"'),1);
 			}
 			break;
 		case COMMENT_DOMNODETYPE:
 			incOrErr(&retval,out->write("<!--",4),4) &&
-			incOrErr(&retval,safeWrite(out,dn->getValue())) &&
+			incOrErr(&retval,safeWrite(out,dn->getValue(),
+						dn->getValueLength())) &&
 			incOrErr(&retval,out->write("-->",3),3);
 			break;
 		case CDATA_DOMNODETYPE:
 			incOrErr(&retval,out->write("<![CDATA[",9),9) &&
-			incOrErr(&retval,safeWrite(out,dn->getValue())) &&
+			incOrErr(&retval,safeWrite(out,dn->getValue(),
+						dn->getValueLength())) &&
 			incOrErr(&retval,out->write("]]>",3),3);
 			break;
 		default:
@@ -456,6 +462,55 @@ ssize_t dom::safeWrite(output *out, const char *str) {
 	uint16_t	num=0;
 
 	for (; *ch; ch++) {
+		if (*ch=='&') {
+			entity="&amp;";
+		} else if (*ch=='<') {
+			entity="&lt;";
+		} else if (*ch=='>') {
+			entity="&gt;";
+		} else if (*ch=='\'') {
+			entity="&apos;";
+		} else if (*ch=='"') {
+			entity="&quot;";
+		} else if ((signed char)*ch<0) {
+			num=(uint16_t)((byte_t)*ch);
+		}
+		if (entity || num) {
+			incOrErr(&retval,out->write(start,ch-start),ch-start);
+			if (entity) {
+				ssize_t	len=charstring::getLength(entity);
+				incOrErr(&retval,out->write(entity,len),len);
+				entity=NULL;
+			} else {
+				incOrErr(&retval,out->write("&#",2),2);
+				char	*numstr=charstring::parseNumber(num);
+				ssize_t	len=charstring::getLength(numstr);
+				incOrErr(&retval,out->write(numstr,len),len);
+				delete[] numstr;
+				incOrErr(&retval,out->write(';'),1);
+				num=0;
+			}
+			start=ch+1;
+		}
+	}
+	incOrErr(&retval,out->write(start,ch-start),ch-start);
+	return retval;
+}
+
+ssize_t dom::safeWrite(output *out, const char *str, size_t length) {
+
+	if (!str) {
+		return 0;
+	}
+
+	ssize_t		retval=0;
+	const char	*start=str;
+	const char	*ch=start;
+	const char	*end=str+length;
+	const char	*entity=NULL;
+	uint16_t	num=0;
+
+	for (; ch<end; ch++) {
 		if (*ch=='&') {
 			entity="&amp;";
 		} else if (*ch=='<') {

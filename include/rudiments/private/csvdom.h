@@ -20,6 +20,8 @@
 		bool	trimColumns(bool left, bool right);
 
 		void	setValue(domnode *node, const char *name, bool quoted);
+		void	setValue(domnode *node, const char *name,
+					size_t namelength, bool quoted);
 
 		bool	renameColumn(const char *oldname,
 				uint64_t position, bool useposition,

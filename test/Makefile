@@ -60,6 +60,7 @@ PROGS2= dynamicarray \
 
 PROGS3= handoff \
 	xmldom \
+	domnode \
 	logger \
 	sys \
 	reboot \
@@ -242,6 +243,9 @@ bytebuffer: bytebuffer.cpp bytebuffer.$(OBJ)
 
 xmldom: xmldom.cpp xmldom.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) xmldom.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+domnode: domnode.cpp domnode.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) domnode.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 des: des.cpp des.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) des.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)

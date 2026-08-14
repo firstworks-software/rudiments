@@ -2,9 +2,11 @@
 // See the file COPYING for more information
 
 #include <rudiments/jsondom.h>
+#include <rudiments/domnode.h>
 #include <rudiments/stdio.h>
 #include <rudiments/file.h>
 #include <rudiments/permissions.h>
+#include <rudiments/charstring.h>
 #include "test.cpp"
 
 struct test {
@@ -390,6 +392,40 @@ int main() {
 				contents));
 		delete[] contents;
 		test("parse file",j.parseFile(filename.getString()));
+		file::remove(filename.getString());
+	}
+
+	// SQL Relay #8872: a jsondom tree built programmatically (not
+	// parsed from text) with a field value containing an embedded
+	// null must not have that value silently truncated when written.
+	{
+		stdoutput.printf("embedded null, built programmatically...\n");
+
+		const char	value[]="ab\0cd";
+		const size_t	valuelength=5;
+
+		jsondom	built;
+		built.createRootNode();
+		domnode	*root=built.getRootNode();
+		domnode	*obj=root->appendTag("r");
+		obj->setAttributeValue("t","o");
+		domnode	*field=obj->appendTag("field");
+		field->setAttributeValue("t","s");
+		field->setAttributeValue("v",value,valuelength);
+
+		filename.clear();
+		filename.append("embedded null")->append(".json");
+		built.writeFile(filename.getString(),
+				permissions::parsePermString("rw-r--r--"),
+				true);
+		char	*contents=file::getContents(filename.getString());
+
+		test("value not truncated, contains escaped null",
+			charstring::contains(contents,"\\u0000"));
+		test("value not truncated, contains bytes after null",
+			charstring::contains(contents,"cd"));
+
+		delete[] contents;
 		file::remove(filename.getString());
 	}
 

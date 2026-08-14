@@ -13,7 +13,8 @@
 					bool indent,
 					uint16_t *indentlevel);
 		ssize_t	writeAndEscape(output *out,
-					const char *value);
+					const char *value,
+					size_t valuelength);
 
 	friend class domnode;
 	private:
