@@ -1,0 +1,122 @@
+<html>
+<head>
+	<title>firstworks: rudiments</title>
+
+	<link rel="stylesheet" href="../css/style.css"/>
+	<!-- nothing -->
+
+	<script language="Javascript" src="js/button.js"></script>
+</head>
+<body onload="setButton();">
+
+
+<div style="position: fixed; top: 0px; left: 0px; width: 100%; z-index: 100;">
+
+<span id="firstworks">a <b><a href="http://www.firstworks.com">firstworks</a></b> project</span>
+
+<div id="projectbox"><a href="index.html"><img src="../images/rudiments-icon.png"/><span id="name">Rudiments</span></a></div>
+
+<table id="projectbuttons">
+<tr>
+<td style="width: 50%;"></td>
+<td class="button nonlastbutton"><a id="button-about" href="../index.html">About</a></td>
+<td class="button nonlastbutton"><a id="button-documentation" href="../documentation.html">Documentation</a></td>
+<td class="button nonlastbutton"><a id="button-download" href="../download.html">Download</a></td>
+<td class="button nonlastbutton"><a id="button-license" href="../license.html">Licensing</a></td>
+<td class="button"><a id="button-news" target="_blank" href="http://software.firstworks.com/">News</a></td>
+<td style="width: 50%;"></td>
+</tr>
+</table>
+
+</div>
+
+<div style="position: absolute; top: 84px; width: 100%;">
+
+
+<div id="content">
+
+
+<h1>Using the bignumber class</h1>
+
+<p>The <a href="../classes/html/classbignumber.html">bignumber class</a> provides an arbitrary-precision signed integer.  There is no practical limit on the magnitude of a bignumber, other than the amount of memory available.</p>
+
+<p>Unlike most rudiments classes, bignumber is a value type, like an int, rather than a stateful object.  Instances may be freely copied, assigned, and passed by value.</p>
+
+<p>Instances can be constructed from a decimal or hexadecimal string, from the native integer types, or from a raw big-endian byte buffer, and setValue() and the assignment operators can set an existing instance to any of these forms as well.  getString() and getString(base) convert back to a decimal or hexadecimal string, getValue() converts back to a native integer type (failing if the value doesn't fit), and getMagnitude() and related methods expose the raw magnitude and sign.</p>
+
+<p>Arithmetic follows the same rules as the native C++ integer types: division truncates toward zero, and the remainder takes the sign of the dividend.  So, for example, -7/2 is -3 and -7%2 is -1, while 7/-2 is -3 and 7%-2 is 1.  The full set of arithmetic, comparison, unary, and bitwise/shift operators is provided (+ - * / % == != < > <= >= unary - ++ -- & | ^ ~ << >>), along with named methods (add(), subtract(), compare(), and so on) that the operators are built on.</p>
+
+<p>The bitwise operators (&, |, ^, and ~) behave as if each operand were an infinitely wide two's complement value, which is the same behavior that Java's BigInteger and Python's int provide.  In particular, ~x is defined as -x-1.</p>
+
+<p>Operations that can fail - parsing a malformed string, dividing by zero, or converting a value that's too large to a native integer type - don't throw exceptions.  They report failure through their return value, and getError() returns the reason.</p>
+
+<p>When available, this class uses OpenSSL's BIGNUM implementation internally.  Otherwise it falls back to a built-in implementation, so isSupported() always returns true.</p>
+
+<p>The following example builds a couple of large values from decimal strings, adds and multiplies them, divides a small negative value to illustrate the truncating division rule, and builds a value from a hex string.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/bignumber.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/charstring.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// check whether bignumber is supported</font></i>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(!</font><b><font color="#000000">bignumber</font></b><font color="#990000">().</font><b><font color="#000000">isSupported</font></b><font color="#990000">())</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"bignumber is not supported</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+		<b><font color="#0000FF">return</font></b> <font color="#993399">1</font><font color="#990000">;</font>
+	<font color="#FF0000">}</font>
+
+
+	<i><font color="#9A1900">// construct large values from decimal strings</font></i>
+	<font color="#008080">bignumber</font>	<b><font color="#000000">a</font></b><font color="#990000">(</font><font color="#FF0000">"123456789012345678901234567890"</font><font color="#990000">);</font>
+	<font color="#008080">bignumber</font>	<b><font color="#000000">b</font></b><font color="#990000">(</font><font color="#FF0000">"-987654321098765432109876543210"</font><font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// arithmetic operators work like the native integer types</font></i>
+	<font color="#008080">bignumber</font>	sum<font color="#990000">=</font>a<font color="#990000">+</font>b<font color="#990000">;</font>
+	<font color="#008080">bignumber</font>	product<font color="#990000">=</font>a<font color="#990000">*</font>b<font color="#990000">;</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"a+b = %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>sum<font color="#990000">.</font><b><font color="#000000">getString</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"a*b = %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>product<font color="#990000">.</font><b><font color="#000000">getString</font></b><font color="#990000">());</font>
+
+
+	<i><font color="#9A1900">// division truncates toward zero, and the remainder takes the sign</font></i>
+	<i><font color="#9A1900">// of the dividend, just like the native integer types</font></i>
+	<font color="#008080">bignumber</font>	<b><font color="#000000">quotient</font></b><font color="#990000">(-</font><font color="#993399">7</font><font color="#990000">);</font>
+	<font color="#008080">bignumber</font>	remainder<font color="#990000">;</font>
+	quotient<font color="#990000">.</font><b><font color="#000000">divide</font></b><font color="#990000">(</font><b><font color="#000000">bignumber</font></b><font color="#990000">(</font><font color="#993399">2</font><font color="#990000">),&amp;</font>remainder<font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"-7/2 = %s remainder %s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>
+				quotient<font color="#990000">.</font><b><font color="#000000">getString</font></b><font color="#990000">(),</font>remainder<font color="#990000">.</font><b><font color="#000000">getString</font></b><font color="#990000">());</font>
+
+
+	<i><font color="#9A1900">// values can also be built from hex strings, and converted back to</font></i>
+	<i><font color="#9A1900">// either base.  Each instance owns a single cached string buffer,</font></i>
+	<i><font color="#9A1900">// reused by the next call to getString(), so the decimal string has</font></i>
+	<i><font color="#9A1900">// to be copied out before asking for the hex string.</font></i>
+	<font color="#008080">bignumber</font>	<b><font color="#000000">c</font></b><font color="#990000">(</font><font color="#FF0000">"DEADBEEF"</font><font color="#990000">,</font><font color="#993399">16</font><font color="#990000">);</font>
+	<font color="#009900">char</font>		<font color="#990000">*</font>decimal<font color="#990000">=</font>charstring<font color="#990000">::</font><b><font color="#000000">duplicate</font></b><font color="#990000">(</font>c<font color="#990000">.</font><b><font color="#000000">getString</font></b><font color="#990000">());</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"c = %s (0x%s)</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,</font>decimal<font color="#990000">,</font>c<font color="#990000">.</font><b><font color="#000000">getString</font></b><font color="#990000">(</font><font color="#993399">16</font><font color="#990000">));</font>
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> decimal<font color="#990000">;</font>
+
+	<b><font color="#0000FF">return</font></b> <font color="#993399">0</font><font color="#990000">;</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+</div> <!-- content -->
+
+
+<div id="copyrightbox">
+Copyright 2017 - David Muse - <a href="mailto:david.muse@firstworks.com">Contact</a> <img style="margin-left: 5px; vertical-align: text-bottom;" title="native english speaker" src="../images/us.png"/> <img style="vertical-align: text-bottom;" title="falo português também" src="../images/br.png"/>
+</div> <!-- copyrightbox -->
+
+</div>
+
+</body>
+</html>
+
+

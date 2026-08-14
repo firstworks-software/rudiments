@@ -7,6 +7,7 @@ include ../../config.mk
 SRCS = aes128.wt \
 	arc4.wt \
 	avltree.wt \
+	bignumber.wt \
 	bytebuffer.wt \
 	bytestring.wt \
 	character.wt \
@@ -94,6 +95,7 @@ SRCS = aes128.wt \
 INS = aes128.html.in \
 	arc4.html.in \
 	avltree.html.in \
+	bignumber.html.in \
 	bytebuffer.html.in \
 	bytestring.html.in \
 	character.html.in \
@@ -183,6 +185,7 @@ INS = aes128.html.in \
 WTOBJS = aes128.html.in \
 	arc4.html.in \
 	avltree.html.in \
+	bignumber.html.in \
 	bytebuffer.html.in \
 	bytestring.html.in \
 	character.html.in \
@@ -270,6 +273,7 @@ WTOBJS = aes128.html.in \
 OBJS = aes128.html \
 	arc4.html \
 	avltree.html \
+	bignumber.html \
 	bytebuffer.html \
 	bytestring.html \
 	character.html \

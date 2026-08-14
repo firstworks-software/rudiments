@@ -87,6 +87,7 @@ PROGS3= handoff \
 	pbkdf2 \
 	dh \
 	arc4 \
+	bignumber \
 	table \
 	scalar \
 	sensitivevalue \
@@ -361,6 +362,9 @@ dh: dh.cpp dh.$(OBJ)
 
 arc4: arc4.cpp arc4.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) arc4.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+bignumber: bignumber.cpp bignumber.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) bignumber.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 table: table.cpp table.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) table.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)

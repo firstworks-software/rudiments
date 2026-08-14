@@ -1,0 +1,33 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
+{{{#!include contentstart.html}}}
+
+= Using the bignumber class =
+
+The [../classes/html/classbignumber.html bignumber class] provides an arbitrary-precision signed integer.  There is no practical limit on the magnitude of a bignumber, other than the amount of memory available.
+
+Unlike most rudiments classes, bignumber is a value type, like an int, rather than a stateful object.  Instances may be freely copied, assigned, and passed by value.
+
+Instances can be constructed from a decimal or hexadecimal string, from the native integer types, or from a raw big-endian byte buffer, and setValue() and the assignment operators can set an existing instance to any of these forms as well.  getString() and getString(base) convert back to a decimal or hexadecimal string, getValue() converts back to a native integer type (failing if the value doesn't fit), and getMagnitude() and related methods expose the raw magnitude and sign.
+
+Arithmetic follows the same rules as the native C++ integer types: division truncates toward zero, and the remainder takes the sign of the dividend.  So, for example, -7/2 is -3 and -7%2 is -1, while 7/-2 is -3 and 7%-2 is 1.  The full set of arithmetic, comparison, unary, and bitwise/shift operators is provided (+ - * / % == != < > <= >= unary - ++ -- & | ^ ~ << >>), along with named methods (add(), subtract(), compare(), and so on) that the operators are built on.
+
+The bitwise operators (&, |, ^, and ~) behave as if each operand were an infinitely wide two's complement value, which is the same behavior that Java's !BigInteger and Python's int provide.  In particular, ~x is defined as -x-1.
+
+Operations that can fail - parsing a malformed string, dividing by zero, or converting a value that's too large to a native integer type - don't throw exceptions.  They report failure through their return value, and getError() returns the reason.
+
+When available, this class uses !OpenSSL's BIGNUM implementation internally.  Otherwise it falls back to a built-in implementation, so isSupported() always returns true.
+
+The following example builds a couple of large values from decimal strings, adds and multiplies them, divides a small negative value to illustrate the truncating division rule, and builds a value from a hex string.
+
+{{{#!blockquote
+{{{#!code
+@../../examples/bignumber.cpp@
+}}}
+}}}
+
+{{{#!include contentend.html}}}
+
+{{{#!include footer.html}}}

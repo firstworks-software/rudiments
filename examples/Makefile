@@ -9,6 +9,7 @@ PROGS0 = \
 	aes128$(EXE) \
 	arc4$(EXE) \
 	avltree$(EXE) \
+	bignumber$(EXE) \
 	bytebuffer$(EXE) \
 	bytestring-compare$(EXE) \
 	bytestring-copy$(EXE) \
@@ -202,6 +203,9 @@ aes128$(EXE): aes128.cpp aes128.$(OBJ)
 
 arc4$(EXE): arc4.cpp arc4.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ arc4.$(OBJ) $(LIBS)
+
+bignumber$(EXE): bignumber.cpp bignumber.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ bignumber.$(OBJ) $(LIBS)
 
 avltree$(EXE): avltree.cpp avltree.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ avltree.$(OBJ) $(LIBS)

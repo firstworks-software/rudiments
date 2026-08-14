@@ -11,6 +11,7 @@ for program in \
 	aes256 \
 	arc4 \
 	avltree \
+	bignumber \
 	bytebuffer \
 	bytestring \
 	character \

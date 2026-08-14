@@ -84,6 +84,9 @@
 /* SSL has BIO_meth_new */
 #undef RUDIMENTS_HAS_BIO_METH_NEW
 
+/* SSL has BN */
+#undef RUDIMENTS_HAS_BN
+
 /* libcurl has CURLOPT_SSH_AUTH_TYPES */
 #undef RUDIMENTS_HAS_CURLOPT_SSH_AUTH_TYPES
 

@@ -1,4 +1,8 @@
-2.3.0 - added an arc4 class, providing the RC4 stream cipher, using OpenSSL
+2.3.0 - added a bignumber class, providing arbitrary-precision signed
+		integer arithmetic, wrapping OpenSSL's BIGNUM functions
+		when they're built in and usable and falling back to a
+		built-in implementation otherwise
+		added an arc4 class, providing the RC4 stream cipher, using OpenSSL
 		when it's built in and usable and falling back to a built-in
 		implementation otherwise
 		clarified csprng::isSupported() doc comment - it reports whether a

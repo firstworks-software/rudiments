@@ -171,6 +171,9 @@
 /* SSL has RC4 */
 /* #undef RUDIMENTS_HAS_RC4 */
 
+/* SSL has BN */
+/* #undef RUDIMENTS_HAS_BN */
+
 /* SSL has EVP_PKEY_base_id */
 /* #undef RUDIMENTS_HAS_EVP_PKEY_BASE_ID */
 
