@@ -6,6 +6,10 @@
 #include <rudiments/device.h>
 #include <rudiments/error.h>
 
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+	#include <stdlib.h>
+#endif
+
 #if defined(RUDIMENTS_HAS_SSL)
 	#include <openssl/rand.h>
 #elif defined(RUDIMENTS_HAVE_CRYPTGENRANDOM)
