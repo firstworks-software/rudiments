@@ -167,6 +167,10 @@ bool sax::parseRemoteFile(const char *filename) {
 }
 
 bool sax::parseString(const char *string) {
+	return parseString(string,charstring::getLength(string));
+}
+
+bool sax::parseString(const char *string, size_t length) {
 
 	// close any previously opened files and reset fd/line
 	close();
@@ -175,7 +179,7 @@ bool sax::parseString(const char *string) {
 	pvt->_string=string;
 	pvt->_ptr=string;
 	pvt->_startptr=string;
-	pvt->_endptr=pvt->_string+charstring::getLength(string);
+	pvt->_endptr=pvt->_string+length;
 	pvt->_mmapped=false;
 
 	return parse();
@@ -225,10 +229,20 @@ char sax::skipWhitespace(char current) {
 }
 
 char sax::getCharacter() {
-	return getCharacter(true);
+	return getCharacter(true,NULL);
+}
+
+bool sax::getCharacter(char *ch) {
+	bool	eof=false;
+	*ch=getCharacter(true,&eof);
+	return !eof;
 }
 
 char sax::getCharacter(bool processignores) {
+	return getCharacter(processignores,NULL);
+}
+
+char sax::getCharacter(bool processignores, bool *eof) {
 
 	// if we're at the very beginning, then ignore footer and header lines
 	if (processignores && !pvt->_offset) {
@@ -238,6 +252,9 @@ char sax::getCharacter(bool processignores) {
 
 	// bail if we've hit the designated eof
 	if (pvt->_eof && pvt->_offset==pvt->_eof) {
+		if (eof) {
+			*eof=true;
+		}
 		return '\0';
 	}
 
@@ -256,6 +273,9 @@ char sax::getCharacter(bool processignores) {
 			// if we're parsing a memory-mapped file,
 			// we need to try to re-map it, if we can't, we're done
 			if (!pvt->_mmapped || !mapFile()) {
+				if (eof) {
+					*eof=true;
+				}
 				return '\0';
 			}
 		}
@@ -263,16 +283,25 @@ char sax::getCharacter(bool processignores) {
 		(pvt->_ptr)++;
 	} else if (pvt->_fl) {
 		if (pvt->_fl->read(&ch)!=sizeof(char)) {
+			if (eof) {
+				*eof=true;
+			}
 			return '\0';
 		}
 	} else {
 		if (pvt->_in->read(&ch)!=sizeof(char)) {
+			if (eof) {
+				*eof=true;
+			}
 			return '\0';
 		}
 	}
 	(pvt->_offset)++;
 	if (ch=='\n') {
 		(pvt->_line)++;
+	}
+	if (eof) {
+		*eof=false;
 	}
 	return ch;
 }

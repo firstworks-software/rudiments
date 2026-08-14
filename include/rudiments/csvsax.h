@@ -53,6 +53,21 @@ class RUDIMENTS_DLLSPEC csvsax : public sax {
 		 *  override this method to do something else. */
 		virtual	bool	column(const char *name, bool quoted);
 
+		/** Gets called when a column name is parsed.  "namelength" is
+		 *  the exact number of bytes in "name" and may be greater than
+		 *  charstring::getLength(name) if "name" contains embedded
+		 *  null bytes.
+		 *
+		 *  Returns true on success and false if an error occurred.
+		 *  Parsing stops if this method returns false.
+		 *
+		 *  This implementation calls column(name,quoted), which
+		 *  truncates "name" at the first embedded null byte.  A child
+		 *  class that needs to preserve embedded null bytes should
+		 *  override this method instead. */
+		virtual	bool	column(const char *name, size_t namelength,
+								bool quoted);
+
 		/** Gets called when the end of the header is encountered.
 		 *
 		 *  Returns true on success and false if an error occurred.
@@ -88,6 +103,21 @@ class RUDIMENTS_DLLSPEC csvsax : public sax {
 		 *  This implementation just returns true by a child class may
 		 *  override this method to do something else. */
 		virtual	bool	field(const char *value, bool quoted);
+
+		/** Gets called when a field is parsed.  "valuelength" is the
+		 *  exact number of bytes in "value" and may be greater than
+		 *  charstring::getLength(value) if "value" contains embedded
+		 *  null bytes.
+		 *
+		 *  Returns true on success and false if an error occurred.
+		 *  Parsing stops if this method returns false.
+		 *
+		 *  This implementation calls field(value,quoted), which
+		 *  truncates "value" at the first embedded null byte.  A child
+		 *  class that needs to preserve embedded null bytes should
+		 *  override this method instead. */
+		virtual	bool	field(const char *value, size_t valuelength,
+								bool quoted);
 
 		/** Gets called when the end of a record is encountered.
 		 *

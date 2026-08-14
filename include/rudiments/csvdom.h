@@ -89,6 +89,13 @@ class RUDIMENTS_DLLSPEC csvdom : public csvsax, public dom {
 		/** Parses string "string" and generates a DOM tree. */
 		bool	parseString(const char *string);
 
+		/** Parses "length" bytes of "string" and generates a DOM tree.
+		 *  Note that DOM node values are stored as null-terminated
+		 *  strings, so a field containing an embedded null byte will
+		 *  still be truncated in the resulting tree.  Use csvsax
+		 *  directly to preserve embedded null bytes. */
+		bool	parseString(const char *string, size_t length);
+
 		/** Creates a new root node.  This is useful for building a
 		 *  tree from scratch. */
 		void	createRootNode();

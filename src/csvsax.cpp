@@ -72,6 +72,11 @@ bool csvsax::column(const char *name, bool quoted) {
 	return true;
 }
 
+bool csvsax::column(const char *name, size_t namelength, bool quoted) {
+	// by default, forward to the length-less version
+	return column(name,quoted);
+}
+
 bool csvsax::headerEnd() {
 	// by default, just return success
 	debugPrintf("}\n");
@@ -97,6 +102,11 @@ bool csvsax::field(const char *value, bool quoted) {
 	return true;
 }
 
+bool csvsax::field(const char *value, size_t valuelength, bool quoted) {
+	// by default, forward to the length-less version
+	return field(value,quoted);
+}
+
 bool csvsax::recordEnd() {
 	// by default, just return success
 	debugPrintf("    }\n");
@@ -119,12 +129,13 @@ bool csvsax::parse() {
 	bool		ignore=false;
 	bool		keepchar=false;
 	char		ch='\0';
+	bool		eof=false;
 
 	for (;;) {
 
 		// get a character
 		if (!keepchar) {
-			ch=getCharacter();
+			eof=!getCharacter(&ch);
 		} else {
 			keepchar=false;
 		}
@@ -133,7 +144,7 @@ bool csvsax::parse() {
 		if (pvt->_state==HEADER_START) {
 			if (ch=='\n' || ch=='\r') {
 				continue;
-			} else if (ch=='\0') {
+			} else if (eof) {
 				// if the file was empty then create an empty
 				// header and empty body
 				if (!headerStart()) {
@@ -153,7 +164,7 @@ bool csvsax::parse() {
 		}
 
 		// handle end of file/string
-		if (ch=='\0') {
+		if (eof) {
 			break;
 		}
 
@@ -175,7 +186,7 @@ bool csvsax::parse() {
 		if (pvt->_state==COLUMN) {
 			if (inquotes) {
 				if (ch==pvt->_quote) {
-					ch=getCharacter();
+					eof=!getCharacter(&ch);
 					if (ch!=pvt->_quote) {
 						inquotes=false;
 						keepchar=true;
@@ -187,7 +198,8 @@ bool csvsax::parse() {
 				if (ch==pvt->_delimiter) {
 					pvt->_state=COLUMN_END;
 					if (!column(current.getString(),
-								quoted)) {
+							current.getSize(),
+							quoted)) {
 						return false;
 					}
 					current.clear();
@@ -197,7 +209,8 @@ bool csvsax::parse() {
 				} else if (ch=='\r' || ch=='\n') {
 					pvt->_state=COLUMN_END;
 					if (!column(current.getString(),
-								quoted)) {
+							current.getSize(),
+							quoted)) {
 						return false;
 					}
 					current.clear();
@@ -241,7 +254,7 @@ bool csvsax::parse() {
 		if (pvt->_state==FIELD) {
 			if (inquotes) {
 				if (ch==pvt->_quote) {
-					ch=getCharacter();
+					eof=!getCharacter(&ch);
 					if (ch!=pvt->_quote) {
 						inquotes=false;
 						keepchar=true;
@@ -253,7 +266,8 @@ bool csvsax::parse() {
 				if (ch==pvt->_delimiter) {
 					pvt->_state=FIELD_END;
 					if (!field(current.getString(),
-								quoted)) {
+							current.getSize(),
+							quoted)) {
 						return false;
 					}
 					current.clear();
@@ -263,7 +277,8 @@ bool csvsax::parse() {
 				} else if (ch=='\r' || ch=='\n') {
 					pvt->_state=FIELD_END;
 					if (!field(current.getString(),
-								quoted)) {
+							current.getSize(),
+							quoted)) {
 						return false;
 					}
 					current.clear();

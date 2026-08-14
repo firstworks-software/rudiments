@@ -72,6 +72,7 @@ PROGS3= handoff \
 	sha1 \
 	sha256 \
 	sha512 \
+	csvsax \
 	csvdom \
 	jsondom \
 	cgi.cgi \
@@ -316,6 +317,9 @@ sha256: sha256.cpp sha256.$(OBJ)
 
 sha512: sha512.cpp sha512.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) sha512.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+csvsax: csvsax.cpp csvsax.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) csvsax.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 csvdom: csvdom.cpp csvdom.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) csvdom.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)

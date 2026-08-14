@@ -60,6 +60,11 @@ bool csvdom::parseString(const char *string) {
 	return sax::parseString(string);
 }
 
+bool csvdom::parseString(const char *string, size_t length) {
+	reset();
+	return sax::parseString(string,length);
+}
+
 bool csvdom::reset() {
 	pvt->_currentparent=NULL;
 	return dom::reset() && csvsax::reset();

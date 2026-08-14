@@ -57,6 +57,16 @@ class RUDIMENTS_DLLSPEC sax : virtual public object {
 		 *  Returns true on success or false otherwise. */
 		virtual bool	parseString(const char *string);
 
+		/** Parses "length" bytes of "string" and calls the appropriate
+		 *  callback when tags, attributes, text, etc. are encountered.
+		 *  Unlike parseString(const char *), "string" may contain
+		 *  embedded null bytes, since the length to parse is given
+		 *  explicitly rather than derived by scanning for a
+		 *  terminating null.
+		 *
+		 *  Returns true on success or false otherwise. */
+		virtual bool	parseString(const char *string, size_t length);
+
 		/** If parseFile() or parseString() fails, this method
 		 *  returns the error that caused the failure. */
 		const char	*getError();

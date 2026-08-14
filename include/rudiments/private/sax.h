@@ -12,6 +12,7 @@
 
 		char	skipWhitespace(char current);
 		char	getCharacter();
+		bool	getCharacter(char *ch);
 		void	parseFailed(const char *thing, const char *why);
 
 	private:
@@ -19,6 +20,7 @@
 		bool	parseRemoteFile(const char *filename);
 
 		char	getCharacter(bool processignores);
+		char	getCharacter(bool processignores, bool *eof);
 		char	getCharacterBackwards();
 		void	ignoreHeaderLines();
 		void	ignoreFooterLines();

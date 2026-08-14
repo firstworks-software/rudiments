@@ -19,6 +19,7 @@ for program in \
 	commandline \
 	csprng \
 	csvdom \
+	csvsax \
 	datetime \
 	des \
 	dh \
