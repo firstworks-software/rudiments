@@ -5,6 +5,7 @@ include ../../config.mk
 .SUFFIXES: .wt .html.in .html
 
 SRCS = aes128.wt \
+	arc4.wt \
 	avltree.wt \
 	bytebuffer.wt \
 	bytestring.wt \
@@ -91,6 +92,7 @@ SRCS = aes128.wt \
 	xmlsax.wt
 
 INS = aes128.html.in \
+	arc4.html.in \
 	avltree.html.in \
 	bytebuffer.html.in \
 	bytestring.html.in \
@@ -179,6 +181,7 @@ INS = aes128.html.in \
 
 # the subset of INS that wt generates from SRCS; the rest are checkout files
 WTOBJS = aes128.html.in \
+	arc4.html.in \
 	avltree.html.in \
 	bytebuffer.html.in \
 	bytestring.html.in \
@@ -265,6 +268,7 @@ WTOBJS = aes128.html.in \
 	xmlsax.html.in
 
 OBJS = aes128.html \
+	arc4.html \
 	avltree.html \
 	bytebuffer.html \
 	bytestring.html \

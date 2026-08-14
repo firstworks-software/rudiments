@@ -261,6 +261,9 @@
 /* SSL has PKCS5_PBKDF2_HMAC_SHA1 */
 #undef RUDIMENTS_HAS_PKCS5_PBKDF2_HMAC_SHA1
 
+/* SSL has RC4 */
+#undef RUDIMENTS_HAS_RC4
+
 /* SSL has SHA1_Init/Update/Final returning int */
 #undef RUDIMENTS_HAS_SHA1_INIT_RETURNING_INT
 

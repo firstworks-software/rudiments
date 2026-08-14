@@ -202,6 +202,9 @@ then
 		AC_MSG_CHECKING(for EVP_CIPHER_CTX_new)
 		FW_TRY_LINK([#include <openssl/evp.h>],[EVP_CIPHER_CTX_new();],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_EVP_CIPHER_CTX_NEW,1,SSL has EVP_CIPHER_CTX_NEW) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 
+		AC_MSG_CHECKING(for RC4)
+		FW_TRY_LINK([#include <openssl/rc4.h>],[RC4_KEY k; RC4_set_key(&k,0,(const unsigned char *)0); RC4(&k,0,(const unsigned char *)0,(unsigned char *)0);],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_RC4,1,SSL has RC4) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+
 		AC_MSG_CHECKING(for EVP_aes_128_cbc)
 		FW_TRY_LINK([#include <openssl/evp.h>],[EVP_aes_128_cbc();],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_EVP_AES_128_CBC,1,SSL has EVP_AES_128_CBC) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 

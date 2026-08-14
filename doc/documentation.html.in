@@ -81,6 +81,7 @@
     <li><a href="programming/aes128.html">Using the aes128 class</a></li>
     <li><a href="programming/dh.html">Using the dh class</a></li>
     <li><a href="programming/pbkdf2.html">Using the pbkdf2 class</a></li>
+    <li><a href="programming/arc4.html">Using the arc4 class</a></li>
   </ul>
 
   <li><b>Security</b></li>

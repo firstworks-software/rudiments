@@ -169,6 +169,9 @@
 /* SSL has EVP_CIPHER_CTX_NEW */
 /* #undef RUDIMENTS_HAS_EVP_CIPHER_CTX_NEW */
 
+/* SSL has RC4 */
+/* #undef RUDIMENTS_HAS_RC4 */
+
 /* SSL has EVP_PKEY_base_id */
 /* #undef RUDIMENTS_HAS_EVP_PKEY_BASE_ID */
 

@@ -7,6 +7,7 @@ LIBS=$(RUDIMENTSLIB) $(SOCKETLIBS) $(PTHREADLIB) $(LIBEDITLIBS) $(SSLLIBS) $(GSS
 
 PROGS0 = \
 	aes128$(EXE) \
+	arc4$(EXE) \
 	avltree$(EXE) \
 	bytebuffer$(EXE) \
 	bytestring-compare$(EXE) \
@@ -198,6 +199,9 @@ clean:
 
 aes128$(EXE): aes128.cpp aes128.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ aes128.$(OBJ) $(LIBS)
+
+arc4$(EXE): arc4.cpp arc4.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@ arc4.$(OBJ) $(LIBS)
 
 avltree$(EXE): avltree.cpp avltree.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@ avltree.$(OBJ) $(LIBS)

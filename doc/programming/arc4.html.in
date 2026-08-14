@@ -1,0 +1,82 @@
+<!--#include virtual="header.html"-->
+
+<!--#include virtual="projectheader.html"-->
+
+<!--#include virtual="contentstart.html"-->
+
+<h1>Using the arc4 class</h1>
+
+<p>The <a href="../classes/html/classarc4.html">arc4 class</a> provides the RC4 stream cipher.</p>
+
+<p>Unlike the classes derived from the <a href="../classes/html/classencryption.html">encryption class</a>, arc4 is not a block cipher.  It has no key size restrictions, no initialization vector, no padding, and no block cipher mode.  Instead, each instance is constructed with a key (or given one via setKey()), and generates a running keystream from it.  The crypt() method XORs that keystream against a buffer, in place, advancing the keystream as it goes.  Since RC4 encryption and decryption are the same operation, there is only one method, crypt(), used for both.</p>
+
+<p>Each instance keeps its own independent, running keystream, so two instances constructed from the same key can be used concurrently without interfering with each other - for example, one to encrypt outgoing data and another to decrypt incoming data on a duplex stream.  crypt() may be called repeatedly, buffer by buffer, across the life of the stream, and the keystream simply continues from where the previous call left off.</p>
+
+<p>The isSupported() method always returns true, since a fallback implementation is built in for platforms where OpenSSL isn't available.</p>
+
+<p>The following example constructs two instances from the same key, one per direction, and uses them to encrypt outgoing data and decrypt incoming data.</p>
+
+<blockquote>
+<!-- Generator: GNU source-highlight 3.1.9
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/arc4.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/charstring.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/bytestring.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
+
+<font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
+
+	<i><font color="#9A1900">// check whether arc4 is supported</font></i>
+	<b><font color="#0000FF">if</font></b> <font color="#990000">(!</font><b><font color="#000000">arc4</font></b><font color="#990000">().</font><b><font color="#000000">isSupported</font></b><font color="#990000">())</font> <font color="#FF0000">{</font>
+		stdoutput<font color="#990000">.</font><b><font color="#000000">write</font></b><font color="#990000">(</font><font color="#FF0000">"arc4 is not supported</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">);</font>
+		<b><font color="#0000FF">return</font></b> <font color="#993399">1</font><font color="#990000">;</font>
+	<font color="#FF0000">}</font>
+
+
+	<i><font color="#9A1900">// two instances constructed from the same key, one for each</font></i>
+	<i><font color="#9A1900">// direction of a duplex stream</font></i>
+	<b><font color="#0000FF">const</font></b> <font color="#008080">byte_t</font>	<font color="#990000">*</font>key<font color="#990000">=(</font><b><font color="#0000FF">const</font></b> byte_t <font color="#990000">*)</font><font color="#FF0000">"a shared key"</font><font color="#990000">;</font>
+	<font color="#008080">size_t</font>		keysize<font color="#990000">=</font>charstring<font color="#990000">::</font><b><font color="#000000">getLength</font></b><font color="#990000">((</font><b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">*)</font>key<font color="#990000">);</font>
+	<font color="#008080">arc4</font>		<b><font color="#000000">writecipher</font></b><font color="#990000">(</font>key<font color="#990000">,</font>keysize<font color="#990000">);</font>
+	<font color="#008080">arc4</font>		<b><font color="#000000">readcipher</font></b><font color="#990000">(</font>key<font color="#990000">,</font>keysize<font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// encrypt some outgoing data</font></i>
+	<b><font color="#0000FF">const</font></b> <font color="#009900">char</font>	<font color="#990000">*</font>outgoing<font color="#990000">=</font><font color="#FF0000">"hello world"</font><font color="#990000">;</font>
+	<font color="#008080">size_t</font>		outgoingsize<font color="#990000">=</font>charstring<font color="#990000">::</font><b><font color="#000000">getLength</font></b><font color="#990000">(</font>outgoing<font color="#990000">);</font>
+	<font color="#008080">byte_t</font>		<font color="#990000">*</font>outbuffer<font color="#990000">=</font><b><font color="#0000FF">new</font></b> byte_t<font color="#990000">[</font>outgoingsize<font color="#990000">];</font>
+	bytestring<font color="#990000">::</font><b><font color="#000000">copy</font></b><font color="#990000">(</font>outbuffer<font color="#990000">,</font>outgoing<font color="#990000">,</font>outgoingsize<font color="#990000">);</font>
+	writecipher<font color="#990000">.</font><b><font color="#000000">crypt</font></b><font color="#990000">(</font>outbuffer<font color="#990000">,</font>outgoingsize<font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// decrypt some incoming data, encrypted separately with a cipher</font></i>
+	<i><font color="#9A1900">// constructed from the same key</font></i>
+	<font color="#008080">arc4</font>		<b><font color="#000000">peerwritecipher</font></b><font color="#990000">(</font>key<font color="#990000">,</font>keysize<font color="#990000">);</font>
+	<b><font color="#0000FF">const</font></b> <font color="#009900">char</font>	<font color="#990000">*</font>incoming<font color="#990000">=</font><font color="#FF0000">"goodbye world"</font><font color="#990000">;</font>
+	<font color="#008080">size_t</font>		incomingsize<font color="#990000">=</font>charstring<font color="#990000">::</font><b><font color="#000000">getLength</font></b><font color="#990000">(</font>incoming<font color="#990000">);</font>
+	<font color="#008080">byte_t</font>		<font color="#990000">*</font>inbuffer<font color="#990000">=</font><b><font color="#0000FF">new</font></b> byte_t<font color="#990000">[</font>incomingsize<font color="#990000">];</font>
+	bytestring<font color="#990000">::</font><b><font color="#000000">copy</font></b><font color="#990000">(</font>inbuffer<font color="#990000">,</font>incoming<font color="#990000">,</font>incomingsize<font color="#990000">);</font>
+	peerwritecipher<font color="#990000">.</font><b><font color="#000000">crypt</font></b><font color="#990000">(</font>inbuffer<font color="#990000">,</font>incomingsize<font color="#990000">);</font>
+	readcipher<font color="#990000">.</font><b><font color="#000000">crypt</font></b><font color="#990000">(</font>inbuffer<font color="#990000">,</font>incomingsize<font color="#990000">);</font>
+
+
+	<i><font color="#9A1900">// crypt() may be called repeatedly, buffer by buffer, and each</font></i>
+	<i><font color="#9A1900">// instance's keystream just continues from where it left off,</font></i>
+	<i><font color="#9A1900">// independently of the other instance's</font></i>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"decrypted: %.*s</font><font color="#CC33CC">\n</font><font color="#FF0000">"</font><font color="#990000">,(</font><font color="#009900">int</font><font color="#990000">)</font>incomingsize<font color="#990000">,</font>
+						<font color="#990000">(</font><b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">*)</font>inbuffer<font color="#990000">);</font>
+
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> outbuffer<font color="#990000">;</font>
+	<b><font color="#0000FF">delete</font></b><font color="#990000">[]</font> inbuffer<font color="#990000">;</font>
+
+	<b><font color="#0000FF">return</font></b> <font color="#993399">0</font><font color="#990000">;</font>
+<font color="#FF0000">}</font>
+</tt></pre>
+
+</blockquote>
+<!--#include virtual="contentend.html"-->
+
+<!--#include virtual="footer.html"-->
+

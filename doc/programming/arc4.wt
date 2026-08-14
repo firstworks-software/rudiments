@@ -1,0 +1,27 @@
+{{{#!include header.html}}}
+
+{{{#!include projectheader.html}}}
+
+{{{#!include contentstart.html}}}
+
+= Using the arc4 class =
+
+The [../classes/html/classarc4.html arc4 class] provides the RC4 stream cipher.
+
+Unlike the classes derived from the [../classes/html/classencryption.html encryption class], arc4 is not a block cipher.  It has no key size restrictions, no initialization vector, no padding, and no block cipher mode.  Instead, each instance is constructed with a key (or given one via setKey()), and generates a running keystream from it.  The crypt() method XORs that keystream against a buffer, in place, advancing the keystream as it goes.  Since RC4 encryption and decryption are the same operation, there is only one method, crypt(), used for both.
+
+Each instance keeps its own independent, running keystream, so two instances constructed from the same key can be used concurrently without interfering with each other - for example, one to encrypt outgoing data and another to decrypt incoming data on a duplex stream.  crypt() may be called repeatedly, buffer by buffer, across the life of the stream, and the keystream simply continues from where the previous call left off.
+
+The isSupported() method always returns true, since a fallback implementation is built in for platforms where !OpenSSL isn't available.
+
+The following example constructs two instances from the same key, one per direction, and uses them to encrypt outgoing data and decrypt incoming data.
+
+{{{#!blockquote
+{{{#!code
+@../../examples/arc4.cpp@
+}}}
+}}}
+
+{{{#!include contentend.html}}}
+
+{{{#!include footer.html}}}

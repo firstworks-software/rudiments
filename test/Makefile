@@ -86,6 +86,7 @@ PROGS3= handoff \
 	aes256 \
 	pbkdf2 \
 	dh \
+	arc4 \
 	table \
 	scalar \
 	sensitivevalue \
@@ -357,6 +358,9 @@ pbkdf2: pbkdf2.cpp pbkdf2.$(OBJ)
 
 dh: dh.cpp dh.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) dh.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+arc4: arc4.cpp arc4.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) arc4.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 table: table.cpp table.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) table.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)

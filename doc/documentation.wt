@@ -57,6 +57,7 @@
  * [programming/aes128.html Using the aes128 class]
  * [programming/dh.html Using the dh class]
  * [programming/pbkdf2.html Using the pbkdf2 class]
+ * [programming/arc4.html Using the arc4 class]
 * '''Security'''
  * [programming/sensitivevalue.html Using the sensitivevalue class]
 * '''Date and Time'''

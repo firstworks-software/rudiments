@@ -9,6 +9,7 @@ for program in \
 	aes128 \
 	aes192 \
 	aes256 \
+	arc4 \
 	avltree \
 	bytebuffer \
 	bytestring \
