@@ -351,10 +351,8 @@ bool compiler::compile(const char *input, stringbuffer *output) {
 					pvt->_inputgrammar,
 					pvt->_startsymbol,
 					root,&codeposition)) {
-			// The offset is into the pre-processed input,
-			// not into the original input, so show the text
-			// on either side of it too.  Also, fewer than 40
-			// bytes may remain, so don't just append 40.
+			// codeposition is an offset into the pre-processed
+			// input, not the original, so show surrounding text
 			size_t	before=(size_t)(codeposition-inptr);
 			if (before>40) {
 				before=40;

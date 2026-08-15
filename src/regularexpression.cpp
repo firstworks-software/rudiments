@@ -57,16 +57,15 @@ class regularexpressionprivate {
 		const char	*_str;
 		size_t		_length;
 
-		// True between a successful match and the failed match that
-		// ends the walk.  It can't be inferred from _matchcount,
-		// because match(NULL) returns early without touching it.
+		// True between a successful match and the failed one that ends
+		// the walk. Can't be inferred from _matchcount, because
+		// match(NULL) returns early without touching it.
 		bool		_walking;
 
 		#if !defined(RUDIMENTS_HAS_PCRE2) && !defined(RUDIMENTS_HAS_PCRE)
-		// The null-terminated buffer regexec() gets pointed at, which
-		// isn't always _str - match(str) hands it the caller's string
-		// and match(str,length) hands it _strcopy.  Remembering which
-		// keeps a walk from duplicating the subject at every step.
+		// null-terminated buffer regexec() is pointed at - match(str)
+		// uses the caller's string, match(str,length) uses _strcopy;
+		// remembering which avoids re-duplicating it on each match
 		const char	*_subject;
 		#endif
 
@@ -92,9 +91,8 @@ void regularexpression::construct() {
 	pvt=new regularexpressionprivate;
 	#if defined(RUDIMENTS_HAS_PCRE2)
 		pvt->_expr=NULL;
-		// The ovector lives inside the match data and is never
-		// reallocated, so this pointer is good for the life of
-		// the object.
+		// ovector lives inside match data, never reallocated,
+		// so this pointer is good for the object's lifetime
 		pvt->_matchdata=pcre2_match_data_create(
 					RUDIMENTS_REGEX_MATCHES,NULL);
 		pvt->_matches=pcre2_get_ovector_pointer(pvt->_matchdata);
@@ -136,9 +134,8 @@ regularexpression::~regularexpression() {
 			pcre_free(pvt->_extra);
 		}
 	#else
-		// regfree() takes the regex_t by address, so there is no
-		// pointer to test like the PCRE arms have.  _compiled stands
-		// in for it.
+		// regfree() takes the regex_t by address, so there's no
+		// pointer to test like the PCRE arms - _compiled stands in
 		if (pvt->_compiled) {
 			regfree(&pvt->_expr);
 		}
@@ -191,11 +188,9 @@ bool regularexpression::setPattern(const char *pattern, uint32_t options) {
 		if (options&REGULAR_EXPRESSION_CASE_INSENSITIVE) {
 			engineoptions|=REG_ICASE;
 		}
-		// REG_NEWLINE is the closest thing POSIX has to multiline,
-		// but it also stops . from matching a newline, which is the
-		// opposite of dot-all.  Dot-all is what these engines do
-		// without it, so it needs no flag of its own, and it's the
-		// one that gets dropped when both are asked for.
+		// REG_NEWLINE is the closest POSIX has to multiline, but it
+		// also blocks . from matching newlines (the opposite of
+		// dot-all) - dot-all loses when both options are requested.
 		if (options&REGULAR_EXPRESSION_MULTILINE) {
 			engineoptions|=REG_NEWLINE;
 		}
@@ -264,10 +259,9 @@ bool regularexpression::study() {
 		return true;
 	}
 	#if defined(RUDIMENTS_HAS_PCRE2)
-		// A library built without jit support returns
-		// PCRE2_ERROR_JIT_BADOPTION.  That just means there was
-		// nothing to do, like pcre1's pcre_study() returning NULL
-		// with no error.
+		// a library without jit support returns
+		// PCRE2_ERROR_JIT_BADOPTION, same as pcre1's pcre_study()
+		// returning NULL with no error - nothing to do either way
 		int32_t	result=pcre2_jit_compile(pvt->_expr,
 						PCRE2_JIT_COMPLETE);
 		return (!result || result==PCRE2_ERROR_JIT_BADOPTION);
@@ -296,12 +290,10 @@ bool regularexpression::match(const char *str, size_t length,
 	pvt->_str=str;
 	pvt->_length=length;
 	#if !defined(RUDIMENTS_HAS_PCRE2) && !defined(RUDIMENTS_HAS_PCRE)
-		// regexec() needs a null-terminated subject, but the
-		// substrings still have to be reported relative to str.
-		// Only worth copying for an offset runMatch() will accept -
-		// it turns an out-of-range one away without running the
-		// engine, so the copy would be for nothing.  Keep this test
-		// in step with the one there.
+		// regexec() needs a null-terminated subject; only copy
+		// when runMatch() will accept the offset, since it rejects
+		// an out-of-range one without running the engine - keep
+		// this test in step with the one there
 		if (offset>=0 && (size_t)offset<=length) {
 			delete[] pvt->_strcopy;
 			pvt->_strcopy=charstring::duplicate(str,length);
@@ -334,14 +326,10 @@ bool regularexpression::matchNext() {
 		return false;
 	}
 
-	// Resume after the previous match.  A non-empty match resumes at
-	// its end and an empty one resumes one character past its start,
-	// so the same empty match can't come back twice.  Bumping from the
-	// start rather than from the end also covers a match that ends
-	// before it starts, which pcre1 reports for a \K inside a
-	// lookahead, where resuming at the end would move backward and
-	// spin forever.  Either way the offset strictly increases, so the
-	// walk terminates.
+	// Resume at the match's end, or one character past its start if
+	// empty (so it can't repeat).  pcre1's \K in a lookahead can end
+	// before it starts, which would spin backward forever - use
+	// whichever point is further ahead.
 	int32_t	fromstart=getSubstringStartOffset(0);
 	int32_t	fromend=getSubstringEndOffset(0);
 	return runMatch((fromend>fromstart)?fromend:fromstart+1);
@@ -385,10 +373,9 @@ bool regularexpression::runMatch(int32_t offset) {
 #if !defined(RUDIMENTS_HAS_PCRE2) && !defined(RUDIMENTS_HAS_PCRE)
 bool regularexpression::runRegexec(const char *subject, int32_t offset) {
 
-	// regexec() has no start offset, so it has to be pointed at the
-	// resume point instead.  REG_NOTBOL keeps ^ from matching there,
-	// which is the whole reason for taking an offset rather than
-	// letting the caller pass a pointer into the middle of the string.
+	// regexec() has no start offset, so point it at the resume point
+	// instead; REG_NOTBOL keeps ^ from matching there - the reason for
+	// taking an offset instead of a pointer into the string
 	if (!pvt->_compiled ||
 		regexec(&pvt->_expr,subject+offset,
 				RUDIMENTS_REGEX_MATCHES,

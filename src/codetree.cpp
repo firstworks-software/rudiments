@@ -344,9 +344,8 @@ bool codetree::parse(const char *in,
 	bool	retval=(parseNonTerminal(pvt->_grammartag,out,
 						&codepos,NULL) && !pvt->_error);
 
-	// A parse that stopped short of the end of the input is a failure.
-	// Report codepos rather than _finalcodeposition, which is just the
-	// last position visited, and is only meaningful on a hard failure.
+	// stash codepos as the failure point; _finalcodeposition is
+	// only meaningful after a hard failure, not a short parse like this
 	if (retval && *codepos) {
 		retval=false;
 		pvt->_finalcodeposition=codepos;

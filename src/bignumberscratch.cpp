@@ -3,20 +3,12 @@
 
 #include <rudiments/dynamicarray.h>
 
-// bignumberscratch is a signed magnitude arbitrary-precision integer.  The
-// functions below mirror the subset of the OpenSSL BIGNUM API that the
-// bignumber class uses.
+// bignumberscratch is a signed-magnitude arbitrary-precision integer,
+// mirroring the subset of the OpenSSL BIGNUM API that bignumber uses.
 //
-// Unless noted otherwise, a "result" may be the same instance as an input, and
-// each function returns false if it ran out of memory.
-//
-// The magnitude is stored in base 256, least significant byte first, so index
-// 0 is the least significant byte.  The array only ever grows, so the logical
-// length is tracked separately, rather than relying on the array's own count.
-//
-// Zero is stored canonically - a length of 0, with no stored zero byte, and a
-// non-negative sign.  There is no negative zero.  Every function below leaves
-// its result in that form.
+// The magnitude is stored in base 256, least significant byte first. The
+// array only ever grows, so the logical length is tracked separately. Zero
+// is canonically a length of 0 and non-negative - there is no negative zero.
 class bignumberscratch {
 	public:
 		bignumberscratch() {
@@ -87,10 +79,7 @@ static void bignumberscratchzero(bignumberscratch *n) {
 
 // input...
 
-// multiplies the magnitude of "n" by 10 and adds "digit", in a single pass
-// with a carry.  This is the one piece of arbitrary-precision arithmetic that
-// converting a base 10 string needs, and it's a much simpler special case than
-// the general multiply and add, so it's kept local here.
+// multiply n's magnitude by 10 and add digit, in one pass with a carry
 static void bignumberscratchmultiplytenadd(bignumberscratch *n, byte_t digit) {
 
 	// the largest product of a byte is 255*10+9, which fits in 16 bits
@@ -108,11 +97,10 @@ static void bignumberscratchmultiplytenadd(bignumberscratch *n, byte_t digit) {
 	}
 }
 
-// "base" is 10 or 16, "value" is not NULL, and any leading + has already been
-// skipped.  A leading - is allowed.  Trailing characters are allowed here, as
-// BN_dec2bn() and BN_hex2bn() allow them, and *chars is set to the number of
-// characters consumed so that the caller can reject them.  Returns false if
-// "value" is malformed.
+// base is 10 or 16, value is not NULL, and a leading + has already been
+// skipped (a leading - is allowed). Trailing characters are allowed, as
+// BN_dec2bn()/BN_hex2bn() allow them; *chars reports how many were consumed
+// so the caller can reject them. Returns false if value is malformed.
 static bool bignumberscratchsetstring(bignumberscratch *n,
 					const char *value,
 					uint16_t base,
@@ -208,11 +196,10 @@ static bool bignumberscratchsetbytes(bignumberscratch *n,
 
 // output...
 
-// getstring() returns a new[] allocated string that the caller delete[]s, or
-// NULL if it ran out of memory.  Base 10 gives the format that BN_bn2dec()
-// gives, and base 16 the format that BN_bn2hex() gives - upper case, and two
-// hex digits per byte, so a leading zero digit is possible.  Both give "0" for
-// zero and a leading - for a negative value.
+// returns a new[] string (caller delete[]s it), or NULL on out of memory.
+// Base 10 matches BN_bn2dec()'s format, base 16 matches BN_bn2hex()'s (upper
+// case, 2 digits per byte, so a leading zero digit is possible). Both give
+// "0" for zero and a leading - for a negative value.
 static char *bignumberscratchgetstring(bignumberscratch *n, uint16_t base) {
 
 	if (!n->_len) {
@@ -241,11 +228,8 @@ static char *bignumberscratchgetstring(bignumberscratch *n, uint16_t base) {
 		return str;
 	}
 
-	// Base 10 needs the magnitude divided by 10 over and over, taking each
-	// remainder as a decimal digit, least significant digit first.  That's
-	// a single pass with a carry, rather than the general divide, so it's
-	// kept local here.  The division is destructive, so it runs against a
-	// copy of the magnitude.
+	// base 10: repeatedly divide the magnitude by 10, taking the remainder
+	// as the next decimal digit; destructive, so it runs against a copy
 	byte_t	*work=new byte_t[n->_len];
 	for (size_t i=0; i<n->_len; i++) {
 		work[i]=n->_mag[i];
@@ -287,8 +271,8 @@ static char *bignumberscratchgetstring(bignumberscratch *n, uint16_t base) {
 	return str;
 }
 
-// getbytecount() returns 0 for zero, as BN_num_bytes() does, and getbytes()
-// writes that many bytes, most significant byte first
+// returns 0 for zero, as BN_num_bytes() does; getbytes() writes that many
+// bytes, most significant byte first
 static size_t bignumberscratchgetbytecount(bignumberscratch *n) {
 	return n->_len;
 }
@@ -334,15 +318,12 @@ static void bignumberscratchsetnegative(bignumberscratch *n, bool negative) {
 
 // arithmetic
 
-// defined below, with the rest of the comparisons
 static int32_t bignumberscratchcomparemagnitude(bignumberscratch *a,
 						bignumberscratch *b);
 
-// Adds "a" and "b", using "aneg" and "bneg" as their signs rather than the
-// signs they carry, so that subtract can run the same code with the sign of
-// "b" flipped without having to modify "b" itself.  "result" may be the same
-// instance as "a" or "b", so each byte of each input is read before the byte
-// at that same index is written, and the lengths and signs are read up front.
+// adds a and b using aneg/bneg rather than their own signs, so subtract can
+// reuse this with b's sign flipped without modifying b. result may alias a
+// or b, so lengths and signs are read up front, before any byte is written.
 static bool bignumberscratchaddsigned(bignumberscratch *result,
 					bignumberscratch *a,
 					bool aneg,
@@ -422,8 +403,8 @@ static bool bignumberscratchadd(bignumberscratch *result,
 	return bignumberscratchaddsigned(result,a,a->_neg,b,b->_neg);
 }
 
-// a-b is a+(-b), and the flipped sign is passed along rather than written to
-// "b", which the caller still owns
+// a-b is a+(-b); the flipped sign is passed along rather than written to b,
+// which the caller still owns
 static bool bignumberscratchsubtract(bignumberscratch *result,
 					bignumberscratch *a,
 					bignumberscratch *b) {
@@ -444,19 +425,16 @@ static bool bignumberscratchmultiply(bignumberscratch *result,
 		return true;
 	}
 
-	// "result" may be the same instance as "a" or "b", so the product is
-	// built up somewhere else entirely and only copied in at the end.  It
-	// can't be longer than the two lengths added together.
+	// result may alias a or b, so the product is built up separately and
+	// copied in at the end; it can't be longer than alen+blen
 	size_t	len=alen+blen;
 	byte_t	*product=new byte_t[len];
 	for (size_t i=0; i<len; i++) {
 		product[i]=0;
 	}
 
-	// schoolbook long multiplication - each byte of "a" against all of "b",
-	// accumulated into the product at the combined position.  The largest
-	// value the accumulator has to hold is 255*255+255+255, which fits in
-	// 32 bits with room to spare.
+	// schoolbook long multiplication: each byte of a against all of b,
+	// accumulated at the combined position (fits comfortably in 32 bits)
 	for (size_t i=0; i<alen; i++) {
 		uint32_t	carry=0;
 		for (size_t j=0; j<blen; j++) {
@@ -466,8 +444,7 @@ static bool bignumberscratchmultiply(bignumberscratch *result,
 			product[i+j]=(byte_t)(sum&0xff);
 			carry=(uint32_t)(sum>>8);
 		}
-		// nothing has been written that high yet, so the carry lands
-		// there rather than accumulating into it
+		// nothing written that high yet, so the carry lands there directly
 		product[i+blen]=(byte_t)carry;
 	}
 
@@ -483,7 +460,7 @@ static bool bignumberscratchmultiply(bignumberscratch *result,
 	return true;
 }
 
-// sets "n" to the unsigned value "value"
+// set n to the unsigned value
 static void bignumberscratchsetword(bignumberscratch *n, uint32_t value) {
 	n->_len=0;
 	n->_neg=false;
@@ -506,8 +483,8 @@ static bool bignumberscratchsubtractword(bignumberscratch *n, uint32_t value) {
 	return bignumberscratchsubtract(n,n,&word);
 }
 
-// compares two magnitudes held in plain byte arrays, each already stripped of
-// its leading zero bytes, and returns -1, 0, or 1
+// compares two magnitudes in plain byte arrays, already stripped of leading
+// zero bytes; returns -1, 0, or 1
 static int32_t bignumberscratchcomparebytes(const byte_t *a, size_t alen,
 						const byte_t *b, size_t blen) {
 
@@ -524,10 +501,9 @@ static int32_t bignumberscratchcomparebytes(const byte_t *a, size_t alen,
 
 // divide()...
 //
-// "quotient" and "remainder" may each be NULL, but neither may be the same
-// instance as the other, as "a", or as "b".  "b" is not zero.  The quotient
-// truncates toward zero and the remainder takes the sign of "a", as BN_div()
-// gives.
+// quotient and remainder may each be NULL, but neither may alias the other,
+// a, or b; b is not zero. The quotient truncates toward zero and the
+// remainder takes the sign of a, as BN_div() gives.
 static bool bignumberscratchdivide(bignumberscratch *quotient,
 					bignumberscratch *remainder,
 					bignumberscratch *a,
@@ -558,9 +534,9 @@ static bool bignumberscratchdivide(bignumberscratch *quotient,
 		divisor[i]=b->_mag[i];
 	}
 
-	// The running remainder is always smaller than the divisor at the top
-	// of each step, so bringing one more byte down can't make it longer
-	// than the divisor by more than a byte.
+	// the running remainder is always smaller than the divisor, so bringing
+	// down one more byte can't make it longer than the divisor by more
+	// than a byte
 	byte_t	*rem=new byte_t[blen+1];
 	size_t	remlen=0;
 
@@ -581,10 +557,9 @@ static bool bignumberscratchdivide(bignumberscratch *quotient,
 			remlen--;
 		}
 
-		// The running remainder is smaller than 256 times the divisor,
-		// so the quotient byte is at most 255 and repeated subtraction
-		// finds it.  That's slower than estimating it, but it can't be
-		// off by one.
+		// the remainder is smaller than 256 times the divisor, so the
+		// quotient byte is at most 255; repeated subtraction finds it -
+		// slower than estimating, but never off by one
 		byte_t	digit=0;
 		while (bignumberscratchcomparebytes(rem,remlen,
 							divisor,blen)>=0) {
@@ -671,8 +646,8 @@ static int32_t bignumberscratchcompare(bignumberscratch *a,
 	return (anegative)?-result:result;
 }
 
-// the magnitude is shifted and the sign is preserved, as BN_lshift() and
-// BN_rshift() do
+// the magnitude is shifted and the sign preserved, as BN_lshift()/BN_rshift()
+// do
 static bool bignumberscratchleftshift(bignumberscratch *result,
 					bignumberscratch *a,
 					uint64_t bits) {
@@ -680,8 +655,7 @@ static bool bignumberscratchleftshift(bignumberscratch *result,
 	size_t	bytes=(size_t)(bits/8);
 	uint16_t	offset=(uint16_t)(bits%8);
 
-	// the counts are read before anything is written, as "result" may be
-	// the same instance as "a"
+	// read counts up front, since result may alias a
 	size_t	alen=a->_len;
 	bool	aneg=a->_neg;
 
@@ -693,9 +667,8 @@ static bool bignumberscratchleftshift(bignumberscratch *result,
 	// 1 extra byte for whatever the sub-byte shift carries out of the top
 	size_t	len=alen+bytes+1;
 
-	// The bytes are written from the top down, so that each one is written
-	// only after the lower bytes it was built from have been read, which
-	// is what makes shifting in place safe.
+	// write bytes top-down, so each is written only after the lower bytes
+	// it's built from are read - safe for shifting in place
 	for (size_t i=len; i>0; i--) {
 		size_t	index=i-1;
 		byte_t	current=0;
@@ -734,9 +707,8 @@ static bool bignumberscratchrightshift(bignumberscratch *result,
 		return true;
 	}
 
-	// The bytes are written from the bottom up, so that each one is
-	// written only after the higher bytes it was built from have been
-	// read, which is what makes shifting in place safe.
+	// write bytes bottom-up, so each is written only after the higher
+	// bytes it's built from are read - safe for shifting in place
 	size_t	len=alen-bytes;
 	for (size_t index=0; index<len; index++) {
 		byte_t	current=a->_mag[index+bytes];

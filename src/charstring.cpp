@@ -476,9 +476,7 @@ char *charstring::replaceIgnoringCase(const char *str,
 	return newstring.detachString();
 }
 
-// appends the "index"'th substring that "from" matched to "newstring" - a
-// group that didn't participate in the match, or that the pattern doesn't
-// have at all, contributes nothing
+// append the substring a group matched, if any
 static void appendSubstring(stringbuffer *newstring,
 					regularexpression *from,
 					int32_t index) {
@@ -489,9 +487,7 @@ static void appendSubstring(stringbuffer *newstring,
 	}
 }
 
-// resolves the body of a \g<...> backref - a non-empty, all-digits body is a
-// group number, anything else is a group name - to a group index, or to -1 if
-// the pattern has no group by that name
+// resolve a \g<...> backref body to a group index
 static int32_t resolveGroupIndex(regularexpression *from,
 					const char *start,
 					const char *end) {
@@ -510,9 +506,7 @@ static int32_t resolveGroupIndex(regularexpression *from,
 		return index;
 	}
 
-	// A number past the group count is out of range no matter what digits
-	// follow it, so the scan stops growing the index there.  That also
-	// keeps a long run of digits from overflowing it.
+	// clamp index growth once it exceeds the group count
 	int32_t	count=from->getSubstringCount();
 	int32_t	index=0;
 	for (const char *d=start; d<end && index<count; d++) {
@@ -521,9 +515,7 @@ static int32_t resolveGroupIndex(regularexpression *from,
 	return index;
 }
 
-// appends "to" to "newstring", expanding \0 through \9, \g<number>, and
-// \g<name> into the substrings that "from" matched, and \\ into a single
-// backslash
+// expand backrefs in "to" and append the result to "newstring"
 static void appendExpandingBackrefs(stringbuffer *newstring,
 					regularexpression *from,
 					const char *to) {
@@ -552,8 +544,7 @@ static void appendExpandingBackrefs(stringbuffer *newstring,
 			continue;
 		}
 
-		// \g<...> refers to a group by number or by name, reaching
-		// the groups past the ninth, which a single digit can't name
+		// handle a \g<...> named or numbered backref
 		if (*ptr=='g' && *(ptr+1)=='<') {
 
 			// find the closing >
@@ -563,9 +554,7 @@ static void appendExpandingBackrefs(stringbuffer *newstring,
 				bodyend++;
 			}
 
-			// an unterminated form is kept as it was, like any
-			// other escape this method doesn't know - the rest
-			// of it is appended by the normal path
+			// leave an unterminated form as it was
 			if (!*bodyend) {
 				newstring->append('\\')->append(*ptr);
 				continue;
@@ -580,8 +569,7 @@ static void appendExpandingBackrefs(stringbuffer *newstring,
 			continue;
 		}
 
-		// anything but a backslash or a digit isn't an escape this
-		// method knows, so both characters are kept as they were
+		// leave an unknown escape as it was
 		if (!character::isDigit((unsigned char)*ptr)) {
 			newstring->append('\\')->append(*ptr);
 			continue;
@@ -602,12 +590,8 @@ char *charstring::replace(const char *str,
 	// declare buffer for new string
 	stringbuffer	newstring;
 
-	// Walk every match with the regularexpression class rather than
-	// resuming by hand.  It knows where the next match starts, it keeps
-	// the engine from thinking each resume point is the start of the
-	// subject - so ^, \b, and lookbehind still work - and it doesn't
-	// re-copy the subject at every step the way a loop over
-	// match(str,length,offset) does on the platforms without PCRE.
+	// Resume with matchNext() rather than a manual offset loop, so
+	// anchors like ^, \b, and lookbehind still see the whole subject.
 	int32_t	start=0;
 	for (bool matched=from->match(str,getLength(str));
 			matched; matched=from->matchNext()) {
@@ -616,11 +600,8 @@ char *charstring::replace(const char *str,
 		int32_t	fromstart=from->getSubstringStartOffset(0);
 		int32_t	fromend=from->getSubstringEndOffset(0);
 
-		// Skip the match if it's empty.  matchNext() reports empty
-		// matches, but replacing one would insert "to" between every
-		// pair of characters, so a substitution steps over them.  A
-		// match can also end before it starts - pcre1 reports that
-		// for a \K inside a lookahead - which counts as empty too.
+		// pcre1 can report a \K inside a lookahead as a match that
+		// ends before it starts; treat that as empty too, and skip it.
 		if (fromend<=fromstart) {
 			continue;
 		}

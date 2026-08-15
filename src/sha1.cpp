@@ -122,10 +122,7 @@ void sha1::setError(int32_t err) {
 				hash::setError(HASH_ERROR_STATE_ERROR);
 				break;
 			default:
-				// The 4 cases above cover every value
-				// sha1rfc3174.cpp returns, so this is
-				// unreachable, but an unrecognized code
-				// is not a success.
+				// unreachable; treat as failure, not success
 				hash::setError(HASH_ERROR_NULL);
 				break;
 		}

@@ -4,7 +4,6 @@
 #include <rudiments/arc4.h>
 #include <rudiments/bytestring.h>
 
-// Without RC4 in libcrypto, the built-in implementation is used instead.
 #if !defined(RUDIMENTS_HAS_RC4)
 	#undef RUDIMENTS_HAS_SSL
 #endif
@@ -12,7 +11,7 @@
 // The low-level RC4_set_key()/RC4() functions are used rather than
 // EVP_rc4().  EVP_rc4() requires the legacy provider to be loaded on OpenSSL
 // 3.0 and up, but the low-level functions are direct libcrypto C
-// implementations that the provider split doesn't apply to.  They are
+// implementations that the provider split doesn't apply to.  They're
 // deprecated, but rudiments builds with -Wno-deprecated-declarations.
 #if defined(RUDIMENTS_HAS_SSL)
 	#include <openssl/rc4.h>

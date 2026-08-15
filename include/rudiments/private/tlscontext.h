@@ -17,13 +17,9 @@
 		void	setError(int32_t err, const char *errstr);
 		void	setNativeError();
 
-		// These are the callbacks of a custom BIO that reads
-		// and writes through the filedescriptor, rather than
-		// through the raw file descriptor.  They must be members
-		// of tlscontext.  filedescriptor::lowLevelRead() and
-		// lowLevelWrite() are protected, tlscontext is a friend
-		// of filedescriptor, and friendship doesn't extend to
-		// free functions.
+		// callbacks of a custom BIO that reads and writes through
+		// a filedescriptor.  They're members because friendship
+		// with filedescriptor doesn't extend to free functions.
 		static int	bioRead(struct bio_st *b, char *buf, int len);
 		static int	bioWrite(struct bio_st *b,
 						const char *buf, int len);

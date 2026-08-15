@@ -226,8 +226,8 @@ static char		_biomethodname[]="rudiments filedescriptor";
 
 // bioRead() and bioWrite() below must check the error number right
 // after the low-level read or write, before anything else can
-// clobber it. Openssl tells a would-block from a hard error by the
-// retry flag, which is set from that error number.
+// clobber it.  Openssl tells a would-block from a hard error by the
+// retry flag, set below from that error number.
 int tlscontext::bioRead(struct bio_st *b, char *buf, int len) {
 
 	#if defined(RUDIMENTS_HAS_BIO_METH_NEW)
@@ -1057,12 +1057,10 @@ bool tlscontext::reInit(bool isclient) {
 
 		// decide on the protocol version...
 		//
-		// Newer OpenSSL versions want you to create the context from
-		// the generic method, then pin the version by setting the
-		// min/max protocol versions on the context.  Older versions
-		// only have the (now deprecated) exact XXX_client/server_method
-		// functions.  So, decide on a min/max version pair if we can,
-		// and on an exact method otherwise.
+		// Newer OpenSSL wants the version pinned by setting min/max
+		// protocol versions on a context created from the generic
+		// method.  Older versions only have the deprecated exact
+		// XXX_client/server_method functions, so fall back to those.
 		const SSL_METHOD	*method=NULL;
 		#if defined(RUDIMENTS_HAS_SSL_CTX_SET_MIN_MAX_PROTO_VERSION)
 			int	minversion=0;
@@ -1772,14 +1770,10 @@ bool tlscontext::reInit(bool isclient) {
 
 		// build schannel creds...
 		//
-		// Every version through TLS 1.2 is selected by turning its
-		// bit on in SCHANNEL_CRED.grbitEnabledProtocols.  TLS 1.3
-		// can't be selected that way at all, no matter what bit is
-		// set.  SChannel only offers it if the credentials are
-		// handed over in the newer SCH_CREDENTIALS struct, which
-		// replaces the allow-list with a TLS_PARAMETERS deny-list of
-		// the versions to refuse.  It also drops the ALG_ID cipher
-		// list, so the ciphers set above don't apply to TLS 1.3.
+		// TLS 1.3 needs the newer SCH_CREDENTIALS struct; it can't
+		// be selected through SCHANNEL_CRED.grbitEnabledProtocols.
+		// SCH_CREDENTIALS also drops the ALG_ID cipher list, so the
+		// ciphers set above don't apply to TLS 1.3.
 		if (retval) {
 
 			if (tls13) {

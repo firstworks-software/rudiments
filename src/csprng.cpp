@@ -21,8 +21,8 @@
 class csprngprivate {
 	friend class csprng;
 	private:
+		// no per-instance state needed
 		#if defined(RUDIMENTS_HAS_SSL)
-			// RAND_bytes() is stateless, nothing to keep
 		#elif defined(RUDIMENTS_HAVE_CRYPTGENRANDOM)
 			HCRYPTPROV	hprov;
 			BOOL		acquired;
@@ -36,7 +36,6 @@ csprng::csprng() : rng() {
 	pvt=new csprngprivate;
 
 	#if defined(RUDIMENTS_HAS_SSL)
-		// nothing to init
 	#elif defined(RUDIMENTS_HAVE_CRYPTGENRANDOM)
 		pvt->hprov=NULL;
 		pvt->acquired=CryptAcquireContext(
@@ -56,7 +55,6 @@ csprng::csprng() : rng() {
 
 csprng::~csprng() {
 	#if defined(RUDIMENTS_HAS_SSL)
-		// nothing to clean up
 	#elif defined(RUDIMENTS_HAVE_CRYPTGENRANDOM)
 		if (pvt->acquired) {
 			CryptReleaseContext(pvt->hprov,0);
@@ -70,8 +68,6 @@ csprng::~csprng() {
 }
 
 bool csprng::setSeed(uint32_t seed) {
-	// ignore the seed, a CSPRNG has no seed concept - this method exists
-	// only to satisfy the rng interface
 	return true;
 }
 
@@ -129,8 +125,6 @@ bool csprng::generateBytes(bytebuffer *buffer, size_t size) {
 }
 
 uint32_t csprng::getSeed() {
-	// a CSPRNG has no seed to report, this is just a placeholder for
-	// interface parity with prng
 	return 0;
 }
 
@@ -145,9 +139,6 @@ int32_t csprng::generate(int32_t lower, int32_t upper) {
 	int32_t		result;
 	return (r.generate(&result,lower,upper))?result:0;
 }
-
-// the seeded statics below ignore "seed" and draw a real
-// cryptographically secure value instead
 
 uint32_t csprng::generate(uint32_t seed) {
 	return generate();
@@ -197,19 +188,12 @@ uint32_t csprng::getRandMax() {
 }
 
 bool csprng::getNeedsMutex() {
-	// none of the backends hold shared mutable state, so no mutex is
-	// ever needed
 	return false;
 }
 
 void csprng::setMutex(threadmutex *mtx) {
-	// no mutex is ever needed (see getNeedsMutex()), so ignore "mtx"
 }
 
 bool csprng::isSupported() {
-	// the arms above are an exhaustive #if/#elif/#else, so one
-	// backend is always compiled in - whether it actually
-	// initializes for a given instance is a separate, runtime
-	// question that generateBytes() answers instead
 	return true;
 }

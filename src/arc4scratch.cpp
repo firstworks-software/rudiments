@@ -1,8 +1,8 @@
 // Copyright (c) David Muse
 // See the COPYING file for more information
 
-// textbook RC4 key-scheduling algorithm.  The key is used raw, with no
-// hashing and no "RC4-drop" discard of the first bytes of keystream.
+// textbook RC4 key schedule; key used raw, no "RC4-drop" of the
+// first bytes of keystream
 static void arc4scratchksa(unsigned char *state,
 				unsigned char *s1, unsigned char *s2,
 				const byte_t *key, size_t keysize) {
@@ -23,10 +23,9 @@ static void arc4scratchksa(unsigned char *state,
 	*s2=0;
 }
 
-// textbook RC4 pseudo-random generation algorithm, applied byte-by-byte as a
-// keystream that's XORed against the buffer.  s1 and s2 are unsigned char so
-// they wrap mod 256 on their own, and nothing here resets between calls, so a
-// later call just continues the same keystream.
+// textbook RC4 keystream generation, XORed byte-by-byte against the
+// buffer; state isn't reset here, so a later call continues the
+// same keystream
 static void arc4scratchprga(unsigned char *state,
 				unsigned char *s1, unsigned char *s2,
 				byte_t *buffer, size_t size) {

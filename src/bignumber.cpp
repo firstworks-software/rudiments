@@ -5,8 +5,6 @@
 #include <rudiments/bytestring.h>
 #include <rudiments/charstring.h>
 
-// Without the BIGNUM functions in libcrypto, the built-in implementation is
-// used instead.
 #if !defined(RUDIMENTS_HAS_BN)
 	#undef RUDIMENTS_HAS_SSL
 #endif
@@ -86,8 +84,7 @@ bool bignumberprivate::isNegative() {
 }
 
 #if defined(RUDIMENTS_HAS_SSL)
-// BN_mul() and BN_div() need a context.  One is created on first use and kept
-// for the life of the instance.
+// create the context on first use and reuse it for the life of the instance
 BN_CTX *bignumberprivate::getContext() {
 	if (!_ctx) {
 		_ctx=BN_CTX_new();
@@ -95,14 +92,13 @@ BN_CTX *bignumberprivate::getContext() {
 	return _ctx;
 }
 
-// clears the OpenSSL error queue, so a failure here doesn't confuse the next
-// libcrypto call to look at it
+// clear openssl's error queue so it doesn't confuse the next call
 static void bignumberclearsslerror() {
 	while (ERR_get_error()) {}
 }
 #endif
 
-// packs "value" into the 8 bytes of "buffer", most significant byte first
+// pack value into buffer, most significant byte first
 static void bignumberpack(uint64_t value, byte_t *buffer) {
 	for (uint16_t i=0; i<8; i++) {
 		buffer[7-i]=(byte_t)(value&0xff);
@@ -110,7 +106,7 @@ static void bignumberpack(uint64_t value, byte_t *buffer) {
 	}
 }
 
-// unpacks the 8 bytes of "buffer", most significant byte first
+// unpack buffer, most significant byte first
 static uint64_t bignumberunpack(const byte_t *buffer) {
 	uint64_t	value=0;
 	for (uint16_t i=0; i<8; i++) {
@@ -209,8 +205,7 @@ bool bignumber::setValue(const char *value, uint16_t base) {
 		return false;
 	}
 
-	// A leading - is handled by the conversion itself, but a leading + is
-	// not, so it's skipped here.  A sign after that is malformed.
+	// skip a leading +; only - is handled by the conversion itself
 	const char	*v=value;
 	bool		malformed=false;
 	if (*v=='+') {
@@ -243,8 +238,7 @@ bool bignumber::setValue(const char *value, uint16_t base) {
 		}
 	#endif
 
-	// the conversion stops at the first character that it can't use, but
-	// the entire string is required to be part of the number
+	// require the entire string to be consumed
 	if (v[chars]) {
 		pvt->zero();
 		setError(BIGNUMBER_ERROR_INVALID_FORMAT);
@@ -264,8 +258,8 @@ void bignumber::setValue(uint32_t value) {
 
 void bignumber::setValue(int64_t value) {
 
-	// take the magnitude through unsigned arithmetic, as the magnitude of
-	// the smallest int64_t doesn't fit in an int64_t
+	// magnitude via unsigned arithmetic, since the smallest int64_t's
+	// magnitude doesn't fit in an int64_t
 	uint64_t	magnitude=(value<0)?
 				((uint64_t)(-(value+1)))+1:(uint64_t)value;
 
@@ -385,9 +379,9 @@ const char *bignumber::getString(uint16_t base) {
 	pvt->_str=NULL;
 
 	#if defined(RUDIMENTS_HAS_SSL)
-		// BN_bn2dec() and BN_bn2hex() return a string that libcrypto
-		// owns, and that has to be released with OPENSSL_free() rather
-		// than delete[], so it's copied out and released right away
+		// BN_bn2dec()/BN_bn2hex() return a string owned by libcrypto;
+		// it must be freed with OPENSSL_free(), not delete[], so it's
+		// copied out and released right away.
 		char	*str=(base==10)?BN_bn2dec(pvt->_bn):
 						BN_bn2hex(pvt->_bn);
 		if (!str) {
@@ -430,11 +424,9 @@ bool bignumber::getValue(int64_t *value) {
 	getMagnitude(buffer+(sizeof(buffer)-size),size);
 	uint64_t	magnitude=bignumberunpack(buffer);
 
-	// apply the sign...
-	//
-	// The magnitude of the smallest int64_t is 1 more than the magnitude
-	// of the largest, and doesn't fit in an int64_t itself, so the
-	// negative value is built up without ever negating it directly.
+	// apply the sign; the smallest int64_t's magnitude doesn't fit in an
+	// int64_t, so the negative value is built up without negating it
+	// directly
 	if (isNegative()) {
 		if (magnitude>(((uint64_t)1)<<63)) {
 			setError(BIGNUMBER_ERROR_OVERFLOW);
@@ -479,8 +471,7 @@ bool bignumber::getValue(uint64_t *value) {
 
 size_t bignumber::getMagnitudeSize() {
 
-	// zero has no bytes at all internally, but it's reported as the single
-	// 0 byte that getMagnitude() writes for it
+	// zero has no internal bytes, but getMagnitude() reports one 0 byte
 	if (isZero()) {
 		return 1;
 	}
@@ -615,15 +606,13 @@ bool bignumber::divide(const bignumber &divisor, bignumber *remainder) {
 
 	setError(BIGNUMBER_ERROR_SUCCESS);
 
-	// libcrypto reports a zero divisor through its error queue, but the
-	// class reports it directly, so it's caught before the divide
+	// catch a zero divisor directly rather than via libcrypto's error queue
 	if (divisor.pvt->isZero()) {
 		setError(BIGNUMBER_ERROR_DIVIDE_BY_ZERO);
 		return false;
 	}
 
-	// the quotient and remainder are built up separately, so that this
-	// instance is left alone if the divide fails
+	// build quotient and remainder separately
 	bignumber	quotient;
 	bignumber	rem;
 
@@ -667,15 +656,13 @@ bool bignumber::nonNegativeModulo(const bignumber &modulus) {
 
 	setError(BIGNUMBER_ERROR_SUCCESS);
 
-	// libcrypto reports a zero modulus through its error queue, but the
-	// class reports it directly, so it's caught before the operation
+	// catch a zero modulus directly rather than via libcrypto's error queue
 	if (modulus.pvt->isZero()) {
 		setError(BIGNUMBER_ERROR_DIVIDE_BY_ZERO);
 		return false;
 	}
 
-	// the result is built up separately, so that this instance is left
-	// alone if the operation fails
+	// build result separately
 	bignumber	result;
 
 	#if defined(RUDIMENTS_HAS_SSL)
@@ -687,11 +674,10 @@ bool bignumber::nonNegativeModulo(const bignumber &modulus) {
 			return false;
 		}
 	#else
-		// modulo() gives a remainder with the sign of the dividend, so
-		// a negative remainder is brought into range by adding the
-		// magnitude of the modulus to it.  That works for a negative
-		// modulus too, as the remainder is always smaller than the
-		// modulus in magnitude.
+		// modulo() gives a remainder with the sign of the dividend, so a
+		// negative remainder is brought into range by adding the
+		// modulus's magnitude. This also works for a negative modulus,
+		// since the remainder is always smaller in magnitude.
 		result.setValue(*this);
 		if (!result.modulo(modulus)) {
 			setError(result.getError());
@@ -712,19 +698,17 @@ bool bignumber::nonNegativeModulo(const bignumber &modulus) {
 	return true;
 }
 
-// add() followed by nonNegativeModulo(), which both backends share
 bool bignumber::modAdd(const bignumber &addend, const bignumber &modulus) {
 
 	setError(BIGNUMBER_ERROR_SUCCESS);
 
-	// unlike nonNegativeModulo(), the modulus has to be positive here
+	// unlike nonNegativeModulo(), the modulus must be positive here
 	if (modulus.pvt->isZero() || modulus.pvt->isNegative()) {
 		setError(BIGNUMBER_ERROR_INVALID_MODULUS);
 		return false;
 	}
 
-	// the result is built up separately, so that this instance is left
-	// alone if the operation fails
+	// build result separately
 	bignumber	result(*this);
 	if (!result.add(addend) || !result.nonNegativeModulo(modulus)) {
 		setError(result.getError());
@@ -736,19 +720,17 @@ bool bignumber::modAdd(const bignumber &addend, const bignumber &modulus) {
 	return true;
 }
 
-// subtract() followed by nonNegativeModulo(), which both backends share
 bool bignumber::modSub(const bignumber &subtrahend, const bignumber &modulus) {
 
 	setError(BIGNUMBER_ERROR_SUCCESS);
 
-	// unlike nonNegativeModulo(), the modulus has to be positive here
+	// unlike nonNegativeModulo(), the modulus must be positive here
 	if (modulus.pvt->isZero() || modulus.pvt->isNegative()) {
 		setError(BIGNUMBER_ERROR_INVALID_MODULUS);
 		return false;
 	}
 
-	// the result is built up separately, so that this instance is left
-	// alone if the operation fails
+	// build result separately
 	bignumber	result(*this);
 	if (!result.subtract(subtrahend) ||
 			!result.nonNegativeModulo(modulus)) {
@@ -765,14 +747,13 @@ bool bignumber::modMul(const bignumber &multiplier, const bignumber &modulus) {
 
 	setError(BIGNUMBER_ERROR_SUCCESS);
 
-	// unlike nonNegativeModulo(), the modulus has to be positive here
+	// unlike nonNegativeModulo(), the modulus must be positive here
 	if (modulus.pvt->isZero() || modulus.pvt->isNegative()) {
 		setError(BIGNUMBER_ERROR_INVALID_MODULUS);
 		return false;
 	}
 
-	// the result is built up separately, so that this instance is left
-	// alone if the operation fails
+	// build result separately
 	bignumber	result;
 
 	#if defined(RUDIMENTS_HAS_SSL)
@@ -785,8 +766,8 @@ bool bignumber::modMul(const bignumber &multiplier, const bignumber &modulus) {
 			return false;
 		}
 	#else
-		// multiply first and reduce afterward, which can leave a large
-		// intermediate value, but keeps the implementation simple
+		// multiply first, then reduce; simpler, though the
+		// intermediate value can grow large
 		result.setValue(*this);
 		if (!result.multiply(multiplier) ||
 				!result.nonNegativeModulo(modulus)) {
@@ -809,20 +790,19 @@ bool bignumber::modPow(const bignumber &exponent, const bignumber &modulus) {
 		return false;
 	}
 
-	// libcrypto quietly uses the magnitude of a negative exponent, rather
-	// than rejecting it, so it's caught here instead
+	// libcrypto silently uses the magnitude of a negative exponent
+	// instead of rejecting it, so catch it here
 	if (exponent.pvt->isNegative()) {
 		setError(BIGNUMBER_ERROR_NEGATIVE_EXPONENT);
 		return false;
 	}
 
-	// the result is built up separately, so that this instance is left
-	// alone if the operation fails
+	// build result separately
 	bignumber	result;
 
 	#if defined(RUDIMENTS_HAS_SSL)
-		// An exponent of 0 needs no special case here.  BN_mod_exp()
-		// gives 1 for it already, and 0 for it when the modulus is 1.
+		// an exponent of 0 needs no special case: BN_mod_exp() already
+		// gives 1 for it (or 0 when the modulus is 1)
 		BN_CTX	*ctx=pvt->getContext();
 		if (!ctx || !BN_mod_exp(result.pvt->_bn,pvt->_bn,
 						exponent.pvt->_bn,
@@ -832,10 +812,9 @@ bool bignumber::modPow(const bignumber &exponent, const bignumber &modulus) {
 			return false;
 		}
 	#else
-		// square-and-multiply...
-		//
-		// The base is reduced up front, and again after every squaring,
-		// so the intermediate values never grow beyond the modulus.
+		// square-and-multiply; the base is reduced up front and again
+		// after every squaring, so intermediate values stay within the
+		// modulus
 		result.setValue((int64_t)1);
 
 		bignumber	base(*this);
@@ -844,8 +823,7 @@ bool bignumber::modPow(const bignumber &exponent, const bignumber &modulus) {
 			return false;
 		}
 
-		// the bits of the exponent are taken from its magnitude, least
-		// significant bit first
+		// walk the exponent's bits, least significant first
 		bignumber	e(exponent);
 		size_t		bits=e.getBitCount();
 		size_t		size=e.getMagnitudeSize();
@@ -875,9 +853,8 @@ bool bignumber::modPow(const bignumber &exponent, const bignumber &modulus) {
 			return false;
 		}
 
-		// An exponent of 0 skips the loop entirely, leaving the result
-		// 1, which still has to be reduced, as every value is 0 modulo
-		// 1.
+		// an exponent of 0 skips the loop, leaving result 1, which
+		// still needs reducing (everything is 0 mod 1)
 		if (!result.nonNegativeModulo(modulus)) {
 			setError(result.getError());
 			return false;
@@ -898,18 +875,16 @@ bool bignumber::modInverse(const bignumber &modulus) {
 		return false;
 	}
 
-	// every value is 0 modulo 1, and libcrypto fails outright for that
-	// case, rather than giving 0, so it's handled here instead
+	// libcrypto fails outright for modulus 1 instead of giving 0, so
+	// handle it here
 	bignumber	one((int64_t)1);
 	if (!one.compare(modulus)) {
 		setValue((int64_t)0);
 		return true;
 	}
 
-	// The inverse exists only if this instance and the modulus are
-	// relatively prime.  libcrypto reports that case and an allocation
-	// failure the same way, so the two are told apart by checking for it
-	// up front.
+	// Libcrypto reports "not relatively prime" and an allocation failure
+	// the same way, so check gcd up front to tell them apart.
 	bignumber	divisor(*this);
 	if (!divisor.gcd(modulus)) {
 		setError(divisor.getError());
@@ -920,8 +895,7 @@ bool bignumber::modInverse(const bignumber &modulus) {
 		return false;
 	}
 
-	// the result is built up separately, so that this instance is left
-	// alone if the operation fails
+	// build result separately
 	bignumber	result;
 
 	#if defined(RUDIMENTS_HAS_SSL)
@@ -933,20 +907,16 @@ bool bignumber::modInverse(const bignumber &modulus) {
 			return false;
 		}
 	#else
-		// extended euclidean algorithm...
-		//
-		// The remainders r0 and r1 run the plain euclidean algorithm,
-		// while s0 and s1 track the coefficient of this instance in
-		// r=s*this+t*modulus.  The corresponding t is never needed.
-		// When the algorithm ends, r0 is the greatest common divisor,
-		// which is known to be 1 here, and s0 is the inverse.
+		// Extended euclidean algorithm: r0/r1 run the plain euclidean
+		// algorithm, while s0/s1 track this instance's coefficient in
+		// r = s*this + t*modulus (t is never needed). At the end, r0
+		// is the gcd (known to be 1 here) and s0 is the inverse.
 		bignumber	r0(modulus);
 		bignumber	r1(*this);
 		bignumber	s0((int64_t)0);
 		bignumber	s1((int64_t)1);
 
-		// reducing this instance up front keeps every value in the
-		// loop non-negative, even if this instance is negative
+		// reduce this instance up front so the loop stays non-negative
 		if (!r1.nonNegativeModulo(modulus)) {
 			setError(r1.getError());
 			return false;
@@ -977,8 +947,7 @@ bool bignumber::modInverse(const bignumber &modulus) {
 			s1.setValue(news1);
 		}
 
-		// the coefficient can come out negative, so it's brought into
-		// the range 0 through the modulus minus 1 here
+		// bring the coefficient into range 0..modulus-1
 		result.setValue(s0);
 		if (!result.nonNegativeModulo(modulus)) {
 			setError(result.getError());
@@ -995,13 +964,12 @@ bool bignumber::gcd(const bignumber &value) {
 
 	setError(BIGNUMBER_ERROR_SUCCESS);
 
-	// the result is built up separately, so that this instance is left
-	// alone if the operation fails
+	// build result separately
 	bignumber	result;
 
 	#if defined(RUDIMENTS_HAS_SSL)
-		// BN_gcd() ignores the signs and gives a non-negative result
-		// already, including 0 when both values are 0
+		// BN_gcd() ignores signs and already gives a non-negative
+		// result, including 0 for two zeros
 		BN_CTX	*ctx=pvt->getContext();
 		if (!ctx || !BN_gcd(result.pvt->_bn,pvt->_bn,
 						value.pvt->_bn,ctx)) {
@@ -1010,10 +978,9 @@ bool bignumber::gcd(const bignumber &value) {
 			return false;
 		}
 	#else
-		// The euclidean algorithm, run on the magnitudes, so the signs
-		// are ignored and the result is non-negative.  Two zeros give
-		// 0, and one zero gives the magnitude of the other value, as
-		// the first pass through the loop swaps them.
+		// euclidean algorithm on the magnitudes, so signs are ignored
+		// and the result is non-negative; two zeros give 0, one zero
+		// gives the other's magnitude
 		result.setValue(*this);
 		result.absoluteValue();
 
@@ -1097,8 +1064,7 @@ bool bignumber::rightShift(uint64_t bits) {
 		return true;
 	}
 
-	// shifting the entire magnitude off gives 0, and the sign goes with
-	// it, as there is no negative zero
+	// shifting off the entire magnitude gives 0 (no negative zero)
 	if (bits>=(uint64_t)getBitCount()) {
 		pvt->zero();
 		return true;
@@ -1120,13 +1086,12 @@ bool bignumber::rightShift(uint64_t bits) {
 	return true;
 }
 
-// The bitwise methods, and the helpers below, are written entirely in terms of
-// the class's own magnitude/sign methods, so both backends share them.
+// the bitwise methods below use only the class's own magnitude/sign methods,
+// so both backends share them
 size_t bignumber::getTwosComplementSize(const bignumber &value) {
 
-	// a two's complement value needs the bits of the magnitude, plus one
-	// more bit for the sign, rounded up to a whole number of bytes, and
-	// both values have to be converted at the same width
+	// magnitude bits plus a sign bit, rounded up to bytes, at matching
+	// width for both values
 	bignumber	tmp(value);
 	size_t		thissize=getBitCount()/8+1;
 	size_t		valuesize=tmp.getBitCount()/8+1;
@@ -1159,8 +1124,8 @@ bool bignumber::toTwosComplement(byte_t *buffer, size_t size) {
 		return true;
 	}
 
-	// a negative value is the two's complement of its magnitude,
-	// invert every bit and add 1, propagating the carry to the left
+	// negative: two's complement of the magnitude - invert every bit,
+	// add 1, carry left
 	uint16_t	carry=1;
 	for (size_t i=size; i>0; i--) {
 		carry=carry+(byte_t)(~buffer[i-1]);
@@ -1180,9 +1145,8 @@ bool bignumber::fromTwosComplement(const byte_t *buffer, size_t size) {
 		return false;
 	}
 
-	// a clear sign bit means the value is its own magnitude, and the
-	// leading 0 bytes that the sign extension added are stripped off
-	// when the value is set
+	// a clear sign bit means the value is its own magnitude (sign
+	// extension bytes are stripped off when the value is set)
 	if (!size || !(buffer[0]&0x80)) {
 		return setValue(buffer,size,false);
 	}
@@ -1524,8 +1488,6 @@ void bignumber::setError(bignumbererror_t err) {
 	pvt->_err=err;
 }
 
-// A fallback implementation is built in, so every platform supports this
-// class.
 bool bignumber::isSupported() {
 	return true;
 }
