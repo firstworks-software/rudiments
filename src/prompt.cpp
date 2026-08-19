@@ -15,6 +15,106 @@
 	#ifndef RUDIMENTS_LIBEDIT_HAS_HISTORY_TRUNCATE_FILE
 		static int history_truncate_file(const char * filename, int n);
 	#endif
+	#ifdef RUDIMENTS_HAVE_STDLIB_H
+		#include <stdlib.h>
+	#endif
+
+	// the tab-completion hook that libedit provides is process-wide, and
+	// the trampoline below isn't a friend of promptprivate, so the
+	// currently active handler and arg are kept here
+	static char	**(*_currenttabhandler)(const char *text,
+						const char *line,
+						int32_t start,
+						int32_t end,
+						void *arg)=NULL;
+	static void	*_currenttabhandlerarg=NULL;
+
+	// libedit frees completion results with free(), so they must be
+	// allocated with malloc() rather than new[]
+	static char *mallocCopy(const char *str, size_t len) {
+		char	*retval=(char *)malloc(len+1);
+		if (!retval) {
+			return NULL;
+		}
+		charstring::copy(retval,str,len);
+		retval[len]='\0';
+		return retval;
+	}
+
+	static char **tabHandlerTrampoline(const char *text,
+						int start, int end) {
+
+		// libedit resets this after every completion attempt, so it
+		// has to be set again each time to suppress libedit's
+		// filename-completion fallback
+		rl_attempted_completion_over=1;
+
+		if (!_currenttabhandler) {
+			return NULL;
+		}
+
+		char	**candidates=(*_currenttabhandler)(text,
+						rl_line_buffer,
+						(int32_t)start,
+						(int32_t)end,
+						_currenttabhandlerarg);
+		if (!candidates) {
+			return NULL;
+		}
+
+		// count the candidates
+		uint64_t	count=0;
+		while (candidates[count]) {
+			count++;
+		}
+
+		char	**retval=NULL;
+		if (count) {
+
+			// element 0 is the longest common prefix of all of
+			// the candidates, elements 1-n are the candidates
+			// themselves
+			size_t	prefixlen=charstring::getLength(candidates[0]);
+			for (uint64_t i=1; i<count; i++) {
+				size_t	j=0;
+				while (j<prefixlen &&
+					candidates[i][j]==candidates[0][j]) {
+					j++;
+				}
+				prefixlen=j;
+			}
+
+			retval=(char **)malloc((count+2)*sizeof(char *));
+			if (retval) {
+				bool	failed=false;
+				retval[0]=mallocCopy(candidates[0],prefixlen);
+				failed=failed||!retval[0];
+				for (uint64_t i=0; i<count; i++) {
+					retval[i+1]=mallocCopy(candidates[i],
+						charstring::getLength(
+								candidates[i]));
+					failed=failed||!retval[i+1];
+				}
+				retval[count+1]=NULL;
+				// don't hand libedit a partially-built array
+				if (failed) {
+					for (uint64_t i=0; i<=count; i++) {
+						free(retval[i]);
+					}
+					free(retval);
+					retval=NULL;
+				}
+			}
+		}
+
+		// the class promises to delete what the handler returned
+		for (uint64_t i=0; i<count; i++) {
+			delete[] candidates[i];
+		}
+		delete[] candidates;
+
+		return retval;
+	}
 #endif
 
 class promptprivate {
@@ -26,6 +126,12 @@ class promptprivate {
 		uint32_t	_maxhistoryqueue;
 		uint32_t	_queue;
 		char		*_prompt;
+		char		**(*_tabhandler)(const char *text,
+						const char *line,
+						int32_t start,
+						int32_t end,
+						void *arg);
+		void		*_tabhandlerarg;
 };
 
 prompt::prompt() : object() {
@@ -36,6 +142,8 @@ prompt::prompt() : object() {
 	pvt->_maxhistoryqueue=1024;
 	pvt->_queue=0;
 	pvt->_prompt=NULL;
+	pvt->_tabhandler=NULL;
+	pvt->_tabhandlerarg=NULL;
 }
 
 prompt::~prompt() {
@@ -79,6 +187,16 @@ const char *prompt::getPrompt() {
 	return pvt->_prompt;
 }
 
+void prompt::setTabHandler(char **(*tabhandler)(const char *text,
+						const char *line,
+						int32_t start,
+						int32_t end,
+						void *arg),
+					void *arg) {
+	pvt->_tabhandler=tabhandler;
+	pvt->_tabhandlerarg=arg;
+}
+
 char *prompt::read() {
 	#ifdef RUDIMENTS_HAVE_LIBEDIT
 
@@ -99,8 +217,31 @@ char *prompt::read() {
 			pvt->_historyread=true;
 		}
 
+		// install the tab handler, if this instance has one
+		bool	tabhandlerinstalled=(pvt->_tabhandler!=NULL);
+		char	**(*oldcompletionfunc)(const char *,int,int)=NULL;
+		char	**(*oldtabhandler)(const char *,const char *,
+						int32_t,int32_t,void *)=NULL;
+		void	*oldtabhandlerarg=NULL;
+		if (tabhandlerinstalled) {
+			oldcompletionfunc=rl_attempted_completion_function;
+			oldtabhandler=_currenttabhandler;
+			oldtabhandlerarg=_currenttabhandlerarg;
+			_currenttabhandler=pvt->_tabhandler;
+			_currenttabhandlerarg=pvt->_tabhandlerarg;
+			rl_attempted_completion_function=
+						tabHandlerTrampoline;
+		}
+
 		// read a line
 		char	*retval=readline(pvt->_prompt);
+
+		// restore the previous tab handler
+		if (tabhandlerinstalled) {
+			rl_attempted_completion_function=oldcompletionfunc;
+			_currenttabhandler=oldtabhandler;
+			_currenttabhandlerarg=oldtabhandlerarg;
+		}
 
 		// queue the line to be flushed to the history
 		if (retval && retval[0]) {

@@ -81,6 +81,54 @@ class RUDIMENTS_DLLSPEC prompt : virtual public object {
 		 *  call to read(). */
 		const char	*getPrompt();
 
+		/** Sets the function that will be called to generate
+		 *  tab-completion candidates during subsequent calls to
+		 *  read(), and the argument that will be passed to it.
+		 *
+		 *  When the user hits the tab key, "tabhandler" is called
+		 *  with:
+		 *  * "text" - the word being completed
+		 *  * "line" - the entire line of input so far
+		 *  * "start" - the offset in "line" where "text" begins
+		 *  * "end" - the offset in "line" of the cursor
+		 *  * "arg" - the argument passed to setTabHandler()
+		 *
+		 *  "tabhandler" must return a NULL-terminated array of
+		 *  candidate completions, or NULL if there are none.  Each
+		 *  candidate must be the complete word that should replace
+		 *  "text", not just the portion of the word after "text" -
+		 *  the typed text is replaced, not appended to.  The array
+		 *  and each string in it must be allocated with new[]
+		 *  (charstring::duplicate() is convenient) and will be
+		 *  deleted by the prompt class.
+		 *
+		 *  If the candidates share a common prefix, that prefix is
+		 *  inserted into the line.  If there is exactly one
+		 *  candidate, it is inserted in its entirety.  Otherwise the
+		 *  candidates are displayed.
+		 *
+		 *  Only one prompt's tab handler can be active at a time.
+		 *  The underlying library provides a single, process-wide
+		 *  tab-completion hook, so if two instances of the prompt
+		 *  class each have a tab handler, only the handler belonging
+		 *  to the instance whose read() method is currently running
+		 *  will be called.  Tab-completion is not thread-safe -
+		 *  don't call read() on tab-handler-enabled instances from
+		 *  more than one thread at a time.
+		 *
+		 *  Each time setTabHandler() is called, the tab handler
+		 *  replaces the previously designated handler.  Passing NULL
+		 *  disables tab-completion for this instance.
+		 *
+		 *  Does nothing if rudiments is compiled without support for
+		 *  libedit. */
+		void	setTabHandler(char **(*tabhandler)(const char *text,
+						const char *line,
+						int32_t start,
+						int32_t end,
+						void *arg),
+					void *arg);
+
 		/** Displays the prompt configured by setPrompt(), reads a
 		 *  line from standard input, queues the line in memory, and
 		 *  calls flushHistory() if the queue has grown beyond the
