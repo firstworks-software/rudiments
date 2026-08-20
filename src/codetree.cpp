@@ -1188,7 +1188,7 @@ void codetree::popBreakStack() {
 	for (listnode< break_t * > *listnode=
 			stacknode->getValue()->getFirst();
 			listnode; listnode=listnode->getNext()) {
-		delete[] listnode->getValue();
+		delete listnode->getValue();
 	}
 	delete stacknode->getValue();
 	delete stacknode;

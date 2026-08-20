@@ -119,6 +119,8 @@
 	tls class sets BIO to use lowLevelRead/Write now, when using openssl
 	tls class uses SSL_CTX_set_min/max_proto_version to pin tls version when
 		using openssl, if available
+	fixed codetree::popBreakStack() freeing a scalar-new'd break_t
+		with delete[], corrupting the heap
 
 2.2.0 - added isSupported() to encryption/hash
 	added block cipher modes to encryption and aes128
