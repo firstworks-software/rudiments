@@ -86,6 +86,8 @@ PROGS3= handoff \
 	aes128 \
 	aes192 \
 	aes256 \
+	singledes \
+	tripledes \
 	pbkdf2 \
 	dh \
 	arc4 \
@@ -361,6 +363,12 @@ aes192: aes192.cpp aes192.$(OBJ)
 
 aes256: aes256.cpp aes256.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) aes256.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+singledes: singledes.cpp singledes.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) singledes.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+tripledes: tripledes.cpp tripledes.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) tripledes.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 pbkdf2: pbkdf2.cpp pbkdf2.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) pbkdf2.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)

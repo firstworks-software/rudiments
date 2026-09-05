@@ -289,6 +289,18 @@ then
 		AC_MSG_CHECKING(for EVP_aes_256_ctr)
 		FW_TRY_LINK([#include <openssl/evp.h>],[EVP_aes_256_ctr();],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_EVP_AES_256_CTR,1,SSL has EVP_AES_256_CTR) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 
+		AC_MSG_CHECKING(for EVP_des_ede3_cbc)
+		FW_TRY_LINK([#include <openssl/evp.h>],[EVP_des_ede3_cbc();],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_EVP_DES_EDE3_CBC,1,SSL has EVP_DES_EDE3_CBC) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+
+		AC_MSG_CHECKING(for EVP_des_ede3_ecb)
+		FW_TRY_LINK([#include <openssl/evp.h>],[EVP_des_ede3_ecb();],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_EVP_DES_EDE3_ECB,1,SSL has EVP_DES_EDE3_ECB) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+
+		AC_MSG_CHECKING(for EVP_des_ede3_cfb64)
+		FW_TRY_LINK([#include <openssl/evp.h>],[EVP_des_ede3_cfb64();],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_EVP_DES_EDE3_CFB64,1,SSL has EVP_DES_EDE3_CFB64) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+
+		AC_MSG_CHECKING(for EVP_des_ede3_ofb)
+		FW_TRY_LINK([#include <openssl/evp.h>],[EVP_des_ede3_ofb();],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_EVP_DES_EDE3_OFB,1,SSL has EVP_DES_EDE3_OFB) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+
 		FW_ENABLE_WERROR
 		AC_MSG_CHECKING(whether MD5_Init/Update/Final return int)
 		FW_TRY_LINK([#include <openssl/md5.h>],[int a=MD5_Init(0);],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_MD5_INIT_RETURNING_INT,1,SSL has MD5_Init/Update/Final returning int) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no);])

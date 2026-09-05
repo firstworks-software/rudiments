@@ -1,4 +1,14 @@
-2.3.0 - added domnode::setValue(value,length) and
+2.3.0 - added singledes and tripledes classes, providing raw
+		block-cipher single DES-CBC and 3-key EDE triple-DES-CBC
+		transforms (no key parity checks, and padding is optional
+		via setUsePadding()), for legacy protocols that need a raw
+		DES or 3DES cipher rather than a modern AEAD cipher, such as
+		Oracle's pre-O5LOGON authentication; singledes always uses a
+		bundled implementation, since OpenSSL 3.x moved single DES to
+		its legacy provider, which a library should not load
+		process-wide; tripledes uses OpenSSL's 3DES-EDE support when
+		it's available, and the same bundled implementation otherwise
+	added domnode::setValue(value,length) and
 		domnode::setAttributeValue(name,value,length) overloads, and
 		domnode::getValueLength()/getAttributeValueLength(), so a
 		node or attribute value containing an embedded null byte

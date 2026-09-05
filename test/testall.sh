@@ -65,6 +65,7 @@ for program in \
 	sha512 \
 	sharedmemory \
 	signal \
+	singledes \
 	singlylinkedlist \
 	snooze \
 	staticarray \
@@ -73,6 +74,7 @@ for program in \
 	table \
 	thread \
 	threadmutex \
+	tripledes \
 	ucs2character \
 	ucs2charstring \
 	ucs2stringbuffer \
