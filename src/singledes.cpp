@@ -6,18 +6,36 @@
 #include <rudiments/bytebuffer.h>
 #include <rudiments/stdio.h>
 
-// OpenSSL 3 moved single DES to the legacy provider.  Loading that provider
-// affects every other OpenSSL user in the process, and it isn't available at
-// all in FIPS-configured builds, so we always use our own implementation here.
-#include "desfips463.cpp"
+#if !defined(RUDIMENTS_HAS_DES_ECB_ENCRYPT)
+	#undef RUDIMENTS_HAS_SSL
+#endif
 
+// The low-level DES_set_key_unchecked()/DES_ecb_encrypt() functions are used
+// rather than EVP_des_cbc().  EVP_des_cbc() requires the legacy provider to be
+// loaded on OpenSSL 3.0 and up, which affects every other OpenSSL user in the
+// process, but the low-level functions are direct libcrypto C implementations
+// that the provider split doesn't apply to.  They're deprecated, but rudiments
+// builds with -Wno-deprecated-declarations.  DES_set_key_unchecked() is used
+// rather than DES_set_key() because it skips the parity and weak-key checks,
+// which callers of this class need it to skip.
+#if defined(RUDIMENTS_HAS_SSL)
+	#include <openssl/des.h>
+#else
+	#include "desfips463.cpp"
+#endif
+
+// OpenSSL doesn't provide a block-size macro for DES
 #define DES_BLOCK_SIZE 8
 
 class singledesprivate {
 	friend class singledes;
 	private:
-		uint32_t	_ek[32];
-		uint32_t	_dk[32];
+		#if defined(RUDIMENTS_HAS_SSL)
+			DES_key_schedule	_ks;
+		#else
+			uint32_t	_ek[32];
+			uint32_t	_dk[32];
+		#endif
 		uint8_t		_cbc[DES_BLOCK_SIZE];
 		byte_t		_out[DES_BLOCK_SIZE];
 		int		_outlen;
@@ -83,7 +101,8 @@ const byte_t *singledes::getData(bool encrypt) {
 
 	freeContext();
 
-	// our implementation only supports CBC
+	// cbc is the only mode implemented, whether backed by openssl or
+	// the bundled implementation
 	if (getBlockCipherMode()!=BLOCK_CIPHER_MODE_CBC) {
 		encryption::setError(ENCRYPTION_ERROR_UNSUPPORTED);
 		return NULL;
@@ -157,7 +176,15 @@ const byte_t *singledes::getData(bool encrypt) {
 			}
 
 			// encrypt the CBC'ed data into the out buffer
-			des_block_encrypt(pvt->_cbc,pvt->_ek,pvt->_out);
+			#if defined(RUDIMENTS_HAS_SSL)
+				DES_ecb_encrypt(
+					(const_DES_cblock *)pvt->_cbc,
+					(DES_cblock *)pvt->_out,
+					&pvt->_ks,DES_ENCRYPT);
+			#else
+				des_block_encrypt(pvt->_cbc,
+						pvt->_ek,pvt->_out);
+			#endif
 
 			// re-seed the CBC buffer from the out buffer
 			bytestring::copy(pvt->_cbc,pvt->_out,DES_BLOCK_SIZE);
@@ -165,7 +192,14 @@ const byte_t *singledes::getData(bool encrypt) {
 		} else {
 
 			// decrypt the in buffer
-			des_block_decrypt(in,pvt->_dk,pvt->_out);
+			#if defined(RUDIMENTS_HAS_SSL)
+				DES_ecb_encrypt(
+					(const_DES_cblock *)in,
+					(DES_cblock *)pvt->_out,
+					&pvt->_ks,DES_DECRYPT);
+			#else
+				des_block_decrypt(in,pvt->_dk,pvt->_out);
+			#endif
 
 			// un-CBC the output (see CBC description above)
 			for (byte_t i=0; i<DES_BLOCK_SIZE; i++) {
@@ -212,7 +246,15 @@ const byte_t *singledes::getData(bool encrypt) {
 			for (byte_t i=0; i<DES_BLOCK_SIZE; i++) {
 				pvt->_cbc[i]^=DES_BLOCK_SIZE;
 			}
-			des_block_encrypt(pvt->_cbc,pvt->_ek,pvt->_out);
+			#if defined(RUDIMENTS_HAS_SSL)
+				DES_ecb_encrypt(
+					(const_DES_cblock *)pvt->_cbc,
+					(DES_cblock *)pvt->_out,
+					&pvt->_ks,DES_ENCRYPT);
+			#else
+				des_block_encrypt(pvt->_cbc,
+						pvt->_ek,pvt->_out);
+			#endif
 			getOut()->append(pvt->_out,DES_BLOCK_SIZE);
 		}
 
@@ -245,15 +287,25 @@ void singledes::setError(int32_t err) {
 }
 
 void singledes::newContext() {
-	des_key_setup(getKey(),pvt->_ek,pvt->_dk);
+	#if defined(RUDIMENTS_HAS_SSL)
+		DES_set_key_unchecked((const_DES_cblock *)getKey(),&pvt->_ks);
+	#else
+		des_key_setup(getKey(),pvt->_ek,pvt->_dk);
+	#endif
 }
 
+// The key schedule is key material, so it's zeroed rather than just discarded.
 void singledes::freeContext() {
-	bytestring::zero(pvt->_ek,sizeof(pvt->_ek));
-	bytestring::zero(pvt->_dk,sizeof(pvt->_dk));
+	#if defined(RUDIMENTS_HAS_SSL)
+		bytestring::zero(&pvt->_ks,sizeof(pvt->_ks));
+	#else
+		bytestring::zero(pvt->_ek,sizeof(pvt->_ek));
+		bytestring::zero(pvt->_dk,sizeof(pvt->_dk));
+	#endif
 }
 
 bool singledes::isSupported() {
-	// our own implementation only supports CBC
+	// cbc is the only mode implemented, whether backed by openssl or
+	// the bundled implementation
 	return getBlockCipherMode()==BLOCK_CIPHER_MODE_CBC;
 }

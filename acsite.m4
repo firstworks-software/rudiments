@@ -205,6 +205,9 @@ then
 		AC_MSG_CHECKING(for RC4)
 		FW_TRY_LINK([#include <openssl/rc4.h>],[RC4_KEY k; RC4_set_key(&k,0,(const unsigned char *)0); RC4(&k,0,(const unsigned char *)0,(unsigned char *)0);],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_RC4,1,SSL has RC4) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 
+		AC_MSG_CHECKING(for DES_ecb_encrypt)
+		FW_TRY_LINK([#include <openssl/des.h>],[DES_key_schedule s; DES_set_key_unchecked((const_DES_cblock *)0,&s); DES_ecb_encrypt((const_DES_cblock *)0,(DES_cblock *)0,&s,DES_ENCRYPT);],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_DES_ECB_ENCRYPT,1,SSL has DES_ecb_encrypt) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+
 		AC_MSG_CHECKING(for BN)
 		FW_TRY_LINK([#include <openssl/bn.h>],[BIGNUM *b=BN_new(); BN_CTX *c=BN_CTX_new(); BN_add(b,b,b); BN_div(b,b,b,b,c); BN_bin2bn((const unsigned char *)0,0,b); BN_dec2bn(&b,(const char *)0); BN_CTX_free(c); BN_free(b);],[$CPPFLAGS $SSLINCLUDES],[$SSLLIBS],[],[AC_DEFINE(RUDIMENTS_HAS_BN,1,SSL has BN) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
 

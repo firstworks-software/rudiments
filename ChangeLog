@@ -3,11 +3,13 @@
 		transforms (no key parity checks, and padding is optional
 		via setUsePadding()), for legacy protocols that need a raw
 		DES or 3DES cipher rather than a modern AEAD cipher, such as
-		Oracle's pre-O5LOGON authentication; singledes always uses a
-		bundled implementation, since OpenSSL 3.x moved single DES to
-		its legacy provider, which a library should not load
-		process-wide; tripledes uses OpenSSL's 3DES-EDE support when
-		it's available, and the same bundled implementation otherwise
+		Oracle's pre-O5LOGON authentication; singledes uses OpenSSL's
+		low-level DES functions when they're available, sidestepping
+		the legacy provider that OpenSSL 3.x requires for single DES
+		through the EVP interface, the same way arc4 does for RC4,
+		and falls back to a bundled implementation otherwise;
+		tripledes uses OpenSSL's 3DES-EDE support when it's
+		available, and the same bundled implementation otherwise
 	added domnode::setValue(value,length) and
 		domnode::setAttributeValue(name,value,length) overloads, and
 		domnode::getValueLength()/getAttributeValueLength(), so a

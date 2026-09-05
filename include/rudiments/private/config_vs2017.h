@@ -170,6 +170,7 @@
 
 /* SSL has RC4 */
 /* #undef RUDIMENTS_HAS_RC4 */
+/* #undef RUDIMENTS_HAS_DES_ECB_ENCRYPT */
 
 /* SSL has BN */
 /* #undef RUDIMENTS_HAS_BN */
