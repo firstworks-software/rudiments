@@ -249,10 +249,16 @@ uint32_t prng::getSeed() {
 		}
 	}
 
-	// if that fails, use epoch
+	// If that fails, fall back to the clock.  The epoch alone has
+	// one-second resolution, so two calls in the same second would get
+	// the same seed, and two generators seeded from it would produce
+	// identical streams.  Mix in microseconds and the pid instead.
 	datetime	dt;
 	dt.initFromSystemDateTime();
-	return dt.getEpoch();
+	uint64_t	usec=((uint64_t)dt.getEpoch())*1000000+
+					((uint64_t)dt.getMicrosecond());
+	return ((uint32_t)usec)^
+		(((uint32_t)process::getProcessId())<<16);
 }
 
 uint32_t prng::generate(uint32_t seed) {

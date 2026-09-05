@@ -103,9 +103,11 @@ const void *bytestring::findLast(const void *haystack,
 		return (haystack)?
 			memrchr(haystack,needle,size):NULL;
 	#else
-		if (haystack) {
+		if (haystack && size) {
 			byte_t	realneedle=needle;
-			for (const byte_t *ptr=((const byte_t *)haystack)+size;
+			// start at the last byte, not one past it
+			for (const byte_t *ptr=((const byte_t *)haystack)+
+								size-1;
 						ptr>=(const byte_t *)haystack;
 						ptr--) {
 				if (*ptr==realneedle) {
@@ -127,13 +129,15 @@ const void *bytestring::findFirst(const void *haystack, size_t haystacksize,
 		return (haystack && needle)?
 			memmem(haystack,haystacksize,needle,needlesize):NULL;
 	#else
-		if (haystack && needle) {
+		if (haystack && needle && needlesize<=haystacksize) {
 
+			// endptr is the last position the needle can start
+			// at, so the loop has to test it too
 			const byte_t	*endptr=(const byte_t *)haystack+
 							haystacksize-needlesize;
 
 			for (const byte_t *ptr=(const byte_t *)haystack;
-							ptr<endptr; ptr++) {
+							ptr<=endptr; ptr++) {
 
 				if (!memcmp(ptr,needle,needlesize)) {
 					return (const void *)ptr;
