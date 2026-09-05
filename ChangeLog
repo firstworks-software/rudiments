@@ -1,3 +1,9 @@
+2.3.0 - the sharedmemory test now waits for its child process instead of
+		sleeping a second before deleting the key file the child needs,
+		which raced on slow hosts, and it now folds the child's exit
+		status into its own result, which it had been discarding - the
+		suite reported success even when the child's assertion failed
+
 2.3.0 - fixed two bugs in the bytestring fallbacks used on platforms whose
 		libc lacks memmem()/memrchr(): findFirst() never tested the
 		last position the needle could start at, so a needle at the

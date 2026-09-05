@@ -7,7 +7,6 @@
 #include <rudiments/permissions.h>
 #include <rudiments/file.h>
 #include <rudiments/directory.h>
-#include <rudiments/snooze.h>
 #include <rudiments/process.h>
 #include <rudiments/stdio.h>
 #include "test.cpp"
@@ -57,12 +56,22 @@ int main(int argc, const char **argv) {
 		#endif
 		delete[] pwd;
 		const char	*args1[]={"sharedmemory","child",NULL};
-		process::spawn(cmd.getString(),args1,true);
+		pid_t	childpid=process::spawn(cmd.getString(),args1,true);
 
-		snooze::macrosnooze(1);
+		// Wait for the child rather than sleeping a fixed amount.
+		// It needs the key file to still be there when it attaches,
+		// and on a slow machine it can take longer than a second
+		// just to start and link, so a sleep here is a race.
+		int32_t	childstatus=0;
+		bool	childok=process::wait(childpid,&childstatus) &&
+							!childstatus;
 
 		// clean up key file
 		file::remove("shmkey");
+
+		// the child's exit status is the only way its result gets
+		// back to this process, and test() exits non-zero on failure
+		test("child",childok);
 
 	} else {
 
