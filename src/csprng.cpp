@@ -201,9 +201,9 @@ bool csprng::isSupported() {
 	#elif defined(RUDIMENTS_HAVE_CRYPTGENRANDOM)
 		return true;
 	#else
-		// The constructor opens /dev/urandom O_RDONLY, so check
-		// readability rather than existence.  Some platforms
-		// (Solaris 8) have no /dev/urandom at all.
+		// the constructor opens /dev/urandom O_RDONLY, so check
+		// readability rather than existence - some platforms
+		// (eg. Solaris 8) have no /dev/urandom at all
 		return file::isReadable("/dev/urandom");
 	#endif
 }
