@@ -16,6 +16,12 @@
 		epoch alone, which has one-second resolution and gave two
 		calls in the same second the same seed
 
+2.3.0 - fixed csprng::isSupported() to actually check for a usable
+		backend - openssl or CryptGenRandom compiled in, or
+		/dev/urandom present and readable - instead of
+		unconditionally returning true, so callers on a host with
+		none of those, such as Solaris 8, get an honest answer
+
 2.3.0 - added singledes and tripledes classes, providing raw
 		block-cipher single DES-CBC and 3-key EDE triple-DES-CBC
 		transforms (no key parity checks, and padding is optional

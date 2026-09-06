@@ -60,13 +60,16 @@ int main(int argc, const char **argv) {
 
 	header("csprng");
 
+	if (!csprng::isSupported()) {
+		stdoutput.printf("	not supported\n\n");
+		return 0;
+	}
+
 	// exercise both implementations through the rng interface
 	prng	p;
 	csprng	cs;
 	testRngInterface("rng interface - prng",&p);
 	testRngInterface("rng interface - csprng",&cs);
-
-	test("isSupported",csprng::isSupported());
 
 	// setSeed()/getSeed() - degenerate, but present for rng interface
 	// parity.  setSeed() always succeeds and is ignored: two instances

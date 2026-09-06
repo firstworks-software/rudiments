@@ -894,12 +894,16 @@ int main(int argc, const char **argv) {
 		!charstring::compare(newstr,"xZyb"));
 	delete[] newstr;
 
+	#if defined(RUDIMENTS_HAS_PCRE2) || defined(RUDIMENTS_HAS_PCRE)
+	// \w is a PCRE shorthand class with no POSIX regcomp equivalent,
+	// so the POSIX engines can't match it at all
 	original="ab cd";
 	from.setPattern("(\\w)(\\w)");
 	newstr=charstring::replace(original,&from,"Z",true);
 	test("replace regex/from-to (whole match)",
 		!charstring::compare(newstr,"Z Z"));
 	delete[] newstr;
+	#endif
 
 	// backrefs - swap two groups, s/([a-z]+) ([a-z]+)/\2 \1/
 	original="hello world";

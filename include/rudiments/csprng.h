@@ -216,12 +216,18 @@ class RUDIMENTS_DLLSPEC csprng : public rng {
 		 *  presents the same interface as prng. */
 		static	void	setMutex(threadmutex *mtx);
 
-		/** Returns true if a cryptographically secure backend
-		 *  (openssl, CryptGenRandom, or /dev/urandom) is compiled
-		 *  in and false otherwise.  This is a static, build-time
-		 *  check - it does not report whether a given instance's
-		 *  backend actually initialized; generateBytes() returns
-		 *  false when that happens. */
+		/** Returns true if a cryptographically secure backend is
+		 *  available and false otherwise.
+		 *
+		 *  For openssl and CryptGenRandom this is a build-time
+		 *  check - true if either is compiled in.  Otherwise it is
+		 *  a runtime check - true if /dev/urandom exists and is
+		 *  readable.
+		 *
+		 *  Either way, this does not guarantee that a given
+		 *  instance's backend will actually initialize
+		 *  successfully; generateBytes() returns false when that
+		 *  happens. */
 		static	bool	isSupported();
 
 	#include <rudiments/private/csprng.h>

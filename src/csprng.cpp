@@ -4,6 +4,7 @@
 #include <rudiments/csprng.h>
 #include <rudiments/bytebuffer.h>
 #include <rudiments/device.h>
+#include <rudiments/file.h>
 #include <rudiments/error.h>
 
 #ifdef RUDIMENTS_HAVE_STDLIB_H
@@ -195,5 +196,14 @@ void csprng::setMutex(threadmutex *mtx) {
 }
 
 bool csprng::isSupported() {
-	return true;
+	#if defined(RUDIMENTS_HAS_SSL)
+		return true;
+	#elif defined(RUDIMENTS_HAVE_CRYPTGENRANDOM)
+		return true;
+	#else
+		// The constructor opens /dev/urandom O_RDONLY, so check
+		// readability rather than existence.  Some platforms
+		// (Solaris 8) have no /dev/urandom at all.
+		return file::isReadable("/dev/urandom");
+	#endif
 }
