@@ -132,9 +132,12 @@ class RUDIMENTS_DLLSPEC regularexpression : public object {
 		 *  Note that on platforms without PCRE, this class falls
 		 *  back to a POSIX regular expression engine, and only
 		 *  the ^ anchor is handled correctly there.  Those
-		 *  engines have no lookbehind at all, and they compute a
-		 *  word boundary as though the subject began at
-		 *  "offset", so \b can match there when it should not.
+		 *  engines have no lookbehind at all.  \b is a GNU
+		 *  extension rather than a POSIX one: glibc's regcomp()
+		 *  supports it, but computes a word boundary as though
+		 *  the subject began at "offset", so \b can match there
+		 *  when it should not; other POSIX regcomp()
+		 *  implementations may not support \b at all.
 		 *
 		 *  Returns true if the match was successful and
 		 *  false if it was not, including if "offset" is negative

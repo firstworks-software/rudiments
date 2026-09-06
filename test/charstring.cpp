@@ -1104,15 +1104,21 @@ int main(int argc, const char **argv) {
 	test("replace regex/from-to (word boundary)",
 		!charstring::compare(newstr,"Za"));
 	delete[] newstr;
-	#else
-	// the POSIX engines compute a word boundary as though the subject
-	// began at the resume point, so the second "a" looks like one too
+	#elif defined(__GLIBC__)
+	// glibc's regcomp() supports \b as a GNU extension, but computes
+	// a word boundary as though the subject began at the resume
+	// point, so the second "a" looks like one too
 	original="aa";
 	from.setPattern("\\ba");
 	newstr=charstring::replace(original,&from,"Z",true);
 	test("replace regex/from-to (word boundary)",
 		!charstring::compare(newstr,"ZZ"));
 	delete[] newstr;
+	#else
+	// \b is a GNU extension, not part of POSIX ERE at all, and
+	// what a non-glibc regcomp() does with a backslash it doesn't
+	// recognize is undefined - there's no specific behavior to
+	// assert here
 	#endif
 
 	// an empty match is skipped rather than replaced, so a pattern
