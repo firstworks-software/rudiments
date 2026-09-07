@@ -74,6 +74,9 @@ int main(int argc, const char **argv) {
 	bool	secure=cs.isCryptographicallySecure();
 	stdoutput.printf("	isCryptographicallySecure(): %s\n\n",
 						(secure)?"true":"false");
+	// this only proves the rng-interface call reaches the same
+	// virtual method as the direct call above, on the same instance -
+	// it doesn't independently verify what that value should be
 	test("isCryptographicallySecure() - through rng interface",
 			((rng *)&cs)->isCryptographicallySecure()==secure);
 

@@ -5,7 +5,6 @@
 #include <rudiments/prng.h>
 #include <rudiments/bytebuffer.h>
 #include <rudiments/device.h>
-#include <rudiments/file.h>
 #include <rudiments/error.h>
 
 #ifdef RUDIMENTS_HAVE_STDLIB_H
@@ -143,7 +142,7 @@ bool csprng::isCryptographicallySecure() {
 	#if defined(RUDIMENTS_HAS_SSL)
 		return true;
 	#elif defined(RUDIMENTS_HAVE_CRYPTGENRANDOM)
-		return true;
+		return pvt->acquired;
 	#else
 		// false when running on the prng fallback
 		return pvt->opened;

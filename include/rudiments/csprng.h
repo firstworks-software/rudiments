@@ -93,14 +93,15 @@ class RUDIMENTS_DLLSPEC csprng : public rng {
 
 		/** Returns true if this instance is actually backed by a
 		 *  cryptographically secure source - openssl's RAND_bytes(),
-		 *  the Windows CryptGenRandom() API, or a successfully
-		 *  opened /dev/urandom - and false otherwise.
+		 *  a successfully acquired Windows CryptGenRandom() API, or
+		 *  a successfully opened /dev/urandom - and false otherwise.
 		 *
 		 *  False means this instance has fallen back to an internal
-		 *  prng instance, because /dev/urandom could not be opened.
-		 *  It still generates output, but that output is not
-		 *  cryptographically secure.  See the prng class for what
-		 *  that fallback provides. */
+		 *  prng instance, because CryptGenRandom() could not be
+		 *  acquired or /dev/urandom could not be opened.  It still
+		 *  generates output, but that output is not cryptographically
+		 *  secure.  See the prng class for what that fallback
+		 *  provides. */
 		virtual bool	isCryptographicallySecure();
 
 		/** Returns 0.
@@ -225,18 +226,22 @@ class RUDIMENTS_DLLSPEC csprng : public rng {
 		 *  a per-instance handle or device - so when one of those is
 		 *  in use, this returns false.
 		 *
-		 *  When neither openssl nor CryptGenRandom is compiled in and
-		 *  /dev/urandom cannot be opened, csprng falls back to prng,
-		 *  whose backends sometimes share process-wide state.  In that
-		 *  case this returns prng::getNeedsMutex(). */
+		 *  When csprng is built without OpenSSL or Windows
+		 *  CryptGenRandom support, this forwards to
+		 *  prng::getNeedsMutex(), since that build's
+		 *  /dev/urandom-or-fallback branch may end up using a prng
+		 *  instance internally. */
 		static	bool	getNeedsMutex();
 
 		/** Allows you to supply a mutex if the class needs it
 		 *  (see getNeedsMutex()).  If your application is not
 		 *  multithreaded, then there is no need to supply a mutex.
 		 *
-		 *  "mtx" is ignored unless csprng is using the prng fallback,
-		 *  in which case it is passed along to prng::setMutex(). */
+		 *  "mtx" is ignored unless csprng is built without OpenSSL or
+		 *  Windows CryptGenRandom support, in which case it is passed
+		 *  along to prng::setMutex(), since that build's
+		 *  /dev/urandom-or-fallback branch may end up using a prng
+		 *  instance internally. */
 		static	void	setMutex(threadmutex *mtx);
 
 		/** Returns true if this platform supports csprng and false
