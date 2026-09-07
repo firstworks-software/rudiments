@@ -63,6 +63,13 @@ class RUDIMENTS_DLLSPEC rng : virtual public object {
 		 *  Returns true on success and false on failure. */
 		virtual bool	generateBytes(bytebuffer *buffer, size_t size)=0;
 
+		/** Returns false by default.  An implementation should
+		 *  override this method and return true only if it can
+		 *  guarantee that its output is suitable for cryptographic
+		 *  use, such as generating keys, tokens, salts, nonces or
+		 *  session ids. */
+		virtual bool	isCryptographicallySecure();
+
 	#include <rudiments/private/rng.h>
 };
 

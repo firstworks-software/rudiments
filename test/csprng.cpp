@@ -60,16 +60,22 @@ int main(int argc, const char **argv) {
 
 	header("csprng");
 
-	if (!csprng::isSupported()) {
-		stdoutput.printf("	not supported\n\n");
-		return 0;
-	}
+	test("isSupported() - always true",csprng::isSupported());
 
 	// exercise both implementations through the rng interface
 	prng	p;
 	csprng	cs;
 	testRngInterface("rng interface - prng",&p);
 	testRngInterface("rng interface - csprng",&cs);
+
+	// isCryptographicallySecure() depends on the backend csprng falls
+	// back to at runtime (openssl/CryptGenRandom vs. /dev/urandom vs.
+	// the prng fallback), so its value isn't asserted, just reported
+	bool	secure=cs.isCryptographicallySecure();
+	stdoutput.printf("	isCryptographicallySecure(): %s\n\n",
+						(secure)?"true":"false");
+	test("isCryptographicallySecure() - through rng interface",
+			((rng *)&cs)->isCryptographicallySecure()==secure);
 
 	// setSeed()/getSeed() - degenerate, but present for rng interface
 	// parity.  setSeed() always succeeds and is ignored: two instances

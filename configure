@@ -3879,6 +3879,10 @@ else $as_nop
   INCLUDE_CSPRNG="1"
 fi
 
+if ( test "$INCLUDE_CSPRNG" = "1" )
+then
+	INCLUDE_PRNG="1"
+fi
 # Check whether --enable-bytestring was given.
 if test ${enable_bytestring+y}
 then :

@@ -2,6 +2,7 @@
 // See the COPYING file for more information
 
 #include <rudiments/csprng.h>
+#include <rudiments/prng.h>
 #include <rudiments/bytebuffer.h>
 #include <rudiments/device.h>
 #include <rudiments/file.h>
@@ -30,6 +31,7 @@ class csprngprivate {
 		#else
 			device		dev;
 			bool		opened;
+			prng		*fallback;
 		#endif
 };
 
@@ -50,7 +52,14 @@ csprng::csprng() : rng() {
 	#else
 		// read straight from /dev/urandom, the same source
 		// prng::getSeed() uses
+		pvt->fallback=NULL;
 		pvt->opened=pvt->dev.open("/dev/urandom",O_RDONLY);
+		if (!pvt->opened) {
+			// fall back to prng, which is not
+			// cryptographically secure
+			pvt->fallback=new prng;
+			pvt->fallback->setSeed(prng::getSeed());
+		}
 	#endif
 }
 
@@ -64,6 +73,7 @@ csprng::~csprng() {
 		if (pvt->opened) {
 			pvt->dev.close();
 		}
+		delete pvt->fallback;
 	#endif
 	delete pvt;
 }
@@ -106,8 +116,12 @@ bool csprng::generateBytes(byte_t *buffer, size_t buffersize,
 		return pvt->acquired &&
 			CryptGenRandom(pvt->hprov,(DWORD)size,(BYTE *)buffer);
 	#else
-		return pvt->opened &&
-			pvt->dev.read(buffer,size)==(ssize_t)size;
+		if (pvt->opened) {
+			return pvt->dev.read(buffer,size)==(ssize_t)size;
+		}
+		// let prng do its own chunking
+		return pvt->fallback &&
+			pvt->fallback->generateBytes(buffer,buffersize,size);
 	#endif
 }
 
@@ -123,6 +137,17 @@ bool csprng::generateBytes(bytebuffer *buffer, size_t size) {
 	buffer->append(bytes,size);
 	delete[] bytes;
 	return true;
+}
+
+bool csprng::isCryptographicallySecure() {
+	#if defined(RUDIMENTS_HAS_SSL)
+		return true;
+	#elif defined(RUDIMENTS_HAVE_CRYPTGENRANDOM)
+		return true;
+	#else
+		// false when running on the prng fallback
+		return pvt->opened;
+	#endif
 }
 
 uint32_t csprng::getSeed() {
@@ -189,21 +214,24 @@ uint32_t csprng::getRandMax() {
 }
 
 bool csprng::getNeedsMutex() {
-	return false;
+	#if defined(RUDIMENTS_HAS_SSL)
+		return false;
+	#elif defined(RUDIMENTS_HAVE_CRYPTGENRANDOM)
+		return false;
+	#else
+		// the prng fallback may need one
+		return prng::getNeedsMutex();
+	#endif
 }
 
 void csprng::setMutex(threadmutex *mtx) {
+	#if defined(RUDIMENTS_HAS_SSL)
+	#elif defined(RUDIMENTS_HAVE_CRYPTGENRANDOM)
+	#else
+		prng::setMutex(mtx);
+	#endif
 }
 
 bool csprng::isSupported() {
-	#if defined(RUDIMENTS_HAS_SSL)
-		return true;
-	#elif defined(RUDIMENTS_HAVE_CRYPTGENRANDOM)
-		return true;
-	#else
-		// the constructor opens /dev/urandom O_RDONLY, so check
-		// readability rather than existence - some platforms
-		// (eg. Solaris 8) have no /dev/urandom at all
-		return file::isReadable("/dev/urandom");
-	#endif
+	return true;
 }

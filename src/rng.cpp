@@ -8,3 +8,7 @@ rng::rng() : object() {
 
 rng::~rng() {
 }
+
+bool rng::isCryptographicallySecure() {
+	return false;
+}

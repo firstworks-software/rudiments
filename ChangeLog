@@ -1,3 +1,19 @@
+2.3.0 - added rng::isCryptographicallySecure(), a new virtual method letting
+		callers ask whether an rng implementation's output is
+		actually fit for cryptographic use - keys, tokens, salts,
+		nonces, session ids; csprng now overrides it, true when
+		backed by openssl, CryptGenRandom, or a successfully opened
+		/dev/urandom, and false when none of those are available and
+		it has fallen back to an internal prng instance instead;
+		previously, on a platform with none of those (such as
+		Solaris 8), csprng was permanently non-functional, since
+		every generate()/generateBytes() call failed, but now it
+		falls back to prng, seeded via prng::getSeed(), and keeps
+		working, just without the cryptographic-security guarantee;
+		csprng::isSupported() now unconditionally returns true,
+		matching the existing bignumber/arc4 precedent, since a
+		fallback implementation is always built in
+
 2.3.0 - the sharedmemory test now waits for its child process instead of
 		sleeping a second before deleting the key file the child needs,
 		which raced on slow hosts, and it now folds the child's exit

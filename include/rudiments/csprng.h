@@ -27,7 +27,11 @@
  *
  *  csprng uses openssl's RAND_bytes() when available, the Windows
  *  CryptGenRandom() API when building for Windows, and /dev/urandom
- *  otherwise. */
+ *  otherwise.  If /dev/urandom cannot be opened, csprng falls back
+ *  further to an internal prng instance, which still produces output
+ *  but is NOT cryptographically secure.  Call
+ *  isCryptographicallySecure() if you need a guarantee that the output
+ *  is suitable for cryptographic use. */
 class RUDIMENTS_DLLSPEC csprng : public rng {
 	public:
 
@@ -86,6 +90,18 @@ class RUDIMENTS_DLLSPEC csprng : public rng {
 		 *
 		 *  Returns true on success and false on failure. */
 		virtual bool	generateBytes(bytebuffer *buffer, size_t size);
+
+		/** Returns true if this instance is actually backed by a
+		 *  cryptographically secure source - openssl's RAND_bytes(),
+		 *  the Windows CryptGenRandom() API, or a successfully
+		 *  opened /dev/urandom - and false otherwise.
+		 *
+		 *  False means this instance has fallen back to an internal
+		 *  prng instance, because /dev/urandom could not be opened.
+		 *  It still generates output, but that output is not
+		 *  cryptographically secure.  See the prng class for what
+		 *  that fallback provides. */
+		virtual bool	isCryptographicallySecure();
 
 		/** Returns 0.
 		 *
@@ -200,34 +216,37 @@ class RUDIMENTS_DLLSPEC csprng : public rng {
 		 *  full 0..2^32-1 range, so this always returns 4294967295U. */
 		static	uint32_t	getRandMax();
 
-		/** Returns false.
+		/** Returns true if this class needs a mutex to operate safely
+		 *  in a threaded environment and false otherwise.
 		 *
-		 *  csprng's backends hold no shared mutable state - openssl's
-		 *  RAND_bytes() is thread safe, and CryptGenRandom() and
-		 *  /dev/urandom are each reached through a per-instance
-		 *  handle or device - so csprng never needs a mutex.  Unlike
-		 *  prng, whose PRNG backends sometimes do. */
+		 *  The cryptographically secure backends hold no shared
+		 *  mutable state - openssl's RAND_bytes() is thread safe, and
+		 *  CryptGenRandom() and /dev/urandom are each reached through
+		 *  a per-instance handle or device - so when one of those is
+		 *  in use, this returns false.
+		 *
+		 *  When neither openssl nor CryptGenRandom is compiled in and
+		 *  /dev/urandom cannot be opened, csprng falls back to prng,
+		 *  whose backends sometimes share process-wide state.  In that
+		 *  case this returns prng::getNeedsMutex(). */
 		static	bool	getNeedsMutex();
 
-		/** Does nothing.
+		/** Allows you to supply a mutex if the class needs it
+		 *  (see getNeedsMutex()).  If your application is not
+		 *  multithreaded, then there is no need to supply a mutex.
 		 *
-		 *  csprng never needs a mutex (see getNeedsMutex()), so "mtx"
-		 *  is ignored.  This method exists only so that csprng
-		 *  presents the same interface as prng. */
+		 *  "mtx" is ignored unless csprng is using the prng fallback,
+		 *  in which case it is passed along to prng::setMutex(). */
 		static	void	setMutex(threadmutex *mtx);
 
-		/** Returns true if a cryptographically secure backend is
-		 *  available and false otherwise.
+		/** Returns true if this platform supports csprng and false
+		 *  otherwise.  Since a fallback implementation is built in,
+		 *  this method always returns true.
 		 *
-		 *  For openssl and CryptGenRandom this is a build-time
-		 *  check - true if either is compiled in.  Otherwise it is
-		 *  a runtime check - true if /dev/urandom exists and is
-		 *  readable.
-		 *
-		 *  Either way, this does not guarantee that a given
-		 *  instance's backend will actually initialize
-		 *  successfully; generateBytes() returns false when that
-		 *  happens. */
+		 *  csprng always produces output, but that output is only
+		 *  cryptographically secure when a secure backend is
+		 *  available.  Call isCryptographicallySecure() on an
+		 *  instance to find out whether it is. */
 		static	bool	isSupported();
 
 	#include <rudiments/private/csprng.h>

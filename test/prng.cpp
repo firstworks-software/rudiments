@@ -33,6 +33,8 @@ int main(int argc, const char **argv) {
         stdoutput.printf("	Seed: %d\n\n",seed);
 
 	prng	r;
+	test("isCryptographicallySecure() - inherited default is false",
+					!r.isCryptographicallySecure());
 	int32_t	*numbers=new int32_t[numbercount];
 
 	for (uint16_t i=0; i<setcount; i++) {
