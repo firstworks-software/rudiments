@@ -174,6 +174,17 @@
 	fixed codetree::popBreakStack() freeing a scalar-new'd break_t
 		with delete[], corrupting the heap
 
+2.3.0 - fixed charstring::printf(char *,size_t,const char *,va_list *) to
+		va_copy() a fresh va_list for each vsnprintf() call it makes,
+		rather than reusing the one passed in; on platforms whose
+		vsnprintf() reports truncation by returning -1 instead of the
+		needed size (Solaris, notably), the function retries with
+		ever-larger buffers, and reusing an already-consumed va_list
+		across those retries is undefined behavior - it could hand a
+		%s conversion a stale argument pointer on a later retry,
+		sending it scanning unboundedly for a NUL byte (SQL Relay
+		#10021, #10022)
+
 2.2.0 - added isSupported() to encryption/hash
 	added block cipher modes to encryption and aes128
 	fixed return value of sha256::append() when not using openssl

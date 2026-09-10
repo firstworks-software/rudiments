@@ -3448,16 +3448,29 @@ ssize_t charstring::printf(char *buffer, size_t len,
 		buflen=2;
 	}
 	error::clearError();
+	// vsnprintf() consumes *argp via va_arg(), leaving it indeterminate
+	// afterward, but this function may need to call vsnprintf() more than
+	// once below (once here, then again per retry iteration further down)
+	// if the platform's vsnprintf() doesn't report truncation the way we
+	// expect.  Reusing *argp itself across those calls is undefined
+	// behavior - on some ABIs it hands a later call a stale argument
+	// pointer instead of the real one, which is exactly the kind of bug
+	// that sends a %s conversion scanning off into unrelated memory
+	// looking for a NUL.  Take a fresh va_copy() for each individual
+	// vsnprintf() call instead, so *argp itself is never directly
+	// consumed and stays valid for as many copies as we need.
+	va_list	argp1;
+	va_copy(argp1,*argp);
 	#if defined(RUDIMENTS_HAVE_VSNPRINTF_S)
-		ssize_t	size=vsnprintf_s(buf,buflen,_TRUNCATE,format,*argp);
+		ssize_t	size=vsnprintf_s(buf,buflen,_TRUNCATE,format,argp1);
 	#elif defined(RUDIMENTS_HAVE___VSNPRINTF)
-		ssize_t	size=__vsnprintf(buf,buflen,format,*argp);
+		ssize_t	size=__vsnprintf(buf,buflen,format,argp1);
 	#elif defined(RUDIMENTS_HAVE__VSNPRINTF)
-		ssize_t	size=_vsnprintf(buf,buflen,format,*argp);
+		ssize_t	size=_vsnprintf(buf,buflen,format,argp1);
 	#elif defined(RUDIMENTS_HAVE_VSNPRINTF)
-		ssize_t	size=vsnprintf(buf,buflen,format,*argp);
+		ssize_t	size=vsnprintf(buf,buflen,format,argp1);
 	#elif defined(RUDIMENTS_HAVE_UNDEFINED___VSNPRINTF)
-		ssize_t	size=__vsnprintf(buf,buflen,format,*argp);
+		ssize_t	size=__vsnprintf(buf,buflen,format,argp1);
 		// Solaris 2.5.1 (and maybe others) return buflen-1 if
 		// truncation occurs.  In that case, simulate systems
 		// that return -1 if truncation occurs.
@@ -3467,6 +3480,7 @@ ssize_t charstring::printf(char *buffer, size_t len,
 	#else
 		#error no vsnprintf or anything like it
 	#endif
+	va_end(argp1);
 
 	// Return "size" if either:
 	// * "size" > -1 (no error occurred)
@@ -3508,16 +3522,20 @@ ssize_t charstring::printf(char *buffer, size_t len,
 		buflen+=inc;
 		buf=new char[buflen+1];
 
+		// each retry needs its own fresh copy too - see comment
+		// on the first attempt above
+		va_list	argp2;
+		va_copy(argp2,*argp);
 		#if defined(RUDIMENTS_HAVE_VSNPRINTF_S)
-			size=vsnprintf_s(buf,buflen,_TRUNCATE,format,*argp);
+			size=vsnprintf_s(buf,buflen,_TRUNCATE,format,argp2);
 		#elif defined(RUDIMENTS_HAVE___VSNPRINTF)
-			size=__vsnprintf(buf,buflen,format,*argp);
+			size=__vsnprintf(buf,buflen,format,argp2);
 		#elif defined(RUDIMENTS_HAVE__VSNPRINTF)
-			size=_vsnprintf(buf,buflen,format,*argp);
+			size=_vsnprintf(buf,buflen,format,argp2);
 		#elif defined(RUDIMENTS_HAVE_VSNPRINTF)
-			size=vsnprintf(buf,buflen,format,*argp);
+			size=vsnprintf(buf,buflen,format,argp2);
 		#elif defined(RUDIMENTS_HAVE_UNDEFINED___VSNPRINTF)
-			size=__vsnprintf(buf,buflen,format,*argp);
+			size=__vsnprintf(buf,buflen,format,argp2);
 			// Solaris 2.5.1 (and maybe others) return buflen if
 			// truncation occurs.  In that case, simulate systems
 			// that return -1 if truncation occurs.
@@ -3527,6 +3545,7 @@ ssize_t charstring::printf(char *buffer, size_t len,
 		#else
 			#error no vsnprintf or anything like it
 		#endif
+		va_end(argp2);
 		if (size>-1) {
 			if ((size_t)(size+1)>len) {
 				// just copy out what we can
