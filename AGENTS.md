@@ -123,9 +123,13 @@ make charstring
   reference - `doc/classes/makedoc` runs `doxygen doxygen.config` against the
   public headers. `doc/programming/` has per-class tutorial pages. None of this
   is built by the top-level `make`; it is only handled on `make install`.
-- **ChangeLog.** Append entries for user-facing changes under the current
-  version section at the top of the file (the newest section is first). Don't
-  log test-only changes.
+- **ChangeLog.** The file is in Keep a Changelog format
+  (https://keepachangelog.com/en/1.1.0/). Append an entry for a user-facing
+  change under the "## [Unreleased]" section at the top of the file, at the
+  end of the category subsection that fits - "### Added", Changed, Deprecated,
+  Removed, Fixed, or Security (add the subsection if it is missing, keeping
+  that order). Don't log test-only changes. On release, [Unreleased] becomes
+  the version and date and a fresh, empty [Unreleased] goes above it.
 - **Windows build is separate**: `config_windows.mk`,
   `include/rudiments/private/config_vs*.h` (one per Visual Studio version),
   `configure.vbs`, and the `msvc/` solutions. Changes that touch build

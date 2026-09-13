@@ -1,1741 +1,2285 @@
-2.3.0 - added rng::isCryptographicallySecure(), a new virtual method letting
-		callers ask whether an rng implementation's output is
-		actually fit for cryptographic use - keys, tokens, salts,
-		nonces, session ids; csprng now overrides it, true when
-		backed by openssl, CryptGenRandom, or a successfully opened
-		/dev/urandom, and false when none of those are available and
-		it has fallen back to an internal prng instance instead;
-		previously, on a platform with none of those (such as
-		Solaris 8), csprng was permanently non-functional, since
-		every generate()/generateBytes() call failed, but now it
-		falls back to prng, seeded via prng::getSeed(), and keeps
-		working, just without the cryptographic-security guarantee;
-		csprng::isSupported() now unconditionally returns true,
-		matching the existing bignumber/arc4 precedent, since a
-		fallback implementation is always built in
-
-2.3.0 - the sharedmemory test now waits for its child process instead of
-		sleeping a second before deleting the key file the child needs,
-		which raced on slow hosts, and it now folds the child's exit
-		status into its own result, which it had been discarding - the
-		suite reported success even when the child's assertion failed
-
-2.3.0 - fixed two bugs in the bytestring fallbacks used on platforms whose
-		libc lacks memmem()/memrchr(): findFirst() never tested the
-		last position the needle could start at, so a needle at the
-		very end of the haystack was never found, and findLast()
-		started one byte past the end of the buffer, reading out of
-		bounds and potentially returning a pointer past the end
-
-2.3.0 - prng::getSeed() now mixes microseconds and the pid into the seed
-		when /dev/urandom isn't available, rather than returning the
-		epoch alone, which has one-second resolution and gave two
-		calls in the same second the same seed
-
-2.3.0 - fixed csprng::isSupported() to actually check for a usable
-		backend - openssl or CryptGenRandom compiled in, or
-		/dev/urandom present and readable - instead of
-		unconditionally returning true, so callers on a host with
-		none of those, such as Solaris 8, get an honest answer
-
-2.3.0 - added singledes and tripledes classes, providing raw
-		block-cipher single DES-CBC and 3-key EDE triple-DES-CBC
-		transforms (no key parity checks, and padding is optional
-		via setUsePadding()), for legacy protocols that need a raw
-		DES or 3DES cipher rather than a modern AEAD cipher, such as
-		Oracle's pre-O5LOGON authentication; singledes uses OpenSSL's
-		low-level DES functions when they're available, sidestepping
-		the legacy provider that OpenSSL 3.x requires for single DES
-		through the EVP interface, the same way arc4 does for RC4,
-		and falls back to a bundled implementation otherwise;
-		tripledes uses OpenSSL's 3DES-EDE support when it's
-		available, and the same bundled implementation otherwise
-	added domnode::setValue(value,length) and
-		domnode::setAttributeValue(name,value,length) overloads, and
-		domnode::getValueLength()/getAttributeValueLength(), so a
-		node or attribute value containing an embedded null byte
-		can be stored and retrieved intact instead of being
-		truncated; jsondom, xmldom, csvdom, inidom, and propdom now
-		use the stored length rather than scanning for a null byte
-		when serializing a value, and csvdom builds tree nodes
-		using the length-aware csvsax field()/column() hooks so a
-		parsed field or column value with an embedded null survives
-		into the tree; jsondom escapes an embedded null as a JSON
-		unicode escape; xmldom writes an embedded null through
-		as-is, which XML 1.0 cannot represent, so the resulting
-		document is not well-formed in that case
-	added csvsax::field(value,length,quoted) and
-		csvsax::column(name,length,quoted) overloads, and
-		sax::parseString(string,length), so a field or column
-		value containing an embedded null byte can reach the
-		caller intact instead of being truncated
-	fixed sax::getCharacter() to distinguish a real end of input
-		from a literal null byte read from the underlying file,
-		string, or input, so an embedded null byte no longer
-		ends a csvsax parse early
-	added a bignumber class, providing arbitrary-precision signed
-		integer arithmetic, wrapping OpenSSL's BIGNUM functions
-		when they're built in and usable and falling back to a
-		built-in implementation otherwise
-	added modular arithmetic to bignumber - nonNegativeModulo(),
-		modAdd(), modSub(), modMul(), modPow(), modInverse(), and gcd()
-	added an arc4 class, providing the RC4 stream cipher, using OpenSSL
-		when it's built in and usable and falling back to a built-in
-		implementation otherwise
-	clarified csprng::isSupported() doc comment - it reports whether a
-		backend is compiled in, not whether one initialized for a
-		given instance
-	fixed buffer overflow when unix socket file name is too long
-	fixed segfault in file::getBaseName(filename,ext) when the base
-		name doesn't end in ext, on NULL arguments, or when the base
-		name is entirely the extension
-	added PCRE2 support, configure now prefers PCRE2, then PCRE1, then
-		POSIX regex
-	fixed double free in regularexpression::clear() on builds without
-		PCRE (POSIX regex or built-in regex)
-	removed regularexpression::clear() - the destructor does its work
-		now
-	added an alloca check to configure for built-in-regex builds on
-		non-GNU compilers
-	fixed hash::reset() not clearing the hash itself
-	fixed pbkdf2::reset() not clearing the salt
-	website ssi expanded at build time instead of by apache
-	website html files not executable anymore
-	regenerated doc/programming/charstring.html and xmlsax.html, which
-		had gone stale against their .wt sources
-	regenerated five doc/programming pages (dictionary, linkedlist,
-		scalar, singlylinkedlist, table) that wt had been truncating
-		(fixed under #8966)
-	fixed md5::getHash() overread when built against an openssl whose
-		MD5_Final() returns int
-	fixed sha1::getError() fallthrough (non-openssl builds) reporting
-		success on error
-	fixed sha256::clear() reporting failure on success, non-openssl
-		builds
-	removed the bundled md5 reference implementation from the export
-		list, non-openssl builds
-	removed obsolete AIX "#pragma alloca" from the bundled glibc regex
-		engine, built-in-regex builds
-	removed bundled sha-1/sha-256/aes-128 reference implementations
-		from the export list, non-openssl builds
-	removed bundled regex engine from the export list on built-in-regex
-		builds
-	fixed memory leaks in regularexpression::setPattern() on realloc
-		failure, built-in-regex builds
-	fixed memory leak in regularexpression::setPattern() on a too-big
-		pattern, built-in-regex builds - unlike the leak fixed under
-		#8928, this one needs no failed allocation to reach
-	fixed regularexpression::match(str,length,offset) copying the whole
-		subject before rejecting a bad offset, non-PCRE builds
-	fixed built-in regex build warning, unused locals under -Wall
-		-Werror
-	added \g<number> and \g<name> backrefs to charstring::replace()
-	fixed memory leak in regularexpression::setPattern() on failed
-		compile, built-in-regex builds
-	added regularexpression::matchNext()
-	fixed charstring::replace() empty-match stepping from wrong point
-	added backref expansion (\0-\9, \\) to charstring::replace()
-	fixed charstring::replace() global substitution resume offset
-	added regularexpression::setPattern(pattern,options) for
-		case-insensitive/multiline/dotall
-	added regularexpression::getSubstringIndex(name) and name-taking
-		overloads
-	added regularexpression::match(str,length,offset) resuming
-		mid-subject
-	fixed regularexpression::getSubstringStart/End() pointer targets on
-		non-PCRE builds
-	fixed regularexpression::getSubstringCount() hiding groups after a
-		non-participating one
-	fixed charstring::replace() replacing only the last capture group
-		instead of the whole match
-	fixed datetime::parse() fractional seconds before an am/pm meridian
-	bumped soname librudiments.so.12 to .so.13
-	fixed debian packaging dropping librudiments-apache
-	stopped compiling static archives in the deb build
-	stopped warning about the apache library's undefined symbols in the
-		deb build
-	fixed collection::writeValue()/writeJsonValue() printing pointers
-		with %08x, truncating on LP64
-	fixed FW_FIX_LIBTOOL and chmod of bin/rudiments-config not running
-		via config.status
-	added sha512, aes192, aes256 classes and
-		encryption::setUsePadding(bool) (SQL Relay #8976)
-	added randomnumber::generateBytes() four overloads
-	added a csrandomnumber class (SQL Relay #9206)
-	added randomnumber's seed-first static generateBytes() overloads
-	added csrandomnumber::scale(), getRandMax(), and static
-		generate()/generate(lower,upper)
-	fixed randomnumber::scale() to clamp its result to "upper"
-	added an rng base class, renamed randomnumber to prng and
-		csrandomnumber to csprng, added generateBytes() methods to each
-	tls class sets BIO to use lowLevelRead/Write now, when using openssl
-	tls class uses SSL_CTX_set_min/max_proto_version to pin tls version when
-		using openssl, if available
-	fixed codetree::popBreakStack() freeing a scalar-new'd break_t
-		with delete[], corrupting the heap
-
-2.3.0 - fixed charstring::printf(char *,size_t,const char *,va_list *) to
-		va_copy() a fresh va_list for each vsnprintf() call it makes,
-		rather than reusing the one passed in; on platforms whose
-		vsnprintf() reports truncation by returning -1 instead of the
-		needed size (Solaris, notably), the function retries with
-		ever-larger buffers, and reusing an already-consumed va_list
-		across those retries is undefined behavior - it could hand a
-		%s conversion a stale argument pointer on a later retry,
-		sending it scanning unboundedly for a NUL byte (SQL Relay
-		#10021, #10022)
-
-2.2.0 - added isSupported() to encryption/hash
-	added block cipher modes to encryption and aes128
-	fixed return value of sha256::append() when not using openssl
-	added pbkdf2 class
-	added dh class
-	fixed null-safety in charstring::findFirstIgnoringCase()
-	fixed date::parse() so that NULL datedelimiters enables all delimiters
-	added date::parse() with adjustshortyears option
-	added hash::getRequiredSaltSize()
-	fixed debugprintf macros to use updated methods
-	made pbkdf2 build against pre-1.0.0 openssl (falls back to sha-1)
-	fixed iconvert crash (iconv_close(-1)) when iconv_open() fails (e.g.
-		native solaris iconv)
-	added dynamiclib::getNextSymbol() (portable RTLD_NEXT/dlvsym symbol
-		wrapper)
-	added dependency info to the debian/ubuntu package control file
-	fixed dh class build on modern LibreSSL (opaque DH struct)
-	fixed statfs-style detection so NetBSD 2.x is not mis-detected as old
-		FreeBSD (filesystem.cpp getTypeName failed to compile)
-	added Mon (mixed-case month abbreviation) format string to
-		datetime::formatAs()
-	fixed pthread detection on FreeBSD 15 (probe now also link-tests
-		pthread_create, not just pthread_exit)
-	added a README.md for the github mirror at
-		github.com/firstworks-software/rudiments
-
-2.1.1 - added test for link.h and added link.h to dynamiclib.cpp
-	updated default timeout for curl_multi_timeout
-
-2.1.0 - renamed *httprequest::get*IsAllowed to is*Allowed
-	renamed *httprequest::get*WereProvided to were*Provided
-	renamed *serverapi and httpresponse::send* to write*
-	renamed httpresponse::setCookie to writeSetCookie
-	refactored some httpresponse header/stauts methods, added "block"
-		methods that send crlfs
-	removed chaining from httpserverapi writeHeader() methods
-	added httpresponse/serverapi::writeStatusLine() methods
-	replaced httpresponse::writeCrLf() method with writeHeaderTerminator() 
-	updated now apachehttpserverapi handles header termination
-	fixed bug that could cause httprequest to crash when being deleted
-	added missing comma after status message when writing mvcresult
-	added wastebasket::write() methods
-	added mvctier::set/getLogger()
-	fixed log-standing log level issue
-	added domnode::get*ByPath()
-	dom paths no longer require indexes
-	logger inherits from output now
-	added /usr/kerberos/bin to search path for krb5-config
-	reordered some inline methods in stringbuffer for older compilers
-	added some missing #ifdef wrappers to dynamiclib
-	added some missing #if !defined()s to randomnumber
-	gave *node virtual destructors for older compilers
-	made *node's protected members private
-	made nodecollectionnode not inherit from object
-	added ifdef wrappers around sys/socket.h for platforms that don't have
-		them internally (ultrix)
-	added support for additional undefined socket functions
-	added -shared -> -G fix for OSR 5.0.5
-	fixed printing on OSR
-	disabled iconv() and iswblank() for OSR5
-	disabled non-C locale tests for OSR
-	disabled inode tests for OSR
-	disabled inode tests for OSR5
-	fixed erroneous wcharacter::upper() calls in
-		charstring::compareIgnoringCase()
-	disabled some getHumanReadable() tests for systems that don't support
-		the long long type
-	fixed long long detection for OSR
-	removed -R for OSR5
-	added code to detect degenerate wctype.h
-	added support for linker namespaces to dynamiclib
-	updated iconvert class to initialize the descriptor to -1 instead of 0
-	added clearError() to iconv() calls to deal with misbehaving
-		iconv_open() on some platforms
-	added dynamiclib::openInNewNamespace()
-
-2.0.2 - moved syslog.h to loggerincludes.h
-	added syslog macros to loggerincludes.h
-
-2.0.1 - added comma-separated host support to inetsocketclient
-	moved entire website into project
-
-2.0.0 - added object, collection class heirarchy
-	added table class
-	added scalar class
-	various semi-obscure internal fixes to dictionary class
-	removed namevaluepairs/constnamevaluepairs typedefs
-	implemented degenerate wcharstring for systems that don't support
-		wide characters, and added a supported() method
-	configure test for dirent.h includes sys/types.h too now
-	in bytestring.cpp, NULL is redefined if _G_config.h undef'ed it
-	added a posix semaphores implementation of semaphoreset
-	added sensitivevalue class
-	changed collection paradigm from multiple remove/clearAndDelete...()
-		methods to setManage...Values/Keys() methods and single
-		clear()/remove()
-	cleaned up httpresponse::status()
-	fixed epoll_wait() and kevent() timeout detection
-	configure script uses -Werror when detecting iov_base now
-	code checks dlclose() for not -1 rather than for 0 now
-	added configure test for Irix
-	added configure test for iswblank() and alternative implementation
-	added configure test for mbrtowc()/mbtowc() and implementations for
-		each
-	fixed wprintf() -> swprintf() calls in wcharstring class
-	added wcharstring::copy(...const char *...) methods
-	wcharstring class handles platforms that don't support vswprintf()
-	added fixes for older OpenSSL
-	added mvcdao class
-	added acfirstworks.m4 and acrudiments.m4 for other projects to use in
-		their configure scripts
-	added NSModule/NSObjectFileImage-based implementation of dynamiclib
-	updated call to GNU stderror_r to use the buffer it fills rather than
-		the return value
-	also updated the error class to prefer strerror() to GNU strerror_r()
-		if XSI strerror_r() isn't present, as GNU strerror_r() appears
-		to be flaky
-	added file::getMatchingFileNames() methods
-	added (w)charstring compareWithWildcard(), compareVersions(), and
-		compareNatural() methods
-	added comparator class with reverse and natural options, and updated
-		various collections to use its methods instead of
-		node_compare(), also added get/setComparator() methods to
-		collection class
-	added character/charstring::duplicate(wchar_t) methods to convert wide
-		strings to normal strings
-	fixed a few size -> length parameters
-	added wchar_t/wchar_t * methods to a bunch of classes
-	dictionarynode renamed dictionarypair
-	updated comparator class to use arithmetic instead of comparisons
-		where possible
-	fixed bugs in dynamicarray::clear()
-	added memory-related methods to sys class
-	added charstring/wcharstring::humanReadable() methods
-	added filedescriptor::supportsPassReceiveFileDescriptor/Socket() and
-		updated it for various systems
-	added a socketlayer class below securitycontext and updated websocket
-		to inherit from that
-	fixed memory leak in avltree clear()
-	added an int cast to a char array subscript in regex.cpp
-	removed bounds checking from various operator[] methods
-	added some Unixware-specific libtool tweaks
-	implemented copy constructors and = operators for various classes that
-		they were previously hidden in
-	added shutdown flag/signal framework to process class
-	process::exitOn*() call exitImmediately() now (which is
-		async-signal-safe)
-	methods that retry on EINTR also check process::getShutDownFlag() now
-		and return if it's true
-	refactored environment a bit and added a lengthy explanation for why 
-		it has to do all the things that it does
-	renamed isSignaHandlerIntUsed to supportsSignalHandlerParameter
-	added SIGXCPU, SIGXFSZ and SIGPWR to the "shutdown signals"
-	refactored write methods of dom class and its children a bit
-	implemented sys::getAvailable*() for SVR5 (eg. UnixWare)
-	implemented block-aligned buffering, which prefers to use mmap, but
-		can fall back to traditional buffering, for non-stream
-		filedescriptors
-	added mvccrud interface
-	fixed some formatting bugs in datetime::formatAs()
-	yday->mday in datetime::setDays()
-	filedescriptor::printf() methods return ssize_t now
-	added thread::reliable()
-	refactored mvcresult a bit
-	added httpModuleInit/httpModuleExit functions
-	added resourcepool class
-	httpserverapi and httprequest are inputs now
-	dom and children's write*() methods return the number of bytes written
-		now, instead of just true/false
-	fixed a Werror-detection bug in the configure script for
-		cross-compilers
-	fixed segfault in charstring::replace()
-	fixed Content-Type in url class when using curl
-	removed cursordomnode class
-	de-consted most things
-	datetime initializes mday, wday, and yday to 1 now, fixing the
-		behavior of various setters
-	normalized datetime getter/setter names
-	codetree writes to an output rather than stringbuffer now
-	removed \b support from codetree
-	added encryption::getRawData() and getRawDataSize()
-	refactored crypt as a child of encryption
-	datetime class sets timezone during instantiation now
-	renamed some datetime methods from get*() to initFrom*()
-	renamed some datetime methods from *DateAndTime() to *DateTime()
-	renamed some datetime methods from adjust*() to set*()
-	renamed *entry methods from init() to open()
-	refactored *client and *util methods, removed convenience methods
-	renamed randomnumber::generate*() to generate(), etc.
-	made Filename/FileName consistent to FileName
-	fixed ininitialized mutex in crypt class
-	fixed tm_isdst handling to deal with > 1 and < 0 cases
-	client connect tries defaults to 1 intead of 0 (infinite tries) now
-	character::duplicate() and charstring::duplicate() use ? as the default
-		replacement character now
-	refactored FW_CHECK_HEADERS_AND_LIBS a bit
-	added peer validation options to url class
-	added getters to url class
-	url::useHttpPost/Get() -> url::setUseHttpPost()
-	renamed crypt class to des
-	fixed configure test for crypt_r which always reported not found
-	fixed potential crash in charstring::duplicate(wchar_t)
-	added duplicateFrom(Wide)CharacterNeedsMutex() methods
-	implemented wcharacter/wcharstring/wstringbuffer methods for platforms
-		with wstr.h
-	filedescriptor::printf(const char */const wchar_t *) to stdout/stderr
-		respect locale now
-	added ucs2character/ucs2charstring/ucs2stringbuffer classes
-	added iconvert class
-	removed foreign append()/write() methods from *stringbuffer classes
-	converted unsigned char to byte_t
-	fixed timezone issues on UnixWare/Irix
-	needsMutex -> getNeedsMutex
-	refactored buffer class setPosition*() methods
-	removed *buffer::appendFormatted() methods, preferring printf()
-	moved safePrint() and printBits() to output class
-	added printHex() to output class
-	fixed various longstanding NULL-related bugs in compare*() methods
-	des class inherits from hash instead of encryption now
-	added sys::getMin/Max*() methods
-	replaced all ssize_t parameters with size_t
-	added get/set and advise to many sys methods
-	renamed sys::lock/unlock to disablePaging/enablePaging
-	added get to some directory methods
-	renamed lots of methods to start with action verbs or at least "is"
-	renamed lots of do/dont*() methods to just set*() and added getters
-		for ones that were missing
-	added locale class
-	configure prefers /usr/bin and /usr/sbin for apr-*-config scripts now
-	-Wno-overloaded-virtual is now set when clang or gcc is used
-	sys::getMaxLineLength() returns 2048 instead of SSIZE_MAX if
-		_SC_LINE_MAX is not supported now
-	added various case-insensitive replace() methods
-	added *charstring::findEndOfQuotedString() methods
-	renamed row to record in csvsax and csvdom classes
-	added static filesystem::getOptimumTransferBlockSize()
-	isInSet*() return false now if the set is NULL or empty
-	added support for additional openssl get-key methods
-
-1.4.0 - added wcharacter, wcharstring, and wstringbuffer classes
-	memorymap::getLength() -> getSize()
-	added various *IgnoringCase methods to charstring/wcharstring
-	removed length()/isNullOrEmpty() with const unsigned char * arguments
-	now size="number of bytes" and length="number of characters/elements",
-		updated comments, parameters, and some method names
-	added datetime::getCentury()
-	added datetime::getShortYear()
-	fixed jsondom::write() of non-existent string values
-	fixed datetime::parse() crash when NULL parameters are passed in
-	added commandline::toDictionary()
-	added parameterstring::getDictionary()
-	fixed potential null dereference in jsondom::write()
-	fixed potential null dereference in templateengine::replaceVariable()
-	added error reporting to templateengine class
-	fixed potentially uninitialized optimum block size in sax class
-	optimized domnode::insertNode() for empty, append, and prepend cases
-	added quoted-printable encodings to charstring
-	added lots of row/column manipulation methods to csvdom class
-	tls::setProtocolVersion() supports "v" format: SSLv3, TLSv1.3, etc.
-	applied patch from Igor to fix configure.vbs VC++ version detection
-		for non-US versions
-	added support for reading posted json/xml to httprequest
-	fixed bug that caused jsondom::writeNode() not to print node names
-		when not indenting
-
-1.3.1 - added apache-related items to spec file BuildRequries
-
-1.3.0 - unattended tests
-	added support for escaping single/double-quotes to templateengine
-	migrated in clasess from stencil project
-	added librudiments-apache
-	added \r\n support when parsing CSVs
-	integrated MVC base classes from other projects
-	added inisax/inidom and propsax/propdom classes
-	added cronschedule class
-	added logger start/end methods
-	logger string-write works like printf now
-	logger indent uses uint32_t now
-	removed some unused logger::write() methods
-	added a log level to the logger class
-	process::spawn()'s forked child exits if exec() fails now
-	charstring::replace() methods are null-safe now
-	migrated datetime::parse() and datetime::formatAs() from sqlrelay
-	csvsax accepts empty (or all whitespace) files now
-	logger::write() is null-safe now
-	base64encode is whitespace-safe now
-	added support for 5-part dates and day-month-year 4-part dates
-	added datetime::getWeekOfYear
-	added file::extension
-	added directory::createTemporaryDirectory
-	added directory::removeTree
-	added encryption interface
-	added aes128 encryption
-	added charstring::startsWith/endsWith
-	-Wno-string-plus-int is now included if possible
-
-1.2.2 - fixed another long-standing charstring::httpEscape bug
-	-Wno-deprecated-declarations is now included if possible
-	added configure tests for RB_HALT/AUTOBOOT (enums on solaris 11.4)
-	certificate tests use sha1 if sha256 is unavailable
-	filedescriptor::pvt->_lstnr is initialzed to NULL in clone operation now
-	listener::listen() safely handles non pollin/out events now
-	removed waitForChildren() from shutdown/crash handlers
-	sigsuspend() fails if errno!=EINTR now instead of whether it returns -1
-	filtered out -Wl,-Bsymbolic-functions -Wl,-z,relro from krb5-config
-
-1.2.1 - charstring::isYes includes "on" and charstring::isNo includes "off"
-	tabs are url-encoded correctly now
-	"unsafe" characters are url-encoded now
-	httpEscape uses character::isAlphanumeric now (to improve perforamnce)
-	some file-descriptor-passing tweaks for modern FreeBSD
-	fixed some json parsing bugs
-	updated default_md=sha256 in ca.cnf to generate ca.pem in tests
-	fixed a possible double-free in listener::cleanUp
-
-1.2.0 - spec file tweaks
-	fixed missing [] in bytebuffer = operator
-	fixed json escaping in parse/write
-	added url::getError()
-	added sha256 class
-	sha1, sha256, and md5 use openssl now if available
-	hash::getHash() returns binary data now (for all hashes)
-	added charstring::hexEncode()/hexDecode() to convert it to/from a string
-	added charstring::before/between/after
-	added http user agent to url class
-	added http headers to url class
-	added http post via curl support to url class
-	added remove/clearAnd(Array)Delete methods to container classes
-
-1.1.0 - fixed some dictionary and xmlsax memory leaks
-	fixed lib/lib64 detection in configure script
-	fixed Werror management in configure script
-	fixed race condition in threadmutext test
-	--enable-built-in-regex works on uw7 now
-	added regularexpression match-with-length methods
-	fixed file test on OSR and UnixWare
-	disabled chown in file test on Windows (not reliable over cifs)
-	fixed file descriptor passing on OSR
-	updated xmldomnode::print() to use the output interface
-	added various clearAndDelete...() methods to container classes
-	reenabled chat class by default
-	updated process::backtrace() to take an output, consolidated methods
-	added explicit virtual destructors to input/output classes
-	removed unused containerutilinlines.h header
-	improved dlopen/-ldl configure test
-	abstracted sax and dom classes
-	added csvsax and csvdom classes
-	renamed xmldomnode and xmldomevents to domnode and domevents
-	refactored write/print/xml methods of dom/domnode classes
-	refactored some classes to have trivial constructors
-	renamed regularexpression::compile() to setPattern(), added getPattern()
-	renamed memorypool::deallocate() to memorypool::clear()
-	renamed memorypool::allocateAndClear() to memorypool::allocateAndZero()
-	added clear-with-parameter-reset methods and parameter-getters to
-		dynamicarray, bytebuffer, stringbuffer
-	added cursordomnode class
-	added jsonsax and jsondom classes
-	added some http-post options to url class
-	improved performance of charstring::integerLength(),
-		charstring::parseInteger(), and stringbuffer::append(integer)
-	refactored bytebuffer/stringbuffer to improve performance
-	getStringLength() -> getSize() in read() with terminator
-	added safe-to-include-byteswap.h-after-netinet/in.h configure test
-	updated tls code to actually use RUDIMENTS_SSL_VOID_PTR macro
-	moved various madvise/mprotect/mlock methods to sys class
-	added tests for systems that have, but don't define tzset, ftruncate,
-		and fsync
-	various windows spawn() fixes
-
-1.0.7 - updated threadmutex, filedescriptor, file, signalhandler, signalset,
-		and dynamciclib destructors to be less disatsterous in the
-		event of a double-free
-	added sys::getRudimentsVersion()
-	added empty-string detection to charstring::isInteger()/isNumber()
-	added charstring::toFloatC()
-	wrapped _access_s call with null/empty-string detection
-	added <nonprintablecharacter/> to codetree
-	added various replaceFirst/replaceAll methods to charstring
-	fixed some subtle codetree bugs that could cause parsing of a
-		concatenation to succeed at eof inappropriately
-	updated xmldomevents to support multiple events per xmldomnode
-	moved codetree nonterminal-build to codetreegrammar
-	added nonterminal definition dictionary to codetree
-	added templateengine from stencil
-	added input/output interfaces
-	made filedescriptor an input/output
-	made bytebuffer an output
-	configure.vbs sets versions in vdproj files now
-	added config_vs2017.h and v2015 detection to configure.vbs
-	added keepalive to http urls
-	added # to characters that must be http-escaped
-	fixed debugprint macros to only print if the file could be opened
-
-1.0.6 - fixed url user/password parsing
-	added setValues() methods to dictionary class
-	added --with-windows-version to configure.vbs
-	added definition for va_copy for older Windows
-	added some GSS/TLS ifdefs for older Windows
-	added HCRYPTPROV_OR_NCRYPT_KEY_HANDLE typedef for older Windows
-	added run-as-Admin requirement to Windows installer
-	implemented process::getEffectiveUser/GroupId to just return
-		getUser/GroupId on Windows
-	SSIZE_MAX in the filedescriptor class is more accurate on Windows now
-	filedescriptor limits buffer sizes to SSIZE_MAX
-	fixed GNU strerror_r usage
-	worked around strerror_r bugs in older freebsd
-	fixed clobbering of errno in filedescriptor write/printf
-	prompt class assigns result of ftruncate for platforms where it's
-		declared with attribute warn_unused_result
-
-1.0.5 - added asprintf()/vasprintf() analogs to charstring
-	added #define PSAPI_VERSION 1 to filesystem.cpp so GetMappedFileName
-		will be correctly mapped to K32GetMappedFileName on 32-bit
-		Windows 7 and Server 2008
-	added EAGAIN handling to filedescriptor::safeWrite()
-	added IPC_PRIVATE support to semaphores on windows
-	added configure test for char16_t type
-	added support for separate TLS cert/key files on non-Windows platforms
-	added missing byte-order translation for read/write of signed integers
-	added clearNativeError and setNativeError methods to error class
-	added support for loading certificates/keys from windows cert stores
-		for certs and ca certs to the tls class
-
-1.0.4 - added support for EOT to codetree
-	added loop-avoidance to xmldomevents class
-	added alias support to codetree class
-	replaced readline with libedit
-	included implementation of history_truncate_file for versions of
-		libedit that don't provide it
-	added --disable-wall and --disable-werror configure options
-
-1.0.3 - added --with-fortify configure option
-	prompt::read() no longer prints an extra blank line when hitting return
-		by itself
-	prompt::read() without readline works as expected when hitting ctrl-D
-		now
-	updated spec file a bit
-	file::open() with O_CREAT but no permissions or 0 for permissions
-		fails with EINVAL now
-	file::create() with 0 for permissions fails with EINVAL now
-
-1.0.2 - TLS cipher defaults to PROFILE=SYSTEM for fedora>=21 now
-
-1.0.1 - added -Werror to tests for SSL/TLS*_method to exclude deprecated
-		functions
-	updated TLS code to use functions to EVP_PKEY structs if available,
-		instead of accessing the struct directly
-	updated TLS code to use X509_get_signature_nid if available,
-		instead of accessing the struct directly
-	updated TLS code to use ASN1_STRING_get0_data instead of
-		ASN1_STRING_data if available
-	added chdir before chroot
-	removed redundant mapprot assignment in memorymap
-	fixed errant self-assignment in modemserver
-
-1.0.0 - images directory and contents are installed with the docs now
-	added md5 class
-	moved sendSignal/raiseSignal to process class
-	implemented process::backtrace() for windows
-	added missing charstring::getLastOfSet(OrEnd) methods
-	refactored thread class to match process class paradigm
-	added avltree class
-	updated dictionary to use an avltree
-	update xmldom to use a dictionary for its string cache
-	file::getContents(fd) gets the entire file contents now, even if the
-		current position in the file isn't the beginning
-	fixed detection of whether timed semaphore ops are supported on
-		platforms that just implement semtimedop() to return -1 and set
-		ENOSYS
-	fake certs aren't generated now (in tests) on Windows, if ssl is
-		disabled, or if openssl isn't found
-	added charstring::isYes/isNo
-	fixed high/low-bits calculation bugs in memorymap and sharedmemory
-		for Windows
-	fixed a maxsize bug in memorymap for Windows
-	changed filesystem paradigm to match file paradigm -
-		open/close/getCurrentProperties
-	added O_BINARY to various open()'s in file class
-	fixed threadmutex::wait() return value on Windows
-	fixed timezone offset during DST for systems with the "timezone"
-		external variable
-	filesystem class returns NULL consistently for methods that return
-		const char * but that aren't implemented by the OS
-	sys::getSuggested* return 1024 if they are unsupported by the OS now
-	added dlerror() calls before dlopen/dlsym/dlclose to clear stale errors
-	added fs type-name to fs type-id mapping for systems with statvfs
-	added type-name and type-id for SCO htfs
-	if unsetenv doesn't exist, then environment::remove() checks to see 
-		if the variable exists at all before setting it to an
-		empty string now, to avoid creating it unnecessarily
-	xmldomnode writes out numeric entites like &#200; correctly now
-	fixed groupentry::initialize(NULL) on UnixWare
-	implemented missing unixsocketserver::close()
-	fixed filesystem::open(fd) for Windows 8+
-	fixed file::changeOwner() for Windows 8+
-	initialized timeremaining in snooze::nanosnooze for systems that
-		don't set it at all if the full sleep occurred (eg. arm64 linux)
-	renamed linkedlistutil_* to node_*
-	added commandline::getValue/found that take arg and abbr parameters
-	added supported() methods to sharedmemory/semaphoreset classes
-	renamed supportsXXX() methods to supported()
-	unix sockets are faked on syllable now
-	tweaked dynamicarray::find() to greatly reduce the number of
-		comparisons it does and improve performance significantly
-	various performance tweaks to memorypool
-	updated memory pool to 8-byte-align allocations
-	renamed filedescriptor::get/setTcpRead/WriteBufferSize to
-		filedescriptor::get/setSocketRead/WriteBufferSize
-	fixed *entry::getAliasList() to return NULL under all circumstances if
-		there are no aliases
-	added missing libraries to the library link command
-
-0.57.0 - fixed subtle bug in codegree::compareValue
-	replaced several type-punned pointer dereferences with
-		bytestring::copy() to avoid bus errors on sparc and other
-		platforms that require assignments from aligned locations
-	added filesystem::hostToLittlEndian/littleEndianToHost
-	added missing __LITTLE_ENDIAN definitions to filedescriptor.cpp
-	added minimal process::backtrace() method
-	added missing libraries to library link command
-
-0.56.0 - userentry/groupentry::initialize(NULL) don't load root any more
-	+ is properly http-escaped now
-	directory::getChildByIndex() works correctly on windows now
-	dynamiclib::getError() returns NULL on all platforms when there is no
-		error now (used to return an "ok" string on Windows)
-	userentry/groupentry::getSidString() returns NULL on non-windows
-		platforms when uninitialized or initialized to an invalid
-		group, used to return NULL on Windows and -1 on unix-like
-		platforms
-	fixed configure bug causing getspnam methods not to be detected
-	datetime::addDays works correctly now
-	datetime::getTimeZoneOffset() works correctly on Windows now
-	added sha1 class
-	printBits() correctly takes a const unsigned char * argument now
-	applied Kasyanov Dmitry's patch to fix a subtle bug in TLS/SSL method
-		initialization
-	added destructor to stdiofiledescriptor that prevents file descriptors
-		0, 1 and 2 from being closed when the instance is destroyed
-	added config_vs2015.h for VS2015
-	updated url.cpp to compile with VS2015
-	sys::getMaxLineLength defaults to SSIZE_MAX now
-	groupentry::getMembers() returns NULL instead of an array with a single
-		NULL member if the group has no members on all systems now
-	directory::fpathConf works correctly now
-	renamed directory::canAccessLongFileNames() to
-		directory::canExceedMaxFileNameLength()
-	disabled calls to deprecated readdir_r
-	moved file::createPipe() to filedescriptor class
-	added file::createTemporaryFile() with permissions argument
-	added process::waitForChildToExit()
-	added a missing clear-the-output-buffer in the compiler class
-	fixed a null regularexpression pattern crash
-	reduced default SSIZE_MAX to 16383 for Windows
-
-0.55.0 - file::open sets errno=ENOENT if the file or path wasn't found on
-		Windows now
-	fixed a bug with filedescriptor::printf when printing to non-buffered
-		files on Windows and Solaris 11
-	fixed a bug that caused a crash in codetree if codeposition is NULL
-	added missing dll export clause to codetreegrammar class
-	added xmldomevents class
-	added namespace discrimination in codetree::write
-	fixed a codetree end-of-string-during-concatenation bug
-	fixed a codetree tree reset bug
-	fixed an xmlsax bug that caused text nodes with empty values to be
-		inserted between tag nodes when there is no text between tags
-	added escapechar option to filedescriptor::read-until-terminator
-		methods
-	added a generic securitycontext class and integrated it with
-		filedescriptor
-	implemented GSS/SSPI and TLS/SSL children of securitycontext
-	removed old SSL integration with filedescriptor
-	updated inet/unixsocketclient to close() as the first step of connect()
-	updated charstring::to(Unsigned)Integer-with-endptr methods to have
-		const char **endptr arguments
-	updated configure script to find erlang on openbsd 5.8
-	buffers allocated by vasprintf are free()'ed now rather than deleted
-	fixed a commandline bug that could cause it to return the next
-		parameter for getValue() of a parameter with no value
-	fixed connect()/useBlockingMode error masking bug
-	removed -revision during link and adopted Semantic Versioning 2.0
-	added pthread_create/EAGAIN retry
-	added methods to configure and examine process::fork and thread::run
-		retry behavior
-	thread methods test for invalid thread before operating on it now
-	charstring::split doesn't crash if list or listlength are null now
-	added debugprint header
-	removed problematic thread::cancel() method
-	added thread::runDetached() methods
-	removed useBlockingMode() call in stdio constructor as is caused
-		problems with apps like Apache that actually need stdin/out/err
-		to be in non-blocking mode sometimes
-
-0.54 - tweaked code in configure script to remove -Werror* to be non-greedy
-	updated semaphoreset/sharedmemory destructors to remove the
-		semaphoreset/sharedmemory segment last
-	added url class that uses libcurl (read-only for now)
-	added support for urls to xmlsax (and thus xmldom and codetree)
-	added http support to the url class for platforms that lack an
-		appropriate libcurl
-	charstring 1-argument trim methods trim all whitespace now,
-		not just spaces
-	added charstring::isNullOrEmpty()
-	added read-until-terminator methods with maxbytes option
-	applied George Carrette's listener class patch to not close
-		invalid-epoll filedescriptors
-
-0.53 - exposed codetreegrammar class and updated codetree class so that
-		successive parses/writes can use the same grammar without
-		having to reload it
-	added insert/appendXml(File) methods to xmldomnode to parse and
-		insert/append xml strings or files to a node
-	fixed FILE->fileno detection for solaris 11.2,
-		which doesn't have it at all
-	llabs() is detected and preferred to abs()
-	added partial xml namespace support (namespaces for tags)
-	added partial support for extended ascii character set to character
-		class
-	added setgroups() call before setuid() call to drop extraneous groups
-	updated rudiments-config man page, slightly
-	removed outdated and unused dtd class
-	updated file::resolveSymbolicLink() to use
-		directory::maxPathLength(filename) as a starting point
-	updated directory::getCurrentDirectory() to use
-		MAX_PATH as a starting point
-	serialport/serialportprofile, modemserver/modemclient classes are
-		disabled in the default build now
-	updated intro docs
-
-0.52 - tweaked codetree's recursive break logic a bit
-	added compiler class
-	added case-insensitive methods to xmldomnode
-	added methods to xmldomnode that operate on descendents (as opposed to
-		just operating on direct children)
-	added methods to xmldomnode for deleting, wrapping, unwrapping
-	fixed dynamiclib::getError() bug on windows
-	tweaked -Werror detection in configure script
-	removed rpcentry class
-	added file::setPermissions() methods
-
-0.51 - added missing inline qualifiers to dynamicarray/staticarray method
-		implementations
-	added test for clock_settime, datetime class uses it if other set-time
-		functions aren't available, returns false and sets
-		errno=ENOSYS if no set-time function is available
-	directory::fpathConf now falls back to MAX_PATH code if fpathconf exists
-		but there's dirfd() or anything like it
-	file::createFifo returns false and sets errno=ENOSYS on platforms that
-		don't support fifo's now
-	file::generateKey returns -1 and sets errno=ENOSYS on VMS now
-	file::createHardLink returns -1 and sets errno=ENOSYS on platforms
-		don't support hard links now
-	fixed missing breaks in stdio::flush
-	userentry::getPassword/getRealName return NULL on VMS now
-	unix sockets are faked on VMS now
-	threadmutex is built and installed now whether or not threads are
-		supported, but if threads are not supported, its methods
-		are degenerate and return success
-	filesystem::getCurrentProperties() returns false and sets errno=ENOSYS
-		on VMS now
-	implemented degenerate groupentry for VMS
-	fixed file::getBlockCount() crash that could occur if the filesystem's
-		block size was reported as 0
-	tweaked copy constructors and = operators in staticarray/dynamicarray
-		classes to work with older compilers
-	disabled -Werror for gcc < 2.7
-	filedescriptor::printf uses fprintf or fdopen/vfprintf when possible,
-		in leiu of falling back to charstring::printf
-	charstring::printf tries the null device before falling back to a
-		scratch file
-	the rate at which charstring::printf expands its buffer is now
-		exponential up to 1024 bytes
-	added sys::getDirectorySeparator()
-	fixed trailing-slash-followed-by-quote issue when building windows
-		command lines
-	added --enable-enosys-notify configure option for runtime notifcations
-		when methods set ENOSYS
-	cleared errno before each EINTR loop
-	fixed sys::sync() segfault
-	fixed ssl tests
-	removed intervaltimer class
-	updated sys::getPhysicalPageCount/getAvailablePhysicalPageCount for
-		Windows
-	added sys::getAllocationGranularity, updated code to use it instead
-		of getPageSize, in most cases
-	fixed copy-constructor/=-operator bugs in dynamicarray class
-	added config_vs2013.h for VS 2013
-	fixed several permissions-related issues for WinNT 4
-	allowShortReads/useBlockingMode are set by default for stdinput now
-	added wrapper for atexit()
-	changed process::getRealUser/GroupId to getUser/GroupId to match
-		setUser/Groupid
-	added process::setEffectiveUser/Group methods
-	fixed and documented auto-resume behavior in snooze methods
-	fixed detection of double-dashed command line parameters without
-		values
-	removed redundant charstring::rightPad()
-	renamed charstring::padString() to charstring::pad()
-	added safePrint methods that take unsigned char arguments
-	fixed bytestring::findFirst() with unsigned char needle,
-		when needle is 0
-	fixed bugs in linkedlist::moveBefore/moveAfter
-	fixed bugs in singlylinkedlist::removeAll()
-	removed arg parameter from thread::setFunction(), added
-		thread::setArgument(), and added thread::create(arg)
-	changed thread::create() to thread::run()
-	wrote lots of example code and updated the programming docs
-	removed unused shmfile class
-	fixed several LocalFree's that should have been delete[]'s
-
-0.50 - added dictionary::detach and dictionary::getValue(key)
-	added xmldom::getNullNode()
-	improved xml printing for text nodes
-	signalmanager::waitForSignal(NULL) works as expected now
-	updated charstring::httpEscape not to escape legal symbols
-	added flush() method to stdio classes
-	added detection and support for vsnprintf_s
-	fixed serviceentry, protocolentry and rpcentry on windows
-	updated *entry classes for NULL and uninitialization safety
-	implemented filesystem::initialize(fd) for Windows
-	updated filesystem::initialize() with NULL and -1 to behave in
-		predictable ways now, updated documentation for them too
-	abstracted _get_osfhandle calls and added an invalid parameter callback
-	updated filedescriptor to use bit fields for all of its flags
-	implemented file::changeOwner() for windows
-	removed xattrs stuff
-	removed SSL-related ifdef's from headers and implemented degenerate
-		SSL routines for when SSL isn't supported
-	timezone conversion works on windows now
-	refactored bytebuffer and stringbuffer to be extent-based
-	fixed a subtle stringbuffer with initialcontents bug
-	refactored stringbuffer to use bytebuffer::write/appendFormatted
-		directly instead of charstring::parseNumber
-	implemented dynamicarray and staticarray classes
-	refactored build process to use nmake and be compatible with many
-		different versions of MS Visual Studio
-	updated vsnprintf_s calls for platforms where it's not defined
-	added configure test for bool and true/false and definitions for
-		platforms that don't define them
-	updated timed semaphore waits - if seconds or nanoseconds are negative
-		then the timed wait acts like an un-timed wait
-	added support for getsockopt with size_t optlen parameter
-	fixed strncasecmp on windows when str2 is longer than str1
-	xmlsax uses memorymap on Windows now
-	fixed file::lockFile() and file::unlockFile() on Windows
-	fixed charstring::printf on Solaris 2.5.1
-	fixed datetime::getSystemDateAndTime() for Windows without 64-bit
-		integers
-	fixed potential double-CloseHandle in thread class
-
-0.49 - combined passswdentry and shadowentry classes into userentry class
-	updated file::sync() to use FlushFileBuffers directly
-	implemented sys::sync(), reboot(), halt() and shutdown() for windows
-	implemented various sys::getXXX() methods for windows
-	added "detached" option to process::spawn()
-	crash-related methods in process class catch SIGABRT, SIGFPE, SIGILL,
-		SIGBUS, SIGIOT, SIGEMT and SIGSYS in addition to SIGSEGV now
-	shutdown-related methods in process class catch SIGQUIT and SIGHUP
-		in addition to SIGINT and SIGTERM now
-	on windows, signal classes now support catching, sending/raising
-		SIGABRT, SIGFPE, SIGILL, SIGINT, SIGSEGV and SIGTERM and
-		sending/raising SIGKILL
-	disabled threads outright on OSR5
-	fixed threads detection for solaris 2.6
-	codetree bails properly at end of string now
-	fixed a break-related condition that could cause codetree to loop
-		indefinitely
-	added support for a beginning-of-line character to codetree
-	added support for recursive breaks to codetree
-	made charstring::compareIgnoringCase null-safe for platforms that
-		don't have str(n)casecmp
-	improved Windows support in signal classes
-	-Wno-overloaded-virtual is now set when clang is used
-	fixed some subtle kqueue-related bugs
-	added sys/byteorder.h and htonll/ntohll for solaris 11
-	fixed endian-detection macros for solaris 10 and older
-	added support for SIGLARM and signalmanager::alarm() on windows
-	improved windows implementation of semaphoreset
-	added sys::signalsInterruptSystemCalls()
-	added process::supportsFork()
-
-0.48 - got directory and file permissions working properly on windows
-	added non-static methods to randomnumber
-	added support for random_r, lrand48_r, arc4random and CreateGenRandom
-	fixed connect-with-timeout error when getaddrinfo is disabled
-	updated deployment projects for windows
-	replaced compile-tests with link-tests for kqueue, posix_fadvise,
-		xattr-functions and various mmap-related functions for minix
-		3.3.0 which defines them but doesn't implement them
-	added test for -lmthread for minix
-	ioctl/FIONBIO is disabled for minix now
-	added configurable randomization of hosts for
-		inetsocketclient::connect()
-	refactored listener class to match paradigms established by
-		kqueue, epoll, /dev/poll and poll
-	added support for /dev/poll and port_create()
-	fixed a few configure-related issues under Cygwin
-	renamed the "retrycount" parameter "tries" in the client classes
-
-0.47 - fixed possible null-dereference in xmldomnode::safeAppend
-	added charstring::inSetIgnoringCase
-	xmldomnode::setAttributeValue does nothing when the null node is
-		referenced now
-	fixed a codetree bug that could cause indentation to attempt to go
-		negative when using an unsigned number
-	added a configure test to see if -Wno-format is needed
-	configure tests for mlockall/munlockall attempt link now
-	added sys/types.h before sys/un.h in sys/un.h test for older freebsd
-	implemented stubs for pure virtual methods of client and server classes
-		so instances of them could be created to attach already-open
-		file descriptors to
-	unified usage of select/poll and prefer poll
-	pushed all select/poll-related code into listener class
-	removed problematic and unused useListener-related methods in
-		filedescriptor class
-	epoll is used in place of select/poll for systems that support it
-	kqueue is used in place of select/poll for systems that support it
-	consolidated getpagesize() calls to use sys::getPageSize()
-	added detection and support for __vsnprintf for platforms that have
-		that instead of vsnprintf
-	added cancel and raiseSignal methods to the thread class
-	fixed datetime memory leak
-	added xmldomnode::clone method to clone a node
-	renamed variablebuffer to bytebuffer
-	renamed rawbuffer to bytestring
-	refactored linkedlist
-	added singlylinkedlist class
-	added sort, detach, move and insert methods to linkedlist classes
-	fixed file::open using O_CREAT without O_EXCL on windows
-
-0.46 - updated filedestination::open to take a permissions parameter
-	added deployment projects for windows
-	tweaked make.batch install target to install 32-bit files under
-		C:\Program Files (x86)
-	wrapped waitpid() in process class
-	added #define _WINSOCKAPI_ before windows.h includes to prevent
-		redefintion of winsock defs later
-	fixed O_RDONLY detection on windows in file::openInternal
-	fixed shared memory segment sizing error on windows
-	fixed O_CREAT without O_EXCL bug on windows
-	fixed backwards loaddependencies flag in dynamiclib for windows
-	added file::eightDotThree
-	added charstring::stripSet and updated charstring::strip to return
-		true/false if stripping occurred or not
-	removed stubs for unimplemented classes
-
-0.45 - got the directory class working on windows
-	got the semaphoreset class working on windows
-	implemented passwd/groupentry::getSid and an internal id-name-sid map
-		for windows
-	removed meaningless groupentry::getPassword
-	improved filesystem class implementation for Windows significantly
-	added a test for the memorymap class
-	got the memorymap class implementation working on Windows
-	got the sharedmemory class working on windows
-	added support for microseconds to the datetime class
-	build-tweaks for mingw32
-	added process::spawn that maps more cleanly on windows than fork/exec
-	added thread class
-	added send/receiveSocket methods to filedescriptor class for systems
-		like Windows that distinguish between sockets and other
-		file descriptors
-	improved file class implementation for Windows
-	fixed a bug that caused all connect-with-timeout calls to fail
-	fixed a bug that caused permissions::setFilePermissions to fail on
-		directories
-
-0.44.1 - configure scripts attempts link for various _r functions now to catch
-		cases where they're defined in the headers but not present in
-		the library
-	tweaks for dlopen/dlsym on linux libc5
-	reordered netinet/in.h and netinet/tcp.h includes for linux libc5
-	configure script tweaks for OSR500
-	extern "C" wrapper around sys/times.h for OSR500
-	added xmldomnode::append/insertTag methods
-
-0.44 - fixed inet_aton test to attempt link, not just compile
-	fixed vsnprintf test to work on arm linux
-	filedescriptor::printf now uses vdprintf, if available, if writes are
-		not being buffered, and vasprintf, if available, if writes are
-		being buffered
-	fixed a memory leak in filedescriptor::printf
-	added multiarch detection
-	applied Simon Martin's getenv-related patch to reset errno and allow
-		getenv to return NULL - fixed a situation where an infinte
-		loop could occur if getenv returned NULL and the most recent
-		error from another system call was EINTR
-	added missing print() for const char *'s in linkedlistutils
-	tweaks for OSR505
-	a few xmlsax optimization fixes
-	renamed *Data methods to *Value in linkedlist and dictionary classes
-	removed print methods and unlikely-to-be-used static methods from
-		*entry classes
-	refactored the static convenience methods of the *entry classes
-	refactored xattr code a little to make it smaller
-	removed static methods from filesystem class to make it smaller
-	removed some static methods from file class to make it smaller
-	removed the clientserverfactory class
-	slight refactoring of linkedlist and dictionary classes
-	various process class fixes for Windows
-
-0.43 - added a workaround for platforms that don't support
-		blocking/non-blocking modes for sockets
-	added *printf wrappers to charstring, filedescriptor and stringbuffer
-		classes
-	added test/include for sys/signal.h for platforms that need it
-	added support for uadmin with int vs. char 3rd argument
-	added snooze and retry if fork fails with EAGAIN
-	moved safePrint and printBits methods into the filedescriptor class
-	added a test and handling for fsetxattr with non-const third parameter
-	"hid openssl" by abstracting SSL types and moving includes into .cpp
-		files
-	fixed erroneous end-of-buffer address when creating a variablebufferis
-		with initial contents
-	added option to disable string cache in xmldom class
-	added "data" member to xmldomnode class for attaching app-specific data
-	improved codetree speed
-	fixed a "char" on ARM issue
-	fixed a longstanding issue where variablebuffers could get extended
-		too much sometimes
-	renamed system class to sys to avoid collisions
-	added -Werror to configure-time tests for older systems where g++
-		doesn't return an error for an implicitly defined function
-	removed the rudiments namespace for compatibility with older compilers
-	replaced a bunch of unsigned long and long with [u]int(32|64)_t
-	removed the timezonefile class
-	renamed mutex class to threadmutex to avoid collisions
-	wrapped setsid() function
-	refactored and simplified dictionary and linkedlist classes
-	if thread detection fails it just disables threads now rather than
-		erroring out
-	thread support is displayed in configure summary
-	refactored xmldomnnode::print() methods, added one to write to a	
-		filedescriptor
-	renamed memorypool methods malloc, calloc and free to allocate,
-		allocateAndClear and deallocate to avoid collisions on
-		platforms that define malloc and calloc using macros
-	fixed lots of cases where const char *'s were being deleted
-	renamed *serversocket to *socketserver
-	renamed *clientsocket to *socketclient
-	added 64-bit build support for Windows
-	refactored daemonprocess class and moved its methods into the process
-		class
-
-0.42 - made a "char" array in the charstring classh explicitly "signed char"
-		for arm and similar platforms where "char" is actually
-		"unsigned char"
-	fixed variadic macros in codetree class for MSVC
-	fixed rpm->rpmbuild in installation docs
-
-0.41 - fixed a few bugs in the codetree class and improved its debug
-	added comments to codetree class header
-	added new search paths and default prefix for syllable
-	initialized an uninitialized variable in clientsocket
-	added support for syllable os
-
-0.40 - fixed -pthread annoyance
-	added -Werror to default build
-	fixed various issues revealed by -Werror
-	fixed hostentry::getAddressString() for numbers greater than 127
-	fixed bugs that could lead to a crash when using the hostentry class
-		with NULL hostnames
-	reads that error out with EAGAIN are treated as successful reads of 0
-		bytes now
-	all sockets are manually set to blocking mode after creation now
-	sockets created by accept() are set to the blocking/non-blocking mode
-		of the socket that was accepted on
-	fixed charstring::safeCopy to copy the NULL terminator
-	made charstring::copy NULL-safe
-	refactored windows make.bat script
-	made crypt class salt NULL-safe
-	lots of small tweaks to support linux/libc5-based systems
-
-0.39 - filedescriptor::getPeerAddress returns NULL now for non-inet sockets
-	added charstring::safeCopy methods
-	made regularexpression::getSubstring* methods return const char *'s
-	fixed a bug where xmldomnode::deleteAttribute() on a non-existent
-		attribute name would crash
-	added xmldomnode::getTree and xmldomnode::print methods
-	added codetree class
-	fixed a longstanding memory leak in dictionary::clear()
-
-0.38 - included some contributed updates to chat, charstring and modemclient
-	added several more wrappers to system class
-	refactored configure/make for non-gnu make compatibility
-	upated passFileDescriptor to dynamically allocate the control buffer
-		for OS X 10.7 whos CMSG_LEN ultimately calls a function
-	updated msvc build to create Release code rather than Debug by default
-	added posix analogs (rewind, skip and read) to directory class
-	updated filedescriptor debug so debugging of the buffering can be
-		enabled/disabled
-	integrated patches from Neowiz for:
-		using -g3 if available when --enable-debug is specified
-		testing the result of getaddrinfo for any non-zero result
-			when checking for EINTR, not just EAI_SYSTEM,
-			and also to reset errno between tries
-		clientsocket to use WSAConnect and friends on windows
-		disabling code that uses AF_UNIX sockets outright for windows
-		inetserversocket::listen() to reuse addresses 
-	added process::exitImmediately
-	updated error::getErrorString() to be thread safe when it uses
-		strerror_r or strerror_s internally
-	fixed charstring::isInteger/isNumber to return false when the string
-		passed in is either - or . without any actual number
-	changed longs in snooze class to uint32_t's
-
-0.37 - updated logger to exclude : if header isn't supplied
-	updated logger not to print double-returns after each log message
-	added file::createPipe()
-	fixed net-to-host and host-to-net byte order conversions for 64-bit
-		integers on windows
-	fixed charstring::copy that I'd broken in 0.36
-	fixed missing [] in a delete in filedescriptor::read() with terminator
-		that could cause leaks and corruption
-	fixed a leak in filedescriptor::read() with terminator that could
-		occur when it fell through with an error, timeout or 0-byte
-		read
-	applied Georgiy Kirichenko's fix to the safePoll call in
-		filedescriptor::readFileDescriptor() - swapped true/false
-		arguments so it would wait using POLLIN
-	added xmldomnode::getPosition()
-	fixed display of seconds from datetime::getString()
-	fixed optimum buffer size calculation in xmlsax
-	fixed several dlclose()-related bugs
-
-0.36 - various fixes for SCO and Ultrix
-	renamed some methods to avoid collisions with macros
-	modified methods that take or return internal structures to take or
-		return void pointers instead
-	added charstring::replace methods
-	renamed all .C files to .cpp for windows
-	added msvc project and got most classes building natively on windows
-
-0.35 - added ( to set of chars to capitalize after
-	added methods to control whether semaphoreset operations are retried
-		after they have been interrupted by a signal
-	added charstring::findFirstOrEnd
-	added character::inSet
-
-0.34 - fixed some STATFS/FSTATFS that needed to be CHAR-versions of the calls
-	added test for utime and utime.h
-	utime is used on platforms that don't have utimes
-	updated process class methods to return -1 and set ENOSUPP for
-		process-group related calls on systems that don't have the
-		concept of process-groups
-	added a call to select() instead of poll() for file-descriptor passing
-		for systems that don't support poll()
-	added tests for timespec in various header files
-	added test for dlopen
-	updated configure script not to outright disable classes if the
-		functions they're dependent on aren't found, but rather for
-		the methods to return erros and set errno to ENOSYS
-	added netapi32 on mingw
-	updated vfstab detection to reflect minix/haiku-style rather than just
-		haiku
-	moved non-member variables and methods into daemonprocess class and
-		its private class
-	updated xmldomnode to output xml entities rather than raw characters
-	fixed a bug that caused numeric xml entities greater than 127 to get
-		set to 127
-	updated mutex class to show a consistent interface on all platforms
-	updated configure script to detect pthreads properly on minix
-	cleaned up semaphoreset class
-	lots of mingw32 compatibility fixes
-	wrapped exit() in process class
-
-0.33 - removed configure tests for strlcpy and strlcat
-	added test for pvt->_translatebyteorder to hostToNet/netToHost for
-		64bit numbers
-	made filedescriptor::hostToNet/netToHost public and static, moved
-		translatebyteorder flag test out of them
-	serviceentry and inet*socket classes use
-		filedescriptor::hostToNet/netToHost rather than htonl/htons
-	added charstring::printBits methods
-	xmlsax class uses optimizations even when not using mmap now
-	updated linkedlist class a good bit
-	applied Renat Sabitov's logger patch
-	fixed some bugs where filesystem.C wouldn't compile on platforms where
-		statfs can return some strings
-	haiku port
-	implemented bswap for systems with nothing like it
-	added #ifdef's in configure script for all header files
-	fixed detection of several things on modern openbsd systems
-	added definitions of (u)int(8|16|32|64)_t for systems that don't have
-		them
-	added randomnumber::getSeed() that uses /dev/urandom if available
-	environment class prefers putenv to setenv to work around a memory
-		leak that can occur when using setenv to set an environment
-		variable over and over
-	fixed 2 memory leaks in environment class
-	fixed memrchr and strpbrk tests in configure script
-	fixed a logger dependency on the permissions class in features.mk.in
-	updated environment class to use malloc and free
-	fixed reference-after-free by putenv in environment class
-	applied patches from Renat Sabitov
-	updated signalhandlers to have (void *)(int) signature
-	added charstring::subString without an end parameter
-	applied patch by Claudio Freire
-	changed several %lf's to %Lf's in charstring long double parsers
-	fixed uninitiaized nodename/nodevalue in xmldomnode
-	fixed unterminated buffer after clear in stringbuffer
-	removed "rebuild" target from all Makefiles
-	added charstring::capitalize method
-	made stringbuffer::terminate append a \0 unconditionally
-	made stringbuffer::clear() terminate the buffer at position 0
-	fixed a bug where xmldomnode::getFirstXXX() could crash if there was
-		no first XXX
-	added xmldomnode::moveChild
-	fixed uninitialized _grp in groupentry class
-	regularexpression class uses pcre_free rather than delete to free
-		pcre_extra block now
-	fixed printf %lld's in timezonefile class
-	made several unsigned shorts use uint16_t in charstring class
-	changed integerLength to return uint16_t rather than int
-	added man page to rpm spec file
-
-0.32 - xmlsax does "sequential" and "only-once" hints when reading the file
-	xmlsax/dom classes use optimal read and write buffers now
-	added DESTDIR= to rudiments.pc.in
-	added charstring::httpUnescape
-	fixed a bug in datetime that would cause TZ to remain after doing a
-		timezone conversion if TZ was unset to begin with
-	fixed a bug in regularexpression that could cause a double-free
-
-0.31 - added OSSwapLittleToHost/OSSwapHostToLittle for Mac OS X
-	modified environment::clear() for mac os x
-	regularexpression wasn't setting the match count correctly, fixed that
-	added charstring::subString() method
-	added missing lingerOnClose(), fixed dontLingerOnClose()
-	added base64 encode/decode methods
-	fixed charstring::parseNumber() for unsigned int's
-	added /opt/csw to configure script's search path
-	fixed a memory leak in xmldom::unCacheString()
-
-0.30 - changed commandline::value() to commandline::getValue()
-	fixed a memory leak in dictionary
-	added setHour/Minute/Second/etc. methods to datetime
-	fixed readdir_r vulnerability
-	added support for either "-arg value" or "--arg=value" to commandline
-	added support for break and control characters to chat class
-	added print method to environment class
-	added close-on-exec methods to filedescriptor class
-	added clear method to environment class
-	made all methods in environment class static
-	added wrappers for strspn/strcspn/strpbrk functions to charstring class
-	fixed bug where datetime would set wrong timezone if it is initialized
-		with a combined zone name like PST8PDT
-	added directory::getChildCount()
-	added datetime::validDateTime()
-	xmldom class stores all strings found in the xml file in a stringlist
-		and stores pointers to them in the xmldomnodes to reduce
-		memory usage in xml files that have lots of duplicated strings
-	added configure tests for dirfd/DIR.dd_fd/DIR.d_fd 
-	initialize addrinfo struct pointer to NULL in inetclientsocket.C
-
-0.29 - added check for whether SSL_read/write takes void * or char * parameter
-	added _XOPEN_SOURCE to filedescriptorincludes.h for sys/socket for irix
-	added collapse argument to charstring::split
-	added configure test for -Wall
-	switched lots of:
-			char	a[charstring::length(b)];
-		to:
-			char	*a=new char[charstring::length(b)];
-			...
-			delete[] a;
-		to improve compiler compatibility
-	removed #ifdef __GNUC__ around static variable definitions, I'll add
-		#ifndefs for compilers that don't allow them (like SCO's) if
-		necessary
-	added -D__EXTENSIONS__ to CPPFLAGS
-	added charstring::escape/unescape
-	defaulted zeropadding to 1 rather than 0, I'm not sure if it's a bug
-		in glibc or not, but printf("%0*lld\n",0,(int64_t)0); prints
-		nothing rather than 0, but printf("%0*ld\n",0,(int32_t)0);
-		prints 0.  Using 1 instead of 0 for the number of 0's works
-		in all cases.
-	solaris's strchr/strrchr return const char *,
-		so I made charstring::findFirst/findLast return const char *
-	use snprintf's rather than sprintf's now
-	uses fchmod/fchown rather than chmod/chown now
-	made envelope classes out of all classes
-	added a configure test for ftok that takes a char * argument
-	switched a bunch of AC_TRY_LINK's to AC_TRY_COMPILE's in configure
-		script
-	configure script does less work looking for getpwnam_r and cousins now
-	if pthread libs can't be found, configure also tries just plain -pthread
-	added #ifdefs for individual POSIX_FADV_* and MADV_* macros
-	in configure script, for cygwin, tests for w32api files and functions
-		are omitted
-	configure tests for strtoll/strtoull now
-	configure tests for caddr_t types for all mmap-related functions
-		individually now
-	unsupported memorymap methods return false now rather than not existing
-	added -pthread when compiling as well as linking
-	fixed a time-remaining-related bug in snooze class
-	fixed a bug where the date/time string buffer could easily be overrun
-
-0.28.2 - filedescriptor desctructor removes the read buffer now
-
-0.28.1 - fixed a bug in bufferedWrite()
-
-0.28 - added strtou(l|ll) wrappers to charstring class
-	added append(long|unsigned long|double...) methods to charstring class
-	implemented ignoreParityErrors in serialportprofile class
-	added baud methods to serialportprofile class that take string args
-	xmldom::parseString() works now (properly calls xmlsax::parseString())
-	regularexpression class zero's it's expression during init now to
-		prevent a segfault when it's freed
-	fixed several timezone-related bugs
-	added modem client/server
-	made default parseNumber base 10 instead of 0
-	INSTALL is moved to INSTALL.txt for OS X now
-	added detachBuffer, detachString to variablebuffer, stringbuffer
-	added split to charstring class
-	added shmfile class
-	moved sleep methods into snooze class, changed sleep() to macrosleep()
-	cleaned up xmlsax class a bit
-	fixed problem where xml comments had ! prepended to them
-	added write()/append() methods for all primitive types to
-		variablebuffer/stringbuffer classes
-	added parseNumber()/integerLength() methods for all primitive types to
-		charstring class
-	added variables() to environment class
-	regularexpression::match() fails immediately if string is NULL now
-	#ifdef'ed out OCRNL, ONOCR, ONLRET in serialportprofile for mac os x
-	added process class
-	updated config.guess
-	uses c++ casting operators now
-	fixed a bunch of const-related messes
-	added rudiments namespace
-	retired errorhandler class
-	implemented copy constructors, = operators for many classes
-	charstring class doesn't use strndup or strdup anymore so
-		strings created using malloc aren't freed using delete[]
-	removed errant connect() definitions from inetclientsocket,
-		unixclientsocket
-	added WNOHANG back to waitpid() call in daemonprocess class and made
-		sure the call gets restarted if it's interrupted by a signal
-	added .PHONY makefile flag, removed INSTALL -> INSTALL.txt hack
-	added /usr/sfw to configure scripts search paths
-	added error class
-	added /sw to configure script search paths
-	added -Wno-long-double if system supports it
-	moved inetserversocket::getClientAddress() to
-		filedescriptor::getPeerAddress()
-
-0.27 - added (slightly modified) pkgconfig stuff from Dolphpower's pkgconfig
-		patch
-	fixed comment detection in xmlsax
-	STRIPPROG is set before calling install-sh now
-	made return value of pass/receiveFileDescriptor a bool
-	fixed filedescriptor::safeRead(); when trying to read more bytes than
-		are available, it now returns the number of bytes read rather
-		than 0
-	updated rudiments-config and pkgconfig scripts to include pthreads/ssl
-		libs and cflags
-	added optional ssl support to filedescriptor class and all child classes
-	added optional pcre support
-	re-engineered regular expression class
-	xmlsax class uses mmap if it's available
-	inet/unix client/server sockets inherit from generic socket class now
-	added blocking/non-blocking mode switches to filedescriptor/socket class
-	added support for connect with timeout to socket client classes
-	changed (void *) cast to (const void *) for setsockopt calls
-	added check for (const void *) vs. (const char *) for setsockopt calls
-	added setDelimiter method to parameterstring class
-	added support for cygwin >=1.5.7-1
-	added search for gthreads to configure for SCO
-	added netToHost/hostToNet virtual methods to fildescriptor class,
-		override them in datatransport class to call ntohl/ntohs
-		and htonl/htons, removed a bunch of read/write methods from
-		datatransport
-	added primitve xml path methods
-	added static getLength() method to charstring class
-	added wait() with timeout methods to semaphore class
-	added chown/fchown,unlink,rename,link,symlink,readlink,fsync,fdatasync,
-		utimes,mknod,mkfifo,mkstemp,access,xattr-related function
-		wrappers to the file class
-	added basename/dirname methods and ftok wrapper to file class
-	added a few pathconf wrappers to file class
-	added dup/dup2 wrappers to filedescriptor class
-	added directory class
-	removed static methods that took an "int fd" from file class
-	added device class
-	added intervaltimer class
-	reworked filedescriptor/client/server heirarchy to reduce size of
-		library's data segment
-	added test for crypt.h
-	made charstring/rawbuffer classes NULL-safe
-	added zero method to rawbuffer class
-	no stripping is done at compile, link or install time now
-	added getMonthName/Abbreviation to datetime class
-
-0.26.3 - updated spec file to work on suse 9.0
-	config.mk uses includedir instead of incdir now
-	docs are installed in ${datadir}/doc/rudiments instead of
-		${prefix}/doc/rudiments now
-
-0.26.2 - fixes for Mac OS 10.2 and Fedora Core 1 compatibility
-	timezonefile class build is now independent of datetime
-
-0.26.1 - a couple of build fixes
-	added shadowentry, serviceentry and rpcentry classes and test programs
-	reorganized *entry class code a bit to generate smaller code
-	uses -pipe compilation flag now if possible
-	-fomit-frame-pointer -fno-exceptions are used now, debugging
-		build just uses -fno-exceptions
-	rpc/rpcent.h is included if necessary for getrpcbyxxx_r
-	rpc/rpc.h is included if necessary for getrpcbyxxx_r
-	pthread.h is included for xxxentry classes now no matter what
-	shadowentry is disabled on systems that have no shadow support
-	added filesystem class
-	added test for s_warn, s_inact, s_expire and s_flag in struct spwd and
-		compile in support for them if found in shadowentry class
-	applied Taguchi Takeshi's listener and inetsocketclient patches
-	check for shmat()!=-1 instead of shmat()>-1 in sharedmemory class now
-		as a memory address could actually be larger than 2^31-1 (or
-		2^64-1), appear to be negative and still be valid as long as
-		it's not -1
-	fixed rpm 4.1 doc-install complaints
-	added --enable-debug option to configure, only 1 library is built now
-	fixed xmldomnode::getNextTagSibling()
-	reworked xmldom relationship in dtd class
-	fixed ssize_t safeSelect() -> int safeSelect() declaration
-	updated config.sub, config.guess and ltmain.sh
-	made a bunch of methods return bool instead of int
-	renamed string class charstring to avoid stl collision
-
-0.25 -	doc's mention genericsocket class now
-	configure script figures out rpm build directory better
-	added rudiments-config script
-	Makefile.in's are just Makefile's now
-	read/write methods return ssize_t's now
-	added logger class and logdestination classes
-	implemented totally different client/server class structure
-	renamed lots of methods to just read(),write(),open(),close(),etc.
-	added xmlsax,xmldom,xmldomnode class
-	added errorhandler class
-	made other classes report errors through the errorhandler class
-	added SONAME_VERSION_INFO and WITH_LIBTOOL variables to config.mk (fmw)
-	added the debian directory (fmw)
-	added memorypool class
-	made lots of (char *)'s into (const char *)'s.
-	made lots of methods const methods
-	inlined lots of methods
-	used autoconf/autoheader 2.53
-	made libtool build the default
-	made build process cross-compile-friendly
-	added --with-system-libtool option to configure (fmw)
-	added fileproperties class (wrapper for stat/lstat)
-	added conectiondata class for use with clienttransport children
-	added right/left justify and center methods to text class
-	added --debug-profiling-libs to rudiments-config
-	added stringbuffer class, made errorhandler use it
-	added --enable-small-code and --with-inlines to configure script
-	added -fno-exceptions to default CXXFLAGS
-	added variablebuffer class
-	added dtd class
-	uses reentrant getpw/getgr functions if available
-	uses reentrant gethostbyname/getprotobyname functions if available
-	uses localtime_r function if available
-	uses static instead of dynamically allocated variables now where
-		possible
-	configure defines -DSMALL_CODE=1 so routines can be written one way
-		or the other
-	moved fileproperties class into file class
-	incorporated matthias saou's spec file instead of mine, added devel
-		package to it
-	removed make rpm target and associated cruft
-	removed kdevelop files
-	uses RUDIMENTS_INLINE instead of just INLINE to avoid conflicts
-	added slackware packaged build target
-	added support for gcc-3.2.2
-	added a features.mk file so features could be compiled in/out
-	moved text class stuff into string class
-	removed unnecessary -pedantic from CXXFLAGS
-	added linkedlist/dictionary classes, other classes use them instead of
-		implementing their own lists/dicts
-	added environment class
-	datetime class handles timezones properly now
-	added mutexes to datetime, *entry classes
-	added read/write with timeout methods to filedescriptor/datatransport
-	inetsocketclient uses getaddrinfo_r now if possible
-
-0.24 -	fixed poor linger implementation
-	added options for SO_REUSEADDR
-	added simple/complex port initilization methods to server class
-	added options to server/client class to automatically retry reads that
-		were interrupted by signals
-	spec file takes libdir, incdir, prefix and exec_prefix into account
-	added support for file descriptor passing over unix sockets
-	server/client classes split into genericsocket, serversocket, 
-		clientsocket classes
-	serversocketpool class added which can listen on an 
-		arbitrary number of ports
-	make generates a profiling version of librudiments.a now
-	test programs are statically linked now
-	added create/attach and createOrAttach methods to semaphoreset class
-	semaphoreset correctly cleans up now
-	include files moved to rudiments subdir of incdir
-	in genericsocket class, reads which didn't get all of the data but
-		did not encounter an error keep trying until all the data
-		is read now
-	safeRead handles count>SSIZE_MAX and eof conditions correctly now
-	setuid/setgid were replaced with setreuid/setregid
-	added #include <netinet/in.h> and defined _XPG4_2 around 
-		#include <socket.h> for solaris8
-	tests don't build by default now
-	clientsocket correctly checks for connect() error now
-
-0.23 -	fixed stupidity where semaphoreset destructor was trying to
-		individually delete all of the semaphores in a set rather
-		than just the whole set at once
-
-0.22 -  added support for "make rpm"
-	added lingerOnClose and disconnectClient calls to svr.C test program
-	check for ld -G vs ld -shared
-
-0.21 -	got rid of some compiler warnings
-	made client/server write/read methods use unsigned long/short
-	added strip commands to text class
-	made configure script take --includedir and --exec-prefix into account
-	added return values for disconnectClient(), stopListening() and 
-		closeConnection() methods in client/server classes
-	added linger socket options to server/client classes
-
-0.20 -	changed DYNAMICAR to use ld -G -o instead of g++ -Wl,-G -o, it was
-		putting an undefined main symbol in the library which java
-		doesn't like
-	tries=0 in client class causes the client to loop infinitely now
-	changed daemon class name to daemonprocess to avoid conflict with
-		daemon function in unistd.h
-	made daemonprocess signal handlers pointers and handled them as such;
-		not doing so and using ld -G -o to create the library caused 
-		any program using the daemonprocess class to crash
-	client class reports a "failed to connect" error only after it's tried
-		for the number of times it's supposed to try, not each time
-	added server/client programs to the test suite
-
-0.19 -	added test suite
-	simplified random number scaling code
-	added negative number tests to random number tester
-	changed randomnumber to prefer rand/srand over nrand48/srand48
-		because SCO's RAND_MAX is 2^15-1 but it's nrand48 returns
-		a number between 0 and 2^32-1 which caused scaling errors
-		but it's rand returns a number between 0 and 2^15-1.
-	added a getRandMax method to the randomnumber class
-		
-	
-
-0.18 -	getUnixServerPort() returns NULL now if the unix socket was never
-		opened in server class
-	initialized serverportin in server class
-	initialized serversock in client class
-	made a bunch of methods static 
-	rolled casechange, trim and encoding classes into text class
-	totally changed random number class
-	added setUsername/setGroupname methods to semaphoreset class
-	daemon class handles SIGCLD by waiting on dead child processes 
-		on it's own now
-	changed several method names in the server class
-	some tweaks for microsoft platform compatibility
-	added a permissions class
-	changed some method names in the signalhandler class
-	added documentation to all of the header files
-	added signalset and signalmanager classes
-	changed signalhandler.h/C to signalclasses.h/C
-	added programming examples to documentation
-	added isNumber/isInteger methods to text class, made them both 
-		recognize negative numbers
-	make clean now removes the .pics directories that Konqueror makes
-
-
-0.17.1 - quick-fix: closeServerSocket() doesn't unlink the unix socket anymore
-
-0.17 -  added some new methods to the regularexpression class
-	added datetime class
-
-0.16 -  got rid of some unnecessary strlen()'s
-	fixed some "I wasn't such a good programmer back then" errors
-	removed idiotic readFromXXX(char *buffer) functions which had no
-		length parameters from client/server classes
-	added methods to daemon class so it can run as a given user/group
-
-0.15 -  tweaks for gcc-2.96
-
-0.14 -	added more writeToServer/writeToClient and readFromServer/readFromClient
-		methods for writing/reading non-character data
-	added chdir("/") and umask(0) to detach() method in daemon class
-	closing a unix socket unlinks the associated file now
-	added socket option SO_REUSEADDR to inet sockets in server class
-
-0.13 -	removed redundant -fpic and unnecessary -DPIC
-	added #include <sys/types.h> to regularexpression, sharedmemory and
-		semaphoreset classes
-	allowed c++ to be used instead of forcing g++
-	changed check for integer signal handler type
-	fixed a few memory leaks
-	preliminary CYGWIN support
-	added detach method to daemon class, must be explicitly called for the
-		daemon to detach from the controlling tty.
-
-0.12 -	added Unix Domain support to server and client classes
-	removed the extern "C" { #undef __cplusplus ... #define __cplusplus }
-		stuff, it caused more trouble than it overcame
-	build improvements
-	error messages go to stderr now and include the strerror() of the
-		error number
-	detect signal handler function signature
-	changed signal handler function signature to void handler() from
-		void handler(int) for greater compatibility
-	added randomnumber class
-
-0.11 -	added sharedmemory class
-	removed select from the readfromfileptr routine 
-		(wasn't supposed to be there anyway)
-	made wait() and signal() semaphoreset class members not use SEM_UNDO
-		by default and added waitWithUndo() and signalWithUndo() 
-		members
-
-0.10 -  added select before accept in server class
-
-0.9 -	documentation improvements and fixes
-	added -fpic -fPIC -DPIC to CXXFLAGS
-	added extern "C" and #undef/#define __cplusplus in various places
-	added modes to install scripts
-	fixed the server class to allow connections using INADDR_ANY
-
-0.8 -	build fix: made calls to "test" more compatible
-
-0.7 -	cleaner build
-	client::openConnection now tries to connect to all the addresses that
-		a hostname resolves to before giving up
-	client::openConnection fails gracefully if gethostbyname or
-		getprotobyname fails
-
-0.6 -	removed LDFLAGS from config.mk
-	general Makefile maintenance
-
-0.5 -	documentation installs now
-	detection of union semun at configure time
-	reingineered Makefiles to be frienlier to non-gnu make
-
-0.4 -	more robust build/install/uninstall
-
-0.3 -	configure based install. 
-	Reorganization of includes.
-	make install/uninstall directives.
-	Got rid of RCS.
-
-0.2 -	bug fixes.
-	
-0.1 -	First release.
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
+
+## [Unreleased]
+
+### Added
+- added rng::isCryptographicallySecure(), a new virtual method letting
+  callers ask whether an rng implementation's output is
+  actually fit for cryptographic use - keys, tokens, salts,
+  nonces, session ids; csprng now overrides it, true when
+  backed by openssl, CryptGenRandom, or a successfully opened
+  /dev/urandom, and false when none of those are available and
+  it has fallen back to an internal prng instance instead;
+  previously, on a platform with none of those (such as
+  Solaris 8), csprng was permanently non-functional, since
+  every generate()/generateBytes() call failed, but now it
+  falls back to prng, seeded via prng::getSeed(), and keeps
+  working, just without the cryptographic-security guarantee;
+  csprng::isSupported() now unconditionally returns true,
+  matching the existing bignumber/arc4 precedent, since a
+  fallback implementation is always built in
+- added singledes and tripledes classes, providing raw
+  block-cipher single DES-CBC and 3-key EDE triple-DES-CBC
+  transforms (no key parity checks, and padding is optional
+  via setUsePadding()), for legacy protocols that need a raw
+  DES or 3DES cipher rather than a modern AEAD cipher, such as
+  Oracle's pre-O5LOGON authentication; singledes uses OpenSSL's
+  low-level DES functions when they're available, sidestepping
+  the legacy provider that OpenSSL 3.x requires for single DES
+  through the EVP interface, the same way arc4 does for RC4,
+  and falls back to a bundled implementation otherwise;
+  tripledes uses OpenSSL's 3DES-EDE support when it's
+  available, and the same bundled implementation otherwise
+- added domnode::setValue(value,length) and
+  domnode::setAttributeValue(name,value,length) overloads, and
+  domnode::getValueLength()/getAttributeValueLength(), so a
+  node or attribute value containing an embedded null byte
+  can be stored and retrieved intact instead of being
+  truncated; jsondom, xmldom, csvdom, inidom, and propdom now
+  use the stored length rather than scanning for a null byte
+  when serializing a value, and csvdom builds tree nodes
+  using the length-aware csvsax field()/column() hooks so a
+  parsed field or column value with an embedded null survives
+  into the tree; jsondom escapes an embedded null as a JSON
+  unicode escape; xmldom writes an embedded null through
+  as-is, which XML 1.0 cannot represent, so the resulting
+  document is not well-formed in that case
+- added csvsax::field(value,length,quoted) and
+  csvsax::column(name,length,quoted) overloads, and
+  sax::parseString(string,length), so a field or column
+  value containing an embedded null byte can reach the
+  caller intact instead of being truncated
+- added a bignumber class, providing arbitrary-precision signed
+  integer arithmetic, wrapping OpenSSL's BIGNUM functions
+  when they're built in and usable and falling back to a
+  built-in implementation otherwise
+- added modular arithmetic to bignumber - nonNegativeModulo(),
+  modAdd(), modSub(), modMul(), modPow(), modInverse(), and gcd()
+- added an arc4 class, providing the RC4 stream cipher, using OpenSSL
+  when it's built in and usable and falling back to a built-in
+  implementation otherwise
+- added PCRE2 support, configure now prefers PCRE2, then PCRE1, then
+  POSIX regex
+- added an alloca check to configure for built-in-regex builds on
+  non-GNU compilers
+- added \g<number> and \g<name> backrefs to charstring::replace()
+- added regularexpression::matchNext()
+- added backref expansion (\0-\9, \\) to charstring::replace()
+- added regularexpression::setPattern(pattern,options) for
+  case-insensitive/multiline/dotall
+- added regularexpression::getSubstringIndex(name) and name-taking
+  overloads
+- added regularexpression::match(str,length,offset) resuming
+  mid-subject
+- added sha512, aes192, aes256 classes and
+  encryption::setUsePadding(bool) (SQL Relay #8976)
+- added randomnumber::generateBytes() four overloads
+- added a csrandomnumber class (SQL Relay #9206)
+- added randomnumber's seed-first static generateBytes() overloads
+- added csrandomnumber::scale(), getRandMax(), and static
+  generate()/generate(lower,upper)
+- added an rng base class, renamed randomnumber to prng and
+  csrandomnumber to csprng, added generateBytes() methods to each
+
+### Changed
+- the sharedmemory test now waits for its child process instead of
+  sleeping a second before deleting the key file the child needs,
+  which raced on slow hosts, and it now folds the child's exit
+  status into its own result, which it had been discarding - the
+  suite reported success even when the child's assertion failed
+- prng::getSeed() now mixes microseconds and the pid into the seed
+  when /dev/urandom isn't available, rather than returning the
+  epoch alone, which has one-second resolution and gave two
+  calls in the same second the same seed
+- clarified csprng::isSupported() doc comment - it reports whether a
+  backend is compiled in, not whether one initialized for a
+  given instance
+- website ssi expanded at build time instead of by apache
+- website html files not executable anymore
+- regenerated doc/programming/charstring.html and xmlsax.html, which
+  had gone stale against their .wt sources
+- regenerated five doc/programming pages (dictionary, linkedlist,
+  scalar, singlylinkedlist, table) that wt had been truncating
+  (fixed under #8966)
+- bumped soname librudiments.so.12 to .so.13
+- stopped compiling static archives in the deb build
+- stopped warning about the apache library's undefined symbols in the
+  deb build
+- tls class sets BIO to use lowLevelRead/Write now, when using openssl
+- tls class uses SSL_CTX_set_min/max_proto_version to pin tls version when
+  using openssl, if available
+
+### Removed
+- removed regularexpression::clear() - the destructor does its work
+  now
+- removed the bundled md5 reference implementation from the export
+  list, non-openssl builds
+- removed obsolete AIX "#pragma alloca" from the bundled glibc regex
+  engine, built-in-regex builds
+- removed bundled sha-1/sha-256/aes-128 reference implementations
+  from the export list, non-openssl builds
+- removed bundled regex engine from the export list on built-in-regex
+  builds
+
+### Fixed
+- fixed two bugs in the bytestring fallbacks used on platforms whose
+  libc lacks memmem()/memrchr(): findFirst() never tested the
+  last position the needle could start at, so a needle at the
+  very end of the haystack was never found, and findLast()
+  started one byte past the end of the buffer, reading out of
+  bounds and potentially returning a pointer past the end
+- fixed csprng::isSupported() to actually check for a usable
+  backend - openssl or CryptGenRandom compiled in, or
+  /dev/urandom present and readable - instead of
+  unconditionally returning true, so callers on a host with
+  none of those, such as Solaris 8, get an honest answer
+- fixed sax::getCharacter() to distinguish a real end of input
+  from a literal null byte read from the underlying file,
+  string, or input, so an embedded null byte no longer
+  ends a csvsax parse early
+- fixed segfault in file::getBaseName(filename,ext) when the base
+  name doesn't end in ext, on NULL arguments, or when the base
+  name is entirely the extension
+- fixed double free in regularexpression::clear() on builds without
+  PCRE (POSIX regex or built-in regex)
+- fixed hash::reset() not clearing the hash itself
+- fixed pbkdf2::reset() not clearing the salt
+- fixed md5::getHash() overread when built against an openssl whose
+  MD5_Final() returns int
+- fixed sha1::getError() fallthrough (non-openssl builds) reporting
+  success on error
+- fixed sha256::clear() reporting failure on success, non-openssl
+  builds
+- fixed memory leaks in regularexpression::setPattern() on realloc
+  failure, built-in-regex builds
+- fixed memory leak in regularexpression::setPattern() on a too-big
+  pattern, built-in-regex builds - unlike the leak fixed under
+  #8928, this one needs no failed allocation to reach
+- fixed regularexpression::match(str,length,offset) copying the whole
+  subject before rejecting a bad offset, non-PCRE builds
+- fixed built-in regex build warning, unused locals under -Wall
+  -Werror
+- fixed memory leak in regularexpression::setPattern() on failed
+  compile, built-in-regex builds
+- fixed charstring::replace() empty-match stepping from wrong point
+- fixed charstring::replace() global substitution resume offset
+- fixed regularexpression::getSubstringStart/End() pointer targets on
+  non-PCRE builds
+- fixed regularexpression::getSubstringCount() hiding groups after a
+  non-participating one
+- fixed charstring::replace() replacing only the last capture group
+  instead of the whole match
+- fixed datetime::parse() fractional seconds before an am/pm meridian
+- fixed debian packaging dropping librudiments-apache
+- fixed collection::writeValue()/writeJsonValue() printing pointers
+  with %08x, truncating on LP64
+- fixed FW_FIX_LIBTOOL and chmod of bin/rudiments-config not running
+  via config.status
+- fixed randomnumber::scale() to clamp its result to "upper"
+- fixed codetree::popBreakStack() freeing a scalar-new'd break_t
+  with delete[], corrupting the heap
+- fixed charstring::printf(char *,size_t,const char *,va_list *) to
+  va_copy() a fresh va_list for each vsnprintf() call it makes,
+  rather than reusing the one passed in; on platforms whose
+  vsnprintf() reports truncation by returning -1 instead of the
+  needed size (Solaris, notably), the function retries with
+  ever-larger buffers, and reusing an already-consumed va_list
+  across those retries is undefined behavior - it could hand a
+  %s conversion a stale argument pointer on a later retry,
+  sending it scanning unboundedly for a NUL byte (SQL Relay
+  #10021, #10022)
+
+### Security
+- fixed buffer overflow when unix socket file name is too long
+
+## [2.2.0] - 2026-07-27
+
+### Added
+- added isSupported() to encryption/hash
+- added block cipher modes to encryption and aes128
+- added pbkdf2 class
+- added dh class
+- added date::parse() with adjustshortyears option
+- added hash::getRequiredSaltSize()
+- added dynamiclib::getNextSymbol() (portable RTLD_NEXT/dlvsym symbol
+  wrapper)
+- added dependency info to the debian/ubuntu package control file
+- added Mon (mixed-case month abbreviation) format string to
+  datetime::formatAs()
+- added a README.md for the github mirror at
+  github.com/firstworks-software/rudiments
+
+### Changed
+- made pbkdf2 build against pre-1.0.0 openssl (falls back to sha-1)
+
+### Fixed
+- fixed return value of sha256::append() when not using openssl
+- fixed null-safety in charstring::findFirstIgnoringCase()
+- fixed date::parse() so that NULL datedelimiters enables all delimiters
+- fixed debugprintf macros to use updated methods
+- fixed iconvert crash (iconv_close(-1)) when iconv_open() fails (e.g.
+  native solaris iconv)
+- fixed dh class build on modern LibreSSL (opaque DH struct)
+- fixed statfs-style detection so NetBSD 2.x is not mis-detected as old
+  FreeBSD (filesystem.cpp getTypeName failed to compile)
+- fixed pthread detection on FreeBSD 15 (probe now also link-tests
+  pthread_create, not just pthread_exit)
+
+## [2.1.1]
+
+### Added
+- added test for link.h and added link.h to dynamiclib.cpp
+
+### Changed
+- updated default timeout for curl_multi_timeout
+
+## [2.1.0] - 2025-05-13
+
+### Added
+- added httpresponse/serverapi::writeStatusLine() methods
+- added missing comma after status message when writing mvcresult
+- added wastebasket::write() methods
+- added mvctier::set/getLogger()
+- added domnode::get*ByPath()
+- added /usr/kerberos/bin to search path for krb5-config
+- added some missing #ifdef wrappers to dynamiclib
+- added some missing #if !defined()s to randomnumber
+- added ifdef wrappers around sys/socket.h for platforms that don't have
+  them internally (ultrix)
+- added support for additional undefined socket functions
+- added code to detect degenerate wctype.h
+- added support for linker namespaces to dynamiclib
+- added clearError() to iconv() calls to deal with misbehaving
+  iconv_open() on some platforms
+- added dynamiclib::openInNewNamespace()
+
+### Changed
+- renamed *httprequest::get*IsAllowed to is*Allowed
+- renamed *httprequest::get*WereProvided to were*Provided
+- renamed *serverapi and httpresponse::send* to write*
+- renamed httpresponse::setCookie to writeSetCookie
+- refactored some httpresponse header/stauts methods, added "block"
+  methods that send crlfs
+- replaced httpresponse::writeCrLf() method with writeHeaderTerminator()
+- updated now apachehttpserverapi handles header termination
+- dom paths no longer require indexes
+- logger inherits from output now
+- reordered some inline methods in stringbuffer for older compilers
+- gave *node virtual destructors for older compilers
+- made *node's protected members private
+- made nodecollectionnode not inherit from object
+- disabled iconv() and iswblank() for OSR5
+- disabled non-C locale tests for OSR
+- disabled inode tests for OSR
+- disabled inode tests for OSR5
+- disabled some getHumanReadable() tests for systems that don't support
+  the long long type
+- updated iconvert class to initialize the descriptor to -1 instead of 0
+
+### Removed
+- removed chaining from httpserverapi writeHeader() methods
+- removed -R for OSR5
+
+### Fixed
+- fixed bug that could cause httprequest to crash when being deleted
+- fixed log-standing log level issue
+- added -shared -> -G fix for OSR 5.0.5
+- fixed printing on OSR
+- fixed erroneous wcharacter::upper() calls in
+  charstring::compareIgnoringCase()
+- fixed long long detection for OSR
+
+## [2.0.2] - 2025-01-02
+
+### Added
+- added syslog macros to loggerincludes.h
+
+### Changed
+- moved syslog.h to loggerincludes.h
+
+## [2.0.1] - 2024-12-05
+
+### Added
+- added comma-separated host support to inetsocketclient
+
+### Changed
+- moved entire website into project
+
+## [2.0.0] - 2024-10-04
+
+### Added
+- added object, collection class heirarchy
+- added table class
+- added scalar class
+- implemented degenerate wcharstring for systems that don't support
+  wide characters, and added a supported() method
+- added a posix semaphores implementation of semaphoreset
+- added sensitivevalue class
+- added configure test for Irix
+- added configure test for iswblank() and alternative implementation
+- added configure test for mbrtowc()/mbtowc() and implementations for
+  each
+- added wcharstring::copy(...const char *...) methods
+- added mvcdao class
+- added acfirstworks.m4 and acrudiments.m4 for other projects to use in
+  their configure scripts
+- added NSModule/NSObjectFileImage-based implementation of dynamiclib
+- added file::getMatchingFileNames() methods
+- added (w)charstring compareWithWildcard(), compareVersions(), and
+  compareNatural() methods
+- added comparator class with reverse and natural options, and updated
+  various collections to use its methods instead of
+  node_compare(), also added get/setComparator() methods to
+  collection class
+- added character/charstring::duplicate(wchar_t) methods to convert wide
+  strings to normal strings
+- added wchar_t/wchar_t * methods to a bunch of classes
+- added memory-related methods to sys class
+- added charstring/wcharstring::humanReadable() methods
+- added filedescriptor::supportsPassReceiveFileDescriptor/Socket() and
+  updated it for various systems
+- added a socketlayer class below securitycontext and updated websocket
+  to inherit from that
+- added an int cast to a char array subscript in regex.cpp
+- added some Unixware-specific libtool tweaks
+- implemented copy constructors and = operators for various classes that
+  they were previously hidden in
+- added shutdown flag/signal framework to process class
+- added SIGXCPU, SIGXFSZ and SIGPWR to the "shutdown signals"
+- implemented sys::getAvailable*() for SVR5 (eg. UnixWare)
+- implemented block-aligned buffering, which prefers to use mmap, but
+  can fall back to traditional buffering, for non-stream
+  filedescriptors
+- added mvccrud interface
+- added thread::reliable()
+- added httpModuleInit/httpModuleExit functions
+- added resourcepool class
+- added encryption::getRawData() and getRawDataSize()
+- added peer validation options to url class
+- added getters to url class
+- added duplicateFrom(Wide)CharacterNeedsMutex() methods
+- implemented wcharacter/wcharstring/wstringbuffer methods for platforms
+  with wstr.h
+- added ucs2character/ucs2charstring/ucs2stringbuffer classes
+- added iconvert class
+- added printHex() to output class
+- added sys::getMin/Max*() methods
+- added get/set and advise to many sys methods
+- added get to some directory methods
+- added locale class
+- added various case-insensitive replace() methods
+- added *charstring::findEndOfQuotedString() methods
+- added static filesystem::getOptimumTransferBlockSize()
+- added support for additional openssl get-key methods
+
+### Changed
+- configure test for dirent.h includes sys/types.h too now
+- in bytestring.cpp, NULL is redefined if _G_config.h undef'ed it
+- changed collection paradigm from multiple remove/clearAndDelete...()
+  methods to setManage...Values/Keys() methods and single
+  clear()/remove()
+- cleaned up httpresponse::status()
+- configure script uses -Werror when detecting iov_base now
+- code checks dlclose() for not -1 rather than for 0 now
+- wcharstring class handles platforms that don't support vswprintf()
+- updated call to GNU stderror_r to use the buffer it fills rather than
+  the return value
+- also updated the error class to prefer strerror() to GNU strerror_r()
+  if XSI strerror_r() isn't present, as GNU strerror_r() appears
+  to be flaky
+- dictionarynode renamed dictionarypair
+- updated comparator class to use arithmetic instead of comparisons
+  where possible
+- process::exitOn*() call exitImmediately() now (which is
+  async-signal-safe)
+- methods that retry on EINTR also check process::getShutDownFlag() now
+  and return if it's true
+- refactored environment a bit and added a lengthy explanation for why
+  it has to do all the things that it does
+- renamed isSignaHandlerIntUsed to supportsSignalHandlerParameter
+- refactored write methods of dom class and its children a bit
+- yday->mday in datetime::setDays()
+- filedescriptor::printf() methods return ssize_t now
+- refactored mvcresult a bit
+- httpserverapi and httprequest are inputs now
+- dom and children's write*() methods return the number of bytes written
+  now, instead of just true/false
+- de-consted most things
+- datetime initializes mday, wday, and yday to 1 now, fixing the
+  behavior of various setters
+- normalized datetime getter/setter names
+- codetree writes to an output rather than stringbuffer now
+- refactored crypt as a child of encryption
+- datetime class sets timezone during instantiation now
+- renamed some datetime methods from get*() to initFrom*()
+- renamed some datetime methods from *DateAndTime() to *DateTime()
+- renamed some datetime methods from adjust*() to set*()
+- renamed *entry methods from init() to open()
+- refactored *client and *util methods, removed convenience methods
+- renamed randomnumber::generate*() to generate(), etc.
+- made Filename/FileName consistent to FileName
+- client connect tries defaults to 1 intead of 0 (infinite tries) now
+- character::duplicate() and charstring::duplicate() use ? as the default
+  replacement character now
+- refactored FW_CHECK_HEADERS_AND_LIBS a bit
+- url::useHttpPost/Get() -> url::setUseHttpPost()
+- renamed crypt class to des
+- filedescriptor::printf(const char */const wchar_t *) to stdout/stderr
+  respect locale now
+- converted unsigned char to byte_t
+- needsMutex -> getNeedsMutex
+- refactored buffer class setPosition*() methods
+- moved safePrint() and printBits() to output class
+- des class inherits from hash instead of encryption now
+- replaced all ssize_t parameters with size_t
+- renamed sys::lock/unlock to disablePaging/enablePaging
+- renamed lots of methods to start with action verbs or at least "is"
+- renamed lots of do/dont*() methods to just set*() and added getters
+  for ones that were missing
+- configure prefers /usr/bin and /usr/sbin for apr-*-config scripts now
+- -Wno-overloaded-virtual is now set when clang or gcc is used
+- sys::getMaxLineLength() returns 2048 instead of SSIZE_MAX if
+  _SC_LINE_MAX is not supported now
+- renamed row to record in csvsax and csvdom classes
+- isInSet*() return false now if the set is NULL or empty
+
+### Removed
+- removed namevaluepairs/constnamevaluepairs typedefs
+- removed bounds checking from various operator[] methods
+- removed cursordomnode class
+- removed \b support from codetree
+- removed foreign append()/write() methods from *stringbuffer classes
+- removed *buffer::appendFormatted() methods, preferring printf()
+
+### Fixed
+- various semi-obscure internal fixes to dictionary class
+- fixed epoll_wait() and kevent() timeout detection
+- fixed wprintf() -> swprintf() calls in wcharstring class
+- added fixes for older OpenSSL
+- fixed a few size -> length parameters
+- fixed bugs in dynamicarray::clear()
+- fixed memory leak in avltree clear()
+- fixed some formatting bugs in datetime::formatAs()
+- fixed a Werror-detection bug in the configure script for
+  cross-compilers
+- fixed segfault in charstring::replace()
+- fixed Content-Type in url class when using curl
+- fixed ininitialized mutex in crypt class
+- fixed tm_isdst handling to deal with > 1 and < 0 cases
+- fixed configure test for crypt_r which always reported not found
+- fixed potential crash in charstring::duplicate(wchar_t)
+- fixed timezone issues on UnixWare/Irix
+- fixed various longstanding NULL-related bugs in compare*() methods
+
+## [1.4.0] - 2021-04-28
+
+### Added
+- added wcharacter, wcharstring, and wstringbuffer classes
+- added various *IgnoringCase methods to charstring/wcharstring
+- added datetime::getCentury()
+- added datetime::getShortYear()
+- added commandline::toDictionary()
+- added parameterstring::getDictionary()
+- added error reporting to templateengine class
+- added quoted-printable encodings to charstring
+- added lots of row/column manipulation methods to csvdom class
+- tls::setProtocolVersion() supports "v" format: SSLv3, TLSv1.3, etc.
+- added support for reading posted json/xml to httprequest
+
+### Changed
+- memorymap::getLength() -> getSize()
+- now size="number of bytes" and length="number of characters/elements",
+  updated comments, parameters, and some method names
+- optimized domnode::insertNode() for empty, append, and prepend cases
+
+### Removed
+- removed length()/isNullOrEmpty() with const unsigned char * arguments
+
+### Fixed
+- fixed jsondom::write() of non-existent string values
+- fixed datetime::parse() crash when NULL parameters are passed in
+- fixed potential null dereference in jsondom::write()
+- fixed potential null dereference in templateengine::replaceVariable()
+- fixed potentially uninitialized optimum block size in sax class
+- applied patch from Igor to fix configure.vbs VC++ version detection
+  for non-US versions
+- fixed bug that caused jsondom::writeNode() not to print node names
+  when not indenting
+
+## [1.3.1] - 2020-09-16
+
+### Added
+- added apache-related items to spec file BuildRequries
+
+## [1.3.0] - 2020-08-26
+
+### Added
+- added support for escaping single/double-quotes to templateengine
+- migrated in clasess from stencil project
+- added librudiments-apache
+- added \r\n support when parsing CSVs
+- integrated MVC base classes from other projects
+- added inisax/inidom and propsax/propdom classes
+- added cronschedule class
+- added logger start/end methods
+- added a log level to the logger class
+- migrated datetime::parse() and datetime::formatAs() from sqlrelay
+- added support for 5-part dates and day-month-year 4-part dates
+- added datetime::getWeekOfYear
+- added file::extension
+- added directory::createTemporaryDirectory
+- added directory::removeTree
+- added encryption interface
+- added aes128 encryption
+- added charstring::startsWith/endsWith
+
+### Changed
+- unattended tests
+- logger string-write works like printf now
+- logger indent uses uint32_t now
+- process::spawn()'s forked child exits if exec() fails now
+- charstring::replace() methods are null-safe now
+- csvsax accepts empty (or all whitespace) files now
+- logger::write() is null-safe now
+- base64encode is whitespace-safe now
+- -Wno-string-plus-int is now included if possible
+
+### Removed
+- removed some unused logger::write() methods
+
+## [1.2.2] - 2020-01-06
+
+### Added
+- added configure tests for RB_HALT/AUTOBOOT (enums on solaris 11.4)
+
+### Changed
+- -Wno-deprecated-declarations is now included if possible
+- certificate tests use sha1 if sha256 is unavailable
+- listener::listen() safely handles non pollin/out events now
+- sigsuspend() fails if errno!=EINTR now instead of whether it returns -1
+- filtered out -Wl,-Bsymbolic-functions -Wl,-z,relro from krb5-config
+
+### Removed
+- removed waitForChildren() from shutdown/crash handlers
+
+### Fixed
+- fixed another long-standing charstring::httpEscape bug
+- filedescriptor::pvt->_lstnr is initialzed to NULL in clone operation now
+
+## [1.2.1] - 2019-08-09
+
+### Changed
+- charstring::isYes includes "on" and charstring::isNo includes "off"
+- "unsafe" characters are url-encoded now
+- httpEscape uses character::isAlphanumeric now (to improve perforamnce)
+- some file-descriptor-passing tweaks for modern FreeBSD
+- updated default_md=sha256 in ca.cnf to generate ca.pem in tests
+
+### Fixed
+- tabs are url-encoded correctly now
+- fixed some json parsing bugs
+- fixed a possible double-free in listener::cleanUp
+
+## [1.2.0] - 2019-03-28
+
+### Added
+- added url::getError()
+- added sha256 class
+- added charstring::hexEncode()/hexDecode() to convert it to/from a string
+- added charstring::before/between/after
+- added http user agent to url class
+- added http headers to url class
+- added http post via curl support to url class
+- added remove/clearAnd(Array)Delete methods to container classes
+
+### Changed
+- spec file tweaks
+- sha1, sha256, and md5 use openssl now if available
+- hash::getHash() returns binary data now (for all hashes)
+
+### Fixed
+- fixed missing [] in bytebuffer = operator
+- fixed json escaping in parse/write
+
+## [1.1.0] - 2019-02-12
+
+### Added
+- added regularexpression match-with-length methods
+- added various clearAndDelete...() methods to container classes
+- added explicit virtual destructors to input/output classes
+- added csvsax and csvdom classes
+- added clear-with-parameter-reset methods and parameter-getters to
+  dynamicarray, bytebuffer, stringbuffer
+- added cursordomnode class
+- added jsonsax and jsondom classes
+- added some http-post options to url class
+- added safe-to-include-byteswap.h-after-netinet/in.h configure test
+- added tests for systems that have, but don't define tzset, ftruncate,
+  and fsync
+
+### Changed
+- disabled chown in file test on Windows (not reliable over cifs)
+- updated xmldomnode::print() to use the output interface
+- reenabled chat class by default
+- updated process::backtrace() to take an output, consolidated methods
+- improved dlopen/-ldl configure test
+- abstracted sax and dom classes
+- renamed xmldomnode and xmldomevents to domnode and domevents
+- refactored write/print/xml methods of dom/domnode classes
+- refactored some classes to have trivial constructors
+- renamed regularexpression::compile() to setPattern(), added getPattern()
+- renamed memorypool::deallocate() to memorypool::clear()
+- renamed memorypool::allocateAndClear() to memorypool::allocateAndZero()
+- improved performance of charstring::integerLength(),
+  charstring::parseInteger(), and stringbuffer::append(integer)
+- refactored bytebuffer/stringbuffer to improve performance
+- getStringLength() -> getSize() in read() with terminator
+- updated tls code to actually use RUDIMENTS_SSL_VOID_PTR macro
+- moved various madvise/mprotect/mlock methods to sys class
+
+### Removed
+- removed unused containerutilinlines.h header
+
+### Fixed
+- fixed some dictionary and xmlsax memory leaks
+- fixed lib/lib64 detection in configure script
+- fixed Werror management in configure script
+- fixed race condition in threadmutext test
+- --enable-built-in-regex works on uw7 now
+- fixed file test on OSR and UnixWare
+- fixed file descriptor passing on OSR
+- various windows spawn() fixes
+
+## [1.0.7] - 2018-05-20
+
+### Added
+- added sys::getRudimentsVersion()
+- added empty-string detection to charstring::isInteger()/isNumber()
+- added charstring::toFloatC()
+- added <nonprintablecharacter/> to codetree
+- added various replaceFirst/replaceAll methods to charstring
+- added nonterminal definition dictionary to codetree
+- added templateengine from stencil
+- added input/output interfaces
+- added config_vs2017.h and v2015 detection to configure.vbs
+- added keepalive to http urls
+- added # to characters that must be http-escaped
+
+### Changed
+- updated threadmutex, filedescriptor, file, signalhandler, signalset,
+  and dynamciclib destructors to be less disatsterous in the
+  event of a double-free
+- wrapped _access_s call with null/empty-string detection
+- updated xmldomevents to support multiple events per xmldomnode
+- moved codetree nonterminal-build to codetreegrammar
+- made filedescriptor an input/output
+- made bytebuffer an output
+- configure.vbs sets versions in vdproj files now
+
+### Fixed
+- fixed some subtle codetree bugs that could cause parsing of a
+  concatenation to succeed at eof inappropriately
+- fixed debugprint macros to only print if the file could be opened
+
+## [1.0.6] - 2017-11-07
+
+### Added
+- added setValues() methods to dictionary class
+- added --with-windows-version to configure.vbs
+- added definition for va_copy for older Windows
+- added some GSS/TLS ifdefs for older Windows
+- added HCRYPTPROV_OR_NCRYPT_KEY_HANDLE typedef for older Windows
+- added run-as-Admin requirement to Windows installer
+- implemented process::getEffectiveUser/GroupId to just return
+  getUser/GroupId on Windows
+
+### Changed
+- SSIZE_MAX in the filedescriptor class is more accurate on Windows now
+- filedescriptor limits buffer sizes to SSIZE_MAX
+- prompt class assigns result of ftruncate for platforms where it's
+  declared with attribute warn_unused_result
+
+### Fixed
+- fixed url user/password parsing
+- fixed GNU strerror_r usage
+- worked around strerror_r bugs in older freebsd
+- fixed clobbering of errno in filedescriptor write/printf
+
+## [1.0.5] - 2017-05-31
+
+### Added
+- added asprintf()/vasprintf() analogs to charstring
+- added #define PSAPI_VERSION 1 to filesystem.cpp so GetMappedFileName
+  will be correctly mapped to K32GetMappedFileName on 32-bit
+  Windows 7 and Server 2008
+- added EAGAIN handling to filedescriptor::safeWrite()
+- added IPC_PRIVATE support to semaphores on windows
+- added configure test for char16_t type
+- added support for separate TLS cert/key files on non-Windows platforms
+- added missing byte-order translation for read/write of signed integers
+- added clearNativeError and setNativeError methods to error class
+- added support for loading certificates/keys from windows cert stores
+  for certs and ca certs to the tls class
+
+## [1.0.4] - 2017-02-24
+
+### Added
+- added support for EOT to codetree
+- added loop-avoidance to xmldomevents class
+- added alias support to codetree class
+- added --disable-wall and --disable-werror configure options
+
+### Changed
+- replaced readline with libedit
+- included implementation of history_truncate_file for versions of
+  libedit that don't provide it
+
+## [1.0.3] - 2017-01-23
+
+### Added
+- added --with-fortify configure option
+
+### Changed
+- updated spec file a bit
+- file::open() with O_CREAT but no permissions or 0 for permissions
+  fails with EINVAL now
+- file::create() with 0 for permissions fails with EINVAL now
+
+### Fixed
+- prompt::read() no longer prints an extra blank line when hitting return
+  by itself
+- prompt::read() without readline works as expected when hitting ctrl-D
+  now
+
+## [1.0.2] - 2016-12-26
+
+### Changed
+- TLS cipher defaults to PROFILE=SYSTEM for fedora>=21 now
+
+## [1.0.1] - 2016-12-25
+
+### Added
+- added -Werror to tests for SSL/TLS*_method to exclude deprecated
+  functions
+- added chdir before chroot
+
+### Changed
+- updated TLS code to use functions to EVP_PKEY structs if available,
+  instead of accessing the struct directly
+- updated TLS code to use X509_get_signature_nid if available,
+  instead of accessing the struct directly
+- updated TLS code to use ASN1_STRING_get0_data instead of
+  ASN1_STRING_data if available
+
+### Removed
+- removed redundant mapprot assignment in memorymap
+
+### Fixed
+- fixed errant self-assignment in modemserver
+
+## [1.0.0] - 2016-12-20
+
+### Added
+- added md5 class
+- implemented process::backtrace() for windows
+- added missing charstring::getLastOfSet(OrEnd) methods
+- added avltree class
+- added charstring::isYes/isNo
+- added O_BINARY to various open()'s in file class
+- added dlerror() calls before dlopen/dlsym/dlclose to clear stale errors
+- added fs type-name to fs type-id mapping for systems with statvfs
+- added type-name and type-id for SCO htfs
+- implemented missing unixsocketserver::close()
+- added commandline::getValue/found that take arg and abbr parameters
+- added supported() methods to sharedmemory/semaphoreset classes
+- added missing libraries to the library link command
+
+### Changed
+- images directory and contents are installed with the docs now
+- moved sendSignal/raiseSignal to process class
+- refactored thread class to match process class paradigm
+- updated dictionary to use an avltree
+- update xmldom to use a dictionary for its string cache
+- file::getContents(fd) gets the entire file contents now, even if the
+  current position in the file isn't the beginning
+- fake certs aren't generated now (in tests) on Windows, if ssl is
+  disabled, or if openssl isn't found
+- changed filesystem paradigm to match file paradigm -
+  open/close/getCurrentProperties
+- filesystem class returns NULL consistently for methods that return
+  const char * but that aren't implemented by the OS
+- sys::getSuggested* return 1024 if they are unsupported by the OS now
+- if unsetenv doesn't exist, then environment::remove() checks to see
+  if the variable exists at all before setting it to an
+  empty string now, to avoid creating it unnecessarily
+- renamed linkedlistutil_* to node_*
+- renamed supportsXXX() methods to supported()
+- unix sockets are faked on syllable now
+- tweaked dynamicarray::find() to greatly reduce the number of
+  comparisons it does and improve performance significantly
+- various performance tweaks to memorypool
+- updated memory pool to 8-byte-align allocations
+- renamed filedescriptor::get/setTcpRead/WriteBufferSize to
+  filedescriptor::get/setSocketRead/WriteBufferSize
+
+### Fixed
+- fixed detection of whether timed semaphore ops are supported on
+  platforms that just implement semtimedop() to return -1 and set
+  ENOSYS
+- fixed high/low-bits calculation bugs in memorymap and sharedmemory
+  for Windows
+- fixed a maxsize bug in memorymap for Windows
+- fixed threadmutex::wait() return value on Windows
+- fixed timezone offset during DST for systems with the "timezone"
+  external variable
+- xmldomnode writes out numeric entites like &#200; correctly now
+- fixed groupentry::initialize(NULL) on UnixWare
+- fixed filesystem::open(fd) for Windows 8+
+- fixed file::changeOwner() for Windows 8+
+- initialized timeremaining in snooze::nanosnooze for systems that
+  don't set it at all if the full sleep occurred (eg. arm64 linux)
+- fixed *entry::getAliasList() to return NULL under all circumstances if
+  there are no aliases
+
+## [0.57.0] - 2016-11-14
+
+### Added
+- added filesystem::hostToLittlEndian/littleEndianToHost
+- added missing __LITTLE_ENDIAN definitions to filedescriptor.cpp
+- added minimal process::backtrace() method
+- added missing libraries to library link command
+
+### Changed
+- replaced several type-punned pointer dereferences with
+  bytestring::copy() to avoid bus errors on sparc and other
+  platforms that require assignments from aligned locations
+
+### Fixed
+- fixed subtle bug in codegree::compareValue
+
+## [0.56.0] - 2016-09-21
+
+### Added
+- added sha1 class
+- added destructor to stdiofiledescriptor that prevents file descriptors
+  0, 1 and 2 from being closed when the instance is destroyed
+- added config_vs2015.h for VS2015
+- added file::createTemporaryFile() with permissions argument
+- added process::waitForChildToExit()
+- added a missing clear-the-output-buffer in the compiler class
+
+### Changed
+- userentry/groupentry::initialize(NULL) don't load root any more
+- dynamiclib::getError() returns NULL on all platforms when there is no
+  error now (used to return an "ok" string on Windows)
+- userentry/groupentry::getSidString() returns NULL on non-windows
+  platforms when uninitialized or initialized to an invalid
+  group, used to return NULL on Windows and -1 on unix-like
+  platforms
+- updated url.cpp to compile with VS2015
+- sys::getMaxLineLength defaults to SSIZE_MAX now
+- groupentry::getMembers() returns NULL instead of an array with a single
+  NULL member if the group has no members on all systems now
+- renamed directory::canAccessLongFileNames() to
+  directory::canExceedMaxFileNameLength()
+- disabled calls to deprecated readdir_r
+- moved file::createPipe() to filedescriptor class
+- reduced default SSIZE_MAX to 16383 for Windows
+
+### Fixed
+- + is properly http-escaped now
+- directory::getChildByIndex() works correctly on windows now
+- fixed configure bug causing getspnam methods not to be detected
+- datetime::addDays works correctly now
+- datetime::getTimeZoneOffset() works correctly on Windows now
+- printBits() correctly takes a const unsigned char * argument now
+- applied Kasyanov Dmitry's patch to fix a subtle bug in TLS/SSL method
+  initialization
+- directory::fpathConf works correctly now
+- fixed a null regularexpression pattern crash
+
+## [0.55.0] - 2016-03-31
+
+### Added
+- added missing dll export clause to codetreegrammar class
+- added xmldomevents class
+- added namespace discrimination in codetree::write
+- added escapechar option to filedescriptor::read-until-terminator
+  methods
+- added a generic securitycontext class and integrated it with
+  filedescriptor
+- implemented GSS/SSPI and TLS/SSL children of securitycontext
+- added pthread_create/EAGAIN retry
+- added methods to configure and examine process::fork and thread::run
+  retry behavior
+- added debugprint header
+- added thread::runDetached() methods
+
+### Changed
+- file::open sets errno=ENOENT if the file or path wasn't found on
+  Windows now
+- updated inet/unixsocketclient to close() as the first step of connect()
+- updated charstring::to(Unsigned)Integer-with-endptr methods to have
+  const char **endptr arguments
+- updated configure script to find erlang on openbsd 5.8
+- buffers allocated by vasprintf are free()'ed now rather than deleted
+- thread methods test for invalid thread before operating on it now
+
+### Removed
+- removed old SSL integration with filedescriptor
+- removed -revision during link and adopted Semantic Versioning 2.0
+- removed problematic thread::cancel() method
+- removed useBlockingMode() call in stdio constructor as is caused
+  problems with apps like Apache that actually need stdin/out/err
+  to be in non-blocking mode sometimes
+
+### Fixed
+- fixed a bug with filedescriptor::printf when printing to non-buffered
+  files on Windows and Solaris 11
+- fixed a bug that caused a crash in codetree if codeposition is NULL
+- fixed a codetree end-of-string-during-concatenation bug
+- fixed a codetree tree reset bug
+- fixed an xmlsax bug that caused text nodes with empty values to be
+  inserted between tag nodes when there is no text between tags
+- fixed a commandline bug that could cause it to return the next
+  parameter for getValue() of a parameter with no value
+- fixed connect()/useBlockingMode error masking bug
+- charstring::split doesn't crash if list or listlength are null now
+
+## [0.54] - 2015-10-16
+
+### Added
+- added url class that uses libcurl (read-only for now)
+- added support for urls to xmlsax (and thus xmldom and codetree)
+- added http support to the url class for platforms that lack an
+  appropriate libcurl
+- added charstring::isNullOrEmpty()
+- added read-until-terminator methods with maxbytes option
+
+### Changed
+- tweaked code in configure script to remove -Werror* to be non-greedy
+- updated semaphoreset/sharedmemory destructors to remove the
+  semaphoreset/sharedmemory segment last
+- charstring 1-argument trim methods trim all whitespace now,
+  not just spaces
+
+### Fixed
+- applied George Carrette's listener class patch to not close
+  invalid-epoll filedescriptors
+
+## [0.53] - 2015-09-01
+
+### Added
+- added insert/appendXml(File) methods to xmldomnode to parse and
+  insert/append xml strings or files to a node
+- added partial xml namespace support (namespaces for tags)
+- added partial support for extended ascii character set to character
+  class
+
+### Changed
+- exposed codetreegrammar class and updated codetree class so that
+  successive parses/writes can use the same grammar without
+  having to reload it
+- llabs() is detected and preferred to abs()
+- updated rudiments-config man page, slightly
+- updated file::resolveSymbolicLink() to use
+  directory::maxPathLength(filename) as a starting point
+- updated directory::getCurrentDirectory() to use
+  MAX_PATH as a starting point
+- serialport/serialportprofile, modemserver/modemclient classes are
+  disabled in the default build now
+- updated intro docs
+
+### Removed
+- removed outdated and unused dtd class
+
+### Fixed
+- fixed FILE->fileno detection for solaris 11.2,
+  which doesn't have it at all
+
+### Security
+- added setgroups() call before setuid() call to drop extraneous groups
+
+## [0.52] - 2015-08-07
+
+### Added
+- added compiler class
+- added case-insensitive methods to xmldomnode
+- added methods to xmldomnode that operate on descendents (as opposed to
+  just operating on direct children)
+- added methods to xmldomnode for deleting, wrapping, unwrapping
+- added file::setPermissions() methods
+
+### Changed
+- tweaked codetree's recursive break logic a bit
+- tweaked -Werror detection in configure script
+
+### Removed
+- removed rpcentry class
+
+### Fixed
+- fixed dynamiclib::getError() bug on windows
+
+## [0.51] - 2015-06-21
+
+### Added
+- added missing inline qualifiers to dynamicarray/staticarray method
+  implementations
+- added test for clock_settime, datetime class uses it if other set-time
+  functions aren't available, returns false and sets
+  errno=ENOSYS if no set-time function is available
+- implemented degenerate groupentry for VMS
+- added sys::getDirectorySeparator()
+- added --enable-enosys-notify configure option for runtime notifcations
+  when methods set ENOSYS
+- added sys::getAllocationGranularity, updated code to use it instead
+  of getPageSize, in most cases
+- added config_vs2013.h for VS 2013
+- added wrapper for atexit()
+- added process::setEffectiveUser/Group methods
+- added safePrint methods that take unsigned char arguments
+
+### Changed
+- directory::fpathConf now falls back to MAX_PATH code if fpathconf exists
+  but there's dirfd() or anything like it
+- file::createFifo returns false and sets errno=ENOSYS on platforms that
+  don't support fifo's now
+- file::generateKey returns -1 and sets errno=ENOSYS on VMS now
+- file::createHardLink returns -1 and sets errno=ENOSYS on platforms
+  don't support hard links now
+- userentry::getPassword/getRealName return NULL on VMS now
+- unix sockets are faked on VMS now
+- threadmutex is built and installed now whether or not threads are
+  supported, but if threads are not supported, its methods
+  are degenerate and return success
+- filesystem::getCurrentProperties() returns false and sets errno=ENOSYS
+  on VMS now
+- tweaked copy constructors and = operators in staticarray/dynamicarray
+  classes to work with older compilers
+- disabled -Werror for gcc < 2.7
+- filedescriptor::printf uses fprintf or fdopen/vfprintf when possible,
+  in leiu of falling back to charstring::printf
+- charstring::printf tries the null device before falling back to a
+  scratch file
+- the rate at which charstring::printf expands its buffer is now
+  exponential up to 1024 bytes
+- cleared errno before each EINTR loop
+- updated sys::getPhysicalPageCount/getAvailablePhysicalPageCount for
+  Windows
+- allowShortReads/useBlockingMode are set by default for stdinput now
+- changed process::getRealUser/GroupId to getUser/GroupId to match
+  setUser/Groupid
+- renamed charstring::padString() to charstring::pad()
+- changed thread::create() to thread::run()
+- wrote lots of example code and updated the programming docs
+
+### Removed
+- removed intervaltimer class
+- removed redundant charstring::rightPad()
+- removed arg parameter from thread::setFunction(), added
+  thread::setArgument(), and added thread::create(arg)
+- removed unused shmfile class
+
+### Fixed
+- fixed missing breaks in stdio::flush
+- fixed file::getBlockCount() crash that could occur if the filesystem's
+  block size was reported as 0
+- fixed trailing-slash-followed-by-quote issue when building windows
+  command lines
+- fixed sys::sync() segfault
+- fixed ssl tests
+- fixed copy-constructor/=-operator bugs in dynamicarray class
+- fixed several permissions-related issues for WinNT 4
+- fixed and documented auto-resume behavior in snooze methods
+- fixed detection of double-dashed command line parameters without
+  values
+- fixed bytestring::findFirst() with unsigned char needle,
+  when needle is 0
+- fixed bugs in linkedlist::moveBefore/moveAfter
+- fixed bugs in singlylinkedlist::removeAll()
+- fixed several LocalFree's that should have been delete[]'s
+
+## [0.50] - 2015-04-24
+
+### Added
+- added dictionary::detach and dictionary::getValue(key)
+- added xmldom::getNullNode()
+- added flush() method to stdio classes
+- added detection and support for vsnprintf_s
+- implemented filesystem::initialize(fd) for Windows
+- implemented file::changeOwner() for windows
+- implemented dynamicarray and staticarray classes
+- added configure test for bool and true/false and definitions for
+  platforms that don't define them
+- added support for getsockopt with size_t optlen parameter
+
+### Changed
+- improved xml printing for text nodes
+- updated charstring::httpEscape not to escape legal symbols
+- updated *entry classes for NULL and uninitialization safety
+- updated filesystem::initialize() with NULL and -1 to behave in
+  predictable ways now, updated documentation for them too
+- abstracted _get_osfhandle calls and added an invalid parameter callback
+- updated filedescriptor to use bit fields for all of its flags
+- refactored bytebuffer and stringbuffer to be extent-based
+- refactored stringbuffer to use bytebuffer::write/appendFormatted
+  directly instead of charstring::parseNumber
+- refactored build process to use nmake and be compatible with many
+  different versions of MS Visual Studio
+- updated vsnprintf_s calls for platforms where it's not defined
+- updated timed semaphore waits - if seconds or nanoseconds are negative
+  then the timed wait acts like an un-timed wait
+- xmlsax uses memorymap on Windows now
+
+### Removed
+- removed xattrs stuff
+- removed SSL-related ifdef's from headers and implemented degenerate
+  SSL routines for when SSL isn't supported
+
+### Fixed
+- signalmanager::waitForSignal(NULL) works as expected now
+- fixed serviceentry, protocolentry and rpcentry on windows
+- timezone conversion works on windows now
+- fixed a subtle stringbuffer with initialcontents bug
+- fixed strncasecmp on windows when str2 is longer than str1
+- fixed file::lockFile() and file::unlockFile() on Windows
+- fixed charstring::printf on Solaris 2.5.1
+- fixed datetime::getSystemDateAndTime() for Windows without 64-bit
+  integers
+- fixed potential double-CloseHandle in thread class
+
+## [0.49] - 2014-12-28
+
+### Added
+- implemented sys::sync(), reboot(), halt() and shutdown() for windows
+- implemented various sys::getXXX() methods for windows
+- added "detached" option to process::spawn()
+- on windows, signal classes now support catching, sending/raising
+  SIGABRT, SIGFPE, SIGILL, SIGINT, SIGSEGV and SIGTERM and
+  sending/raising SIGKILL
+- added support for a beginning-of-line character to codetree
+- added support for recursive breaks to codetree
+- added sys/byteorder.h and htonll/ntohll for solaris 11
+- added support for SIGLARM and signalmanager::alarm() on windows
+- added sys::signalsInterruptSystemCalls()
+- added process::supportsFork()
+
+### Changed
+- combined passswdentry and shadowentry classes into userentry class
+- updated file::sync() to use FlushFileBuffers directly
+- crash-related methods in process class catch SIGABRT, SIGFPE, SIGILL,
+  SIGBUS, SIGIOT, SIGEMT and SIGSYS in addition to SIGSEGV now
+- shutdown-related methods in process class catch SIGQUIT and SIGHUP
+  in addition to SIGINT and SIGTERM now
+- disabled threads outright on OSR5
+- made charstring::compareIgnoringCase null-safe for platforms that
+  don't have str(n)casecmp
+- improved Windows support in signal classes
+- -Wno-overloaded-virtual is now set when clang is used
+- improved windows implementation of semaphoreset
+
+### Fixed
+- fixed threads detection for solaris 2.6
+- codetree bails properly at end of string now
+- fixed a break-related condition that could cause codetree to loop
+  indefinitely
+- fixed some subtle kqueue-related bugs
+- fixed endian-detection macros for solaris 10 and older
+
+## [0.48] - 2014-10-11
+
+### Added
+- added non-static methods to randomnumber
+- added support for random_r, lrand48_r, arc4random and CreateGenRandom
+- added test for -lmthread for minix
+- added configurable randomization of hosts for
+  inetsocketclient::connect()
+- added support for /dev/poll and port_create()
+
+### Changed
+- updated deployment projects for windows
+- replaced compile-tests with link-tests for kqueue, posix_fadvise,
+  xattr-functions and various mmap-related functions for minix
+  3.3.0 which defines them but doesn't implement them
+- ioctl/FIONBIO is disabled for minix now
+- refactored listener class to match paradigms established by
+  kqueue, epoll, /dev/poll and poll
+- renamed the "retrycount" parameter "tries" in the client classes
+
+### Fixed
+- got directory and file permissions working properly on windows
+- fixed connect-with-timeout error when getaddrinfo is disabled
+- fixed a few configure-related issues under Cygwin
+
+## [0.47] - 2014-07-15
+
+### Added
+- added charstring::inSetIgnoringCase
+- added a configure test to see if -Wno-format is needed
+- added sys/types.h before sys/un.h in sys/un.h test for older freebsd
+- implemented stubs for pure virtual methods of client and server classes
+  so instances of them could be created to attach already-open
+  file descriptors to
+- added detection and support for __vsnprintf for platforms that have
+  that instead of vsnprintf
+- added cancel and raiseSignal methods to the thread class
+- added xmldomnode::clone method to clone a node
+- added singlylinkedlist class
+- added sort, detach, move and insert methods to linkedlist classes
+
+### Changed
+- xmldomnode::setAttributeValue does nothing when the null node is
+  referenced now
+- configure tests for mlockall/munlockall attempt link now
+- unified usage of select/poll and prefer poll
+- pushed all select/poll-related code into listener class
+- epoll is used in place of select/poll for systems that support it
+- kqueue is used in place of select/poll for systems that support it
+- consolidated getpagesize() calls to use sys::getPageSize()
+- renamed variablebuffer to bytebuffer
+- renamed rawbuffer to bytestring
+- refactored linkedlist
+
+### Removed
+- removed problematic and unused useListener-related methods in
+  filedescriptor class
+
+### Fixed
+- fixed possible null-dereference in xmldomnode::safeAppend
+- fixed a codetree bug that could cause indentation to attempt to go
+  negative when using an unsigned number
+- fixed datetime memory leak
+- fixed file::open using O_CREAT without O_EXCL on windows
+
+## [0.46] - 2014-03-31
+
+### Added
+- added deployment projects for windows
+- wrapped waitpid() in process class
+- added #define _WINSOCKAPI_ before windows.h includes to prevent
+  redefintion of winsock defs later
+- added file::eightDotThree
+- added charstring::stripSet and updated charstring::strip to return
+  true/false if stripping occurred or not
+
+### Changed
+- updated filedestination::open to take a permissions parameter
+- tweaked make.batch install target to install 32-bit files under
+  C:\Program Files (x86)
+
+### Removed
+- removed stubs for unimplemented classes
+
+### Fixed
+- fixed O_RDONLY detection on windows in file::openInternal
+- fixed shared memory segment sizing error on windows
+- fixed O_CREAT without O_EXCL bug on windows
+- fixed backwards loaddependencies flag in dynamiclib for windows
+
+## [0.45] - 2014-01-31
+
+### Added
+- implemented passwd/groupentry::getSid and an internal id-name-sid map
+  for windows
+- added a test for the memorymap class
+- added support for microseconds to the datetime class
+- added process::spawn that maps more cleanly on windows than fork/exec
+- added thread class
+- added send/receiveSocket methods to filedescriptor class for systems
+  like Windows that distinguish between sockets and other
+  file descriptors
+
+### Changed
+- got the directory class working on windows
+- got the semaphoreset class working on windows
+- improved filesystem class implementation for Windows significantly
+- got the memorymap class implementation working on Windows
+- got the sharedmemory class working on windows
+- build-tweaks for mingw32
+- improved file class implementation for Windows
+
+### Removed
+- removed meaningless groupentry::getPassword
+
+### Fixed
+- fixed a bug that caused all connect-with-timeout calls to fail
+- fixed a bug that caused permissions::setFilePermissions to fail on
+  directories
+
+## [0.44.1] - 2013-11-06
+
+### Added
+- added xmldomnode::append/insertTag methods
+
+### Changed
+- configure scripts attempts link for various _r functions now to catch
+  cases where they're defined in the headers but not present in
+  the library
+- tweaks for dlopen/dlsym on linux libc5
+- reordered netinet/in.h and netinet/tcp.h includes for linux libc5
+- configure script tweaks for OSR500
+- extern "C" wrapper around sys/times.h for OSR500
+
+## [0.44] - 2013-10-31
+
+### Added
+- added multiarch detection
+- added missing print() for const char *'s in linkedlistutils
+
+### Changed
+- filedescriptor::printf now uses vdprintf, if available, if writes are
+  not being buffered, and vasprintf, if available, if writes are
+  being buffered
+- tweaks for OSR505
+- renamed *Data methods to *Value in linkedlist and dictionary classes
+- refactored the static convenience methods of the *entry classes
+- refactored xattr code a little to make it smaller
+- slight refactoring of linkedlist and dictionary classes
+
+### Removed
+- removed print methods and unlikely-to-be-used static methods from
+  *entry classes
+- removed static methods from filesystem class to make it smaller
+- removed some static methods from file class to make it smaller
+- removed the clientserverfactory class
+
+### Fixed
+- fixed inet_aton test to attempt link, not just compile
+- fixed vsnprintf test to work on arm linux
+- fixed a memory leak in filedescriptor::printf
+- applied Simon Martin's getenv-related patch to reset errno and allow
+  getenv to return NULL - fixed a situation where an infinte
+  loop could occur if getenv returned NULL and the most recent
+  error from another system call was EINTR
+- a few xmlsax optimization fixes
+- various process class fixes for Windows
+
+## [0.43] - 2013-09-26
+
+### Added
+- added a workaround for platforms that don't support
+  blocking/non-blocking modes for sockets
+- added *printf wrappers to charstring, filedescriptor and stringbuffer
+  classes
+- added test/include for sys/signal.h for platforms that need it
+- added support for uadmin with int vs. char 3rd argument
+- added snooze and retry if fork fails with EAGAIN
+- added a test and handling for fsetxattr with non-const third parameter
+- added option to disable string cache in xmldom class
+- added "data" member to xmldomnode class for attaching app-specific data
+- added -Werror to configure-time tests for older systems where g++
+  doesn't return an error for an implicitly defined function
+- wrapped setsid() function
+- added 64-bit build support for Windows
+
+### Changed
+- moved safePrint and printBits methods into the filedescriptor class
+- "hid openssl" by abstracting SSL types and moving includes into .cpp
+  files
+- improved codetree speed
+- renamed system class to sys to avoid collisions
+- replaced a bunch of unsigned long and long with [u]int(32|64)_t
+- renamed mutex class to threadmutex to avoid collisions
+- refactored and simplified dictionary and linkedlist classes
+- if thread detection fails it just disables threads now rather than
+  erroring out
+- thread support is displayed in configure summary
+- refactored xmldomnnode::print() methods, added one to write to a
+  filedescriptor
+- renamed memorypool methods malloc, calloc and free to allocate,
+  allocateAndClear and deallocate to avoid collisions on
+  platforms that define malloc and calloc using macros
+- renamed *serversocket to *socketserver
+- renamed *clientsocket to *socketclient
+- refactored daemonprocess class and moved its methods into the process
+  class
+
+### Removed
+- removed the rudiments namespace for compatibility with older compilers
+- removed the timezonefile class
+
+### Fixed
+- fixed erroneous end-of-buffer address when creating a variablebufferis
+  with initial contents
+- fixed a "char" on ARM issue
+- fixed a longstanding issue where variablebuffers could get extended
+  too much sometimes
+- fixed lots of cases where const char *'s were being deleted
+
+## [0.42] - 2013-08-05
+
+### Changed
+- made a "char" array in the charstring classh explicitly "signed char"
+  for arm and similar platforms where "char" is actually
+  "unsigned char"
+
+### Fixed
+- fixed variadic macros in codetree class for MSVC
+- fixed rpm->rpmbuild in installation docs
+
+## [0.41] - 2013-02-22
+
+### Added
+- added comments to codetree class header
+- added new search paths and default prefix for syllable
+- added support for syllable os
+
+### Fixed
+- fixed a few bugs in the codetree class and improved its debug
+- initialized an uninitialized variable in clientsocket
+
+## [0.40] - 2013-01-01
+
+### Added
+- added -Werror to default build
+
+### Changed
+- reads that error out with EAGAIN are treated as successful reads of 0
+  bytes now
+- all sockets are manually set to blocking mode after creation now
+- sockets created by accept() are set to the blocking/non-blocking mode
+  of the socket that was accepted on
+- made charstring::copy NULL-safe
+- refactored windows make.bat script
+- made crypt class salt NULL-safe
+- lots of small tweaks to support linux/libc5-based systems
+
+### Fixed
+- fixed -pthread annoyance
+- fixed various issues revealed by -Werror
+- fixed hostentry::getAddressString() for numbers greater than 127
+- fixed bugs that could lead to a crash when using the hostentry class
+  with NULL hostnames
+- fixed charstring::safeCopy to copy the NULL terminator
+
+## [0.39] - 2012-12-08
+
+### Added
+- added charstring::safeCopy methods
+- added xmldomnode::getTree and xmldomnode::print methods
+- added codetree class
+
+### Changed
+- filedescriptor::getPeerAddress returns NULL now for non-inet sockets
+- made regularexpression::getSubstring* methods return const char *'s
+
+### Fixed
+- fixed a bug where xmldomnode::deleteAttribute() on a non-existent
+  attribute name would crash
+- fixed a longstanding memory leak in dictionary::clear()
+
+## [0.38] - 2012-11-01
+
+### Added
+- added several more wrappers to system class
+- added posix analogs (rewind, skip and read) to directory class
+- added process::exitImmediately
+
+### Changed
+- included some contributed updates to chat, charstring and modemclient
+- refactored configure/make for non-gnu make compatibility
+- upated passFileDescriptor to dynamically allocate the control buffer
+  for OS X 10.7 whos CMSG_LEN ultimately calls a function
+- updated msvc build to create Release code rather than Debug by default
+- updated filedescriptor debug so debugging of the buffering can be
+  enabled/disabled
+- integrated patches from Neowiz for:
+  using -g3 if available when --enable-debug is specified
+  testing the result of getaddrinfo for any non-zero result
+    when checking for EINTR, not just EAI_SYSTEM,
+    and also to reset errno between tries
+  clientsocket to use WSAConnect and friends on windows
+  disabling code that uses AF_UNIX sockets outright for windows
+  inetserversocket::listen() to reuse addresses
+- updated error::getErrorString() to be thread safe when it uses
+  strerror_r or strerror_s internally
+- changed longs in snooze class to uint32_t's
+
+### Fixed
+- fixed charstring::isInteger/isNumber to return false when the string
+  passed in is either - or . without any actual number
+
+## [0.37] - 2012-08-15
+
+### Added
+- added file::createPipe()
+- added xmldomnode::getPosition()
+
+### Changed
+- updated logger to exclude : if header isn't supplied
+- updated logger not to print double-returns after each log message
+
+### Fixed
+- fixed net-to-host and host-to-net byte order conversions for 64-bit
+  integers on windows
+- fixed charstring::copy that I'd broken in 0.36
+- fixed missing [] in a delete in filedescriptor::read() with terminator
+  that could cause leaks and corruption
+- fixed a leak in filedescriptor::read() with terminator that could
+  occur when it fell through with an error, timeout or 0-byte
+  read
+- applied Georgiy Kirichenko's fix to the safePoll call in
+  filedescriptor::readFileDescriptor() - swapped true/false
+  arguments so it would wait using POLLIN
+- fixed display of seconds from datetime::getString()
+- fixed optimum buffer size calculation in xmlsax
+- fixed several dlclose()-related bugs
+
+## [0.36] - 2012-04-10
+
+### Added
+- added charstring::replace methods
+- added msvc project and got most classes building natively on windows
+
+### Changed
+- renamed some methods to avoid collisions with macros
+- modified methods that take or return internal structures to take or
+  return void pointers instead
+- renamed all .C files to .cpp for windows
+
+### Fixed
+- various fixes for SCO and Ultrix
+
+## [0.35] - 2012-01-18
+
+### Added
+- added ( to set of chars to capitalize after
+- added methods to control whether semaphoreset operations are retried
+  after they have been interrupted by a signal
+- added charstring::findFirstOrEnd
+- added character::inSet
+
+## [0.34] - 2011-09-21
+
+### Added
+- added test for utime and utime.h
+- added a call to select() instead of poll() for file-descriptor passing
+  for systems that don't support poll()
+- added tests for timespec in various header files
+- added test for dlopen
+- added netapi32 on mingw
+- wrapped exit() in process class
+
+### Changed
+- utime is used on platforms that don't have utimes
+- updated process class methods to return -1 and set ENOSUPP for
+  process-group related calls on systems that don't have the
+  concept of process-groups
+- updated configure script not to outright disable classes if the
+  functions they're dependent on aren't found, but rather for
+  the methods to return erros and set errno to ENOSYS
+- updated vfstab detection to reflect minix/haiku-style rather than just
+  haiku
+- moved non-member variables and methods into daemonprocess class and
+  its private class
+- updated xmldomnode to output xml entities rather than raw characters
+- updated mutex class to show a consistent interface on all platforms
+- updated configure script to detect pthreads properly on minix
+- cleaned up semaphoreset class
+
+### Fixed
+- fixed some STATFS/FSTATFS that needed to be CHAR-versions of the calls
+- fixed a bug that caused numeric xml entities greater than 127 to get
+  set to 127
+- lots of mingw32 compatibility fixes
+
+## [0.33] - 2011-06-30
+
+### Added
+- added test for pvt->_translatebyteorder to hostToNet/netToHost for
+  64bit numbers
+- added charstring::printBits methods
+- haiku port
+- implemented bswap for systems with nothing like it
+- added #ifdef's in configure script for all header files
+- added definitions of (u)int(8|16|32|64)_t for systems that don't have
+  them
+- added randomnumber::getSeed() that uses /dev/urandom if available
+- added charstring::subString without an end parameter
+- added charstring::capitalize method
+- added xmldomnode::moveChild
+- added man page to rpm spec file
+
+### Changed
+- made filedescriptor::hostToNet/netToHost public and static, moved
+  translatebyteorder flag test out of them
+- serviceentry and inet*socket classes use
+  filedescriptor::hostToNet/netToHost rather than htonl/htons
+- xmlsax class uses optimizations even when not using mmap now
+- updated linkedlist class a good bit
+- applied Renat Sabitov's logger patch
+- updated environment class to use malloc and free
+- applied patches from Renat Sabitov
+- updated signalhandlers to have (void *)(int) signature
+- applied patch by Claudio Freire
+- changed several %lf's to %Lf's in charstring long double parsers
+- made stringbuffer::terminate append a \0 unconditionally
+- made stringbuffer::clear() terminate the buffer at position 0
+- regularexpression class uses pcre_free rather than delete to free
+  pcre_extra block now
+- made several unsigned shorts use uint16_t in charstring class
+- changed integerLength to return uint16_t rather than int
+
+### Removed
+- removed configure tests for strlcpy and strlcat
+- removed "rebuild" target from all Makefiles
+
+### Fixed
+- fixed some bugs where filesystem.C wouldn't compile on platforms where
+  statfs can return some strings
+- fixed detection of several things on modern openbsd systems
+- environment class prefers putenv to setenv to work around a memory
+  leak that can occur when using setenv to set an environment
+  variable over and over
+- fixed 2 memory leaks in environment class
+- fixed memrchr and strpbrk tests in configure script
+- fixed a logger dependency on the permissions class in features.mk.in
+- fixed reference-after-free by putenv in environment class
+- fixed uninitiaized nodename/nodevalue in xmldomnode
+- fixed unterminated buffer after clear in stringbuffer
+- fixed a bug where xmldomnode::getFirstXXX() could crash if there was
+  no first XXX
+- fixed uninitialized _grp in groupentry class
+- fixed printf %lld's in timezonefile class
+
+## [0.32] - 2009-01-08
+
+### Added
+- added DESTDIR= to rudiments.pc.in
+- added charstring::httpUnescape
+
+### Changed
+- xmlsax does "sequential" and "only-once" hints when reading the file
+- xmlsax/dom classes use optimal read and write buffers now
+
+### Fixed
+- fixed a bug in datetime that would cause TZ to remain after doing a
+  timezone conversion if TZ was unset to begin with
+- fixed a bug in regularexpression that could cause a double-free
+
+## [0.31] - 2007-08-03
+
+### Added
+- added OSSwapLittleToHost/OSSwapHostToLittle for Mac OS X
+- added charstring::subString() method
+- added missing lingerOnClose(), fixed dontLingerOnClose()
+- added base64 encode/decode methods
+- added /opt/csw to configure script's search path
+
+### Changed
+- modified environment::clear() for mac os x
+
+### Fixed
+- regularexpression wasn't setting the match count correctly, fixed that
+- fixed charstring::parseNumber() for unsigned int's
+- fixed a memory leak in xmldom::unCacheString()
+
+## [0.30] - 2006-11-03
+
+### Added
+- added setHour/Minute/Second/etc. methods to datetime
+- added support for either "-arg value" or "--arg=value" to commandline
+- added support for break and control characters to chat class
+- added print method to environment class
+- added close-on-exec methods to filedescriptor class
+- added clear method to environment class
+- added wrappers for strspn/strcspn/strpbrk functions to charstring class
+- added directory::getChildCount()
+- added datetime::validDateTime()
+- added configure tests for dirfd/DIR.dd_fd/DIR.d_fd
+
+### Changed
+- changed commandline::value() to commandline::getValue()
+- made all methods in environment class static
+- xmldom class stores all strings found in the xml file in a stringlist
+  and stores pointers to them in the xmldomnodes to reduce
+  memory usage in xml files that have lots of duplicated strings
+- initialize addrinfo struct pointer to NULL in inetclientsocket.C
+
+### Fixed
+- fixed a memory leak in dictionary
+- fixed bug where datetime would set wrong timezone if it is initialized
+  with a combined zone name like PST8PDT
+
+### Security
+- fixed readdir_r vulnerability
+
+## [0.29] - 2006-02-07
+
+### Added
+- added check for whether SSL_read/write takes void * or char * parameter
+- added _XOPEN_SOURCE to filedescriptorincludes.h for sys/socket for irix
+- added collapse argument to charstring::split
+- added configure test for -Wall
+- added -D__EXTENSIONS__ to CPPFLAGS
+- added charstring::escape/unescape
+- added a configure test for ftok that takes a char * argument
+- added #ifdefs for individual POSIX_FADV_* and MADV_* macros
+- added -pthread when compiling as well as linking
+
+### Changed
+- switched lots of:
+    char	a[charstring::length(b)];
+  to:
+    char	*a=new char[charstring::length(b)];
+    ...
+    delete[] a;
+  to improve compiler compatibility
+- defaulted zeropadding to 1 rather than 0, I'm not sure if it's a bug
+  in glibc or not, but printf("%0*lld\n",0,(int64_t)0); prints
+  nothing rather than 0, but printf("%0*ld\n",0,(int32_t)0);
+  prints 0.  Using 1 instead of 0 for the number of 0's works
+  in all cases.
+- solaris's strchr/strrchr return const char *,
+  so I made charstring::findFirst/findLast return const char *
+- use snprintf's rather than sprintf's now
+- uses fchmod/fchown rather than chmod/chown now
+- made envelope classes out of all classes
+- switched a bunch of AC_TRY_LINK's to AC_TRY_COMPILE's in configure
+  script
+- configure script does less work looking for getpwnam_r and cousins now
+- if pthread libs can't be found, configure also tries just plain -pthread
+- in configure script, for cygwin, tests for w32api files and functions
+  are omitted
+- configure tests for strtoll/strtoull now
+- configure tests for caddr_t types for all mmap-related functions
+  individually now
+- unsupported memorymap methods return false now rather than not existing
+
+### Removed
+- removed #ifdef __GNUC__ around static variable definitions, I'll add
+  #ifndefs for compilers that don't allow them (like SCO's) if
+  necessary
+
+### Fixed
+- fixed a time-remaining-related bug in snooze class
+
+### Security
+- fixed a bug where the date/time string buffer could easily be overrun
+
+## [0.28.2] - 2005-04-22
+
+### Changed
+- filedescriptor desctructor removes the read buffer now
+
+## [0.28.1] - 2005-04-06
+
+### Fixed
+- fixed a bug in bufferedWrite()
+
+## [0.28] - 2005-03-28
+
+### Added
+- added strtou(l|ll) wrappers to charstring class
+- added append(long|unsigned long|double...) methods to charstring class
+- implemented ignoreParityErrors in serialportprofile class
+- added baud methods to serialportprofile class that take string args
+- added modem client/server
+- added detachBuffer, detachString to variablebuffer, stringbuffer
+- added split to charstring class
+- added shmfile class
+- added write()/append() methods for all primitive types to
+  variablebuffer/stringbuffer classes
+- added parseNumber()/integerLength() methods for all primitive types to
+  charstring class
+- added variables() to environment class
+- added process class
+- added rudiments namespace
+- implemented copy constructors, = operators for many classes
+- added WNOHANG back to waitpid() call in daemonprocess class and made
+  sure the call gets restarted if it's interrupted by a signal
+- added .PHONY makefile flag, removed INSTALL -> INSTALL.txt hack
+- added /usr/sfw to configure scripts search paths
+- added error class
+- added /sw to configure script search paths
+- added -Wno-long-double if system supports it
+
+### Changed
+- made default parseNumber base 10 instead of 0
+- INSTALL is moved to INSTALL.txt for OS X now
+- moved sleep methods into snooze class, changed sleep() to macrosleep()
+- cleaned up xmlsax class a bit
+- regularexpression::match() fails immediately if string is NULL now
+- #ifdef'ed out OCRNL, ONOCR, ONLRET in serialportprofile for mac os x
+- updated config.guess
+- uses c++ casting operators now
+- moved inetserversocket::getClientAddress() to
+  filedescriptor::getPeerAddress()
+
+### Removed
+- retired errorhandler class
+- removed errant connect() definitions from inetclientsocket,
+  unixclientsocket
+
+### Fixed
+- xmldom::parseString() works now (properly calls xmlsax::parseString())
+- regularexpression class zero's it's expression during init now to
+  prevent a segfault when it's freed
+- fixed several timezone-related bugs
+- fixed problem where xml comments had ! prepended to them
+- fixed a bunch of const-related messes
+- charstring class doesn't use strndup or strdup anymore so
+  strings created using malloc aren't freed using delete[]
+
+## [0.27] - 2004-08-10
+
+### Added
+- added (slightly modified) pkgconfig stuff from Dolphpower's pkgconfig
+  patch
+- added optional ssl support to filedescriptor class and all child classes
+- added optional pcre support
+- added blocking/non-blocking mode switches to filedescriptor/socket class
+- added support for connect with timeout to socket client classes
+- added check for (const void *) vs. (const char *) for setsockopt calls
+- added setDelimiter method to parameterstring class
+- added support for cygwin >=1.5.7-1
+- added search for gthreads to configure for SCO
+- added netToHost/hostToNet virtual methods to fildescriptor class,
+  override them in datatransport class to call ntohl/ntohs
+  and htonl/htons, removed a bunch of read/write methods from
+  datatransport
+- added primitve xml path methods
+- added static getLength() method to charstring class
+- added wait() with timeout methods to semaphore class
+- added chown/fchown,unlink,rename,link,symlink,readlink,fsync,fdatasync,
+  utimes,mknod,mkfifo,mkstemp,access,xattr-related function
+  wrappers to the file class
+- added basename/dirname methods and ftok wrapper to file class
+- added a few pathconf wrappers to file class
+- added dup/dup2 wrappers to filedescriptor class
+- added directory class
+- added device class
+- added intervaltimer class
+- added test for crypt.h
+- added zero method to rawbuffer class
+- added getMonthName/Abbreviation to datetime class
+
+### Changed
+- STRIPPROG is set before calling install-sh now
+- made return value of pass/receiveFileDescriptor a bool
+- updated rudiments-config and pkgconfig scripts to include pthreads/ssl
+  libs and cflags
+- re-engineered regular expression class
+- xmlsax class uses mmap if it's available
+- inet/unix client/server sockets inherit from generic socket class now
+- changed (void *) cast to (const void *) for setsockopt calls
+- reworked filedescriptor/client/server heirarchy to reduce size of
+  library's data segment
+- made charstring/rawbuffer classes NULL-safe
+- no stripping is done at compile, link or install time now
+
+### Removed
+- removed static methods that took an "int fd" from file class
+
+### Fixed
+- fixed comment detection in xmlsax
+- fixed filedescriptor::safeRead(); when trying to read more bytes than
+  are available, it now returns the number of bytes read rather
+  than 0
+
+## [0.26.3] - 2003-12-31
+
+### Changed
+- updated spec file to work on suse 9.0
+- config.mk uses includedir instead of incdir now
+- docs are installed in ${datadir}/doc/rudiments instead of
+  ${prefix}/doc/rudiments now
+
+## [0.26.2] - 2003-12-21
+
+### Changed
+- timezonefile class build is now independent of datetime
+
+### Fixed
+- fixes for Mac OS 10.2 and Fedora Core 1 compatibility
+
+## [0.26.1] - 2003-12-01
+
+### Added
+- added shadowentry, serviceentry and rpcentry classes and test programs
+- added filesystem class
+- added test for s_warn, s_inact, s_expire and s_flag in struct spwd and
+  compile in support for them if found in shadowentry class
+- added --enable-debug option to configure, only 1 library is built now
+
+### Changed
+- reorganized *entry class code a bit to generate smaller code
+- uses -pipe compilation flag now if possible
+- -fomit-frame-pointer -fno-exceptions are used now, debugging
+  build just uses -fno-exceptions
+- rpc/rpcent.h is included if necessary for getrpcbyxxx_r
+- rpc/rpc.h is included if necessary for getrpcbyxxx_r
+- pthread.h is included for xxxentry classes now no matter what
+- shadowentry is disabled on systems that have no shadow support
+- applied Taguchi Takeshi's listener and inetsocketclient patches
+- reworked xmldom relationship in dtd class
+- updated config.sub, config.guess and ltmain.sh
+- made a bunch of methods return bool instead of int
+- renamed string class charstring to avoid stl collision
+
+### Fixed
+- a couple of build fixes
+- check for shmat()!=-1 instead of shmat()>-1 in sharedmemory class now
+  as a memory address could actually be larger than 2^31-1 (or
+  2^64-1), appear to be negative and still be valid as long as
+  it's not -1
+- fixed rpm 4.1 doc-install complaints
+- fixed xmldomnode::getNextTagSibling()
+- fixed ssize_t safeSelect() -> int safeSelect() declaration
+
+## [0.25] - 2003-04-25
+
+### Added
+- added rudiments-config script
+- added logger class and logdestination classes
+- added xmlsax,xmldom,xmldomnode class
+- added errorhandler class
+- added SONAME_VERSION_INFO and WITH_LIBTOOL variables to config.mk (fmw)
+- added the debian directory (fmw)
+- added memorypool class
+- added --with-system-libtool option to configure (fmw)
+- added fileproperties class (wrapper for stat/lstat)
+- added conectiondata class for use with clienttransport children
+- added right/left justify and center methods to text class
+- added --debug-profiling-libs to rudiments-config
+- added stringbuffer class, made errorhandler use it
+- added --enable-small-code and --with-inlines to configure script
+- added -fno-exceptions to default CXXFLAGS
+- added variablebuffer class
+- added dtd class
+- added slackware packaged build target
+- added support for gcc-3.2.2
+- added a features.mk file so features could be compiled in/out
+- added linkedlist/dictionary classes, other classes use them instead of
+  implementing their own lists/dicts
+- added environment class
+- added mutexes to datetime, *entry classes
+- added read/write with timeout methods to filedescriptor/datatransport
+
+### Changed
+- doc's mention genericsocket class now
+- configure script figures out rpm build directory better
+- Makefile.in's are just Makefile's now
+- read/write methods return ssize_t's now
+- implemented totally different client/server class structure
+- renamed lots of methods to just read(),write(),open(),close(),etc.
+- made other classes report errors through the errorhandler class
+- made lots of (char *)'s into (const char *)'s.
+- made lots of methods const methods
+- inlined lots of methods
+- used autoconf/autoheader 2.53
+- made libtool build the default
+- made build process cross-compile-friendly
+- uses reentrant getpw/getgr functions if available
+- uses reentrant gethostbyname/getprotobyname functions if available
+- uses localtime_r function if available
+- uses static instead of dynamically allocated variables now where
+  possible
+- configure defines -DSMALL_CODE=1 so routines can be written one way
+  or the other
+- moved fileproperties class into file class
+- incorporated matthias saou's spec file instead of mine, added devel
+  package to it
+- uses RUDIMENTS_INLINE instead of just INLINE to avoid conflicts
+- moved text class stuff into string class
+- inetsocketclient uses getaddrinfo_r now if possible
+
+### Removed
+- removed make rpm target and associated cruft
+- removed kdevelop files
+- removed unnecessary -pedantic from CXXFLAGS
+
+### Fixed
+- datetime class handles timezones properly now
+
+## [0.24] - 2002-04-15
+
+### Added
+- added options for SO_REUSEADDR
+- added simple/complex port initilization methods to server class
+- added options to server/client class to automatically retry reads that
+  were interrupted by signals
+- added support for file descriptor passing over unix sockets
+- serversocketpool class added which can listen on an
+  arbitrary number of ports
+- added create/attach and createOrAttach methods to semaphoreset class
+- added #include <netinet/in.h> and defined _XPG4_2 around
+  #include <socket.h> for solaris8
+
+### Changed
+- spec file takes libdir, incdir, prefix and exec_prefix into account
+- server/client classes split into genericsocket, serversocket,
+  clientsocket classes
+- make generates a profiling version of librudiments.a now
+- test programs are statically linked now
+- include files moved to rudiments subdir of incdir
+- in genericsocket class, reads which didn't get all of the data but
+  did not encounter an error keep trying until all the data
+  is read now
+- setuid/setgid were replaced with setreuid/setregid
+- tests don't build by default now
+
+### Fixed
+- fixed poor linger implementation
+- semaphoreset correctly cleans up now
+- safeRead handles count>SSIZE_MAX and eof conditions correctly now
+- clientsocket correctly checks for connect() error now
+
+## [0.23] - 2001-10-18
+
+### Fixed
+- fixed stupidity where semaphoreset destructor was trying to
+  individually delete all of the semaphores in a set rather
+  than just the whole set at once
+
+## [0.22] - 2001-09-27
+
+### Added
+- added support for "make rpm"
+- added lingerOnClose and disconnectClient calls to svr.C test program
+
+### Changed
+- check for ld -G vs ld -shared
+
+## [0.21] - 2001-08-09
+
+### Added
+- added strip commands to text class
+- added return values for disconnectClient(), stopListening() and
+  closeConnection() methods in client/server classes
+- added linger socket options to server/client classes
+
+### Changed
+- got rid of some compiler warnings
+- made client/server write/read methods use unsigned long/short
+- made configure script take --includedir and --exec-prefix into account
+
+## [0.20] - 2001-06-30
+
+### Added
+- added server/client programs to the test suite
+
+### Changed
+- changed DYNAMICAR to use ld -G -o instead of g++ -Wl,-G -o, it was
+  putting an undefined main symbol in the library which java
+  doesn't like
+- tries=0 in client class causes the client to loop infinitely now
+- changed daemon class name to daemonprocess to avoid conflict with
+  daemon function in unistd.h
+- client class reports a "failed to connect" error only after it's tried
+  for the number of times it's supposed to try, not each time
+
+### Fixed
+- made daemonprocess signal handlers pointers and handled them as such;
+  not doing so and using ld -G -o to create the library caused
+  any program using the daemonprocess class to crash
+
+## [0.19] - 2001-06-20
+
+### Added
+- added test suite
+- added negative number tests to random number tester
+- added a getRandMax method to the randomnumber class
+
+### Changed
+- simplified random number scaling code
+- changed randomnumber to prefer rand/srand over nrand48/srand48
+  because SCO's RAND_MAX is 2^15-1 but it's nrand48 returns
+  a number between 0 and 2^32-1 which caused scaling errors
+  but it's rand returns a number between 0 and 2^15-1.
+
+## [0.18] - 2001-03-18
+
+### Added
+- added setUsername/setGroupname methods to semaphoreset class
+- added a permissions class
+- added documentation to all of the header files
+- added signalset and signalmanager classes
+- added programming examples to documentation
+- added isNumber/isInteger methods to text class, made them both
+  recognize negative numbers
+
+### Changed
+- getUnixServerPort() returns NULL now if the unix socket was never
+  opened in server class
+- initialized serverportin in server class
+- initialized serversock in client class
+- made a bunch of methods static
+- rolled casechange, trim and encoding classes into text class
+- totally changed random number class
+- daemon class handles SIGCLD by waiting on dead child processes
+  on it's own now
+- changed several method names in the server class
+- some tweaks for microsoft platform compatibility
+- changed some method names in the signalhandler class
+- changed signalhandler.h/C to signalclasses.h/C
+- make clean now removes the .pics directories that Konqueror makes
+
+## [0.17.1] - 2001-01-31
+
+### Fixed
+- quick-fix: closeServerSocket() doesn't unlink the unix socket anymore
+
+## [0.17] - 2001-01-30
+
+### Added
+- added some new methods to the regularexpression class
+- added datetime class
+
+## [0.16] - 2001-01-18
+
+### Added
+- added methods to daemon class so it can run as a given user/group
+
+### Changed
+- got rid of some unnecessary strlen()'s
+
+### Removed
+- removed idiotic readFromXXX(char *buffer) functions which had no
+  length parameters from client/server classes
+
+### Fixed
+- fixed some "I wasn't such a good programmer back then" errors
+
+## [0.15] - 2000-12-07
+
+### Changed
+- tweaks for gcc-2.96
+
+## [0.14] - 2000-10-20
+
+### Added
+- added more writeToServer/writeToClient and readFromServer/readFromClient
+  methods for writing/reading non-character data
+- added chdir("/") and umask(0) to detach() method in daemon class
+- added socket option SO_REUSEADDR to inet sockets in server class
+
+### Changed
+- closing a unix socket unlinks the associated file now
+
+## [0.13] - 2000-08-29
+
+### Added
+- added #include <sys/types.h> to regularexpression, sharedmemory and
+  semaphoreset classes
+- preliminary CYGWIN support
+- added detach method to daemon class, must be explicitly called for the
+  daemon to detach from the controlling tty.
+
+### Changed
+- allowed c++ to be used instead of forcing g++
+- changed check for integer signal handler type
+
+### Removed
+- removed redundant -fpic and unnecessary -DPIC
+
+### Fixed
+- fixed a few memory leaks
+
+## [0.12] - 2000-08-01
+
+### Added
+- added Unix Domain support to server and client classes
+- added randomnumber class
+
+### Changed
+- build improvements
+- error messages go to stderr now and include the strerror() of the
+  error number
+- detect signal handler function signature
+- changed signal handler function signature to void handler() from
+  void handler(int) for greater compatibility
+
+### Removed
+- removed the extern "C" { #undef __cplusplus ... #define __cplusplus }
+  stuff, it caused more trouble than it overcame
+
+## [0.11] - 2000-07-07
+
+### Added
+- added sharedmemory class
+
+### Changed
+- made wait() and signal() semaphoreset class members not use SEM_UNDO
+  by default and added waitWithUndo() and signalWithUndo()
+  members
+
+### Removed
+- removed select from the readfromfileptr routine
+  (wasn't supposed to be there anyway)
+
+## [0.10] - 2000-06-28
+
+### Added
+- added select before accept in server class
+
+## [0.9] - 2000-06-19
+
+### Added
+- added -fpic -fPIC -DPIC to CXXFLAGS
+- added extern "C" and #undef/#define __cplusplus in various places
+- added modes to install scripts
+
+### Changed
+- documentation improvements and fixes
+
+### Fixed
+- fixed the server class to allow connections using INADDR_ANY
+
+## [0.8] - 2000-06-14
+
+### Fixed
+- build fix: made calls to "test" more compatible
+
+## [0.7] - 2000-06-08
+
+### Changed
+- cleaner build
+- client::openConnection now tries to connect to all the addresses that
+  a hostname resolves to before giving up
+- client::openConnection fails gracefully if gethostbyname or
+  getprotobyname fails
+
+## [0.6] - 2000-06-04
+
+### Changed
+- general Makefile maintenance
+
+### Removed
+- removed LDFLAGS from config.mk
+
+## [0.5] - 2000-05-18
+
+### Changed
+- documentation installs now
+- detection of union semun at configure time
+- reingineered Makefiles to be frienlier to non-gnu make
+
+## [0.4] - 2000-04-24
+
+### Changed
+- more robust build/install/uninstall
+
+## [0.3] - 2000-04-21
+
+### Changed
+- configure based install.
+- Reorganization of includes.
+- make install/uninstall directives.
+
+### Removed
+- Got rid of RCS.
+
+## [0.2] - 2000-04-04
+
+### Fixed
+- bug fixes.
+
+## [0.1] - 2000-01-23
+
+### Added
+- First release.
