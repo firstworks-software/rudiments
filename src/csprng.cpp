@@ -230,7 +230,3 @@ void csprng::setMutex(threadmutex *mtx) {
 		prng::setMutex(mtx);
 	#endif
 }
-
-bool csprng::isSupported() {
-	return true;
-}

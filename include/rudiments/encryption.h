@@ -161,9 +161,12 @@ class RUDIMENTS_DLLSPEC encryption : virtual public object {
 		 *  fails, and possibly set an error. */
 		virtual	bool	reset();
 
-		/** Returns true if the platforms supports this encryption type
-		 *  and false otherwise. */
-		virtual bool	isSupported()=0;
+		/** Returns true if the platform supports this encryption type
+		 *  and false otherwise.  This implementation always returns
+		 *  true, but a child class may override this method to
+		 *  return false if the platform doesn't support that
+		 *  particular cipher. */
+		virtual bool	isSupported();
 	
 	#include <rudiments/private/encryption.h>
 };

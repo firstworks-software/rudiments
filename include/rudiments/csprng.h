@@ -244,16 +244,6 @@ class RUDIMENTS_DLLSPEC csprng : public rng {
 		 *  instance internally. */
 		static	void	setMutex(threadmutex *mtx);
 
-		/** Returns true if this platform supports csprng and false
-		 *  otherwise.  Since a fallback implementation is built in,
-		 *  this method always returns true.
-		 *
-		 *  csprng always produces output, but that output is only
-		 *  cryptographically secure when a secure backend is
-		 *  available.  Call isCryptographicallySecure() on an
-		 *  instance to find out whether it is. */
-		static	bool	isSupported();
-
 	#include <rudiments/private/csprng.h>
 };
 

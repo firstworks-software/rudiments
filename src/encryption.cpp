@@ -185,3 +185,7 @@ bool encryption::reset() {
 	construct();
 	return true;
 }
+
+bool encryption::isSupported() {
+	return true;
+}

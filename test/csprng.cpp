@@ -60,11 +60,14 @@ int main(int argc, const char **argv) {
 
 	header("csprng");
 
-	test("isSupported() - always true",csprng::isSupported());
-
-	// exercise both implementations through the rng interface
 	prng	p;
 	csprng	cs;
+
+	test("isSupported() - always true",cs.isSupported());
+	test("isSupported() - through rng interface",
+			((rng *)&cs)->isSupported()==cs.isSupported());
+
+	// exercise both implementations through the rng interface
 	testRngInterface("rng interface - prng",&p);
 	testRngInterface("rng interface - csprng",&cs);
 

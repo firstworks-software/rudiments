@@ -104,3 +104,7 @@ bool hash::reset() {
 	construct();
 	return clear();
 }
+
+bool hash::isSupported() {
+	return true;
+}

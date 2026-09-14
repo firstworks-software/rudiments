@@ -33,10 +33,6 @@ class RUDIMENTS_DLLSPEC sha512 : public hash {
  		 *  false if an error occurred. */
 		bool	clear();
 
-		/** Returns true if this platform supports sha512 and false
-		 *  otherwise. */
-		bool	isSupported();
-
 	#include <rudiments/private/sha512.h>
 };
 

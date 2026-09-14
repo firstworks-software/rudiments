@@ -7,6 +7,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ## [Unreleased]
 
 ### Added
+- added rng::isSupported(), a virtual method (default true) that lets an
+  isSupported() call dispatch correctly through an rng * base pointer,
+  matching isCryptographicallySecure(); csprng no longer needs its own
+  separate isSupported(), and prng inherits the same default
 - added rng::isCryptographicallySecure(), a new virtual method letting
   callers ask whether an rng implementation's output is
   actually fit for cryptographic use - keys, tokens, salts,
@@ -18,10 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   Solaris 8), csprng was permanently non-functional, since
   every generate()/generateBytes() call failed, but now it
   falls back to prng, seeded via prng::getSeed(), and keeps
-  working, just without the cryptographic-security guarantee;
-  csprng::isSupported() now unconditionally returns true,
-  matching the existing bignumber/arc4 precedent, since a
-  fallback implementation is always built in
+  working, just without the cryptographic-security guarantee
 - added singledes and tripledes classes, providing raw
   block-cipher single DES-CBC and 3-key EDE triple-DES-CBC
   transforms (no key parity checks, and padding is optional
@@ -86,6 +87,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   csrandomnumber to csprng, added generateBytes() methods to each
 
 ### Changed
+- encryption and hash isSupported() is a non-pure virtual now, defaulting
+  to true instead of forcing every subclass to implement it, matching the
+  existing bignumber/rng precedent; sha1, sha256, sha512, and md5 dropped
+  their now-redundant override, while aes128, aes192, aes256, des,
+  singledes, tripledes, and pbkdf2 keep their own conditional overrides
 - the sharedmemory test now waits for its child process instead of
   sleeping a second before deleting the key file the child needs,
   which raced on slow hosts, and it now folds the child's exit
@@ -95,9 +101,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   when /dev/urandom isn't available, rather than returning the
   epoch alone, which has one-second resolution and gave two
   calls in the same second the same seed
-- clarified csprng::isSupported() doc comment - it reports whether a
-  backend is compiled in, not whether one initialized for a
-  given instance
 - website ssi expanded at build time instead of by apache
 - website html files not executable anymore
 - regenerated doc/programming/charstring.html and xmlsax.html, which
@@ -114,6 +117,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   using openssl, if available
 
 ### Removed
+- removed csprng's static isSupported() - it was always unconditionally
+  true and callers should use the new rng::isSupported() instance method
+  instead (see Added); breaking change for any caller of
+  csprng::isSupported()
 - removed regularexpression::clear() - the destructor does its work
   now
 - removed the bundled md5 reference implementation from the export
@@ -132,11 +139,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   very end of the haystack was never found, and findLast()
   started one byte past the end of the buffer, reading out of
   bounds and potentially returning a pointer past the end
-- fixed csprng::isSupported() to actually check for a usable
-  backend - openssl or CryptGenRandom compiled in, or
-  /dev/urandom present and readable - instead of
-  unconditionally returning true, so callers on a host with
-  none of those, such as Solaris 8, get an honest answer
 - fixed sax::getCharacter() to distinguish a real end of input
   from a literal null byte read from the underlying file,
   string, or input, so an embedded null byte no longer

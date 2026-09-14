@@ -90,9 +90,11 @@ class RUDIMENTS_DLLSPEC hash : virtual public object {
  		 *  which case the error clear() set is left in place. */
 		virtual	bool	reset();
 
-		/** Returns true if the platforms supports this hash type
-		 *  and false otherwise. */
-		virtual bool	isSupported()=0;
+		/** Returns true if this platform supports this hash type
+		 *  and false otherwise.  This implementation always
+		 *  returns true; a subclass may override it for a hash
+		 *  type the platform might not support. */
+		virtual bool	isSupported();
 
 	#include <rudiments/private/hash.h>
 };

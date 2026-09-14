@@ -70,6 +70,16 @@ class RUDIMENTS_DLLSPEC rng : virtual public object {
 		 *  session ids. */
 		virtual bool	isCryptographicallySecure();
 
+		/** Returns true by default, since a fallback implementation
+		 *  is assumed to exist.  A subclass should override this
+		 *  method and return false only if the platform genuinely
+		 *  can't support that implementation.
+		 *
+		 *  This says nothing about whether the output is
+		 *  cryptographically secure - see
+		 *  isCryptographicallySecure() for that. */
+		virtual bool	isSupported();
+
 	#include <rudiments/private/rng.h>
 };
 

@@ -12,3 +12,7 @@ rng::~rng() {
 bool rng::isCryptographicallySecure() {
 	return false;
 }
+
+bool rng::isSupported() {
+	return true;
+}

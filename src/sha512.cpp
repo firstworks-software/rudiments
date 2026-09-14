@@ -108,7 +108,3 @@ void sha512::setError(int32_t err) {
 		hash::setError(HASH_ERROR_NULL);
 	#endif
 }
-
-bool sha512::isSupported() {
-	return true;
-}
