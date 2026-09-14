@@ -134,6 +134,7 @@ install:
 	$(CP) classes/html/*.png $(docdir)/classes/html
 	$(CP) classes/html/*.css $(docdir)/classes/html
 	$(CP) classes/html/*.js $(docdir)/classes/html
+	$(CP) classes/html/*.svg $(docdir)/classes/html
 	$(CHMOD) 644 $(docdir)/classes/html/a*.html
 	$(CHMOD) 644 $(docdir)/classes/html/b*.html
 	$(CHMOD) 644 $(docdir)/classes/html/c*.html
@@ -158,6 +159,7 @@ install:
 	$(CHMOD) 644 $(docdir)/classes/html/*.png
 	$(CHMOD) 644 $(docdir)/classes/html/*.css
 	$(CHMOD) 644 $(docdir)/classes/html/*.js
+	$(CHMOD) 644 $(docdir)/classes/html/*.svg
 	$(MKINSTALLDIRS) $(docdir)/css
 	$(CP) css/* $(docdir)/css
 	$(CHMOD) 644 $(docdir)/css/*
