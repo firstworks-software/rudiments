@@ -181,12 +181,9 @@ int main(int argc, const char **argv) {
 		const wchar_t	*retrystr=L"retrystring";
 		wchar_t	*buf2=NULL;
 		size=wcharstring::printf(&buf2,L"%lc%d%ls",L'a',123,retrystr);
-		size_t	expectedsize=1+3+wcharstring::getLength(retrystr);
-		test("retry size",(size_t)size==expectedsize);
-		wchar_t	expectedbuf[200];
-		wcharstring::printf(expectedbuf,200,
-					L"%lc%d%ls",L'a',123,retrystr);
-		test("retry contents",!wcharstring::compare(buf2,expectedbuf));
+		test("retry size",size==15);
+		test("retry contents",
+			!wcharstring::compare(buf2,L"a123retrystring"));
 		delete[] buf2;
 	} else {
 		stdoutput.printf("not supported\n");
