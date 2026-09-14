@@ -459,6 +459,24 @@ int main(int argc, const char **argv) {
 		!bytestring::compare(decodedbytes,bytes,1));
 	delete[] encodedbytes;
 	delete[] decodedbytes;
+
+	// input larger than a 16-bit loop counter can index, to guard against
+	// the ii<inputsize overflow fixed in #10043
+	uint64_t	bigsize=70000;
+	byte_t		*bigbytes=new byte_t[bigsize];
+	for (uint64_t bi=0; bi<bigsize; bi++) {
+		bigbytes[bi]=(byte_t)(bi%256);
+	}
+	charstring::hexEncode(bigbytes,bigsize,&encodedbytes,&encodedlen);
+	charstring::hexDecode(encodedbytes,encodedlen,
+					&decodedbytes,&decodedlen);
+	test("hex test 11",
+		encodedlen==bigsize*2 &&
+		decodedlen==bigsize &&
+		!bytestring::compare(decodedbytes,bigbytes,bigsize));
+	delete[] bigbytes;
+	delete[] encodedbytes;
+	delete[] decodedbytes;
 	stdoutput.printf("\n");
 
 

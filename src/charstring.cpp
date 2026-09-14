@@ -3084,7 +3084,7 @@ void charstring::hexEncode(const byte_t *input, uint64_t inputsize,
 	*outputlen=inputsize*2;
 	*output=new char[*outputlen+1];
 	char	*oi=*output;
-	for (uint16_t ii=0; ii<inputsize; ii++) {
+	for (uint64_t ii=0; ii<inputsize; ii++) {
 		printf(oi,3,"%02x",input[ii]);
 		oi+=2;
 	}
