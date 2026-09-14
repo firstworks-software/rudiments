@@ -2695,14 +2695,19 @@ ssize_t wcharstring::printf(wchar_t *buffer, size_t length,
 			}
 			#if defined(EINVAL) || \
 				defined(EOVERFLOW) || \
-				defined(EILSEQ)
+				defined(EILSEQ) || \
+				defined(E2BIG)
 			// On freebsd-style platforms EINVAL is set if
 			// buflen==0 and EOVERFLOW or EILSEQ can be set when
-			// truncation occurs.  Ignore all of these.
+			// truncation occurs.  On linux/glibc, truncation by
+			// more than one wide character is reported as E2BIG
+			// instead (confirmed against glibc).  Ignore all of
+			// these.
 			else if (size==-1 &&
 				(error::getErrorNumber()==EINVAL ||
 				error::getErrorNumber()==EOVERFLOW ||
-				error::getErrorNumber()==EILSEQ)) {
+				error::getErrorNumber()==EILSEQ ||
+				error::getErrorNumber()==E2BIG)) {
 				error::clearError();
 			}
 			#endif

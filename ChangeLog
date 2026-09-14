@@ -202,6 +202,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   vswprintf() truncation-retry loop instead of va_copy()'ing it
 - fixed charstring's vsnprintf() fallback (used only without a
   native vsnprintf variant) reusing its va_list without va_copy()
+- fixed wcharstring::printf()'s truncation-retry loop misreading
+  glibc's E2BIG as a real failure instead of retrying with a
+  larger buffer
 
 ### Security
 - fixed buffer overflow when unix socket file name is too long

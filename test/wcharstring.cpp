@@ -185,6 +185,28 @@ int main(int argc, const char **argv) {
 		test("retry contents",
 			!wcharstring::compare(buf2,L"a123retrystring"));
 		delete[] buf2;
+
+		// force the truncation-retry loop through several growths,
+		// not just one (ticket #10139 - on linux/glibc, vswprintf()
+		// reports truncation via E2BIG once the shortfall is more
+		// than one wide character, which used to make the loop bail
+		// out with a false failure instead of growing the buffer
+		// again and retrying).  The auto-allocating overload starts
+		// the loop at buflen 0 and grows it 16, 48, 112, 240, ...,
+		// so a result this long forces several of those growths
+		// before one is large enough.
+		const size_t	longretrylen=300;
+		wchar_t	longretrystr[longretrylen+1];
+		for (size_t i=0; i<longretrylen; i++) {
+			longretrystr[i]=L'a'+(wchar_t)(i%26);
+		}
+		longretrystr[longretrylen]=L'\0';
+		wchar_t	*buf3=NULL;
+		size=wcharstring::printf(&buf3,L"%ls",longretrystr);
+		test("multi-step retry size",size==(ssize_t)longretrylen);
+		test("multi-step retry contents",
+			!wcharstring::compare(buf3,longretrystr));
+		delete[] buf3;
 	} else {
 		stdoutput.printf("not supported\n");
 	}
