@@ -171,6 +171,23 @@ int main(int argc, const char **argv) {
 		test("size",size==9);
 		test("contents",!wcharstring::compare(buffer,L"a123hello"));
 		delete[] buf;
+
+		// force the truncation-retry loop through a real retry
+		// (ticket #10023 - each retry needs its own va_copy'd
+		// va_list, or a %ls argument like "retrystr" below can pick
+		// up a stale argument pointer on the second attempt).  The
+		// auto-allocating overload always starts the loop at buflen
+		// 0, guaranteeing at least one retry.
+		const wchar_t	*retrystr=L"retrystring";
+		wchar_t	*buf2=NULL;
+		size=wcharstring::printf(&buf2,L"%lc%d%ls",L'a',123,retrystr);
+		size_t	expectedsize=1+3+wcharstring::getLength(retrystr);
+		test("retry size",(size_t)size==expectedsize);
+		wchar_t	expectedbuf[200];
+		wcharstring::printf(expectedbuf,200,
+					L"%lc%d%ls",L'a',123,retrystr);
+		test("retry contents",!wcharstring::compare(buf2,expectedbuf));
+		delete[] buf2;
 	} else {
 		stdoutput.printf("not supported\n");
 	}

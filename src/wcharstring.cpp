@@ -2665,7 +2665,22 @@ ssize_t wcharstring::printf(wchar_t *buffer, size_t length,
 
 			wchar_t	*buf=new wchar_t[buflen];
 
-			size=vswprintf(buf,buflen,format,*argp);
+			// vswprintf() consumes *argp via va_arg(), leaving it
+			// indeterminate afterward, but this loop may call
+			// vswprintf() more than once if the platform doesn't
+			// report truncation the way we expect.  Reusing *argp
+			// itself across those calls is undefined behavior - on
+			// some ABIs it hands a later call a stale argument
+			// pointer, which is exactly the kind of bug that sends a
+			// %ls conversion scanning off into unrelated memory
+			// looking for a NUL.  Take a fresh va_copy() each
+			// iteration instead, so *argp itself is never directly
+			// consumed and stays valid for as many iterations as we
+			// need.
+			va_list	argp1;
+			va_copy(argp1,*argp);
+			size=vswprintf(buf,buflen,format,argp1);
+			va_end(argp1);
 
 			// On most platforms, size-written equaling -1
 			// indicates truncation.

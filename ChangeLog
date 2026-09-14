@@ -192,6 +192,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   %s conversion a stale argument pointer on a later retry,
   sending it scanning unboundedly for a NUL byte (SQL Relay
   #10021, #10022)
+- fixed wcharstring::printf() reusing a va_list across its
+  vswprintf() truncation-retry loop instead of va_copy()'ing it
+- fixed charstring's vsnprintf() fallback (used only without a
+  native vsnprintf variant) reusing its va_list without va_copy()
 - fixed charstring::hexEncode() looping forever and writing out of
   bounds on inputs of 65536 bytes or more
 - fixed doc/Makefile's install target to also copy classes/html's svg

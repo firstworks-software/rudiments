@@ -3392,13 +3392,26 @@ static ssize_t vsnprintf(char *buffer, size_t len,
 
 	// write to the scratch file so we can
 	// figure out how much space we need
-	ssize_t	safebuffersize=vfprintf(scratch,format,argp);
+	//
+	// argp gets consumed by va_arg() here and again below by vsprintf(),
+	// and on platforms where va_list is itself an array type (so this
+	// by-value parameter is really a reference to the caller's va_list),
+	// reusing it as-is for both calls is undefined behavior - see the
+	// va_copy() comment above charstring::printf()'s vsnprintf() calls
+	// for the mechanism.  Each call gets its own copy instead.
+	va_list	argp1;
+	va_copy(argp1,argp);
+	ssize_t	safebuffersize=vfprintf(scratch,format,argp1);
+	va_end(argp1);
 
 	// create a big enough buffer for that
 	char	*safebuffer=new char[safebuffersize+1];
 
 	// vsprintf to safebuffer
-	ssize_t byteswritten=vsprintf(safebuffer,format,argp);
+	va_list	argp2;
+	va_copy(argp2,argp);
+	ssize_t byteswritten=vsprintf(safebuffer,format,argp2);
+	va_end(argp2);
 
 	// bail on error
 	if (byteswritten==-1) {
