@@ -368,6 +368,15 @@ const struct test tests[]={
 	}
 };
 
+// parses json and returns the first value node of the root array
+static bool firstValue(jsondom *j, const char *json, domnode **value) {
+	if (!j->parseString(json)) {
+		return false;
+	}
+	*value=j->getRootNode()->getFirstTagChild()->getFirstTagChild();
+	return !(*value)->isNullNode();
+}
+
 int main() {
 
 	header("jsondom");
@@ -427,6 +436,64 @@ int main() {
 
 		delete[] contents;
 		file::remove(filename.getString());
+	}
+
+	// string escapes and number syntax
+	{
+		stdoutput.printf("escapes and numbers...\n");
+
+		jsondom	e;
+		domnode	*v;
+		char	*contents=NULL;
+
+		test("\\u00e9 is utf-8",
+			firstValue(&e,"[\"\\u00e9\"]",&v) &&
+			!charstring::compare(
+				v->getAttributeValue("v"),"\xc3\xa9"));
+		test("surrogate pair is utf-8",
+			firstValue(&e,"[\"\\ud83d\\ude00\"]",&v) &&
+			!charstring::compare(
+				v->getAttributeValue("v"),
+				"\xf0\x9f\x98\x80"));
+		test("escaped solidus",
+			firstValue(&e,"[\"a\\/b\"]",&v) &&
+			!charstring::compare(
+				v->getAttributeValue("v"),"a/b"));
+
+		test("1e2",
+			firstValue(&e,"[1e2]",&v) &&
+			!charstring::compare(
+				v->getAttributeValue("v"),"1e2"));
+		test("-1.5E-3",
+			firstValue(&e,"[-1.5E-3]",&v) &&
+			!charstring::compare(
+				v->getAttributeValue("v"),"-1.5E-3"));
+		test("0e+1",
+			firstValue(&e,"[0e+1]",&v) &&
+			!charstring::compare(
+				v->getAttributeValue("v"),"0e+1"));
+
+		test("lone minus fails",!e.parseString("[-]"));
+		test("minus dot fails",!e.parseString("[-.]"));
+		test("missing exponent digits fails",!e.parseString("[1e]"));
+		test("lone high surrogate fails",
+			!e.parseString("[\"\\ud83d\"]"));
+		test("lone low surrogate fails",
+			!e.parseString("[\"\\ude00\"]"));
+		test("\\u0000 kept as text",
+			firstValue(&e,"[\"a\\u0000b\"]",&v) &&
+			!charstring::compare(
+				v->getAttributeValue("v"),"a\\u0000b"));
+		firstValue(&e,"[\"q\\\"b\\\\c\\u0001\"]",&v);
+		e.writeFile("escapes.json",
+			permissions::parsePermString("rw-r--r--"),true);
+		contents=file::getContents("escapes.json");
+		test("quote, backslash and control escaped on write",
+			charstring::contains(contents,
+				"\"q\\\"b\\\\c\\u0001\""));
+		delete[] contents;
+		file::remove("escapes.json");
+		test("bad hex fails",!e.parseString("[\"\\u12g4\"]"));
 	}
 
 	stdoutput.printf("\n");

@@ -205,6 +205,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - fixed wcharstring::printf()'s truncation-retry loop misreading
   glibc's E2BIG as a real failure instead of retrying with a
   larger buffer
+- fixed httprequest crashes on a GET with a body and on multipart
+  without a boundary
+- multipart request bodies are read through CONTENT_LENGTH
+- fixed httprequest reading past EOF on a urlencoded POST with an
+  oversized CONTENT_LENGTH
+- jsonsax decodes \u escapes to UTF-8 and accepts exponents
+- jsonsax rejects invalid numbers such as leading zeros
+- jsondom escapes quotes, backslashes and control characters when writing
 
 ### Security
 - fixed buffer overflow when unix socket file name is too long

@@ -4,10 +4,10 @@ export HTTP_COOKIE
 REQUEST_METHOD="POST"
 export REQUEST_METHOD
 
-CONTENT_TYPE="multipart/form-data boundary=-----------------------------5888635166783692101018350758"
+CONTENT_TYPE="multipart/form-data; boundary=-----------------------------5888635166783692101018350758"
 export CONTENT_TYPE
 
-CONTENT_LENGTH="29"
+CONTENT_LENGTH="2128"
 export CONTENT_LENGTH
 
 SCRIPT_NAME="/application/modules/module/cgi.cgi"

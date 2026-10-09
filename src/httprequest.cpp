@@ -126,8 +126,18 @@ class httprequestprivate {
 		const char	**_parametervars;
 		const char	**_parametervals;
 
+		bool	readQueryChar(const char *querystring,
+						size_t length,
+						size_t *pos,
+						char *ch);
+		bool	readBodyChar(char *ch);
+		void	drainBody();
+
+		bool		_countedbody;
+		uint64_t	_bodyremaining;
+
 		size_t		_tmpdirlen;
-		const char	*_boundary;
+		char		*_boundary;
 		dictionary<char *, fileparameter *>	_fileparameters;
 		bool		_dirtyfilenames;
 		const char	**_filenames;
@@ -143,6 +153,55 @@ class httprequestprivate {
 		const char	**_allvals;
 };
 
+bool httprequestprivate::readQueryChar(const char *querystring,
+						size_t length,
+						size_t *pos,
+						char *ch) {
+	if (querystring) {
+		if (*pos>=length) {
+			return false;
+		}
+		*ch=querystring[*pos];
+		(*pos)++;
+		return true;
+	}
+	return readBodyChar(ch);
+}
+
+bool httprequestprivate::readBodyChar(char *ch) {
+	if (!_countedbody) {
+		return (_sapi->read(ch)==sizeof(char));
+	}
+	if (!_bodyremaining) {
+		return false;
+	}
+	if (_sapi->read(ch)!=sizeof(char)) {
+		_bodyremaining=0;
+		return false;
+	}
+	_bodyremaining--;
+	return true;
+}
+
+void httprequestprivate::drainBody() {
+	if (!_countedbody) {
+		return;
+	}
+	char	buffer[1024];
+	while (_bodyremaining) {
+		size_t	size=sizeof(buffer);
+		if (size>_bodyremaining) {
+			size=_bodyremaining;
+		}
+		ssize_t	result=_sapi->read(buffer,size);
+		if (result<=0) {
+			break;
+		}
+		_bodyremaining-=result;
+	}
+	_bodyremaining=0;
+}
+
 httprequest::httprequest(httpserverapi *sapi) : object() {
 	pvt=new httprequestprivate;
 
@@ -153,6 +212,8 @@ httprequest::httprequest(httpserverapi *sapi) : object() {
 
 	// initialize some variables
 	pvt->_boundary=NULL;
+	pvt->_countedbody=false;
+	pvt->_bodyremaining=0;
 
 	pvt->_fileparameters.setManageArrayKeys(true);
 	pvt->_fileparameters.setManageValues(true);
@@ -183,6 +244,7 @@ httprequest::~httprequest() {
 	cleanFiles();
 	cleanCookies();
 
+	delete[] pvt->_boundary;
 	delete pvt;
 }
 
@@ -326,12 +388,14 @@ void httprequest::initParameters() {
 		!charstring::compareIgnoringCase(requestmethod,"post")) {
 
 		// handle application/x-www-form-urlencoded
-		if (contenttype && !charstring::compare(contenttype,
+		if (contenttype && !charstring::compareIgnoringCase(
+				contenttype,
 				"application/x-www-form-urlencoded",33)) {
 			parseQueryString(post_request);
 
 		// handle multipart/form-data
-		} else if (contenttype && !charstring::compare(contenttype,
+		} else if (contenttype && !charstring::compareIgnoringCase(
+						contenttype,
 						"multipart/form-data",19)) {
 			parseMultipart();
 		}
@@ -353,38 +417,31 @@ void httprequest::parseQueryString(httprequestmethod method) {
 	char		ones;
 	char		charbuf;
 	size_t		length=0;
+	size_t		pos=0;
+	bool		gotchars=false;
 
-	// run through string, unescaping as I go, creating parameters
+	// Get and head requests parse only the query string, and leave any
+	// body unread for the app.  Post requests read up to CONTENT_LENGTH
+	// bytes of the body, or parse the query string if there's no body.
 	const char	*querystring=
 				getEnvironmentVariable("QUERY_STRING");
-	const char	*contentlengthstr=
-				getEnvironmentVariable("CONTENT_LENGTH");
-	size_t		contentlength=
-				charstring::convertToUnsignedInteger(contentlengthstr);
-	if (method==get_request || method==head_request) {
-		if (!charstring::isNullOrEmpty(querystring)) {
-			length=charstring::getLength(querystring);
-		} else {
-			length=contentlength;
-		}
+	uint64_t	contentlength=
+				charstring::convertToUnsignedInteger(
+				getEnvironmentVariable("CONTENT_LENGTH"));
+	if (method==post_request && contentlength) {
+		querystring=NULL;
+		pvt->_countedbody=true;
+		pvt->_bodyremaining=contentlength;
+	} else if (!charstring::isNullOrEmpty(querystring)) {
+		length=charstring::getLength(querystring);
 	} else {
-		if (contentlength) {
-			length=contentlength;
-		} else if (!charstring::isNullOrEmpty(querystring)) {
-			length=charstring::getLength(querystring);
-		} else {
-			length=0;
-		}
+		return;
 	}
-	for (size_t i=0; i<length; i++) {
 
-		if (method==get_request || method==head_request) {
-			// for get or head get from querystring
-			charbuf=querystring[i];
-		} else { 
-			// for post get from stdin
-			pvt->_sapi->read(&charbuf);
-		}
+	// run through string, unescaping as I go, creating parameters
+	while (pvt->readQueryChar(querystring,length,&pos,&charbuf)) {
+
+		gotchars=true;
 
 		if (charbuf=='&') {
 
@@ -405,11 +462,9 @@ void httprequest::parseQueryString(httprequestmethod method) {
 			// convert hex to ascii
 
 			// get next char in stream: sixteens place
-			i++;
-			if (method==get_request || method==head_request) {
-				charbuf=querystring[i];
-			} else { 
-				pvt->_sapi->read(&charbuf);
+			if (!pvt->readQueryChar(querystring,length,
+							&pos,&charbuf)) {
+				break;
 			}
 
 			sixteens=character::upper(charbuf);
@@ -420,11 +475,9 @@ void httprequest::parseQueryString(httprequestmethod method) {
 			}
 
 			// get next char in stream: ones place
-			i++;
-			if (method==get_request || method==head_request) {
-				charbuf=querystring[i];
-			} else { 
-				pvt->_sapi->read(&charbuf);
+			if (!pvt->readQueryChar(querystring,length,
+							&pos,&charbuf)) {
+				break;
 			}
 
 			ones=character::upper(charbuf);
@@ -441,7 +494,7 @@ void httprequest::parseQueryString(httprequestmethod method) {
 	}
 
 	// create last new parameter
-	if (length>0) {
+	if (gotchars) {
 		setParameter(name.getString(),value.getString());
 	}
 }
@@ -456,11 +509,43 @@ bool httprequest::setParameter(const char *name, const char *value) {
 
 void httprequest::parseMultipart() {
 
-	// get the boundary and its length
-	pvt->_boundary=charstring::findFirst(
-				getEnvironmentVariable("CONTENT_TYPE"),
-				"boundary=")+9;
-	size_t	boundarylen=charstring::getLength(pvt->_boundary);
+	// find the boundary
+	const char	*boundary=charstring::findFirstIgnoringCase(
+					getEnvironmentVariable("CONTENT_TYPE"),
+					"boundary=");
+	if (!boundary) {
+		return;
+	}
+	boundary+=9;
+
+	// get its length, up to the next parameter
+	size_t	boundarylen=0;
+	while (boundary[boundarylen] && boundary[boundarylen]!=';') {
+		boundarylen++;
+	}
+	while (boundarylen && character::isWhitespace(
+					boundary[boundarylen-1])) {
+		boundarylen--;
+	}
+
+	// strip quotes
+	if (boundarylen>=2 && boundary[0]=='"' &&
+				boundary[boundarylen-1]=='"') {
+		boundary++;
+		boundarylen-=2;
+	}
+	if (!boundarylen) {
+		return;
+	}
+	pvt->_boundary=charstring::duplicate(boundary,boundarylen);
+
+	// read CONTENT_LENGTH bytes, or to EOF if it's not set
+	const char	*contentlength=getEnvironmentVariable("CONTENT_LENGTH");
+	if (!charstring::isNullOrEmpty(contentlength)) {
+		pvt->_countedbody=true;
+		pvt->_bodyremaining=
+			charstring::convertToUnsignedInteger(contentlength);
+	}
 
 	// create a buffer and copy the boundary into the buffer,
 	// preceeded by \r\n--
@@ -486,7 +571,7 @@ void httprequest::parseMultipart() {
 	for (;;) {
 
 		// get a character
-		if (pvt->_sapi->read(&charbuf)!=sizeof(char)) {
+		if (!pvt->readBodyChar(&charbuf)) {
 			break;
 		}
 
@@ -501,10 +586,8 @@ void httprequest::parseMultipart() {
 			// we're done, otherwise they're \r\n and we need to
 			// add the parameter
 			bool	finalboundary=false;
-			if (pvt->_sapi->read(&(boundaryend[0]))!=
-							sizeof(char) ||
-				pvt->_sapi->read(&(boundaryend[1]))!=
-							sizeof(char) ||
+			if (!pvt->readBodyChar(&(boundaryend[0])) ||
+				!pvt->readBodyChar(&(boundaryend[1])) ||
 				!charstring::compare(boundaryend,"--")) {
 				finalboundary=true;
 			}
@@ -526,10 +609,16 @@ void httprequest::parseMultipart() {
 			delete name;
 			delete filename;
 			delete mimetype;
+			name=NULL;
+			filename=NULL;
+			mimetype=NULL;
+			value=NULL;
+			tempfile=NULL;
+			tempfilename=NULL;
 
 			// if we hit the final boundary, we're done...
 			if (finalboundary) {
-				return;
+				break;
 			}
 
 			// clear the ring buffer
@@ -561,9 +650,21 @@ void httprequest::parseMultipart() {
 		}
 	}
 
+	// discard a partial file parameter
+	if (tempfile) {
+		tempfile->close();
+		delete tempfile;
+		file::remove(tempfilename);
+		delete[] tempfilename;
+	}
+
+	// read the rest of the body (trailing CRLF, epilogue)
+	pvt->drainBody();
+
 	// clean up
 	delete name;
 	delete filename;
+	delete mimetype;
 	delete value;
 	delete[] altboundary;
 }
@@ -576,12 +677,12 @@ void httprequest::getNewNames(stringbuffer **name, stringbuffer **filename,
 
 	// get the new name and possibly filename
 	*name=getName();
-	char	charbuf;
-	pvt->_sapi->read(&charbuf);
+	char	charbuf='\0';
+	pvt->readBodyChar(&charbuf);
 	if (charbuf==';') {
 
 		*filename=getFileName();
-		pvt->_sapi->read(&charbuf);
+		pvt->readBodyChar(&charbuf);
 
 		*mimetype=getMimeType();
 	} else {
@@ -592,9 +693,9 @@ void httprequest::getNewNames(stringbuffer **name, stringbuffer **filename,
 
 	// get the 2 \r\n's before the content
 	// (we should already have the first \r)
-	pvt->_sapi->read(&charbuf);
-	pvt->_sapi->read(&charbuf);
-	pvt->_sapi->read(&charbuf);
+	pvt->readBodyChar(&charbuf);
+	pvt->readBodyChar(&charbuf);
+	pvt->readBodyChar(&charbuf);
 }
 
 void httprequest::getTempFile(const char *filename, file **tempfile,
@@ -637,7 +738,7 @@ stringbuffer *httprequest::getSomeKindOfName(char c) {
 
 	// skip to the "n" or "f" in (file)name="...";
 	for (;;) {
-		if (pvt->_sapi->read(&charbuf)!=sizeof(char)) {
+		if (!pvt->readBodyChar(&charbuf)) {
 			return name;
 		} else if (charbuf==c) {
 			break;
@@ -646,7 +747,7 @@ stringbuffer *httprequest::getSomeKindOfName(char c) {
 
 	// skip to the first " in (file)name="...";
 	for (;;) {
-		if (pvt->_sapi->read(&charbuf)!=sizeof(char)) {
+		if (!pvt->readBodyChar(&charbuf)) {
 			return name;
 		} else if (charbuf=='"') {
 			break;
@@ -655,7 +756,7 @@ stringbuffer *httprequest::getSomeKindOfName(char c) {
 
 	// get everything before the last " in (file)name="...";
 	for (;;) {
-		if (pvt->_sapi->read(&charbuf)!=sizeof(char)) {
+		if (!pvt->readBodyChar(&charbuf)) {
 			return name;
 		} else if (charbuf=='"') {
 			break;
@@ -674,16 +775,16 @@ stringbuffer *httprequest::getMimeType() {
 	// skip past "Content-type:"
 	char	charbuf;
 	for (;;) {
-		if (pvt->_sapi->read(&charbuf)!=sizeof(char) || charbuf==':') {
+		if (!pvt->readBodyChar(&charbuf) || charbuf==':') {
 			break;
 		}
 	}
 
 	// skip the space after "Content-type:"
-	pvt->_sapi->read(&charbuf);
+	pvt->readBodyChar(&charbuf);
 
 	// get the mime type
-	while (pvt->_sapi->read(&charbuf)==sizeof(char) && charbuf!='\r') {
+	while (pvt->readBodyChar(&charbuf) && charbuf!='\r') {
 		mimetype->append(charbuf);
 	}
 

@@ -449,6 +449,23 @@ ssize_t jsondom::writeNode(domnode *dn, output *out,
 							2)) {
 							return retval;
 						}
+					} else if (*val=='"' || *val=='\\') {
+						if (!incOrErr(&retval,
+							out->write('\\'),1) ||
+							!incOrErr(&retval,
+							out->write(*val),1)) {
+							return retval;
+						}
+					} else if ((unsigned char)*val<0x20) {
+						static const char	hex[]=
+							"0123456789abcdef";
+						char	esc[6]={'\\','u','0','0',
+							hex[(*val>>4)&0x0f],
+							hex[*val&0x0f]};
+						if (!incOrErr(&retval,
+							out->write(esc,6),6)) {
+							return retval;
+						}
 					} else {
 						if (!incOrErr(&retval,
 							out->write(*val),1)) {

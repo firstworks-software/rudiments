@@ -58,6 +58,11 @@ class RUDIMENTS_DLLSPEC jsonsax : public sax {
 
 		/** Gets called when a string value is parsed.
 		 *
+		 *  \uXXXX escapes (including surrogate pairs) are decoded to
+		 *  UTF-8, as is \/.  A lone surrogate or bad hex digits cause
+		 *  the parse to fail.  \u0000 is passed through as the six
+		 *  characters \u0000 as a string can't hold a null.
+		 *
 		 *  Returns true on success and false if an error occurred.
 		 *  Parsing stops if this method returns false.
 		 *
@@ -66,6 +71,10 @@ class RUDIMENTS_DLLSPEC jsonsax : public sax {
 		virtual	bool	stringValue(const char *value);
 
 		/** Gets called when a number value is parsed.
+		 *
+		 *  "value" is the number text, including any exponent.  Numbers
+		 *  must follow the JSON grammar.  A bare -, leading +, leading
+		 *  or trailing . and leading zeros cause the parse to fail.
 		 *
 		 *  Returns true on success and false if an error occurred.
 		 *  Parsing stops if this method returns false.

@@ -79,6 +79,7 @@ for program in \
 	ucs2charstring \
 	ucs2stringbuffer \
 	url \
+	urlhttprequest \
 	userentry \
 	wcharacter \
 	wcharstring \

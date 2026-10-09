@@ -160,14 +160,16 @@ class RUDIMENTS_DLLSPEC httprequest : public input {
 		 *  Returns the number of bytes that were successfully read or
 		 *  RESULT_ERROR if an error occurred.
 		 *
-		 *  Note that all read() methods return 0 (EOF) when the
-		 *  REQUEST_METHOD environment vairable is "get" or "head", as
-		 *  no data will have been posted, or when the REQUEST_METHOD
-		 *  environment variable is "post" and the CONTENT_TYPE
-		 *  environment variable is either
-		 *  "application/x-www-form-urlencoded" or
-		 *  "multipart-form-data", as in those cases, the posted data
-		 *  will have been processed internally. */
+		 *  Note that for a "get" or "head" REQUEST_METHOD, any body is
+		 *  left unread for the application.  For a "post"
+		 *  REQUEST_METHOD with a CONTENT_LENGTH, the body has already been
+		 *  consumed internally if CONTENT_TYPE is
+		 *  "application/x-www-form-urlencoded" or "multipart/form-data"
+		 *  (with a boundary), so read() methods return 0 (EOF).  Without
+		 *  a CONTENT_LENGTH, a urlencoded body is not consumed and a
+		 *  multipart body is consumed up to its closing boundary.  A
+		 *  multipart request with no boundary is ignored and its body is
+		 *  left unread.  CONTENT_TYPE matching is case-insensitive. */
 		ssize_t	read(byte_t *buffer, size_t size);
 
 		/** Reads "length" characters from the data posted by the
@@ -175,14 +177,16 @@ class RUDIMENTS_DLLSPEC httprequest : public input {
 		 *  Returns the number of bytes that were successfully read or
 		 *  RESULT_ERROR if an error occurred.
 		 *
-		 *  Note that all read() methods return 0 (EOF) when the
-		 *  REQUEST_METHOD environment vairable is "get" or "head", as
-		 *  no data will have been posted, or when the REQUEST_METHOD
-		 *  environment variable is "post" and the CONTENT_TYPE
-		 *  environment variable is either
-		 *  "application/x-www-form-urlencoded" or
-		 *  "multipart-form-data", as in those cases, the posted data
-		 *  will have been processed internally. */
+		 *  Note that for a "get" or "head" REQUEST_METHOD, any body is
+		 *  left unread for the application.  For a "post"
+		 *  REQUEST_METHOD with a CONTENT_LENGTH, the body has already been
+		 *  consumed internally if CONTENT_TYPE is
+		 *  "application/x-www-form-urlencoded" or "multipart/form-data"
+		 *  (with a boundary), so read() methods return 0 (EOF).  Without
+		 *  a CONTENT_LENGTH, a urlencoded body is not consumed and a
+		 *  multipart body is consumed up to its closing boundary.  A
+		 *  multipart request with no boundary is ignored and its body is
+		 *  left unread.  CONTENT_TYPE matching is case-insensitive. */
 		ssize_t	read(char *buffer, size_t length);
 
 		/** Reads a character from the data posted by the client into
@@ -190,14 +194,16 @@ class RUDIMENTS_DLLSPEC httprequest : public input {
 		 *  Returns the number of bytes that were successfully read or
 		 *  RESULT_ERROR if an error occurred.
 		 *
-		 *  Note that all read() methods return 0 (EOF) when the
-		 *  REQUEST_METHOD environment vairable is "get" or "head", as
-		 *  no data will have been posted, or when the REQUEST_METHOD
-		 *  environment variable is "post" and the CONTENT_TYPE
-		 *  environment variable is either
-		 *  "application/x-www-form-urlencoded" or
-		 *  "multipart-form-data", as in those cases, the posted data
-		 *  will have been processed internally. */
+		 *  Note that for a "get" or "head" REQUEST_METHOD, any body is
+		 *  left unread for the application.  For a "post"
+		 *  REQUEST_METHOD with a CONTENT_LENGTH, the body has already been
+		 *  consumed internally if CONTENT_TYPE is
+		 *  "application/x-www-form-urlencoded" or "multipart/form-data"
+		 *  (with a boundary), so read() methods return 0 (EOF).  Without
+		 *  a CONTENT_LENGTH, a urlencoded body is not consumed and a
+		 *  multipart body is consumed up to its closing boundary.  A
+		 *  multipart request with no boundary is ignored and its body is
+		 *  left unread.  CONTENT_TYPE matching is case-insensitive. */
 		ssize_t	read(char *character);
 
 		/** Reads "length" characters from the data posted by the
@@ -205,14 +211,16 @@ class RUDIMENTS_DLLSPEC httprequest : public input {
 		 *  Returns the number of bytes that were successfully read or
 		 *  RESULT_ERROR if an error occurred.
 		 *
-		 *  Note that all read() methods return 0 (EOF) when the
-		 *  REQUEST_METHOD environment vairable is "get" or "head", as
-		 *  no data will have been posted, or when the REQUEST_METHOD
-		 *  environment variable is "post" and the CONTENT_TYPE
-		 *  environment variable is either
-		 *  "application/x-www-form-urlencoded" or
-		 *  "multipart-form-data", as in those cases, the posted data
-		 *  will have been processed internally. */
+		 *  Note that for a "get" or "head" REQUEST_METHOD, any body is
+		 *  left unread for the application.  For a "post"
+		 *  REQUEST_METHOD with a CONTENT_LENGTH, the body has already been
+		 *  consumed internally if CONTENT_TYPE is
+		 *  "application/x-www-form-urlencoded" or "multipart/form-data"
+		 *  (with a boundary), so read() methods return 0 (EOF).  Without
+		 *  a CONTENT_LENGTH, a urlencoded body is not consumed and a
+		 *  multipart body is consumed up to its closing boundary.  A
+		 *  multipart request with no boundary is ignored and its body is
+		 *  left unread.  CONTENT_TYPE matching is case-insensitive. */
 		ssize_t	read(wchar_t *buffer, size_t length);
 
 		/** Reads a character from the data posted by the client into
@@ -220,14 +228,16 @@ class RUDIMENTS_DLLSPEC httprequest : public input {
 		 *  Returns the number of bytes that were successfully read or
 		 *  RESULT_ERROR if an error occurred.
 		 *
-		 *  Note that all read() methods return 0 (EOF) when the
-		 *  REQUEST_METHOD environment vairable is "get" or "head", as
-		 *  no data will have been posted, or when the REQUEST_METHOD
-		 *  environment variable is "post" and the CONTENT_TYPE
-		 *  environment variable is either
-		 *  "application/x-www-form-urlencoded" or
-		 *  "multipart-form-data", as in those cases, the posted data
-		 *  will have been processed internally. */
+		 *  Note that for a "get" or "head" REQUEST_METHOD, any body is
+		 *  left unread for the application.  For a "post"
+		 *  REQUEST_METHOD with a CONTENT_LENGTH, the body has already been
+		 *  consumed internally if CONTENT_TYPE is
+		 *  "application/x-www-form-urlencoded" or "multipart/form-data"
+		 *  (with a boundary), so read() methods return 0 (EOF).  Without
+		 *  a CONTENT_LENGTH, a urlencoded body is not consumed and a
+		 *  multipart body is consumed up to its closing boundary.  A
+		 *  multipart request with no boundary is ignored and its body is
+		 *  left unread.  CONTENT_TYPE matching is case-insensitive. */
 		ssize_t	read(wchar_t *character);
 
 		/** Reads "length" characters from the data posted by the
@@ -235,14 +245,16 @@ class RUDIMENTS_DLLSPEC httprequest : public input {
 		 *  Returns the number of bytes that were successfully read or
 		 *  RESULT_ERROR if an error occurred.
 		 *
-		 *  Note that all read() methods return 0 (EOF) when the
-		 *  REQUEST_METHOD environment vairable is "get" or "head", as
-		 *  no data will have been posted, or when the REQUEST_METHOD
-		 *  environment variable is "post" and the CONTENT_TYPE
-		 *  environment variable is either
-		 *  "application/x-www-form-urlencoded" or
-		 *  "multipart-form-data", as in those cases, the posted data
-		 *  will have been processed internally. */
+		 *  Note that for a "get" or "head" REQUEST_METHOD, any body is
+		 *  left unread for the application.  For a "post"
+		 *  REQUEST_METHOD with a CONTENT_LENGTH, the body has already been
+		 *  consumed internally if CONTENT_TYPE is
+		 *  "application/x-www-form-urlencoded" or "multipart/form-data"
+		 *  (with a boundary), so read() methods return 0 (EOF).  Without
+		 *  a CONTENT_LENGTH, a urlencoded body is not consumed and a
+		 *  multipart body is consumed up to its closing boundary.  A
+		 *  multipart request with no boundary is ignored and its body is
+		 *  left unread.  CONTENT_TYPE matching is case-insensitive. */
 		ssize_t	readUcs2(ucs2_t *buffer, size_t length);
 
 		/** Reads a character from the data posted by the client into
@@ -250,14 +262,16 @@ class RUDIMENTS_DLLSPEC httprequest : public input {
 		 *  Returns the number of bytes that were successfully read or
 		 *  RESULT_ERROR if an error occurred.
 		 *
-		 *  Note that all read() methods return 0 (EOF) when the
-		 *  REQUEST_METHOD environment vairable is "get" or "head", as
-		 *  no data will have been posted, or when the REQUEST_METHOD
-		 *  environment variable is "post" and the CONTENT_TYPE
-		 *  environment variable is either
-		 *  "application/x-www-form-urlencoded" or
-		 *  "multipart-form-data", as in those cases, the posted data
-		 *  will have been processed internally. */
+		 *  Note that for a "get" or "head" REQUEST_METHOD, any body is
+		 *  left unread for the application.  For a "post"
+		 *  REQUEST_METHOD with a CONTENT_LENGTH, the body has already been
+		 *  consumed internally if CONTENT_TYPE is
+		 *  "application/x-www-form-urlencoded" or "multipart/form-data"
+		 *  (with a boundary), so read() methods return 0 (EOF).  Without
+		 *  a CONTENT_LENGTH, a urlencoded body is not consumed and a
+		 *  multipart body is consumed up to its closing boundary.  A
+		 *  multipart request with no boundary is ignored and its body is
+		 *  left unread.  CONTENT_TYPE matching is case-insensitive. */
 		ssize_t	readUcs2(ucs2_t *character);
 
 		/** Reads a 16-bit integer from the data posted by the client
@@ -265,14 +279,16 @@ class RUDIMENTS_DLLSPEC httprequest : public input {
 		 *  Returns the number of bytes that were successfully read or
 		 *  RESULT_ERROR if an error occurred.
 		 *
-		 *  Note that all read() methods return 0 (EOF) when the
-		 *  REQUEST_METHOD environment vairable is "get" or "head", as
-		 *  no data will have been posted, or when the REQUEST_METHOD
-		 *  environment variable is "post" and the CONTENT_TYPE
-		 *  environment variable is either
-		 *  "application/x-www-form-urlencoded" or
-		 *  "multipart-form-data", as in those cases, the posted data
-		 *  will have been processed internally. */
+		 *  Note that for a "get" or "head" REQUEST_METHOD, any body is
+		 *  left unread for the application.  For a "post"
+		 *  REQUEST_METHOD with a CONTENT_LENGTH, the body has already been
+		 *  consumed internally if CONTENT_TYPE is
+		 *  "application/x-www-form-urlencoded" or "multipart/form-data"
+		 *  (with a boundary), so read() methods return 0 (EOF).  Without
+		 *  a CONTENT_LENGTH, a urlencoded body is not consumed and a
+		 *  multipart body is consumed up to its closing boundary.  A
+		 *  multipart request with no boundary is ignored and its body is
+		 *  left unread.  CONTENT_TYPE matching is case-insensitive. */
 		ssize_t	read(int16_t *number);
 
 		/** Reads a 32-bit integer from the data posted by the client
@@ -280,14 +296,16 @@ class RUDIMENTS_DLLSPEC httprequest : public input {
 		 *  Returns the number of bytes that were successfully read or
 		 *  RESULT_ERROR if an error occurred.
 		 *
-		 *  Note that all read() methods return 0 (EOF) when the
-		 *  REQUEST_METHOD environment vairable is "get" or "head", as
-		 *  no data will have been posted, or when the REQUEST_METHOD
-		 *  environment variable is "post" and the CONTENT_TYPE
-		 *  environment variable is either
-		 *  "application/x-www-form-urlencoded" or
-		 *  "multipart-form-data", as in those cases, the posted data
-		 *  will have been processed internally. */
+		 *  Note that for a "get" or "head" REQUEST_METHOD, any body is
+		 *  left unread for the application.  For a "post"
+		 *  REQUEST_METHOD with a CONTENT_LENGTH, the body has already been
+		 *  consumed internally if CONTENT_TYPE is
+		 *  "application/x-www-form-urlencoded" or "multipart/form-data"
+		 *  (with a boundary), so read() methods return 0 (EOF).  Without
+		 *  a CONTENT_LENGTH, a urlencoded body is not consumed and a
+		 *  multipart body is consumed up to its closing boundary.  A
+		 *  multipart request with no boundary is ignored and its body is
+		 *  left unread.  CONTENT_TYPE matching is case-insensitive. */
 		ssize_t	read(int32_t *number);
 
 		/** Reads a 64-bit integer from the data posted by the client
@@ -295,28 +313,32 @@ class RUDIMENTS_DLLSPEC httprequest : public input {
 		 *  Returns the number of bytes that were successfully read or
 		 *  RESULT_ERROR if an error occurred.
 		 *
-		 *  Note that all read() methods return 0 (EOF) when the
-		 *  REQUEST_METHOD environment vairable is "get" or "head", as
-		 *  no data will have been posted, or when the REQUEST_METHOD
-		 *  environment variable is "post" and the CONTENT_TYPE
-		 *  environment variable is either
-		 *  "application/x-www-form-urlencoded" or
-		 *  "multipart-form-data", as in those cases, the posted data
-		 *  will have been processed internally. */
+		 *  Note that for a "get" or "head" REQUEST_METHOD, any body is
+		 *  left unread for the application.  For a "post"
+		 *  REQUEST_METHOD with a CONTENT_LENGTH, the body has already been
+		 *  consumed internally if CONTENT_TYPE is
+		 *  "application/x-www-form-urlencoded" or "multipart/form-data"
+		 *  (with a boundary), so read() methods return 0 (EOF).  Without
+		 *  a CONTENT_LENGTH, a urlencoded body is not consumed and a
+		 *  multipart body is consumed up to its closing boundary.  A
+		 *  multipart request with no boundary is ignored and its body is
+		 *  left unread.  CONTENT_TYPE matching is case-insensitive. */
 		ssize_t	read(int64_t *number);
 
 		/** Reads a byte from the data posted by the client into
 		 *  "character".  Returns the number of bytes that were
 		 *  successfully read or  RESULT_ERROR if an error occurred.
 		 *
-		 *  Note that all read() methods return 0 (EOF) when the
-		 *  REQUEST_METHOD environment vairable is "get" or "head", as
-		 *  no data will have been posted, or when the REQUEST_METHOD
-		 *  environment variable is "post" and the CONTENT_TYPE
-		 *  environment variable is either
-		 *  "application/x-www-form-urlencoded" or
-		 *  "multipart-form-data", as in those cases, the posted data
-		 *  will have been processed internally. */
+		 *  Note that for a "get" or "head" REQUEST_METHOD, any body is
+		 *  left unread for the application.  For a "post"
+		 *  REQUEST_METHOD with a CONTENT_LENGTH, the body has already been
+		 *  consumed internally if CONTENT_TYPE is
+		 *  "application/x-www-form-urlencoded" or "multipart/form-data"
+		 *  (with a boundary), so read() methods return 0 (EOF).  Without
+		 *  a CONTENT_LENGTH, a urlencoded body is not consumed and a
+		 *  multipart body is consumed up to its closing boundary.  A
+		 *  multipart request with no boundary is ignored and its body is
+		 *  left unread.  CONTENT_TYPE matching is case-insensitive. */
 		ssize_t	read(byte_t *character);
 
 		/** Reads a 16-bit unsigned integer from the data posted by the
@@ -324,14 +346,16 @@ class RUDIMENTS_DLLSPEC httprequest : public input {
 		 *  Returns the number of bytes that were successfully read or
 		 *  RESULT_ERROR if an error occurred.
 		 *
-		 *  Note that all read() methods return 0 (EOF) when the
-		 *  REQUEST_METHOD environment vairable is "get" or "head", as
-		 *  no data will have been posted, or when the REQUEST_METHOD
-		 *  environment variable is "post" and the CONTENT_TYPE
-		 *  environment variable is either
-		 *  "application/x-www-form-urlencoded" or
-		 *  "multipart-form-data", as in those cases, the posted data
-		 *  will have been processed internally. */
+		 *  Note that for a "get" or "head" REQUEST_METHOD, any body is
+		 *  left unread for the application.  For a "post"
+		 *  REQUEST_METHOD with a CONTENT_LENGTH, the body has already been
+		 *  consumed internally if CONTENT_TYPE is
+		 *  "application/x-www-form-urlencoded" or "multipart/form-data"
+		 *  (with a boundary), so read() methods return 0 (EOF).  Without
+		 *  a CONTENT_LENGTH, a urlencoded body is not consumed and a
+		 *  multipart body is consumed up to its closing boundary.  A
+		 *  multipart request with no boundary is ignored and its body is
+		 *  left unread.  CONTENT_TYPE matching is case-insensitive. */
 		ssize_t	read(uint16_t *number);
 
 		/** Reads a 32-bit unsigned integer from the data posted by the
@@ -339,14 +363,16 @@ class RUDIMENTS_DLLSPEC httprequest : public input {
 		 *  Returns the number of bytes that were successfully read or
 		 *  RESULT_ERROR if an error occurred.
 		 *
-		 *  Note that all read() methods return 0 (EOF) when the
-		 *  REQUEST_METHOD environment vairable is "get" or "head", as
-		 *  no data will have been posted, or when the REQUEST_METHOD
-		 *  environment variable is "post" and the CONTENT_TYPE
-		 *  environment variable is either
-		 *  "application/x-www-form-urlencoded" or
-		 *  "multipart-form-data", as in those cases, the posted data
-		 *  will have been processed internally. */
+		 *  Note that for a "get" or "head" REQUEST_METHOD, any body is
+		 *  left unread for the application.  For a "post"
+		 *  REQUEST_METHOD with a CONTENT_LENGTH, the body has already been
+		 *  consumed internally if CONTENT_TYPE is
+		 *  "application/x-www-form-urlencoded" or "multipart/form-data"
+		 *  (with a boundary), so read() methods return 0 (EOF).  Without
+		 *  a CONTENT_LENGTH, a urlencoded body is not consumed and a
+		 *  multipart body is consumed up to its closing boundary.  A
+		 *  multipart request with no boundary is ignored and its body is
+		 *  left unread.  CONTENT_TYPE matching is case-insensitive. */
 		ssize_t	read(uint32_t *number);
 
 		/** Reads a 64-bit unsigned integer from the data posted by the
@@ -354,14 +380,16 @@ class RUDIMENTS_DLLSPEC httprequest : public input {
 		 *  Returns the number of bytes that were successfully read or
 		 *  RESULT_ERROR if an error occurred.
 		 *
-		 *  Note that all read() methods return 0 (EOF) when the
-		 *  REQUEST_METHOD environment vairable is "get" or "head", as
-		 *  no data will have been posted, or when the REQUEST_METHOD
-		 *  environment variable is "post" and the CONTENT_TYPE
-		 *  environment variable is either
-		 *  "application/x-www-form-urlencoded" or
-		 *  "multipart-form-data", as in those cases, the posted data
-		 *  will have been processed internally. */
+		 *  Note that for a "get" or "head" REQUEST_METHOD, any body is
+		 *  left unread for the application.  For a "post"
+		 *  REQUEST_METHOD with a CONTENT_LENGTH, the body has already been
+		 *  consumed internally if CONTENT_TYPE is
+		 *  "application/x-www-form-urlencoded" or "multipart/form-data"
+		 *  (with a boundary), so read() methods return 0 (EOF).  Without
+		 *  a CONTENT_LENGTH, a urlencoded body is not consumed and a
+		 *  multipart body is consumed up to its closing boundary.  A
+		 *  multipart request with no boundary is ignored and its body is
+		 *  left unread.  CONTENT_TYPE matching is case-insensitive. */
 		ssize_t	read(uint64_t *number);
 
 		/** Reads a floating point number from the data posted by the
@@ -369,14 +397,16 @@ class RUDIMENTS_DLLSPEC httprequest : public input {
 		 *  Returns the number of bytes that were successfully read or
 		 *  RESULT_ERROR if an error occurred.
 		 *
-		 *  Note that all read() methods return 0 (EOF) when the
-		 *  REQUEST_METHOD environment vairable is "get" or "head", as
-		 *  no data will have been posted, or when the REQUEST_METHOD
-		 *  environment variable is "post" and the CONTENT_TYPE
-		 *  environment variable is either
-		 *  "application/x-www-form-urlencoded" or
-		 *  "multipart-form-data", as in those cases, the posted data
-		 *  will have been processed internally. */
+		 *  Note that for a "get" or "head" REQUEST_METHOD, any body is
+		 *  left unread for the application.  For a "post"
+		 *  REQUEST_METHOD with a CONTENT_LENGTH, the body has already been
+		 *  consumed internally if CONTENT_TYPE is
+		 *  "application/x-www-form-urlencoded" or "multipart/form-data"
+		 *  (with a boundary), so read() methods return 0 (EOF).  Without
+		 *  a CONTENT_LENGTH, a urlencoded body is not consumed and a
+		 *  multipart body is consumed up to its closing boundary.  A
+		 *  multipart request with no boundary is ignored and its body is
+		 *  left unread.  CONTENT_TYPE matching is case-insensitive. */
 		ssize_t	read(float *number);
 
 		/** Reads a double-precision floating point number from the
@@ -384,14 +414,16 @@ class RUDIMENTS_DLLSPEC httprequest : public input {
 		 *  Returns the number of bytes that were successfully read or
 		 *  RESULT_ERROR if an error occurred.
 		 *
-		 *  Note that all read() methods return 0 (EOF) when the
-		 *  REQUEST_METHOD environment vairable is "get" or "head", as
-		 *  no data will have been posted, or when the REQUEST_METHOD
-		 *  environment variable is "post" and the CONTENT_TYPE
-		 *  environment variable is either
-		 *  "application/x-www-form-urlencoded" or
-		 *  "multipart-form-data", as in those cases, the posted data
-		 *  will have been processed internally. */
+		 *  Note that for a "get" or "head" REQUEST_METHOD, any body is
+		 *  left unread for the application.  For a "post"
+		 *  REQUEST_METHOD with a CONTENT_LENGTH, the body has already been
+		 *  consumed internally if CONTENT_TYPE is
+		 *  "application/x-www-form-urlencoded" or "multipart/form-data"
+		 *  (with a boundary), so read() methods return 0 (EOF).  Without
+		 *  a CONTENT_LENGTH, a urlencoded body is not consumed and a
+		 *  multipart body is consumed up to its closing boundary.  A
+		 *  multipart request with no boundary is ignored and its body is
+		 *  left unread.  CONTENT_TYPE matching is case-insensitive. */
 		ssize_t	read(double *number);
 
 

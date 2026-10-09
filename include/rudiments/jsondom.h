@@ -130,10 +130,12 @@ class RUDIMENTS_DLLSPEC jsondom : public jsonsax, public dom {
 		/** Gets called when a value start is parsed. */
 		virtual	bool	valueStart();
 
-		/** Gets called when a string value is parsed. */
+		/** Gets called when a string value is parsed.
+		 *  \uXXXX escapes and \/ are decoded to UTF-8. */
 		virtual	bool	stringValue(const char *value);
 
-		/** Gets called when a number value is parsed. */
+		/** Gets called when a number value is parsed.
+		 *  "value" includes any exponent. */
 		virtual	bool	numberValue(const char *value);
 
 		/** Gets called when a true value is parsed. */

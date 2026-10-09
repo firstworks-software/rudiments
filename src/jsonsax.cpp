@@ -262,6 +262,49 @@ bool jsonsax::parseObject(char current, char *next) {
 	return true;
 }
 
+static int32_t hexValue(char ch) {
+	if (ch>='0' && ch<='9') {
+		return ch-'0';
+	} else if (ch>='a' && ch<='f') {
+		return ch-'a'+10;
+	} else if (ch>='A' && ch<='F') {
+		return ch-'A'+10;
+	}
+	return -1;
+}
+
+static void appendUtf8(stringbuffer *str, uint32_t cp) {
+	if (cp<0x80) {
+		str->append((char)cp);
+	} else if (cp<0x800) {
+		str->append((char)(0xC0|(cp>>6)));
+		str->append((char)(0x80|(cp&0x3F)));
+	} else if (cp<0x10000) {
+		str->append((char)(0xE0|(cp>>12)));
+		str->append((char)(0x80|((cp>>6)&0x3F)));
+		str->append((char)(0x80|(cp&0x3F)));
+	} else {
+		str->append((char)(0xF0|(cp>>18)));
+		str->append((char)(0x80|((cp>>12)&0x3F)));
+		str->append((char)(0x80|((cp>>6)&0x3F)));
+		str->append((char)(0x80|(cp&0x3F)));
+	}
+}
+
+bool jsonsax::parseHex4(uint32_t *value) {
+	uint32_t	v=0;
+	for (uint8_t i=0; i<4; i++) {
+		int32_t	h=hexValue(getCharacter());
+		if (h<0) {
+			parseFailed("str","invalid \\u escape");
+			return false;
+		}
+		v=(v<<4)|h;
+	}
+	*value=v;
+	return true;
+}
+
 bool jsonsax::parseStr(stringbuffer *str, char current, char *next) {
 
 	char	ch=current;
@@ -287,8 +330,41 @@ bool jsonsax::parseStr(stringbuffer *str, char current, char *next) {
 				str->append('\r');
 			} else if (ch=='t') {
 				str->append('\t');
-			} else if (ch=='\\' || ch=='\"') {
+			} else if (ch=='\\' || ch=='\"' || ch=='/') {
 				str->append(ch);
+			} else if (ch=='u') {
+				uint32_t	cp;
+				if (!parseHex4(&cp)) {
+					return false;
+				}
+				if (cp>=0xD800 && cp<=0xDBFF) {
+
+					// high surrogate, needs a low one
+					uint32_t	low;
+					if (getCharacter()!='\\' ||
+						getCharacter()!='u' ||
+						!parseHex4(&low) ||
+						low<0xDC00 || low>0xDFFF) {
+						parseFailed("str",
+							"invalid surrogate");
+						return false;
+					}
+					cp=0x10000+
+						((cp-0xD800)<<10)+
+						(low-0xDC00);
+				} else if (cp>=0xDC00 && cp<=0xDFFF) {
+					parseFailed("str","invalid surrogate");
+					return false;
+				}
+				if (cp) {
+					appendUtf8(str,cp);
+				} else {
+
+					// a C string can't hold a null, so keep
+					// the escape as text, which the writer
+					// emits for a null
+					str->append("\\u0000");
+				}
 			} else {
 				str->append('\\');
 				str->append(ch);
@@ -328,7 +404,7 @@ bool jsonsax::parseValue(char current, char *next) {
 		success=parseObject(ch,next);
 	} else if (ch=='[') {
 		success=parseArray(ch,next);
-	} else if (character::isDigit(ch) || character::isInSet(ch,"-+,")) {
+	} else if (ch=='-' || character::isDigit(ch)) {
 		pvt->_str.clear();
 		if ((success=parseNumber(&pvt->_str,ch,next))) {
 			if (!numberValue(pvt->_str.getString())) {
@@ -420,31 +496,56 @@ bool jsonsax::parseNumber(stringbuffer *str, char current, char *next) {
 
 	char	ch=current;
 
-	bool	gotdecimal=false;
-
-	// handle signs
+	// optional sign
 	if (ch=='-') {
 		str->append(ch);
 		ch=getCharacter();
-	} else if (ch=='+') {
-		ch=getCharacter();
 	}
 
-	// prepend a zero if the number starts with a decimal
-	if (ch=='.') {
-		gotdecimal=true;
-		str->append("0.");
+	// integer part: a single 0 or a nonzero digit followed by digits
+	if (ch=='0') {
+		str->append(ch);
 		ch=getCharacter();
-	}
-
-	// get the number into the stringbuffer
-	for (;;) {
-		if (character::isDigit(ch) || (ch=='.' && !gotdecimal)) {
+	} else if (character::isDigit(ch)) {
+		do {
 			str->append(ch);
-		} else {
-			break;
-		}
+			ch=getCharacter();
+		} while (character::isDigit(ch));
+	} else {
+		parseFailed("number","missing digit");
+		return false;
+	}
+
+	// optional fraction
+	if (ch=='.') {
+		str->append(ch);
 		ch=getCharacter();
+		if (!character::isDigit(ch)) {
+			parseFailed("number","missing digit after .");
+			return false;
+		}
+		do {
+			str->append(ch);
+			ch=getCharacter();
+		} while (character::isDigit(ch));
+	}
+
+	// optional exponent
+	if (ch=='e' || ch=='E') {
+		str->append(ch);
+		ch=getCharacter();
+		if (ch=='+' || ch=='-') {
+			str->append(ch);
+			ch=getCharacter();
+		}
+		if (!character::isDigit(ch)) {
+			parseFailed("number","missing exponent digit");
+			return false;
+		}
+		do {
+			str->append(ch);
+			ch=getCharacter();
+		} while (character::isDigit(ch));
 	}
 
 	// skip whitespace after and return the next character

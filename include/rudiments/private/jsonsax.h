@@ -10,6 +10,7 @@
 		bool	parseMember(char current, char *next);
 		bool	parseStr(stringbuffer *str,
 					char current, char *next);
+		bool	parseHex4(uint32_t *value);
 		bool	parseValue(char current, char *next);
 		bool	parseArray(char current, char *next);
 		bool	parseNumber(stringbuffer *str,
