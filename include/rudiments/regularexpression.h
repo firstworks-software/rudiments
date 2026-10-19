@@ -240,6 +240,11 @@ class RUDIMENTS_DLLSPEC regularexpression : public object {
 		 *  returns -1 if more than one group has the name, since
 		 *  there is then no single index to return.
 		 *
+		 *  PCRE older than 4.0 doesn't have named capture groups
+		 *  either, so this method returns -1 there too.  PCRE
+		 *  older than 7.0 only accepts the (?P\<name\>...)
+		 *  syntax, and (?P=name) to refer to the group later.
+		 *
 		 *  Note that passing a literal NULL to the methods below
 		 *  that take a "name" is ambiguous with the ones that
 		 *  take an "index" on some compilers, and picks the index

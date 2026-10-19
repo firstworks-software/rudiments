@@ -1068,7 +1068,9 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  regular expression engines that the regularexpression
 		 *  class falls back to, on platforms without PCRE, do
 		 *  not have them, so \\g\<name\> contributes nothing on
-		 *  those platforms.
+		 *  those platforms.  PCRE older than 4.0 doesn't have
+		 *  them either, and PCRE older than 7.0 only accepts the
+		 *  (?P\<name\>...) syntax for naming a group.
 		 *
 		 *  A group that didn't participate in the match, or that
 		 *  the pattern doesn't have at all, contributes nothing.

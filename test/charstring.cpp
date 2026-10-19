@@ -1065,13 +1065,25 @@ int main(int argc, const char **argv) {
 		!charstring::compare(newstr,"[|]b"));
 	delete[] newstr;
 
-	#if defined(RUDIMENTS_HAS_PCRE2) || defined(RUDIMENTS_HAS_PCRE)
-	// a \g<name> is resolved with getSubstringIndex(), which only the
-	// PCRE engines can answer - the POSIX engines have no named capture
-	// groups, so a pattern that declares one won't compile there at all
+	#if defined(RUDIMENTS_HAS_PCRE2) || \
+		(defined(RUDIMENTS_HAS_PCRE) && \
+			defined(RUDIMENTS_HAS_PCRE_GET_STRINGNUMBER))
+	// a \g<name> is resolved with getSubstringIndex(), which only PCRE2
+	// and a PCRE with pcre_get_stringnumber (4.0+) can answer - the other
+	// engines have no named capture groups, so a pattern that declares
+	// one won't compile there at all.  (?<name>...) needs PCRE 7.0, but
+	// (?P<name>...) works in every engine that has named groups.
 	original="2026-08-05";
-	from.setPattern("(?<year>[0-9]{4})-(?<month>[0-9]{2})-"
-			"(?<day>[0-9]{2})");
+	regularexpression	probe;
+	if (probe.setPattern("(?<n>x)")) {
+		from.setPattern("(?<year>[0-9]{4})-(?<month>[0-9]{2})-"
+				"(?<day>[0-9]{2})");
+	} else {
+		stdoutput.printf("\t(?<name>...) syntax: skipped, "
+				"using (?P<name>...)\n");
+		from.setPattern("(?P<year>[0-9]{4})-(?P<month>[0-9]{2})-"
+				"(?P<day>[0-9]{2})");
+	}
 	newstr=charstring::replace(original,&from,
 				"\\g<month>/\\g<day>/\\g<year>",false);
 	test("replace regex/from-to (named groups)",
@@ -1085,8 +1097,8 @@ int main(int argc, const char **argv) {
 		!charstring::compare(newstr,"[2026|]"));
 	delete[] newstr;
 	#else
-	// the POSIX engines have no named groups at all, so every name is
-	// an unknown one and expands to nothing
+	// the POSIX engines, and a PCRE older than 4.0, have no named groups
+	// at all, so every name is an unknown one and expands to nothing
 	original="2026-08-05";
 	from.setPattern("([0-9]{4})-([0-9]{2})-([0-9]{2})");
 	newstr=charstring::replace(original,&from,

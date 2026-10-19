@@ -601,6 +601,8 @@ then
 					;;
 				* )
 					AC_DEFINE(RUDIMENTS_HAS_PCRE,1,Rudiments supports PCRE)
+					AC_DEFINE(RUDIMENTS_HAS_PCRE_GET_STRINGNUMBER,1,PCRE has pcre_get_stringnumber)
+					AC_DEFINE(RUDIMENTS_HAS_PCRE_GET_STRINGTABLE_ENTRIES,1,PCRE has pcre_get_stringtable_entries)
 					;;
 			esac
 		fi
@@ -666,6 +668,23 @@ then
 					#include <stdlib.h>
 #endif
 #include <pcre.h>],[pcre_extra *extra=pcre_study(NULL,0,NULL);],[$CPPFLAGS $PCREINCLUDES],[$PCRELIBS],[],[HAVE_PCRE="yes"; AC_DEFINE(RUDIMENTS_HAS_PCRE,1,Rudiments supports PCRE) AC_MSG_RESULT(yes)],[PCREINCLUDES=""; PCRELIBS=""; AC_MSG_RESULT(no)])
+
+				dnl named group lookup needs pcre 4.0, and
+				dnl detecting duplicate names needs pcre 6.7
+				if ( test -n "$HAVE_PCRE" )
+				then
+					AC_MSG_CHECKING(for pcre_get_stringnumber)
+					FW_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
+						#include <stdlib.h>
+#endif
+#include <pcre.h>],[int n=pcre_get_stringnumber(NULL,NULL);],[$CPPFLAGS $PCREINCLUDES],[$PCRELIBS],[],[AC_DEFINE(RUDIMENTS_HAS_PCRE_GET_STRINGNUMBER,1,PCRE has pcre_get_stringnumber) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+
+					AC_MSG_CHECKING(for pcre_get_stringtable_entries)
+					FW_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDLIB_H
+						#include <stdlib.h>
+#endif
+#include <pcre.h>],[char *first; char *last; int n=pcre_get_stringtable_entries(NULL,NULL,&first,&last);],[$CPPFLAGS $PCREINCLUDES],[$PCRELIBS],[],[AC_DEFINE(RUDIMENTS_HAS_PCRE_GET_STRINGTABLE_ENTRIES,1,PCRE has pcre_get_stringtable_entries) AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)])
+				fi
 			else
 				AC_MSG_RESULT(no)
 			fi

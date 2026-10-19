@@ -273,6 +273,12 @@
 /* Rudiments supports PCRE2 */
 #undef RUDIMENTS_HAS_PCRE2
 
+/* PCRE has pcre_get_stringnumber */
+#undef RUDIMENTS_HAS_PCRE_GET_STRINGNUMBER
+
+/* PCRE has pcre_get_stringtable_entries */
+#undef RUDIMENTS_HAS_PCRE_GET_STRINGTABLE_ENTRIES
+
 /* SSL has generic PKCS5_PBKDF2_HMAC */
 #undef RUDIMENTS_HAS_PKCS5_PBKDF2_HMAC
 

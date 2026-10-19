@@ -7,6 +7,22 @@
 #include <rudiments/stdio.h>
 #include "test.cpp"
 
+// a name lookup needs PCRE2, or a PCRE with pcre_get_stringnumber (4.0+)
+#if defined(RUDIMENTS_HAS_PCRE2) || \
+	(defined(RUDIMENTS_HAS_PCRE) && \
+		defined(RUDIMENTS_HAS_PCRE_GET_STRINGNUMBER))
+	#define NAMED_GROUPS
+#endif
+
+#ifdef NAMED_GROUPS
+// whether the engine accepts a pattern's syntax can only be found by
+// compiling it, which a configure link check cannot do
+static bool compiles(const char *pattern) {
+	regularexpression	probe;
+	return probe.setPattern(pattern);
+}
+#endif
+
 void printMatches(regularexpression *re) {
 	for (int32_t i=0; i<re->getSubstringCount(); i++) {
 		stdoutput.printf("match %d start: \"%s\"\n",
@@ -576,8 +592,17 @@ printMatches(&re);
 
         stdoutput.printf("named capture groups\n");
 
-	#if defined(RUDIMENTS_HAS_PCRE2) || defined(RUDIMENTS_HAS_PCRE)
-	test("setPattern",re.setPattern("(?<year>[0-9]{4})-(?<month>[0-9]{2})"));
+	#ifdef NAMED_GROUPS
+	// (?<name>...) needs PCRE 7.0, but (?P<name>...) works in every engine
+	// that has named groups, so older ones get the latter
+	bool	perlnames=compiles("(?<n>x)");
+	if (!perlnames) {
+		stdoutput.printf("\t(?<name>...) syntax: skipped, "
+				"using (?P<name>...)\n");
+	}
+	test("setPattern",re.setPattern((perlnames)?
+			"(?<year>[0-9]{4})-(?<month>[0-9]{2})":
+			"(?P<year>[0-9]{4})-(?P<month>[0-9]{2})"));
         str="on 2026-08 sometime";
         test(str,re.match(str));
 
@@ -613,7 +638,9 @@ printMatches(&re);
 
 	// a named group that didn't participate keeps its index, but
 	// reports no substring
-	test("setPattern",re.setPattern("(?<a>x)?(?<b>y)"));
+	test("setPattern",re.setPattern((perlnames)?
+					"(?<a>x)?(?<b>y)":
+					"(?P<a>x)?(?P<b>y)"));
         str="y";
         test(str,re.match(str));
 	test("a index",re.getSubstringIndex("a")==1);
@@ -627,31 +654,48 @@ printMatches(&re);
 	// there's no single index to report.  (?J) turns duplicate names
 	// on from inside the pattern, so this is reachable even though
 	// setPattern() never asks for them.
-	test("setPattern",re.setPattern("(?J)(?<n>aa)|(?<n>bb)"));
+	#if defined(RUDIMENTS_HAS_PCRE2) || \
+		defined(RUDIMENTS_HAS_PCRE_GET_STRINGTABLE_ENTRIES)
+	test("setPattern",re.setPattern((perlnames)?
+					"(?J)(?<n>aa)|(?<n>bb)":
+					"(?J)(?P<n>aa)|(?P<n>bb)"));
         str="zzaa";
         test(str,re.match(str));
 	test("duplicate name index",re.getSubstringIndex("n")==-1);
 	test("duplicate name start",!re.getSubstringStart("n"));
 	test("duplicate name start offset",re.getSubstringStartOffset("n")==-1);
+	#else
+	// the duplicate check needs pcre_get_stringtable_entries (PCRE 6.7+)
+	stdoutput.printf("\tduplicate names: skipped\n");
+	#endif
 
 	// ...but a branch reset gives every branch the same index, so the
-	// name still resolves
-	test("setPattern",re.setPattern("(?|(?<n>aa)|(?<n>bb))"));
-        str="zzbb";
-        test(str,re.match(str));
-	test("branch reset index",re.getSubstringIndex("n")==1);
-	test("branch reset start",re.getSubstringStart("n")==(str+2));
-	test("branch reset end",re.getSubstringEnd("n")==(str+4));
+	// name still resolves (a shared name in a branch reset needs PCRE 8.0)
+	if (compiles((perlnames)?
+			"(?|(?<n>aa)|(?<n>bb))":
+			"(?|(?P<n>aa)|(?P<n>bb))")) {
+		test("setPattern",re.setPattern((perlnames)?
+					"(?|(?<n>aa)|(?<n>bb))":
+					"(?|(?P<n>aa)|(?P<n>bb))"));
+		str="zzbb";
+		test(str,re.match(str));
+		test("branch reset index",re.getSubstringIndex("n")==1);
+		test("branch reset start",re.getSubstringStart("n")==(str+2));
+		test("branch reset end",re.getSubstringEnd("n")==(str+4));
+	} else {
+		stdoutput.printf("\tbranch reset: skipped\n");
+	}
 
 	// the index is a property of the pattern, so it resolves before a
 	// match has been tried, and stops resolving when the pattern changes
-	test("setPattern",re.setPattern("(?<zzz>z)"));
+	test("setPattern",re.setPattern((perlnames)?"(?<zzz>z)":"(?P<zzz>z)"));
 	test("index before a match",re.getSubstringIndex("zzz")==1);
 	test("no substring before a match",!re.getSubstringStart("zzz"));
 	test("setPattern",re.setPattern("(z)"));
 	test("index after a new pattern",re.getSubstringIndex("zzz")==-1);
 	#else
-	// the POSIX engines have no named capture groups
+	// the POSIX engines, and a PCRE older than 4.0, have no named
+	// capture groups
 	test("setPattern",re.setPattern("(a)(b)"));
         str="ab";
         test(str,re.match(str));

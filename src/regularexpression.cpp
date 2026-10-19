@@ -453,17 +453,27 @@ int32_t regularexpression::getSubstringIndex(const char *name) {
 		if (!pvt->_expr) {
 			return -1;
 		}
-		// Unlike pcre2, pcre1 returns one of the numbers when more
-		// than one group has the name, and doesn't define which.
-		// The name table has to be consulted to rule that out.
-		char	*first;
-		char	*last;
-		if (pcre_get_stringtable_entries(pvt->_expr,name,
-							&first,&last)<0 ||
-			first!=last) {
-			return -1;
-		}
-		int32_t	index=pcre_get_stringnumber(pvt->_expr,name);
+		#if defined(RUDIMENTS_HAS_PCRE_GET_STRINGNUMBER)
+			// Before 6.7, pcre has no way to search the name
+			// table, but doesn't allow duplicate names either.
+			#if defined(RUDIMENTS_HAS_PCRE_GET_STRINGTABLE_ENTRIES)
+				// Unlike pcre2, pcre1 returns one of the
+				// numbers when more than one group has the
+				// name, and doesn't define which.  The name
+				// table has to be consulted to rule that out.
+				char	*first;
+				char	*last;
+				if (pcre_get_stringtable_entries(pvt->_expr,
+							name,&first,&last)<0 ||
+					first!=last) {
+					return -1;
+				}
+			#endif
+			int32_t	index=pcre_get_stringnumber(pvt->_expr,name);
+		#else
+			// pcre before 4.0 has no named capture groups
+			int32_t	index=-1;
+		#endif
 	#else
 		// the POSIX regular expression engines have no named
 		// capture groups

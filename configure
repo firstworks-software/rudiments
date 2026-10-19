@@ -30202,6 +30202,12 @@ printf "%s\n" "#define RUDIMENTS_HAS_PCRE2 1" >>confdefs.h
 
 printf "%s\n" "#define RUDIMENTS_HAS_PCRE 1" >>confdefs.h
 
+
+printf "%s\n" "#define RUDIMENTS_HAS_PCRE_GET_STRINGNUMBER 1" >>confdefs.h
+
+
+printf "%s\n" "#define RUDIMENTS_HAS_PCRE_GET_STRINGTABLE_ENTRIES 1" >>confdefs.h
+
 					;;
 			esac
 		fi
@@ -31257,6 +31263,93 @@ LIBS="$SAVELIBS"
 LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
 export LD_LIBRARY_PATH
 
+
+												if ( test -n "$HAVE_PCRE" )
+				then
+					{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for pcre_get_stringnumber" >&5
+printf %s "checking for pcre_get_stringnumber... " >&6; }
+
+SAVECPPFLAGS="$CPPFLAGS"
+SAVELIBS="$LIBS"
+SAVE_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
+CPPFLAGS="$CPPFLAGS $PCREINCLUDES"
+LIBS="$PCRELIBS"
+LD_LIBRARY_PATH=""
+export LD_LIBRARY_PATH
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+						#include <stdlib.h>
+#endif
+#include <pcre.h>
+int
+main (void)
+{
+int n=pcre_get_stringnumber(NULL,NULL);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"
+then :
+
+printf "%s\n" "#define RUDIMENTS_HAS_PCRE_GET_STRINGNUMBER 1" >>confdefs.h
+ { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+printf "%s\n" "yes" >&6; }
+else $as_nop
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.beam \
+    conftest$ac_exeext conftest.$ac_ext
+CPPFLAGS="$SAVECPPFLAGS"
+LIBS="$SAVELIBS"
+LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
+export LD_LIBRARY_PATH
+
+
+					{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for pcre_get_stringtable_entries" >&5
+printf %s "checking for pcre_get_stringtable_entries... " >&6; }
+
+SAVECPPFLAGS="$CPPFLAGS"
+SAVELIBS="$LIBS"
+SAVE_LD_LIBRARY_PATH="$LD_LIBRARY_PATH"
+CPPFLAGS="$CPPFLAGS $PCREINCLUDES"
+LIBS="$PCRELIBS"
+LD_LIBRARY_PATH=""
+export LD_LIBRARY_PATH
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifdef RUDIMENTS_HAVE_STDLIB_H
+						#include <stdlib.h>
+#endif
+#include <pcre.h>
+int
+main (void)
+{
+char *first; char *last; int n=pcre_get_stringtable_entries(NULL,NULL,&first,&last);
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"
+then :
+
+printf "%s\n" "#define RUDIMENTS_HAS_PCRE_GET_STRINGTABLE_ENTRIES 1" >>confdefs.h
+ { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+printf "%s\n" "yes" >&6; }
+else $as_nop
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.beam \
+    conftest$ac_exeext conftest.$ac_ext
+CPPFLAGS="$SAVECPPFLAGS"
+LIBS="$SAVELIBS"
+LD_LIBRARY_PATH="$SAVE_LD_LIBRARY_PATH"
+export LD_LIBRARY_PATH
+
+				fi
 			else
 				{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
 printf "%s\n" "no" >&6; }
