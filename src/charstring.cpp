@@ -856,6 +856,177 @@ char *charstring::urlDecode(const char *input) {
 	return output;
 }
 
+char *charstring::htmlEncode(const char *input) {
+
+	if (!input) {
+		input="";
+	}
+
+	// size the output
+	size_t	outputlen=1;
+	for (const char *ptr=input; *ptr; ptr++) {
+		switch (*ptr) {
+			case '&':
+			case '\'':
+				outputlen+=5;
+				break;
+			case '<':
+			case '>':
+				outputlen+=4;
+				break;
+			case '"':
+				outputlen+=6;
+				break;
+			default:
+				outputlen++;
+				break;
+		}
+	}
+
+	// copy the input, replacing the five characters
+	char	*output=new char[outputlen];
+	char	*outptr=output;
+	for (const char *ptr=input; *ptr; ptr++) {
+		const char	*rep=NULL;
+		switch (*ptr) {
+			case '&':
+				rep="&amp;";
+				break;
+			case '<':
+				rep="&lt;";
+				break;
+			case '>':
+				rep="&gt;";
+				break;
+			case '"':
+				rep="&quot;";
+				break;
+			case '\'':
+				rep="&#39;";
+				break;
+			default:
+				(*outptr)=*ptr;
+				outptr++;
+				break;
+		}
+		if (rep) {
+			copy(outptr,rep);
+			outptr+=getLength(rep);
+		}
+	}
+	(*outptr)='\0';
+
+	return output;
+}
+
+static char *writeUtf8(char *outptr, uint32_t cp) {
+	if (cp<0x80) {
+		*outptr++=(char)cp;
+	} else if (cp<0x800) {
+		*outptr++=(char)(0xC0|(cp>>6));
+		*outptr++=(char)(0x80|(cp&0x3F));
+	} else if (cp<0x10000) {
+		*outptr++=(char)(0xE0|(cp>>12));
+		*outptr++=(char)(0x80|((cp>>6)&0x3F));
+		*outptr++=(char)(0x80|(cp&0x3F));
+	} else {
+		*outptr++=(char)(0xF0|(cp>>18));
+		*outptr++=(char)(0x80|((cp>>12)&0x3F));
+		*outptr++=(char)(0x80|((cp>>6)&0x3F));
+		*outptr++=(char)(0x80|(cp&0x3F));
+	}
+	return outptr;
+}
+
+static const char	*htmlentities[]={
+	"&amp;","&","&lt;","<","&gt;",">","&quot;","\"","&apos;","'",NULL
+};
+
+char *charstring::htmlDecode(const char *input) {
+
+	if (!input) {
+		input="";
+	}
+
+	// no entity decodes to more bytes than it occupies
+	char		*output=new char[getLength(input)+1];
+	char		*outptr=output;
+	const char	*ptr=input;
+
+	while (*ptr) {
+
+		if (*ptr!='&') {
+			(*outptr)=*ptr;
+			outptr++;
+			ptr++;
+			continue;
+		}
+
+		// named entities
+		bool	found=false;
+		for (const char **e=htmlentities; *e; e+=2) {
+			size_t	len=getLength(*e);
+			if (!compare(ptr,*e,len)) {
+				(*outptr)=**(e+1);
+				outptr++;
+				ptr+=len;
+				found=true;
+				break;
+			}
+		}
+		if (found) {
+			continue;
+		}
+
+		// numeric references
+		if (ptr[1]=='#') {
+			const char	*p=ptr+2;
+			bool		hex=(*p=='x' || *p=='X');
+			if (hex) {
+				p++;
+			}
+			const char	*digits=p;
+			uint32_t	cp=0;
+			bool		valid=true;
+			for (;;) {
+				unsigned char	ch=(unsigned char)*p;
+				uint32_t	d;
+				if (character::isDigit(ch)) {
+					d=ch-'0';
+				} else if (hex && character::isHexDigit(ch)) {
+					d=(ch|0x20)-'a'+10;
+				} else {
+					break;
+				}
+
+				// stop accumulating past the largest
+				// code point, so the value can't wrap
+				if (valid) {
+					cp=cp*((hex)?16:10)+d;
+					if (cp>0x10FFFF) {
+						valid=false;
+					}
+				}
+				p++;
+			}
+			if (p>digits && *p==';' && valid && cp &&
+					(cp<0xD800 || cp>0xDFFF)) {
+				outptr=writeUtf8(outptr,cp);
+				ptr=p+1;
+				continue;
+			}
+		}
+
+		// leave anything else as typed
+		(*outptr)=*ptr;
+		outptr++;
+		ptr++;
+	}
+	(*outptr)='\0';
+
+	return output;
+}
+
 char *charstring::escape(const char *input, const char *characters) {
 	char		*output;
 	uint64_t	outputlength;

@@ -9,6 +9,30 @@
 #include <limits.h>
 #include "test.cpp"
 
+static void htmlEncodeTest(const char *label,
+				const char *input, const char *expected) {
+	char	*output=charstring::htmlEncode(input);
+	test(label,!charstring::compare(output,expected));
+	delete[] output;
+}
+
+static void htmlDecodeTest(const char *label,
+				const char *input, const char *expected) {
+	char	*output=charstring::htmlDecode(input);
+	test(label,!charstring::compare(output,expected) &&
+			charstring::getLength(output)<=
+			charstring::getLength(input));
+	delete[] output;
+}
+
+static void htmlRoundTripTest(const char *label, const char *input) {
+	char	*encoded=charstring::htmlEncode(input);
+	char	*decoded=charstring::htmlDecode(encoded);
+	test(label,!charstring::compare(decoded,input));
+	delete[] encoded;
+	delete[] decoded;
+}
+
 int main(int argc, const char **argv) {
 
 	header("charstring");
@@ -490,6 +514,140 @@ int main(int argc, const char **argv) {
 	test("unescaped",!charstring::compare(unescbuffer,original));
 	delete[] escbuffer;
 	delete[] unescbuffer;
+	stdoutput.printf("\n");
+
+
+	// html encode
+	stdoutput.printf("html-encode...\n");
+	htmlEncodeTest("NULL",NULL,"");
+	htmlEncodeTest("empty","","");
+	htmlEncodeTest("hello world","hello world","hello world");
+	htmlEncodeTest("&","&","&amp;");
+	htmlEncodeTest("<","<","&lt;");
+	htmlEncodeTest(">",">","&gt;");
+	htmlEncodeTest("\"","\"","&quot;");
+	htmlEncodeTest("'","'","&#39;");
+	htmlEncodeTest("<b>Tom & Jerry's \"x\"</b>",
+			"<b>Tom & Jerry's \"x\"</b>",
+		"&lt;b&gt;Tom &amp; Jerry&#39;s &quot;x&quot;&lt;/b&gt;");
+	htmlEncodeTest("caf\\xC3\\xA9","caf\xC3\xA9","caf\xC3\xA9");
+	stdoutput.printf("\n");
+
+
+	// html decode
+	stdoutput.printf("html-decode...\n");
+	htmlDecodeTest("NULL",NULL,"");
+	htmlDecodeTest("empty","","");
+	htmlDecodeTest("hello","hello","hello");
+	htmlDecodeTest("&amp;","&amp;","&");
+	htmlDecodeTest("&lt;","&lt;","<");
+	htmlDecodeTest("&gt;","&gt;",">");
+	htmlDecodeTest("&quot;","&quot;","\"");
+	htmlDecodeTest("&apos;","&apos;","'");
+	htmlDecodeTest("&#39;","&#39;","'");
+	htmlDecodeTest("&lt;b&gt;Tom &amp; Jerry&#39;s&lt;/b&gt;",
+			"&lt;b&gt;Tom &amp; Jerry&#39;s&lt;/b&gt;",
+			"<b>Tom & Jerry's</b>");
+	stdoutput.printf("\n");
+
+
+	// html decode numeric references
+	stdoutput.printf("html-decode numeric references...\n");
+	htmlDecodeTest("&#65;","&#65;","A");
+	htmlDecodeTest("&#x41;","&#x41;","A");
+	htmlDecodeTest("&#X41;","&#X41;","A");
+	htmlDecodeTest("&#x0041;","&#x0041;","A");
+	htmlDecodeTest("&#00000065;","&#00000065;","A");
+	htmlDecodeTest("&#x7F;","&#x7F;","\x7F");
+	htmlDecodeTest("&#x80;","&#x80;","\xC2\x80");
+	htmlDecodeTest("&#233;","&#233;","\xC3\xA9");
+	htmlDecodeTest("&#xe9;","&#xe9;","\xC3\xA9");
+	htmlDecodeTest("&#xE9;","&#xE9;","\xC3\xA9");
+	htmlDecodeTest("&#x7FF;","&#x7FF;","\xDF\xBF");
+	htmlDecodeTest("&#x800;","&#x800;","\xE0\xA0\x80");
+	htmlDecodeTest("&#8364;","&#8364;","\xE2\x82\xAC");
+	htmlDecodeTest("&#x20AC;","&#x20AC;","\xE2\x82\xAC");
+	htmlDecodeTest("&#xD7FF;","&#xD7FF;","\xED\x9F\xBF");
+	htmlDecodeTest("&#xE000;","&#xE000;","\xEE\x80\x80");
+	htmlDecodeTest("&#xFFFF;","&#xFFFF;","\xEF\xBF\xBF");
+	htmlDecodeTest("&#x10000;","&#x10000;","\xF0\x90\x80\x80");
+	htmlDecodeTest("&#128512;","&#128512;","\xF0\x9F\x98\x80");
+	htmlDecodeTest("&#x1F600;","&#x1F600;","\xF0\x9F\x98\x80");
+	htmlDecodeTest("&#x10FFFF;","&#x10FFFF;","\xF4\x8F\xBF\xBF");
+	stdoutput.printf("\n");
+
+
+	// html decode invalid code points
+	stdoutput.printf("html-decode invalid code points...\n");
+	htmlDecodeTest("&#0;","&#0;","&#0;");
+	htmlDecodeTest("&#x0;","&#x0;","&#x0;");
+	htmlDecodeTest("&#xD800;","&#xD800;","&#xD800;");
+	htmlDecodeTest("&#xDBFF;","&#xDBFF;","&#xDBFF;");
+	htmlDecodeTest("&#xDC00;","&#xDC00;","&#xDC00;");
+	htmlDecodeTest("&#xDFFF;","&#xDFFF;","&#xDFFF;");
+	htmlDecodeTest("&#55296;","&#55296;","&#55296;");
+	htmlDecodeTest("&#x110000;","&#x110000;","&#x110000;");
+	htmlDecodeTest("&#1114112;","&#1114112;","&#1114112;");
+	htmlDecodeTest("&#4294967361;","&#4294967361;","&#4294967361;");
+	htmlDecodeTest("&#xFFFFFFFF41;","&#xFFFFFFFF41;","&#xFFFFFFFF41;");
+	htmlDecodeTest("&#99999999999999999999999999;",
+			"&#99999999999999999999999999;",
+			"&#99999999999999999999999999;");
+	stdoutput.printf("\n");
+
+
+	// html decode malformed entities
+	stdoutput.printf("html-decode malformed entities...\n");
+	htmlDecodeTest("&#65","&#65","&#65");
+	htmlDecodeTest("&#x41","&#x41","&#x41");
+	htmlDecodeTest("&amp","&amp","&amp");
+	htmlDecodeTest("&amp ;","&amp ;","&amp ;");
+	htmlDecodeTest("&#;","&#;","&#;");
+	htmlDecodeTest("&#x;","&#x;","&#x;");
+	htmlDecodeTest("&#X;","&#X;","&#X;");
+	htmlDecodeTest("&#","&#","&#");
+	htmlDecodeTest("&","&","&");
+	htmlDecodeTest("a & b","a & b","a & b");
+	htmlDecodeTest("&#6a;","&#6a;","&#6a;");
+	htmlDecodeTest("&#x41g;","&#x41g;","&#x41g;");
+	htmlDecodeTest("&# 65;","&# 65;","&# 65;");
+	htmlDecodeTest("&#+65;","&#+65;","&#+65;");
+	htmlDecodeTest("&#-65;","&#-65;","&#-65;");
+	stdoutput.printf("\n");
+
+
+	// html decode unknown entities
+	stdoutput.printf("html-decode unknown entities...\n");
+	htmlDecodeTest("&AMP;","&AMP;","&AMP;");
+	htmlDecodeTest("&Lt;","&Lt;","&Lt;");
+	htmlDecodeTest("&APOS;","&APOS;","&APOS;");
+	htmlDecodeTest("&nbsp;","&nbsp;","&nbsp;");
+	htmlDecodeTest("&copy;","&copy;","&copy;");
+	htmlDecodeTest("&am;","&am;","&am;");
+	htmlDecodeTest("&foo;","&foo;","&foo;");
+	stdoutput.printf("\n");
+
+
+	// html decode single pass
+	stdoutput.printf("html-decode single pass...\n");
+	htmlDecodeTest("&amp;lt;","&amp;lt;","&lt;");
+	htmlDecodeTest("&amp;#65;","&amp;#65;","&#65;");
+	htmlDecodeTest("&&amp;","&&amp;","&&");
+	htmlDecodeTest("&#&amp;","&#&amp;","&#&");
+	htmlDecodeTest("&#65&#66;","&#65&#66;","&#65B");
+	htmlDecodeTest("&lt&gt;","&lt&gt;","&lt>");
+	stdoutput.printf("\n");
+
+
+	// html round trip
+	stdoutput.printf("html round trip...\n");
+	htmlRoundTripTest("empty","");
+	htmlRoundTripTest("plain","plain");
+	htmlRoundTripTest("&<>\"'","&<>\"'");
+	htmlRoundTripTest("<b>Tom & Jerry's \"x\"</b>",
+				"<b>Tom & Jerry's \"x\"</b>");
+	htmlRoundTripTest("&amp;","&amp;");
+	htmlRoundTripTest("caf\\xC3\\xA9","caf\xC3\xA9");
 	stdoutput.printf("\n");
 
 

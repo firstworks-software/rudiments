@@ -1408,6 +1408,26 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  deleted by the calling program. */
 		static	char	*urlDecode(const char *input);
 
+		/** HTML-encodes "input", replacing \& \< \> " and ' with
+		 *  \&amp; \&lt; \&gt; \&quot; and \&#39;, and returns it in a
+		 *  buffer allocated inside the function.  This buffer
+		 *  must be deleted by the calling program.  Unlike
+		 *  urlEncode(), a NULL "input" returns an empty string
+		 *  rather than NULL. */
+		static	char	*htmlEncode(const char *input);
+
+		/** HTML-decodes "input" and returns it in a buffer
+		 *  allocated inside the function.  This buffer must be
+		 *  deleted by the calling program.  Decodes \&amp; \&lt;
+		 *  \&gt; \&quot; and \&apos;, and decimal (\&#NN;) and hex
+		 *  (\&#xHH;) numeric references, which are written as
+		 *  UTF-8.  Unknown or malformed entities, and numeric
+		 *  references to 0, a surrogate, or a code point past
+		 *  0x10FFFF, are left as typed.  Unlike urlDecode(), a
+		 *  NULL "input" returns an empty string rather than
+		 *  NULL. */
+		static	char	*htmlDecode(const char *input);
+
 		/** base64-encodes "input" and returns it in a buffer
 		 *  allocated inside the function.  This buffer must be
 		 *  deleted by the calling program. */

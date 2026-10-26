@@ -85,6 +85,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   generate()/generate(lower,upper)
 - added an rng base class, renamed randomnumber to prng and
   csrandomnumber to csprng, added generateBytes() methods to each
+- added charstring::htmlEncode() and htmlDecode()
 
 ### Changed
 - encryption and hash isSupported() is a non-pure virtual now, defaulting
