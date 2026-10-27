@@ -2,12 +2,169 @@
 // See the file COPYING for more information
 
 #include <rudiments/wcharstring.h>
+#include <rudiments/charstring.h>
 #include <rudiments/bytestring.h>
 #include <rudiments/filedescriptor.h>
 #include <rudiments/wstringbuffer.h>
+#include <rudiments/stringbuffer.h>
+#include <rudiments/sys.h>
+#include <rudiments/locale.h>
 #include <rudiments/stdio.h>
 #include <limits.h>
 #include "test.cpp"
+
+// checks the length-taking forms of duplicate() and duplicateUcs2() for
+// one length of a string that is at least that long
+static void duplicateLengthTest(const char *label, const char *str,
+				const wchar_t *wstr, const ucs2_t *ustr,
+				size_t len) {
+	bool		big=sys::isBigEndian();
+	stringbuffer	name;
+	wchar_t		*result=wcharstring::duplicate(wstr,len);
+	name.append(label);
+	name.append(" wchar_t");
+	test(name.getString(),result &&
+		wcharstring::getLength(result)==len &&
+		!wcharstring::compare(result,wstr,len));
+	delete[] result;
+	result=wcharstring::duplicate(str,len);
+	name.clear();
+	name.append(label);
+	name.append(" char");
+	test(name.getString(),result &&
+		wcharstring::getLength(result)==len &&
+		!wcharstring::compare(result,wstr,len));
+	delete[] result;
+	result=wcharstring::duplicateUcs2(ustr,len);
+	name.clear();
+	name.append(label);
+	name.append(" ucs2");
+	test(name.getString(),result &&
+		wcharstring::getLength(result)==len &&
+		!wcharstring::compare(result,wstr,len));
+	delete[] result;
+	result=wcharstring::duplicateUcs2(ustr,len,big);
+	name.clear();
+	name.append(label);
+	name.append(" ucs2 bigendian");
+	test(name.getString(),result &&
+		wcharstring::getLength(result)==len &&
+		!wcharstring::compare(result,wstr,len));
+	delete[] result;
+	result=wcharstring::duplicateUcs2(ustr,len,L'#');
+	name.clear();
+	name.append(label);
+	name.append(" ucs2 replacement");
+	test(name.getString(),result &&
+		wcharstring::getLength(result)==len &&
+		!wcharstring::compare(result,wstr,len));
+	delete[] result;
+	result=wcharstring::duplicateUcs2(ustr,len,L'#',big);
+	name.clear();
+	name.append(label);
+	name.append(" ucs2 replacement bigendian");
+	test(name.getString(),result &&
+		wcharstring::getLength(result)==len &&
+		!wcharstring::compare(result,wstr,len));
+	delete[] result;
+}
+
+// checks pad(), where "expected" is NULL if pad() must return NULL
+static void padTest(const char *label, const wchar_t *str, wchar_t padchar,
+			int16_t direction, uint64_t totallen,
+			const wchar_t *expected) {
+	wchar_t	*result=wcharstring::pad(str,padchar,direction,totallen);
+	test(label,(expected)?
+			(result && !wcharstring::compare(result,expected)):
+			!result);
+	delete[] result;
+}
+
+// checks pad(), element by element, against a result built here
+static bool padMatches(const wchar_t *str, wchar_t padchar,
+			int16_t direction, uint64_t totallen) {
+	wchar_t	*result=wcharstring::pad(str,padchar,direction,totallen);
+	if (!result) {
+		return false;
+	}
+	uint64_t	len=(str)?wcharstring::getLength(str):0;
+	uint64_t	lead=0;
+	if (len<totallen) {
+		lead=(direction<0)?totallen-len:
+			(direction>0)?0:(totallen-len)/2;
+	}
+	bool	matches=(result[totallen]==0);
+	for (uint64_t i=0; i<totallen; i++) {
+		wchar_t	expected=padchar;
+		if (i>=lead && i-lead<len) {
+			expected=str[i-lead];
+		}
+		if (result[i]!=expected) {
+			matches=false;
+		}
+	}
+	delete[] result;
+	return matches;
+}
+
+// checks convertAmount() with and without padding against charstring
+static bool amountMatches(int64_t amount) {
+	char	*narrow=charstring::convertAmount(amount);
+	wchar_t	*expected=wcharstring::duplicate(narrow);
+	wchar_t	*result=wcharstring::convertAmount(amount);
+	bool	matches=(result && !wcharstring::compare(result,expected));
+	delete[] result;
+	delete[] expected;
+	delete[] narrow;
+	uint16_t	paddings[]={0,3,8,12,20};
+	for (size_t i=0; i<sizeof(paddings)/sizeof(paddings[0]); i++) {
+		narrow=charstring::convertAmount(amount,paddings[i]);
+		expected=wcharstring::duplicate(narrow);
+		result=wcharstring::convertAmount(amount,paddings[i]);
+		if (!result || wcharstring::compare(result,expected) ||
+			wcharstring::getLength(result)!=
+				charstring::getLength(narrow)) {
+			matches=false;
+		}
+		delete[] result;
+		delete[] expected;
+		delete[] narrow;
+	}
+	return matches;
+}
+
+// checks insertString()
+static void insertStringTest(const char *label, const wchar_t *dest,
+				const wchar_t *src, uint64_t index,
+				const wchar_t *expected) {
+	wchar_t	*result=wcharstring::insertString(dest,src,index);
+	test(label,result && !wcharstring::compare(result,expected));
+	delete[] result;
+}
+
+// checks the out-pointer forms of escape() and unescape()
+static void escapeLengthTest(const char *label, const wchar_t *input,
+				uint64_t inputlen, const wchar_t *characters,
+				const wchar_t *expectedescaped) {
+	wchar_t		*output=NULL;
+	uint64_t	outputlen=0;
+	wcharstring::escape(input,inputlen,&output,&outputlen,characters);
+	test(label,output && !wcharstring::compare(output,expectedescaped) &&
+			outputlen==wcharstring::getLength(expectedescaped));
+	wchar_t		*escaped=output;
+	uint64_t	escapedlen=outputlen;
+	output=NULL;
+	outputlen=0;
+	wcharstring::unescape(escaped,escapedlen,&output,&outputlen);
+	stringbuffer	name;
+	name.append("un");
+	name.append(label);
+	test(name.getString(),output &&
+			!wcharstring::compare(output,input,inputlen) &&
+			outputlen==inputlen);
+	delete[] output;
+	delete[] escaped;
+}
 
 int main(int argc, const char **argv) {
 
@@ -1142,6 +1299,287 @@ int main(int argc, const char **argv) {
 					wcharstring::getLength(*s),true,true)==
 					*s+wcharstring::getLength(*s));
 	}
+	stdoutput.printf("\n");
+
+
+	// escape/unescape, pad, insertString, and the length forms of duplicate
+	stdoutput.printf("escape/pad/insertString/duplicate length...\n");
+	escapeLengthTest("escape length 0",L"",0,L"\"",L"");
+	escapeLengthTest("escape length 1",L"a",1,L"\"",L"a");
+	escapeLengthTest("escape length 3",L"a\"b",3,L"\"",L"a\\\"b");
+	escapeLengthTest("escape backslash",L"a\\b",3,L"\"",L"a\\\\b");
+	padTest("pad exact length",L"abc",L'*',-1,3,L"abc");
+	padTest("pad truncate",L"abcdef",L'*',-1,3,L"abc");
+	padTest("pad truncate right",L"abcdef",L'*',1,4,L"abcd");
+	padTest("pad zero length",L"abc",L'*',1,0,NULL);
+	padTest("pad NULL zero length",NULL,L'*',1,0,NULL);
+	insertStringTest("insertString start",L"hello",L"XY",0,L"XYhello");
+	insertStringTest("insertString middle",L"hello",L"XY",2,L"heXYllo");
+	insertStringTest("insertString end",L"hello",L"XY",5,L"helloXY");
+	insertStringTest("insertString empty dest",L"",L"XY",0,L"XY");
+	insertStringTest("insertString one",L"hello",L"-",3,L"hel-lo");
+	const char	*dupstr="hello world";
+	const wchar_t	*dupwstr=L"hello world";
+	ucs2_t		dupustr[12];
+	for (uint16_t i=0; i<12; i++) {
+		dupustr[i]=(ucs2_t)dupstr[i];
+	}
+	size_t	duplens[]={0,1,2,5,11};
+	for (size_t i=0; i<sizeof(duplens)/sizeof(duplens[0]); i++) {
+		stringbuffer	label;
+		label.append("duplicate length ");
+		label.append((uint64_t)duplens[i]);
+		duplicateLengthTest(label.getString(),
+					dupstr,dupwstr,dupustr,duplens[i]);
+	}
+	stdoutput.printf("\n");
+
+
+	// the methods below size their buffer in wide characters, so the first
+	// length whose (length,1,1) size does not fit in a size_t is the
+	// largest size_t divided by the size of a wide character
+	//
+	// these calls give a zero-element input buffer and a length too large
+	// for the result to be sized (AddressSanitizer reports any read), and
+	// rely on the size check coming before any read or write
+	stdoutput.printf("escape/pad/duplicate oversized length...\n");
+	size_t		none=0;
+	wchar_t		*zin=(wchar_t *)new char[none];
+	ucs2_t		*zuin=(ucs2_t *)new char[none];
+	char		*zcin=new char[none];
+	size_t		maxsize=(size_t)-1;
+	size_t		firstfail=maxsize/sizeof(wchar_t);
+	uint64_t	maxlen=(uint64_t)-1;
+	uint64_t	lens[]={firstfail,maxlen};
+	const char	*lenlabels[]={"first failing","-1"};
+	for (uint16_t i=0; i<2; i++) {
+		stringbuffer	name;
+		wchar_t		*oversized;
+
+		// the out-pointers are preset to non-NULL
+		wchar_t		*output=zin;
+		uint64_t	outputlen=1;
+		wcharstring::escape(zin,lens[i],&output,&outputlen,L"\"");
+		name.append("escape ");
+		name.append(lenlabels[i]);
+		test(name.getString(),!output && !outputlen);
+		delete[] output;
+		output=zin;
+		outputlen=1;
+		wcharstring::unescape(zin,lens[i],&output,&outputlen);
+		name.clear();
+		name.append("unescape ");
+		name.append(lenlabels[i]);
+		test(name.getString(),!output && !outputlen);
+		delete[] output;
+
+		oversized=wcharstring::pad(zin,L'*',-1,lens[i]);
+		name.clear();
+		name.append("pad left ");
+		name.append(lenlabels[i]);
+		test(name.getString(),!oversized);
+		delete[] oversized;
+		oversized=wcharstring::pad(zin,L'*',0,lens[i]);
+		name.clear();
+		name.append("pad center ");
+		name.append(lenlabels[i]);
+		test(name.getString(),!oversized);
+		delete[] oversized;
+		oversized=wcharstring::pad(zin,L'*',1,lens[i]);
+		name.clear();
+		name.append("pad right ");
+		name.append(lenlabels[i]);
+		test(name.getString(),!oversized);
+		delete[] oversized;
+
+		oversized=wcharstring::duplicate(zin,(size_t)lens[i]);
+		name.clear();
+		name.append("duplicate wchar_t ");
+		name.append(lenlabels[i]);
+		test(name.getString(),!oversized);
+		delete[] oversized;
+		oversized=wcharstring::duplicate(zcin,(size_t)lens[i]);
+		name.clear();
+		name.append("duplicate char ");
+		name.append(lenlabels[i]);
+		test(name.getString(),!oversized);
+		delete[] oversized;
+		oversized=wcharstring::duplicateUcs2(zuin,(size_t)lens[i]);
+		name.clear();
+		name.append("duplicateUcs2 ");
+		name.append(lenlabels[i]);
+		test(name.getString(),!oversized);
+		delete[] oversized;
+		oversized=wcharstring::duplicateUcs2(zuin,(size_t)lens[i],true);
+		name.clear();
+		name.append("duplicateUcs2 bigendian ");
+		name.append(lenlabels[i]);
+		test(name.getString(),!oversized);
+		delete[] oversized;
+		oversized=wcharstring::duplicateUcs2(zuin,(size_t)lens[i],L'#');
+		name.clear();
+		name.append("duplicateUcs2 replacement ");
+		name.append(lenlabels[i]);
+		test(name.getString(),!oversized);
+		delete[] oversized;
+		oversized=wcharstring::duplicateUcs2(zuin,
+					(size_t)lens[i],L'#',false);
+		name.clear();
+		name.append("duplicateUcs2 replacement bigendian ");
+		name.append(lenlabels[i]);
+		test(name.getString(),!oversized);
+		delete[] oversized;
+	}
+
+	// getSubString() asks duplicate() for a length of (size_t)-1
+	// when "start" is 1 past the end of an empty string
+	wchar_t	*substr=wcharstring::getSubString(L"",1);
+	test("getSubString past end",!substr);
+	delete[] substr;
+
+	// a NULL input is handled before the length is checked
+	const wchar_t	*nullwstr=NULL;
+	const char	*nullstr=NULL;
+	const ucs2_t	*nullustr=NULL;
+	wchar_t		*nulloutput=zin;
+	uint64_t	nulloutputlen=1;
+	wcharstring::escape(nullwstr,maxlen,&nulloutput,&nulloutputlen,L"\"");
+	test("escape NULL, -1",!nulloutput && !nulloutputlen);
+	nulloutput=zin;
+	nulloutputlen=1;
+	wcharstring::unescape(nullwstr,maxlen,&nulloutput,&nulloutputlen);
+	test("unescape NULL, -1",!nulloutput && !nulloutputlen);
+	test("pad NULL, -1",!wcharstring::pad(nullwstr,L'*',1,maxlen));
+	test("duplicate NULL, -1 wchar_t",
+			!wcharstring::duplicate(nullwstr,maxsize));
+	test("duplicate NULL, -1 char",
+			!wcharstring::duplicate(nullstr,maxsize));
+	test("duplicateUcs2 NULL, -1",
+			!wcharstring::duplicateUcs2(nullustr,maxsize));
+	delete[] (char *)zin;
+	delete[] (char *)zuin;
+	delete[] zcin;
+
+	// split sizes its list from the number of parts of a real string and
+	// insertString sizes its result from the lengths of two real strings,
+	// so a size that does not fit in a size_t needs a string larger than
+	// the address space and cannot be tested on a 64-bit platform
+	stdoutput.printf("\n");
+
+
+	// a scratch buffer too large to size makes printf fail without
+	// allocating
+	stdoutput.printf("printf oversized length...\n");
+	if (wcharstring::supportsPrintf()) {
+		wchar_t	*nullbuffer=NULL;
+		test("printf first failing",wcharstring::printf(nullbuffer,
+					firstfail+1,L"%d",1)==-1);
+		test("printf -1",wcharstring::printf(nullbuffer,
+					maxsize,L"%d",1)==-1);
+	} else {
+		stdoutput.printf("not supported\n");
+	}
+	stdoutput.printf("\n");
+
+
+	// pad and convertAmount count characters, not bytes
+	stdoutput.printf("pad/convertAmount characters...\n");
+	padTest("pad left",L"abc",L'*',-1,8,L"*****abc");
+	padTest("pad right",L"abc",L'*',1,8,L"abc*****");
+	padTest("pad centre",L"abc",L'*',0,8,L"**abc***");
+	padTest("pad empty",L"",L'*',-1,4,L"****");
+	padTest("pad NULL",NULL,L'*',1,3,L"***");
+	wchar_t		padchars[]={
+				L' ',
+				(wchar_t)0x00E9,
+				(wchar_t)0x263A,
+				(wchar_t)((sizeof(wchar_t)>=4)?0x1F600:0x263B)
+			};
+	wchar_t		special[]={(wchar_t)0x00E9,L'x',(wchar_t)0x263A,0};
+	const wchar_t	*padstrs[]={NULL,L"",L"a",L"abc",L"abcd",special};
+	uint64_t	padlens[]={1,2,3,4,5,8,17,64};
+	const char	*dirnames[]={"left","centre","right"};
+	for (size_t p=0; p<sizeof(padchars)/sizeof(padchars[0]); p++) {
+		for (int16_t d=-1; d<=1; d++) {
+			bool	matches=true;
+			for (size_t i=0; i<sizeof(padstrs)/
+						sizeof(padstrs[0]); i++) {
+				for (size_t j=0; j<sizeof(padlens)/
+						sizeof(padlens[0]); j++) {
+					if (!padMatches(padstrs[i],padchars[p],
+							d,padlens[j])) {
+						matches=false;
+					}
+				}
+			}
+			stringbuffer	name;
+			name.append("pad ");
+			name.append(dirnames[d+1]);
+			name.append(" with character ");
+			name.append((uint64_t)padchars[p]);
+			test(name.getString(),matches);
+		}
+	}
+	int64_t		amounts[]={0,5,99,100,101,12345,99999,1234567,
+					987654321,-100,-12345,-1234567};
+	for (size_t i=0; i<sizeof(amounts)/sizeof(amounts[0]); i++) {
+		stringbuffer	name;
+		name.append("convertAmount ");
+		name.append(amounts[i]);
+		test(name.getString(),amountMatches(amounts[i]));
+	}
+	wchar_t	*amount=wcharstring::convertAmount(12345,8);
+	test("convertAmount padding",amount &&
+		!wcharstring::compare(amount,L"$ 123.45"));
+	delete[] amount;
+	stdoutput.printf("\n");
+
+
+	// convertToFloatC converts a string with a "." decimal point when the
+	// locale uses another one
+	stdoutput.printf("convertToFloatC...\n");
+	if (locale::setNumeric("de_DE.utf8") &&
+		wcharstring::convertToFloat(L"1,5")==1.5) {
+		test("convertToFloatC 1.5",
+			wcharstring::convertToFloatC(L"1.5")==1.5);
+		test("convertToFloatC -0.5",
+			wcharstring::convertToFloatC(L"-0.5")==-0.5);
+		test("convertToFloatC 123.25",
+			wcharstring::convertToFloatC(L"123.25")==123.25);
+		test("convertToFloatC no decimal point",
+			wcharstring::convertToFloatC(L"42")==42.0);
+
+		// the longest string that is converted in place
+		wchar_t	longstr[512];
+		for (size_t i=0; i<252; i++) {
+			longstr[i]=L'0';
+		}
+		longstr[252]=L'1';
+		longstr[253]=L'.';
+		longstr[254]=L'5';
+		longstr[255]=0;
+		test("convertToFloatC 255 characters",
+			wcharstring::convertToFloatC(longstr)==1.5);
+
+		// a string too long for the buffer must not write past it
+		longstr[0]=L'1';
+		for (size_t i=1; i<290; i++) {
+			longstr[i]=L'0';
+		}
+		longstr[290]=0;
+		long double	expected=wcharstring::convertToFloat(longstr);
+		longstr[290]=L'.';
+		for (size_t i=291; i<300; i++) {
+			longstr[i]=L'5';
+		}
+		longstr[300]=0;
+		test("convertToFloatC 300 characters",
+			wcharstring::convertToFloatC(longstr)==expected);
+	} else {
+		stdoutput.printf("de_DE.utf8 locale not available, "
+					"skipped\n");
+	}
+	locale::setNumeric("C");
 	stdoutput.printf("\n");
 
 

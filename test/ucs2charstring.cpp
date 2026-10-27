@@ -3,12 +3,177 @@
 
 #include <rudiments/ucs2charstring.h>
 #include <rudiments/ucs2character.h>
+#include <rudiments/charstring.h>
 #include <rudiments/bytestring.h>
 #include <rudiments/filedescriptor.h>
 #include <rudiments/ucs2stringbuffer.h>
+#include <rudiments/stringbuffer.h>
+#include <rudiments/sys.h>
+#include <rudiments/locale.h>
 #include <rudiments/stdio.h>
 #include <limits.h>
 #include "test.cpp"
+
+// checks the length-taking forms of duplicate() for one length of a string
+// that is at least that long
+static void duplicateLengthTest(const char *label, const char *str,
+				const wchar_t *wstr, const ucs2_t *ustr,
+				size_t len) {
+	bool		big=sys::isBigEndian();
+	stringbuffer	name;
+	ucs2_t		*result=ucs2charstring::duplicate(ustr,len);
+	name.append(label);
+	name.append(" ucs2");
+	test(name.getString(),result &&
+		ucs2charstring::getLength(result)==len &&
+		!ucs2charstring::compare(result,ustr,len));
+	delete[] result;
+	result=ucs2charstring::duplicate(str,len);
+	name.clear();
+	name.append(label);
+	name.append(" char");
+	test(name.getString(),result &&
+		ucs2charstring::getLength(result)==len &&
+		!ucs2charstring::compare(result,ustr,len));
+	delete[] result;
+	result=ucs2charstring::duplicate(str,len,big);
+	name.clear();
+	name.append(label);
+	name.append(" char bigendian");
+	test(name.getString(),result &&
+		ucs2charstring::getLength(result)==len &&
+		!ucs2charstring::compare(result,ustr,len));
+	delete[] result;
+	result=ucs2charstring::duplicate(wstr,len);
+	name.clear();
+	name.append(label);
+	name.append(" wchar_t");
+	test(name.getString(),result &&
+		ucs2charstring::getLength(result)==len &&
+		!ucs2charstring::compare(result,ustr,len));
+	delete[] result;
+	result=ucs2charstring::duplicate(wstr,len,big);
+	name.clear();
+	name.append(label);
+	name.append(" wchar_t bigendian");
+	test(name.getString(),result &&
+		ucs2charstring::getLength(result)==len &&
+		!ucs2charstring::compare(result,ustr,len));
+	delete[] result;
+	result=ucs2charstring::duplicate(wstr,len,(ucs2_t)'#',big);
+	name.clear();
+	name.append(label);
+	name.append(" wchar_t replacement bigendian");
+	test(name.getString(),result &&
+		ucs2charstring::getLength(result)==len &&
+		!ucs2charstring::compare(result,ustr,len));
+	delete[] result;
+}
+
+// checks pad(), where "expected" is NULL if pad() must return NULL
+static void padTest(const char *label, const ucs2_t *str, ucs2_t padchar,
+			int16_t direction, uint64_t totallen,
+			const ucs2_t *expected) {
+	ucs2_t	*result=ucs2charstring::pad(str,padchar,direction,totallen);
+	test(label,(expected)?
+			(result && !ucs2charstring::compare(result,expected)):
+			!result);
+	delete[] result;
+}
+
+// checks pad(), element by element, against a result built here
+static bool padMatches(const ucs2_t *str, ucs2_t padchar,
+			int16_t direction, uint64_t totallen) {
+	ucs2_t	*result=ucs2charstring::pad(str,padchar,direction,totallen);
+	if (!result) {
+		return false;
+	}
+	uint64_t	len=(str)?ucs2charstring::getLength(str):0;
+	uint64_t	lead=0;
+	if (len<totallen) {
+		lead=(direction<0)?totallen-len:
+			(direction>0)?0:(totallen-len)/2;
+	}
+	bool	matches=(result[totallen]==0);
+	for (uint64_t i=0; i<totallen; i++) {
+		ucs2_t	expected=padchar;
+		if (i>=lead && i-lead<len) {
+			expected=str[i-lead];
+		}
+		if (result[i]!=expected) {
+			matches=false;
+		}
+	}
+	delete[] result;
+	return matches;
+}
+
+// checks convertAmount() with and without padding against charstring
+static bool amountMatches(int64_t amount) {
+	char	*narrow=charstring::convertAmount(amount);
+	ucs2_t	*expected=ucs2charstring::duplicate(narrow);
+	ucs2_t	*result=ucs2charstring::convertAmount(amount);
+	bool	matches=(result && !ucs2charstring::compare(result,expected));
+	delete[] result;
+	delete[] expected;
+	delete[] narrow;
+	uint16_t	paddings[]={0,3,8,12,20};
+	for (size_t i=0; i<sizeof(paddings)/sizeof(paddings[0]); i++) {
+		narrow=charstring::convertAmount(amount,paddings[i]);
+		expected=ucs2charstring::duplicate(narrow);
+		result=ucs2charstring::convertAmount(amount,paddings[i]);
+		if (!result || ucs2charstring::compare(result,expected) ||
+			ucs2charstring::getLength(result)!=
+				charstring::getLength(narrow)) {
+			matches=false;
+		}
+		delete[] result;
+		delete[] expected;
+		delete[] narrow;
+	}
+	return matches;
+}
+
+// converts the ASCII string "str" with convertToFloatC()
+static long double floatC(const char *str) {
+	ucs2_t		*ustr=ucs2charstring::duplicate(str);
+	long double	result=ucs2charstring::convertToFloatC(ustr);
+	delete[] ustr;
+	return result;
+}
+
+// checks insertString()
+static void insertStringTest(const char *label, const ucs2_t *dest,
+				const ucs2_t *src, uint64_t index,
+				const ucs2_t *expected) {
+	ucs2_t	*result=ucs2charstring::insertString(dest,src,index);
+	test(label,result && !ucs2charstring::compare(result,expected));
+	delete[] result;
+}
+
+// checks the out-pointer forms of escape() and unescape()
+static void escapeLengthTest(const char *label, const ucs2_t *input,
+				uint64_t inputlen, const ucs2_t *characters,
+				const ucs2_t *expectedescaped) {
+	ucs2_t		*output=NULL;
+	uint64_t	outputlen=0;
+	ucs2charstring::escape(input,inputlen,&output,&outputlen,characters);
+	test(label,output && !ucs2charstring::compare(output,expectedescaped) &&
+			outputlen==ucs2charstring::getLength(expectedescaped));
+	ucs2_t		*escaped=output;
+	uint64_t	escapedlen=outputlen;
+	output=NULL;
+	outputlen=0;
+	ucs2charstring::unescape(escaped,escapedlen,&output,&outputlen);
+	stringbuffer	name;
+	name.append("un");
+	name.append(label);
+	test(name.getString(),output &&
+			!ucs2charstring::compare(output,input,inputlen) &&
+			outputlen==inputlen);
+	delete[] output;
+	delete[] escaped;
+}
 
 int main(int argc, const char **argv) {
 
@@ -1298,6 +1463,309 @@ unimplemented...
 				u2s+ucs2charstring::getLength(u2s));
 		delete[] u2s;
 	}
+	stdoutput.printf("\n");
+
+
+	// escape/unescape, pad, insertString, and the length forms of duplicate
+	stdoutput.printf("escape/pad/insertString/duplicate length...\n");
+	ucs2literal(quote,"\"");
+	ucs2literal(emptystr,"");
+	ucs2literal(lena,"a");
+	ucs2literal(lenaqb,"a\"b");
+	ucs2literal(lenaqbesc,"a\\\"b");
+	ucs2literal(lenabsb,"a\\b");
+	ucs2literal(lenabsbesc,"a\\\\b");
+	escapeLengthTest("escape length 0",emptystr,0,quote,emptystr);
+	escapeLengthTest("escape length 1",lena,1,quote,lena);
+	escapeLengthTest("escape length 3",lenaqb,3,quote,lenaqbesc);
+	escapeLengthTest("escape backslash",lenabsb,3,quote,lenabsbesc);
+	ucs2literal(abcstr,"abc");
+	ucs2literal(abcdef,"abcdef");
+	ucs2literal(abcd,"abcd");
+	ucs2_t	star=(ucs2_t)'*';
+	padTest("pad exact length",abcstr,star,-1,3,abcstr);
+	padTest("pad truncate",abcdef,star,-1,3,abcstr);
+	padTest("pad truncate right",abcdef,star,1,4,abcd);
+	padTest("pad zero length",abcstr,star,1,0,NULL);
+	padTest("pad NULL zero length",NULL,star,1,0,NULL);
+	ucs2literal(hellostr,"hello");
+	ucs2literal(xy,"XY");
+	ucs2literal(dash,"-");
+	ucs2literal(xyhello,"XYhello");
+	ucs2literal(hexyllo,"heXYllo");
+	ucs2literal(helloxy,"helloXY");
+	ucs2literal(helldashlo,"hel-lo");
+	insertStringTest("insertString start",hellostr,xy,0,xyhello);
+	insertStringTest("insertString middle",hellostr,xy,2,hexyllo);
+	insertStringTest("insertString end",hellostr,xy,5,helloxy);
+	insertStringTest("insertString empty dest",emptystr,xy,0,xy);
+	insertStringTest("insertString one",hellostr,dash,3,helldashlo);
+	const char	*dupstr="hello world";
+	const wchar_t	*dupwstr=L"hello world";
+	ucs2_t		dupustr[12];
+	for (uint16_t i=0; i<12; i++) {
+		dupustr[i]=(ucs2_t)dupstr[i];
+	}
+	size_t	duplens[]={0,1,2,5,11};
+	for (size_t i=0; i<sizeof(duplens)/sizeof(duplens[0]); i++) {
+		stringbuffer	label;
+		label.append("duplicate length ");
+		label.append((uint64_t)duplens[i]);
+		duplicateLengthTest(label.getString(),
+					dupstr,dupwstr,dupustr,duplens[i]);
+	}
+	stdoutput.printf("\n");
+
+
+	// the methods below size their buffer in UCS-2 characters, so the first
+	// length whose (length,1,1) size does not fit in a size_t is the
+	// largest size_t divided by the size of a UCS-2 character
+	//
+	// these calls give a zero-element input buffer and a length too large
+	// for the result to be sized (AddressSanitizer reports any read), and
+	// rely on the size check coming before any read or write
+	stdoutput.printf("escape/pad/duplicate oversized length...\n");
+	size_t		none=0;
+	ucs2_t		*zin=(ucs2_t *)new char[none];
+	wchar_t		*zwin=(wchar_t *)new char[none];
+	char		*zcin=new char[none];
+	size_t		maxsize=(size_t)-1;
+	size_t		firstfail=maxsize/sizeof(ucs2_t);
+	uint64_t	maxlen=(uint64_t)-1;
+	uint64_t	lens[]={firstfail,maxlen};
+	const char	*lenlabels[]={"first failing","-1"};
+	for (uint16_t i=0; i<2; i++) {
+		stringbuffer	name;
+		ucs2_t		*oversized;
+
+		// the out-pointers are preset to non-NULL
+		ucs2_t		*output=zin;
+		uint64_t	outputlen=1;
+		ucs2charstring::escape(zin,lens[i],&output,&outputlen,quote);
+		name.append("escape ");
+		name.append(lenlabels[i]);
+		test(name.getString(),!output && !outputlen);
+		delete[] output;
+		output=zin;
+		outputlen=1;
+		ucs2charstring::unescape(zin,lens[i],&output,&outputlen);
+		name.clear();
+		name.append("unescape ");
+		name.append(lenlabels[i]);
+		test(name.getString(),!output && !outputlen);
+		delete[] output;
+
+		oversized=ucs2charstring::pad(zin,star,-1,lens[i]);
+		name.clear();
+		name.append("pad left ");
+		name.append(lenlabels[i]);
+		test(name.getString(),!oversized);
+		delete[] oversized;
+		oversized=ucs2charstring::pad(zin,star,0,lens[i]);
+		name.clear();
+		name.append("pad center ");
+		name.append(lenlabels[i]);
+		test(name.getString(),!oversized);
+		delete[] oversized;
+		oversized=ucs2charstring::pad(zin,star,1,lens[i]);
+		name.clear();
+		name.append("pad right ");
+		name.append(lenlabels[i]);
+		test(name.getString(),!oversized);
+		delete[] oversized;
+
+		oversized=ucs2charstring::duplicate(zin,(size_t)lens[i]);
+		name.clear();
+		name.append("duplicate ucs2 ");
+		name.append(lenlabels[i]);
+		test(name.getString(),!oversized);
+		delete[] oversized;
+		oversized=ucs2charstring::duplicate(zcin,(size_t)lens[i]);
+		name.clear();
+		name.append("duplicate char ");
+		name.append(lenlabels[i]);
+		test(name.getString(),!oversized);
+		delete[] oversized;
+		oversized=ucs2charstring::duplicate(zcin,(size_t)lens[i],true);
+		name.clear();
+		name.append("duplicate char bigendian ");
+		name.append(lenlabels[i]);
+		test(name.getString(),!oversized);
+		delete[] oversized;
+		oversized=ucs2charstring::duplicate(zwin,(size_t)lens[i]);
+		name.clear();
+		name.append("duplicate wchar_t ");
+		name.append(lenlabels[i]);
+		test(name.getString(),!oversized);
+		delete[] oversized;
+		oversized=ucs2charstring::duplicate(zwin,(size_t)lens[i],true);
+		name.clear();
+		name.append("duplicate wchar_t bigendian ");
+		name.append(lenlabels[i]);
+		test(name.getString(),!oversized);
+		delete[] oversized;
+		oversized=ucs2charstring::duplicate(zwin,
+					(size_t)lens[i],(ucs2_t)'#',false);
+		name.clear();
+		name.append("duplicate wchar_t replacement bigendian ");
+		name.append(lenlabels[i]);
+		test(name.getString(),!oversized);
+		delete[] oversized;
+	}
+
+	// getSubString() asks duplicate() for a length of (size_t)-1
+	// when "start" is 1 past the end of an empty string
+	ucs2_t	*substr=ucs2charstring::getSubString(emptystr,1);
+	test("getSubString past end",!substr);
+	delete[] substr;
+
+	// a NULL input is handled before the length is checked
+	const ucs2_t	*nullustr=NULL;
+	const char	*nullstr=NULL;
+	const wchar_t	*nullwstr=NULL;
+	ucs2_t		*nulloutput=zin;
+	uint64_t	nulloutputlen=1;
+	ucs2charstring::escape(nullustr,maxlen,
+				&nulloutput,&nulloutputlen,quote);
+	test("escape NULL, -1",!nulloutput && !nulloutputlen);
+	nulloutput=zin;
+	nulloutputlen=1;
+	ucs2charstring::unescape(nullustr,maxlen,&nulloutput,&nulloutputlen);
+	test("unescape NULL, -1",!nulloutput && !nulloutputlen);
+	test("pad NULL, -1",!ucs2charstring::pad(nullustr,star,1,maxlen));
+	test("duplicate NULL, -1 ucs2",
+			!ucs2charstring::duplicate(nullustr,maxsize));
+	test("duplicate NULL, -1 char",
+			!ucs2charstring::duplicate(nullstr,maxsize));
+	test("duplicate NULL, -1 wchar_t",
+			!ucs2charstring::duplicate(nullwstr,maxsize));
+	delete[] (char *)zin;
+	delete[] (char *)zwin;
+	delete[] zcin;
+
+	// split sizes its list from the number of parts of a real string and
+	// insertString sizes its result from the lengths of two real strings,
+	// so a size that does not fit in a size_t needs a string larger than
+	// the address space and cannot be tested on a 64-bit platform
+	stdoutput.printf("\n");
+
+
+	// pad and convertAmount count characters, not bytes
+	stdoutput.printf("pad/convertAmount characters...\n");
+	ucs2_t		*padabc=ucs2charstring::duplicate("abc");
+	ucs2_t		*pada=ucs2charstring::duplicate("a");
+	ucs2_t		*padabcd=ucs2charstring::duplicate("abcd");
+	ucs2_t		*padempty=ucs2charstring::duplicate("");
+	ucs2_t		*expectedpad=ucs2charstring::duplicate("*****abc");
+	ucs2_t		starchar=(ucs2_t)'*';
+	padTest("pad left",padabc,starchar,-1,8,expectedpad);
+	delete[] expectedpad;
+	expectedpad=ucs2charstring::duplicate("abc*****");
+	padTest("pad right",padabc,starchar,1,8,expectedpad);
+	delete[] expectedpad;
+	expectedpad=ucs2charstring::duplicate("**abc***");
+	padTest("pad centre",padabc,starchar,0,8,expectedpad);
+	delete[] expectedpad;
+	expectedpad=ucs2charstring::duplicate("****");
+	padTest("pad empty",padempty,starchar,-1,4,expectedpad);
+	delete[] expectedpad;
+	expectedpad=ucs2charstring::duplicate("***");
+	padTest("pad NULL",NULL,starchar,1,3,expectedpad);
+	delete[] expectedpad;
+	ucs2_t		padchars[]={(ucs2_t)' ',0x00E9,0x263A,0x263B};
+	ucs2_t		special[]={0x00E9,(ucs2_t)'x',0x263A,0};
+	const ucs2_t	*padstrs[]={NULL,padempty,pada,padabc,padabcd,
+							special};
+	uint64_t	padlens[]={1,2,3,4,5,8,17,64};
+	const char	*dirnames[]={"left","centre","right"};
+	for (size_t p=0; p<sizeof(padchars)/sizeof(padchars[0]); p++) {
+		for (int16_t d=-1; d<=1; d++) {
+			bool	matches=true;
+			for (size_t i=0; i<sizeof(padstrs)/
+						sizeof(padstrs[0]); i++) {
+				for (size_t j=0; j<sizeof(padlens)/
+						sizeof(padlens[0]); j++) {
+					if (!padMatches(padstrs[i],padchars[p],
+							d,padlens[j])) {
+						matches=false;
+					}
+				}
+			}
+			stringbuffer	name;
+			name.append("pad ");
+			name.append(dirnames[d+1]);
+			name.append(" with character ");
+			name.append((uint64_t)padchars[p]);
+			test(name.getString(),matches);
+		}
+	}
+	delete[] padabc;
+	delete[] pada;
+	delete[] padabcd;
+	delete[] padempty;
+	int64_t		amounts[]={0,5,99,100,101,12345,99999,1234567,
+					987654321,-100,-12345,-1234567};
+	for (size_t i=0; i<sizeof(amounts)/sizeof(amounts[0]); i++) {
+		stringbuffer	name;
+		name.append("convertAmount ");
+		name.append(amounts[i]);
+		test(name.getString(),amountMatches(amounts[i]));
+	}
+	ucs2_t	*amount=ucs2charstring::convertAmount(12345,8);
+	ucs2_t	*expectedamount=ucs2charstring::duplicate("$ 123.45");
+	test("convertAmount padding",amount &&
+		!ucs2charstring::compare(amount,expectedamount));
+	delete[] amount;
+	delete[] expectedamount;
+	stdoutput.printf("\n");
+
+
+	// convertToFloatC converts a string with a "." decimal point when the
+	// locale uses another one
+	stdoutput.printf("convertToFloatC...\n");
+	ucs2_t	*comma=ucs2charstring::duplicate("1,5");
+	if (locale::setNumeric("de_DE.utf8") &&
+		ucs2charstring::convertToFloat(comma)==1.5) {
+		test("convertToFloatC 1.5",floatC("1.5")==1.5);
+		test("convertToFloatC -0.5",floatC("-0.5")==-0.5);
+		test("convertToFloatC 123.25",floatC("123.25")==123.25);
+		test("convertToFloatC no decimal point",floatC("42")==42.0);
+
+		// the longest string that is converted in place
+		char	longstr[512];
+		for (size_t i=0; i<252; i++) {
+			longstr[i]='0';
+		}
+		longstr[252]='1';
+		longstr[253]='.';
+		longstr[254]='5';
+		longstr[255]='\0';
+		test("convertToFloatC 255 characters",
+			floatC(longstr)==1.5);
+
+		// a string too long for the buffer must not write past it
+		longstr[0]='1';
+		for (size_t i=1; i<290; i++) {
+			longstr[i]='0';
+		}
+		longstr[290]='\0';
+		ucs2_t		*ulongstr=ucs2charstring::duplicate(longstr);
+		long double	expected=
+				ucs2charstring::convertToFloat(ulongstr);
+		delete[] ulongstr;
+		longstr[290]='.';
+		for (size_t i=291; i<300; i++) {
+			longstr[i]='5';
+		}
+		longstr[300]='\0';
+		test("convertToFloatC 300 characters",
+			floatC(longstr)==expected);
+	} else {
+		stdoutput.printf("de_DE.utf8 locale not available, "
+					"skipped\n");
+	}
+	locale::setNumeric("C");
+	delete[] comma;
 	stdoutput.printf("\n");
 
 

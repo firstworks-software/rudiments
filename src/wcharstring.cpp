@@ -565,13 +565,36 @@ wchar_t *wcharstring::convertAmount(int64_t amount, uint16_t spaces) {
 	uint16_t	realspaces=(amtlen+1>spaces)?amtlen+1:spaces;
 	wchar_t	*buffer=new wchar_t[realspaces+1];
 	buffer[realspaces]=L'\0';
-	bytestring::set(buffer,L' ',realspaces);
-	bytestring::copy(buffer+realspaces-amtlen,amt+1,amtlen);
+	for (uint16_t i=0; i<realspaces; i++) {
+		buffer[i]=L' ';
+	}
+	for (size_t i=0; i<amtlen; i++) {
+		buffer[realspaces-amtlen+i]=amt[i+1];
+	}
 	if (buffer[0]==L' ') {
 		buffer[0]=L'$';
 	}
 	delete[] amt;
 	return buffer;
+}
+
+// computes count*multiplier+addend, false if it exceeds limit
+static bool bufferSizeWithin(uint64_t count, uint64_t multiplier,
+				uint64_t addend, size_t limit, size_t *size) {
+	if (addend>limit || (multiplier && count>(limit-addend)/multiplier)) {
+		return false;
+	}
+	*size=count*multiplier+addend;
+	return true;
+}
+
+// computes count*multiplier+addend elements, false if that many elements of
+// "elementsize" bytes do not fit in a size_t
+static bool bufferSize(uint64_t count, uint64_t multiplier,
+				uint64_t addend, size_t elementsize,
+				size_t *size) {
+	return bufferSizeWithin(count,multiplier,addend,
+				((size_t)-1)/elementsize,size);
 }
 
 wchar_t *wcharstring::escape(const wchar_t *input, const wchar_t *characters) {
@@ -589,6 +612,12 @@ void wcharstring::escape(const wchar_t *input, uint64_t inputlen,
 	(*outputlen)=0;
 
 	if (!input) {
+		return;
+	}
+
+	// check the size before reading the input
+	size_t	size;
+	if (!bufferSize(inputlen,1,1,sizeof(wchar_t),&size)) {
 		return;
 	}
 
@@ -615,7 +644,13 @@ void wcharstring::escape(const wchar_t *input, uint64_t inputlen,
 			outputindex++;
 		}
 		if (pass==0) {
-			(*output)=new wchar_t[(*outputlen)+1];
+			// size the output
+			if (!bufferSize(*outputlen,1,1,
+					sizeof(wchar_t),&size)) {
+				(*outputlen)=0;
+				return;
+			}
+			(*output)=new wchar_t[size];
 			(*output)[(*outputlen)]=L'\0';
 		}
 	}
@@ -635,6 +670,12 @@ void wcharstring::unescape(const wchar_t *input, uint64_t inputlen,
 	(*outputlen)=0;
 
 	if (!input) {
+		return;
+	}
+
+	// check the size before reading the input
+	size_t	size;
+	if (!bufferSize(inputlen,1,1,sizeof(wchar_t),&size)) {
 		return;
 	}
 
@@ -658,7 +699,10 @@ void wcharstring::unescape(const wchar_t *input, uint64_t inputlen,
 			escaped=false;
 		}
 		if (pass==0) {
-			(*output)=new wchar_t[(*outputlen)+1];
+			// size the output, which cannot fail because the
+			// count is at most the input length
+			bufferSize(*outputlen,1,1,sizeof(wchar_t),&size);
+			(*output)=new wchar_t[size];
 			(*output)[(*outputlen)]=L'\0';
 		}
 	}
@@ -2099,7 +2143,11 @@ wchar_t *wcharstring::duplicate(const wchar_t *str, size_t length) {
 	if (!str) {
 		return NULL;
 	}
-	wchar_t	*buffer=new wchar_t[length+1];
+	size_t	size;
+	if (!bufferSize(length,1,1,sizeof(wchar_t),&size)) {
+		return NULL;
+	}
+	wchar_t	*buffer=new wchar_t[size];
 	copy(buffer,str,length);
 	buffer[length]=L'\0';
 	return buffer;
@@ -2113,7 +2161,11 @@ wchar_t	*wcharstring::duplicate(const char *string, size_t length) {
 	if (!string) {
 		return NULL;
 	}
-	wchar_t		*retval=new wchar_t[length+1];
+	size_t	size;
+	if (!bufferSize(length,1,1,sizeof(wchar_t),&size)) {
+		return NULL;
+	}
+	wchar_t		*retval=new wchar_t[size];
 	for (size_t i=0; i<length; i++) {
 		retval[i]=wcharacter::duplicate(string[i]);
 	}
@@ -2161,7 +2213,11 @@ wchar_t *wcharstring::duplicateUcs2(const ucs2_t *string, size_t len,
 	if (!string) {
 		return NULL;
 	}
-	wchar_t	*retval=new wchar_t[len+1];
+	size_t	size;
+	if (!bufferSize(len,1,1,sizeof(wchar_t),&size)) {
+		return NULL;
+	}
+	wchar_t	*retval=new wchar_t[size];
 	for (size_t i=0; i<len; i++) {
 		retval[i]=wcharacter::duplicateUcs2(string[i],
 							replacement,bigendian);
@@ -2314,9 +2370,10 @@ long double wcharstring::convertToFloatC(const wchar_t *string) {
 			(currentlconv->decimal_point[0]!=L'.') &&
 			(currentlconv->decimal_point[1]==0) &&
 			((decimalpointlocation=findFirst(string,L'.'))!=NULL) &&
-			(len<sizeof(stringinlocale))) {
+			(len<sizeof(stringinlocale)/
+					sizeof(stringinlocale[0]))) {
 
-			bytestring::copy(stringinlocale,string,len+1);
+			copy(stringinlocale,string,len+1);
 
 			stringinlocale[decimalpointlocation-string]=
 						currentlconv->decimal_point[0];
@@ -2476,7 +2533,16 @@ void wcharstring::split(const wchar_t *string,
 		// if we're done with the first pass,
 		// create the list and reset the counter
 		if (!pass && list) {
-			(*list)=new wchar_t *[lc];
+			// size the list
+			size_t	size;
+			if (!bufferSize(lc,1,0,sizeof(wchar_t *),&size)) {
+				(*list)=NULL;
+				if (listcount) {
+					(*listcount)=0;
+				}
+				return;
+			}
+			(*list)=new wchar_t *[size];
 		}
 	}
 
@@ -2506,7 +2572,11 @@ wchar_t *wcharstring::insertString(const wchar_t *dest,
 
 	uint64_t	srcsize=getLength(src);
 	uint64_t	size=getLength(dest)+srcsize+1;
-	wchar_t		*retval=new wchar_t[size];
+	size_t		bufsize;
+	if (!bufferSize(size,1,0,sizeof(wchar_t),&bufsize)) {
+		return NULL;
+	}
+	wchar_t		*retval=new wchar_t[bufsize];
 	for (uint64_t i=0,j=0; i<size;) {
 		if (i==index) {
 			for (uint64_t k=0; k<srcsize; k++) {
@@ -2527,17 +2597,25 @@ wchar_t *wcharstring::pad(const wchar_t *str, wchar_t padchar,
 		return NULL;
 	}
 
+	// check the size before reading the input
+	size_t	size;
+	if (!bufferSize(totallength,1,1,sizeof(wchar_t),&size)) {
+		return NULL;
+	}
+
 	uint64_t	strlen=((str==NULL)?0:getLength(str));
 	wchar_t		*newstring=NULL;
 
-	newstring=new wchar_t[totallength+1];
+	newstring=new wchar_t[size];
 	if (strlen>=totallength) {
 		copy(newstring,str,totallength);
 		newstring[totallength]=0;
 		return newstring;
 	}
 
-	bytestring::set(newstring,padchar,totallength);
+	for (uint64_t i=0; i<totallength; i++) {
+		newstring[i]=padchar;
+	}
 	newstring[totallength]=0;
 
 	if (direction<0) {
@@ -2663,7 +2741,12 @@ ssize_t wcharstring::printf(wchar_t *buffer, size_t length,
 		error::clearError();
 		do {
 
-			wchar_t	*buf=new wchar_t[buflen];
+			// size the scratch buffer
+			size_t	bufsize;
+			if (!bufferSize(buflen,1,0,sizeof(wchar_t),&bufsize)) {
+				return -1;
+			}
+			wchar_t	*buf=new wchar_t[bufsize];
 
 			// this loop may call vswprintf() more than once;
 			// reusing *argp directly across those calls is
@@ -2759,7 +2842,13 @@ ssize_t wcharstring::printf(wchar_t **buffer,
 	ssize_t	size=printf(*buffer,0,format,argp);
 	va_end(*argp);
 	if (size!=-1) {
-		*buffer=new wchar_t[size+1];
+		// cannot fail, the scratch buffer above was at least this large
+		size_t	bufsize;
+		if (!bufferSize(size,1,1,sizeof(wchar_t),&bufsize)) {
+			va_end(argp1);
+			return -1;
+		}
+		*buffer=new wchar_t[bufsize];
 		size=printf(*buffer,size+1,format,&argp1);
 	}
 	va_end(argp1);

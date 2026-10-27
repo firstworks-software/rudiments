@@ -598,29 +598,9 @@ int64_t ucs2charstring::convertAmount(const ucs2_t *amount) {
 }
 
 ucs2_t *ucs2charstring::convertAmount(int64_t amount) {
-	uint16_t	len=getIntegerLength(amount)+4;
-	if (len<6) {
-		len=6;
-	}
-	ucs2_t	negative[2];
-	if (amount<0) {
-		negative[0]=(ucs2_t)'-';
-	} else {
-		negative[0]=(ucs2_t)'\0';
-	}
-	negative[1]=(ucs2_t)'\0';
-	ucs2_t	*amountstr=new ucs2_t[len];
-	int64_t		amt;
-	#ifdef RUDIMENTS_HAVE_LLABS
-		amt=llabs((long long)amount);
-	#else
-		amt=abs((long)amount);
-	#endif
-	ucs2_t	*format=duplicate("$%s%lld.%02lld");
-	printf(amountstr,len,
-			format,negative,
-			amt/100,amt-(amt/100*100));
-	delete[] format;
+	char	*temp=charstring::convertAmount(amount);
+	ucs2_t	*amountstr=duplicate(temp);
+	delete[] temp;
 	return amountstr;
 }
 
@@ -630,13 +610,36 @@ ucs2_t *ucs2charstring::convertAmount(int64_t amount, uint16_t spaces) {
 	uint16_t	realspaces=(amtlen+1>spaces)?amtlen+1:spaces;
 	ucs2_t	*buffer=new ucs2_t[realspaces+1];
 	buffer[realspaces]=(ucs2_t)'\0';
-	bytestring::set(buffer,(ucs2_t)' ',realspaces);
-	bytestring::copy(buffer+realspaces-amtlen,amt+1,amtlen);
+	for (uint16_t i=0; i<realspaces; i++) {
+		buffer[i]=(ucs2_t)' ';
+	}
+	for (ssize_t i=0; i<amtlen; i++) {
+		buffer[realspaces-amtlen+i]=amt[i+1];
+	}
 	if (buffer[0]==(ucs2_t)' ') {
 		buffer[0]=(ucs2_t)'$';
 	}
 	delete[] amt;
 	return buffer;
+}
+
+// computes count*multiplier+addend, false if it exceeds limit
+static bool bufferSizeWithin(uint64_t count, uint64_t multiplier,
+				uint64_t addend, size_t limit, size_t *size) {
+	if (addend>limit || (multiplier && count>(limit-addend)/multiplier)) {
+		return false;
+	}
+	*size=count*multiplier+addend;
+	return true;
+}
+
+// computes count*multiplier+addend elements, false if that many elements of
+// "elementsize" bytes do not fit in a size_t
+static bool bufferSize(uint64_t count, uint64_t multiplier,
+				uint64_t addend, size_t elementsize,
+				size_t *size) {
+	return bufferSizeWithin(count,multiplier,addend,
+				((size_t)-1)/elementsize,size);
 }
 
 ucs2_t *ucs2charstring::escape(const ucs2_t *input,
@@ -655,6 +658,12 @@ void ucs2charstring::escape(const ucs2_t *input, uint64_t inputlength,
 	(*outputlength)=0;
 
 	if (!input) {
+		return;
+	}
+
+	// check the size before reading the input
+	size_t	size;
+	if (!bufferSize(inputlength,1,1,sizeof(ucs2_t),&size)) {
 		return;
 	}
 
@@ -681,7 +690,13 @@ void ucs2charstring::escape(const ucs2_t *input, uint64_t inputlength,
 			outputindex++;
 		}
 		if (pass==0) {
-			(*output)=new ucs2_t[(*outputlength)+1];
+			// size the output
+			if (!bufferSize(*outputlength,1,1,
+					sizeof(ucs2_t),&size)) {
+				(*outputlength)=0;
+				return;
+			}
+			(*output)=new ucs2_t[size];
 			(*output)[(*outputlength)]=(ucs2_t)'\0';
 		}
 	}
@@ -701,6 +716,12 @@ void ucs2charstring::unescape(const ucs2_t *input, uint64_t inputlength,
 	(*outputlength)=0;
 
 	if (!input) {
+		return;
+	}
+
+	// check the size before reading the input
+	size_t	size;
+	if (!bufferSize(inputlength,1,1,sizeof(ucs2_t),&size)) {
 		return;
 	}
 
@@ -724,7 +745,10 @@ void ucs2charstring::unescape(const ucs2_t *input, uint64_t inputlength,
 			escaped=false;
 		}
 		if (pass==0) {
-			(*output)=new ucs2_t[(*outputlength)+1];
+			// size the output, which cannot fail because the
+			// count is at most the input length
+			bufferSize(*outputlength,1,1,sizeof(ucs2_t),&size);
+			(*output)=new ucs2_t[size];
 			(*output)[(*outputlength)]=(ucs2_t)'\0';
 		}
 	}
@@ -2172,7 +2196,11 @@ ucs2_t *ucs2charstring::duplicate(const char *str, size_t len, bool bigendian) {
 	if (!str) {
 		return NULL;
 	}
-	ucs2_t	*buffer=new ucs2_t[len+1];
+	size_t	size;
+	if (!bufferSize(len,1,1,sizeof(ucs2_t),&size)) {
+		return NULL;
+	}
+	ucs2_t	*buffer=new ucs2_t[size];
 	for (size_t i=0; i<len; i++) {
 		buffer[i]=ucs2character::duplicate(str[i],bigendian);
 	}
@@ -2188,7 +2216,11 @@ ucs2_t *ucs2charstring::duplicate(const ucs2_t *str, size_t len) {
 	if (!str) {
 		return NULL;
 	}
-	ucs2_t	*buffer=new ucs2_t[len+1];
+	size_t	size;
+	if (!bufferSize(len,1,1,sizeof(ucs2_t),&size)) {
+		return NULL;
+	}
+	ucs2_t	*buffer=new ucs2_t[size];
 	copy(buffer,str,len);
 	buffer[len]=(ucs2_t)'\0';
 	return buffer;
@@ -2225,7 +2257,11 @@ ucs2_t *ucs2charstring::duplicate(const wchar_t *string, size_t len,
 	if (!string) {
 		return NULL;
 	}
-	ucs2_t	*retval=new ucs2_t[len+1];
+	size_t	size;
+	if (!bufferSize(len,1,1,sizeof(ucs2_t),&size)) {
+		return NULL;
+	}
+	ucs2_t	*retval=new ucs2_t[size];
 	for (size_t i=0; i<len; i++) {
 		retval[i]=ucs2character::duplicate(string[i],replacement,
 								bigendian);
@@ -2365,9 +2401,9 @@ long double ucs2charstring::convertToFloatC(const ucs2_t *string) {
 		(currentlconv->decimal_point[0]!=(ucs2_t)'.') &&
 		(currentlconv->decimal_point[1]==0) &&
 		((decimalpointlocation=findFirst(string,(ucs2_t)'.'))!=NULL) &&
-		(len<sizeof(stringinlocale))) {
+		(len<sizeof(stringinlocale)/sizeof(stringinlocale[0]))) {
 
-		bytestring::copy(stringinlocale,string,len+1);
+		copy(stringinlocale,string,len+1);
 
 		stringinlocale[decimalpointlocation-string]=
 					(ucs2_t)currentlconv->decimal_point[0];
@@ -2523,7 +2559,16 @@ void ucs2charstring::split(const ucs2_t *string,
 		// if we're done with the first pass,
 		// create the list and reset the counter
 		if (!pass && list) {
-			(*list)=new ucs2_t *[lc];
+			// size the list
+			size_t	size;
+			if (!bufferSize(lc,1,0,sizeof(ucs2_t *),&size)) {
+				(*list)=NULL;
+				if (listcount) {
+					(*listcount)=0;
+				}
+				return;
+			}
+			(*list)=new ucs2_t *[size];
 		}
 	}
 
@@ -2556,7 +2601,11 @@ ucs2_t *ucs2charstring::insertString(const ucs2_t *dest,
 
 	uint64_t	srcsize=getLength(src);
 	uint64_t	size=getLength(dest)+srcsize+1;
-	ucs2_t		*retval=new ucs2_t[size];
+	size_t		bufsize;
+	if (!bufferSize(size,1,0,sizeof(ucs2_t),&bufsize)) {
+		return NULL;
+	}
+	ucs2_t		*retval=new ucs2_t[bufsize];
 	for (uint64_t i=0,j=0; i<size;) {
 		if (i==index) {
 			for (uint64_t k=0; k<srcsize; k++) {
@@ -2577,17 +2626,25 @@ ucs2_t *ucs2charstring::pad(const ucs2_t *str, ucs2_t padchar,
 		return NULL;
 	}
 
+	// check the size before reading the input
+	size_t	size;
+	if (!bufferSize(totallength,1,1,sizeof(ucs2_t),&size)) {
+		return NULL;
+	}
+
 	uint64_t	strlen=((str==NULL)?0:getLength(str));
 	ucs2_t	*newstring=NULL;
 
-	newstring=new ucs2_t[totallength+1];
+	newstring=new ucs2_t[size];
 	if (strlen>=totallength) {
 		copy(newstring,str,totallength);
 		newstring[totallength]=(ucs2_t)'\0';
 		return newstring;
 	}
 
-	bytestring::set(newstring,padchar,totallength);
+	for (uint64_t i=0; i<totallength; i++) {
+		newstring[i]=padchar;
+	}
 	newstring[totallength]=(ucs2_t)'\0';
 
 	if (direction<0) {
@@ -2726,7 +2783,13 @@ ssize_t ucs2charstring::printf(ucs2_t **buffer,
 	ssize_t	size=printf(*buffer,0,format,argp);
 	va_end(*argp);
 	if (size!=-1) {
-		*buffer=new ucs2_t[size+1];
+		// cannot fail, wcharstring::printf sized a buffer this large
+		size_t	bufsize;
+		if (!bufferSize(size,1,1,sizeof(ucs2_t),&bufsize)) {
+			va_end(argp1);
+			return -1;
+		}
+		*buffer=new ucs2_t[bufsize];
 		size=printf(*buffer,size+1,format,&argp1);
 	}
 	va_end(argp1);

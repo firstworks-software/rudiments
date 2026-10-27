@@ -705,7 +705,10 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *  "str" and returns a pointer to it.  Note that this
 		 *  method allocates a buffer for the duplicate string
 		 *  internally and returns it.  The calling program must
-		 *  deallocate this buffer. */
+		 *  deallocate this buffer.
+		 *
+		 *  Returns NULL if "len"+1 wide characters take more bytes
+		 *  than a size_t can hold. */
 		static	wchar_t	*duplicate(const wchar_t *str, size_t len);
 
 		/** Creates a duplicate of "str", converts it to a wide string,
@@ -719,7 +722,10 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *  "str", converts it to a wide string, and returns a pointer
 		 *  to it.  Note that this method allocates a buffer for the
 		 *  duplicate string internally and returns it.  The calling
-		 *  program must deallocate this buffer. */
+		 *  program must deallocate this buffer.
+		 *
+		 *  Returns NULL if "len"+1 wide characters take more bytes
+		 *  than a size_t can hold. */
 		static	wchar_t	*duplicate(const char *str, size_t len);
 
 		/** Creates a duplicate of "str", converting each UCS-2
@@ -746,7 +752,10 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *
 		 *  Note that this method allocates a buffer for the duplicate
 		 *  string internally and returns it.  The calling program must
-		 *  deallocate this buffer. */
+		 *  deallocate this buffer.
+		 *
+		 *  Returns NULL if "len"+1 wide characters take more bytes
+		 *  than a size_t can hold. */
 		static	wchar_t	*duplicateUcs2(const ucs2_t *str, size_t len);
 
 		/** Creates a duplicate of "str", converting each UCS-2
@@ -776,7 +785,10 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *
 		 *  Note that this method allocates a buffer for the duplicate
 		 *  string internally and returns it.  The calling program must
-		 *  deallocate this buffer. */
+		 *  deallocate this buffer.
+		 *
+		 *  Returns NULL if "len"+1 wide characters take more bytes
+		 *  than a size_t can hold. */
 		static	wchar_t	*duplicateUcs2(const ucs2_t *str,
 							size_t len,
 							bool bigendian);
@@ -806,7 +818,10 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *
 		 *  Note that this method allocates a buffer for the duplicate
 		 *  string internally and returns it.  The calling program must
-		 *  deallocate this buffer. */
+		 *  deallocate this buffer.
+		 *
+		 *  Returns NULL if "len"+1 wide characters take more bytes
+		 *  than a size_t can hold. */
 		static	wchar_t	*duplicateUcs2(const ucs2_t *str,
 							size_t len,
 							wchar_t replacement);
@@ -839,7 +854,10 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *
 		 *  Note that this method allocates a buffer for the duplicate
 		 *  string internally and returns it.  The calling program must
-		 *  deallocate this buffer. */
+		 *  deallocate this buffer.
+		 *
+		 *  Returns NULL if "len"+1 wide characters take more bytes
+		 *  than a size_t can hold. */
 		static	wchar_t	*duplicateUcs2(const ucs2_t *str,
 							size_t len,
 							wchar_t replacement,
@@ -1213,14 +1231,18 @@ class RUDIMENTS_DLLSPEC wcharstring {
 
 		/** similar to escape() above, but takes an "inputlen"
 		 *  parameter and returns the result in "output" and
-		 *  "outputlen" rather than in a return value */
+		 *  "outputlen" rather than in a return value.  If the result
+		 *  takes more bytes than a size_t can hold then "output" is
+		 *  set to NULL and "outputlen" to 0. */
 		static	void	escape(const wchar_t *input, uint64_t inputlen,
 					wchar_t **output, uint64_t *outputlen,
 					const wchar_t *characters);
 
 		/** similar to unescape() above, but takes an "inputlen"
 		 *  parameter and returns the result in "output" and
-		 *  "outputlen" rather than in a return value */
+		 *  "outputlen" rather than in a return value.  If "inputlen"+1
+		 *  wide characters take more bytes than a size_t can hold then
+		 *  "output" is set to NULL and "outputlen" to 0. */
 		static	void	unescape(const wchar_t *input,
 						uint64_t inputlen,
 						wchar_t **output,
@@ -1248,7 +1270,10 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *  to -1 to left-pad, 0 to center-pad and 1 to right-pad.
 		 *  Note that this method allocates a buffer internally and
 		 *  returns it.  The calling program must deallocate this
-		 *  buffer. */
+		 *  buffer.
+		 *
+		 *  Returns NULL if "totallength" is 0 or "totallength"+1 wide
+		 *  characters take more bytes than a size_t can hold. */
 		static wchar_t	*pad(const wchar_t *string,
 						wchar_t padchar,
 						int16_t direction,
@@ -1261,7 +1286,11 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *  multiple instances of the delimiter in a row will be
 		 *  interpreted as one instance of the delimiter.  Each member
 		 *  of "list" and "list" itseslf must be deallocated by the
-		 *  calling program. */
+		 *  calling program.
+		 *
+		 *  If "list" would take more bytes than a size_t can hold
+		 *  then "list" is set to NULL and "listcount" to 0.  If "list"
+		 *  is NULL then "listcount" is only set. */
 		static void	split(const wchar_t *string,
 					size_t stringlength,
 					const wchar_t *delimiter,
@@ -1276,7 +1305,11 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *  "collapse" is true then multiple instances of the delimiter
 		 *  in a row will be interpreted as one instance of the
 		 *  delimiter.  Each member of "list" and "list" itseslf must
-		 *  be deallocated by the calling program. */
+		 *  be deallocated by the calling program.
+		 *
+		 *  If "list" would take more bytes than a size_t can hold
+		 *  then "list" is set to NULL and "listcount" to 0.  If "list"
+		 *  is NULL then "listcount" is only set. */
 		static void	split(const wchar_t *string,
 					const wchar_t *delimiter,
 					size_t delimiterlength,
@@ -1290,7 +1323,11 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *  "collapse" is true then multiple instances of the delimiter
 		 *  in a row will be interpreted as one instance of the
 		 *  delimiter.  Each member of "list" and "list" itseslf must
-		 *  be deallocated by the calling program. */
+		 *  be deallocated by the calling program.
+		 *
+		 *  If "list" would take more bytes than a size_t can hold
+		 *  then "list" is set to NULL and "listcount" to 0.  If "list"
+		 *  is NULL then "listcount" is only set. */
 		static void	split(const wchar_t *string,
 					size_t stringlength,
 					const wchar_t *delimiter,
@@ -1304,7 +1341,11 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *  true then multiple instances of the delimiter in a row will
 		 *  be interpreted as one instance of the delimiter.  Each
 		 *  member of "list" and "list" itseslf must be deallocated by
-		 *  the calling program. */
+		 *  the calling program.
+		 *
+		 *  If "list" would take more bytes than a size_t can hold
+		 *  then "list" is set to NULL and "listcount" to 0.  If "list"
+		 *  is NULL then "listcount" is only set. */
 		static void	split(const wchar_t *string,
 					const wchar_t *delimiter,
 					bool collapse,
@@ -1313,17 +1354,27 @@ class RUDIMENTS_DLLSPEC wcharstring {
 
 		/** Returns a copy of the segment of "str"
 		 *  between string indices "start" and "end",
-		 *  inclusive. */
+		 *  inclusive.
+		 *
+		 *  Returns NULL if the segment and its NULL terminator take
+		 *  more bytes than a size_t can hold.  If "end" minus
+		 *  "start" is SIZE_MAX then the segment size wraps to 0 and
+		 *  an empty string is returned. */
 		static wchar_t	*getSubString(const wchar_t *str,
 						size_t start, size_t end);
 
 		/** Returns a copy of the segment of "str"
 		 *  between string index "start" and the end
-		 *  of the string, inclusive. */
+		 *  of the string, inclusive.
+		 *
+		 *  Returns NULL if the segment and its NULL terminator take
+		 *  more bytes than a size_t can hold. */
 		static wchar_t	*getSubString(const wchar_t *str, size_t start);
 
 		/** Creates a new string with "src" inserted into "dest" at
-                 *  "index". */
+		 *  "index".  Returns NULL if the new string would take more
+		 *  bytes than a size_t can hold, which can only happen where
+		 *  size_t is 32 bits. */
 		static wchar_t	*insertString(const wchar_t *dest,
 						const wchar_t *src,
 						uint64_t index);
@@ -1388,7 +1439,10 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *  been written had "buffer" been large enough is still
 		 *  returned.
 		 *
-		 *  Returns -1 if an error occurred.
+		 *  Returns -1 if an error occurred or if the formatted data
+		 *  would take more bytes than a size_t can hold.  Also
+		 *  returns -1 if "len" is more than
+		 *  SIZE_MAX/sizeof(wchar_t), whatever the formatted data.
 		 *
 		 *  NOTE: non-wide character sequences will be converted to
 		 *  sequences of wide characters.
@@ -1418,7 +1472,10 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *  been written had "buffer" been large enough is still
 		 *  returned.
 		 *
-		 *  Returns -1 if an error occurred.
+		 *  Returns -1 if an error occurred or if the formatted data
+		 *  would take more bytes than a size_t can hold.  Also
+		 *  returns -1 if "len" is more than
+		 *  SIZE_MAX/sizeof(wchar_t), whatever the formatted data.
 		 *
 		 *  NOTE: non-wide character sequences will be converted to
 		 *  sequences of wide characters.
