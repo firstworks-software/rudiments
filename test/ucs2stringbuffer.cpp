@@ -5,12 +5,89 @@
 #include <rudiments/ucs2charstring.h>
 #include <rudiments/bytestring.h>
 #include <rudiments/sys.h>
+#include <rudiments/signalclasses.h>
 #include <rudiments/stdio.h>
 #include "test.cpp"
+
+// getString and getPosition; these need no printf
+static void stringBufferBasics() {
+
+	signalmanager::alarm(60);
+	stdoutput.printf("getString and getPosition...\n");
+
+	ucs2literal(ab,"ab");
+	ucs2literal(c,"c");
+	ucs2literal(abc,"abc");
+	ucs2literal(hello,"hello");
+	ucs2literal(x,"X");
+	ucs2literal(axc,"aXc");
+
+	// getString removes one character, not one byte
+	ucs2stringbuffer	*sb=new ucs2stringbuffer();
+	sb->appendUcs2(ab);
+	test("getString ab",!ucs2charstring::compare(sb->getString(),ab));
+	test("getSize ab",sb->getSize()==2*sizeof(ucs2_t));
+	test("getPosition ab",sb->getPosition()==2);
+	sb->appendUcs2(c);
+	test("getString abc",!ucs2charstring::compare(sb->getString(),abc));
+	test("getSize abc",sb->getSize()==3*sizeof(ucs2_t));
+	test("getStringLength abc",sb->getStringLength()==3);
+
+	// getString, append and getStringLength repeated
+	sb->clear();
+	ucs2_t	expected[201];
+	bool	ok=true;
+	for (size_t i=0; i<200; i++) {
+		ucs2_t	ch=(ucs2_t)('a'+(i%26));
+		sb->appendUcs2(ch);
+		expected[i]=ch;
+		expected[i+1]=0;
+		if (sb->getStringLength()!=i+1 ||
+			ucs2charstring::compare(sb->getString(),expected) ||
+			sb->getSize()!=(i+1)*sizeof(ucs2_t) ||
+			sb->getPosition()!=(off64_t)(i+1)) {
+			ok=false;
+		}
+	}
+	test("repeated getString and append",ok);
+
+	// no append after getString
+	sb->clear();
+	sb->appendUcs2(hello);
+	sb->getString();
+	sb->getString();
+	test("getString twice",
+		!ucs2charstring::compare(sb->getString(),hello));
+	test("getSize twice",sb->getSize()==5*sizeof(ucs2_t));
+	delete sb;
+
+	// positions count characters
+	sb=new ucs2stringbuffer();
+	sb->appendUcs2(abc);
+	test("position 3",sb->getPosition()==3);
+	sb->setPositionRelativeToBeginning(1);
+	test("position begin 1",sb->getPosition()==1);
+	sb->setPositionRelativeToCurrent(1);
+	test("position current 1",sb->getPosition()==2);
+	sb->setPositionRelativeToEnd(-1);
+	test("position end -1",sb->getPosition()==2);
+	sb->setPositionRelativeToEnd(0);
+	test("position end 0",sb->getPosition()==3);
+	sb->setPositionRelativeToBeginning(1);
+	sb->writeUcs2(x);
+	test("position write",sb->getPosition()==2);
+	test("write contents",!ucs2charstring::compare(sb->getString(),axc));
+	delete sb;
+
+	stdoutput.printf("\n");
+	signalmanager::alarm(0);
+}
 
 int main(int argc, const char **argv) {
 
 	header("ucs2stringbuffer");
+
+	stringBufferBasics();
 
 	if (!ucs2charstring::supportsPrintf()) {
 		stdoutput.printf("	not supported\n\n");

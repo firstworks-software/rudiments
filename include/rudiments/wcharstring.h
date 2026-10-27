@@ -345,12 +345,16 @@ class RUDIMENTS_DLLSPEC wcharstring {
 							wchar_t needle);
 
 		/** Returns a pointer to the last occurrance of "needle"
-		 *  in "haystack" or NULL if not found. */
+		 *  in "haystack" or NULL if not found. An empty "needle"
+		 *  gives a pointer to the NULL terminator at the end of
+		 *  "haystack". */
 		static	const wchar_t	*findLast(const wchar_t *haystack,
 							const wchar_t *needle);
 
 		/** Returns a pointer to the last occurrance of "needle"
-		 *  in "haystack" or NULL if not found. */
+		 *  in "haystack" or NULL if not found. A "needle" of 0
+		 *  gives a pointer to the NULL terminator at the end of
+		 *  "haystack". */
 		static	const wchar_t	*findLast(const wchar_t *haystack,
 							wchar_t needle);
 
@@ -386,22 +390,30 @@ class RUDIMENTS_DLLSPEC wcharstring {
 							const wchar_t *needle);
 
 		/** Returns a pointer to the last occurrance of "needle"
-		 *  in "haystack" or NULL if not found. */
+		 *  in "haystack" or NULL if not found. An empty "needle"
+		 *  gives a pointer to the NULL terminator at the end of
+		 *  "haystack". */
 		static	wchar_t	*findLast(wchar_t *haystack,
 							const wchar_t *needle);
 
-		/** Returns a pointer to the last occurrance of "needle"
-		 *  in "haystack", ignoring case, or NULL if not found. */
+		/** Returns a pointer to the last occurrance of "needle" in
+		 *  "haystack", ignoring case, or NULL if not found. An empty
+		 *  "needle" gives a pointer to the NULL terminator at the end
+		 *  of "haystack". */
 		static	const wchar_t	*findLastIgnoringCase(
 							const wchar_t *haystack,
 							const wchar_t *needle);
 
 		/** Returns a pointer to the last occurrance of "needle"
-		 *  in "haystack" or NULL if not found. */
+		 *  in "haystack" or NULL if not found. A "needle" of 0
+		 *  gives a pointer to the NULL terminator at the end of
+		 *  "haystack". */
 		static	wchar_t	*findLast(wchar_t *haystack, wchar_t needle);
 
-		/** Returns a pointer to the last occurrance of "needle"
-		 *  in "haystack", ignoring case, or NULL if not found. */
+		/** Returns a pointer to the last occurrance of "needle" in
+		 *  "haystack", ignoring case, or NULL if not found. A "needle"
+		 *  of 0 gives a pointer to the NULL terminator at the end of
+		 *  "haystack". */
 		static	const wchar_t	*findLastIgnoringCase(
 							const wchar_t *haystack,
 							wchar_t needle);
@@ -873,11 +885,13 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *  or lower case as necessary. */
 		static void	capitalize(wchar_t *str);
 
-		/** Trims all spaces off of the right hand side of "str". */
+		/** Trims all spaces off of the right hand side of "str".
+		 *  A string of only spaces becomes empty. */
 		static	void	rightTrim(wchar_t *str);
 
 		/** Trims all "character"'s off of the right hand side
-		 *  of "str". */
+		 *  of "str".  A string of only "character"'s becomes
+		 *  empty. */
 		static	void	rightTrim(wchar_t *str, wchar_t character);
 
 		/** Trims all spaces off of the left hand side of "str". */
@@ -900,7 +914,9 @@ class RUDIMENTS_DLLSPEC wcharstring {
 
 		/** Strips all instances of "str2" from "str1".
 		 *  Returns true if any characters were stripped and
-		 *  false if no characters were stripped. */
+		 *  false if no characters were stripped.
+		 *  If "str2" is empty or NULL, nothing is stripped and
+		 *  false is returned. */
 		static	bool	strip(wchar_t *str1, const wchar_t *str2);
 
 		/** Strips all instances of any character in "set" from
@@ -922,7 +938,9 @@ class RUDIMENTS_DLLSPEC wcharstring {
 
 		/** Returns a new string which is a copy of "str" in which
 		 *  all instances of "oldstr" have been replaced with
-		 *  "newstr" */
+		 *  "newstr".
+		 *  An empty or NULL "oldstr" matches nothing, so the new
+		 *  string is a plain copy of "str". */
 		static	wchar_t	*replace(const wchar_t *str,
 						const wchar_t *oldstr,
 						const wchar_t *newstr);
@@ -933,7 +951,9 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *  given by the array "oldstrlen", have been replaced with the
 		 *  commensurate string found in the NULL-terminated array
 		 *  "newstrset", which must have the same number of members as
-		 *  "oldstrset" */
+		 *  "oldstrset".
+		 *  A member of "oldstrset" whose length in "oldstrlen" is 0 is
+		 *  skipped, but the other members are still replaced. */
 		static	wchar_t	*replace(const wchar_t *str,
 					const wchar_t * const *oldstrset,
 					size_t *oldstrlen,
@@ -953,7 +973,9 @@ class RUDIMENTS_DLLSPEC wcharstring {
 
 		/** Returns a new string which is a copy of "str" in which
 		 *  all instances of "oldstr" have been replaced with
-		 *  "newstr", ignoring case */
+		 *  "newstr", ignoring case.
+		 *  An empty or NULL "oldstr" matches nothing, so the new
+		 *  string is a plain copy of "str". */
 		static	wchar_t	*replaceIgnoringCase(const wchar_t *str,
 						const wchar_t *oldstr,
 						const wchar_t *newstr);
@@ -964,22 +986,30 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *  given by the array "oldstrlen", have been replaced with the
 		 *  commensurate string found in the NULL-terminated array
 		 *  "newstrset", which must have the same number of members as
-		 *  "oldstrset", ignoring case */
+		 *  "oldstrset", ignoring case.
+		 *  A member of "oldstrset" whose length in "oldstrlen" is 0 is
+		 *  skipped, but the other members are still replaced. */
 		static	wchar_t	*replaceIgnoringCase(const wchar_t *str,
 					const wchar_t * const *oldstrset,
 					size_t *oldstrlen,
 					const wchar_t * const *newstrset);
 
 		/** Returns the number of characters needed to represent
-		 *  "number" as a string. */
+		 *  "number" as a string, including the minus sign of a
+		 *  negative number.  This is exact for the minimum value
+		 *  too. */
 		static	uint16_t	getIntegerLength(int16_t number);
 
 		/** Returns the number of characters needed to represent
-		 *  "number" as a string. */
+		 *  "number" as a string, including the minus sign of a
+		 *  negative number.  This is exact for the minimum value
+		 *  too. */
 		static	uint16_t	getIntegerLength(int32_t number);
 
 		/** Returns the number of characters needed to represent
-		 *  "number" as a string. */
+		 *  "number" as a string, including the minus sign of a
+		 *  negative number.  This is exact for the minimum value
+		 *  too. */
 		static	uint16_t	getIntegerLength(int64_t number);
 
 		/** Returns the number of characters needed to represent
@@ -999,7 +1029,9 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		static	bool	isInteger(const wchar_t *val);
 
 		/** Returns true if the string "val" is an integer and
-		 *  false if it is not an integer. */
+		 *  false if it is not an integer.
+		 *  Only the first "len" characters are examined.
+		 *  Returns false if "len" is less than 1. */
 		static	bool	isInteger(const wchar_t *val, int32_t len);
 
 		/** Returns true the string "val" is a number and false
@@ -1007,7 +1039,9 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		static	bool	isNumber(const wchar_t *val);
 
 		/** Returns true the string "val" is a number and false
-		 *  if it is not a number */
+		 *  if it is not a number.
+		 *  Only the first "len" characters are examined.
+		 *  Returns false if "len" is less than 1. */
 		static	bool	isNumber(const wchar_t *val, int32_t len);
 
 		/** Returns a string representing "number".  The string
@@ -1056,7 +1090,8 @@ class RUDIMENTS_DLLSPEC wcharstring {
 
 		/** Returns a string representing "number".  The string
 		 *  is allocated inside the function and must be deleted
-		 *  by the calling program. */
+		 *  by the calling program.  This is exact for the
+		 *  minimum value too. */
 		static	wchar_t	*parseNumber(int64_t number);
 
 		/** Returns a string representing "number".  The string
@@ -1066,7 +1101,11 @@ class RUDIMENTS_DLLSPEC wcharstring {
 
 		/** Returns a string representing "number".  The string
 		 *  is allocated inside the function and must be deleted
-		 *  by the calling program. */
+		 *  by the calling program.  The string is at least
+		 *  "zeropadding" characters long, counting the minus
+		 *  sign of a negative number, and is padded with zeros
+		 *  after the sign.  This is exact for the minimum value
+		 *  too. */
 		static	wchar_t	*parseNumber(int64_t number,
 						uint16_t zeropadding);
 
@@ -1204,14 +1243,18 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		static	int64_t	convertAmount(const wchar_t *amount);
 
 		/** Converts "amount" which is assumed to be a number of
- 		 *  pennies into a dollar amount string. */
+		 *  pennies into a dollar amount string.  A negative amount
+		 *  has a minus sign after the dollar sign, as in $-0.05.
+		 *  This is exact for every int64_t value, including the
+		 *  minimum. */
 		static	wchar_t	*convertAmount(int64_t amount);
 
 		/** Converts "amount" which is assumed to be a number of
  		 *  pennies into a dollar amount string where there
  		 *  are "padding" places between the dollar sign and decimal
  		 *  point.   These will be space padded if the amount is
- 		 *  small enough not to fill them.  */
+		 *  small enough not to fill them.  The minus sign of a
+		 *  negative amount is part of the amount. */
 		static	wchar_t	*convertAmount(int64_t amount,
 						uint16_t padding);
 
@@ -1251,16 +1294,28 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		/** Moves leading spaces to the end of "str" for
 		 *  "len" characters.
 		 *
+		 *  Only the first "len" characters of "str" are read
+		 *  and written.  "str" needs no terminator within them.
+		 *  Does nothing if "len" is less than 1.
+		 *
 		 *  Example: "   hello   " -> "hello      " */
 		static	void	leftJustify(wchar_t *str, int32_t len);
 
 		/** Moves trailing spaces to the beginning of "str" for
 		 *  "len" characters.
 		 *  
+		 *  Only the first "len" characters of "str" are read
+		 *  and written.  "str" needs no terminator within them.
+		 *  Does nothing if "len" is less than 1.
+		 *
 		 *  Example: "   hello   " -> "      hello"  */
 		static	void	rightJustify(wchar_t *str, int32_t len);
 
 		/** Centers the text of "str" for "len" characters.
+		 *
+		 *  Only the first "len" characters of "str" are read
+		 *  and written.  "str" needs no terminator within them.
+		 *  Does nothing if "len" is less than 1.
 		 *
 		 *  Example: "hello      " -> "   hello   "  */
 		static	void	center(wchar_t *str, int32_t len);
@@ -1372,9 +1427,16 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		static wchar_t	*getSubString(const wchar_t *str, size_t start);
 
 		/** Creates a new string with "src" inserted into "dest" at
-		 *  "index".  Returns NULL if the new string would take more
-		 *  bytes than a size_t can hold, which can only happen where
-		 *  size_t is 32 bits. */
+		 *  "index".
+		 *
+		 *  A NULL "dest" or "src" is treated as an empty string.
+		 *  If "index" is greater than the length of "dest" then
+		 *  "src" is inserted at the end of "dest".
+		 *
+		 *  The new string must be deleted by the caller using
+		 *  delete[].  Returns NULL only if the new string would take
+		 *  more bytes than a size_t can hold, which can only happen
+		 *  where size_t is 32 bits. */
 		static wchar_t	*insertString(const wchar_t *dest,
 						const wchar_t *src,
 						uint64_t index);

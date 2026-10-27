@@ -26,7 +26,9 @@ class RUDIMENTS_DLLSPEC wstringbuffer : public bytebuffer {
 		 *  The buffer "initialcontents" will be attached to the
 		 *  instance and used as the initial contents.  This buffer
 		 *  should not be freed by the calling program.  The initial
-		 *  size may be specified by the "initialsize" parameter. */
+		 *  size, in characters, may be specified by the "initialsize"
+		 *  parameter.  If "initialsize" characters would take more
+		 *  than SSIZE_MAX bytes then the initial size is 0. */
 		wstringbuffer(wchar_t *initialcontents, size_t initialsize);
 
 		/** Creates an instance of the wstringbuffer class
@@ -41,21 +43,22 @@ class RUDIMENTS_DLLSPEC wstringbuffer : public bytebuffer {
 		~wstringbuffer();
 
 		/** Sets the position (relative to the beginning of the buffer)
-		 *  at which the next read or write will occur to "offset".
-		 *  If the position is set beyond the end of the buffer, the
-		 *  buffer will grow but the data between the current end of
-		 *  the buffer and the new position will be undefined. */
+		 *  at which the next read or write will occur to "offset"
+		 *  characters.  If the position is set beyond the end of the
+		 *  buffer, the buffer will grow but the data between the
+		 *  current end of the buffer and the new position will be
+		 *  undefined. */
 		off64_t	setPositionRelativeToBeginning(off64_t pos);
 
 		/** Advances the position at which the next read or write will
-		 *  occur by "offset" bytes.  If the position is set beyond the
-		 *  end of the buffer, the buffer will grow but the data between
-		 *  the current end of the buffer and the new position will be
-		 *  undefined. */
+		 *  occur by "offset" characters.  If the position is set
+		 *  beyond the end of the buffer, the buffer will grow but the
+		 *  data between the current end of the buffer and the new
+		 *  position will be undefined. */
 		off64_t	setPositionRelativeToCurrent(off64_t pos);
 
 		/** Sets the position at which the next read or write will
-		 *  occur to the end of the buffer plus "offset" bytes.
+		 *  occur to the end of the buffer plus "offset" characters.
 		 *  Generally, offset will be negative.  If it is positive
 		 *  then the buffer will grow, but the data between the current
 		 *  buffer will grow but the data between the current end of
@@ -63,7 +66,7 @@ class RUDIMENTS_DLLSPEC wstringbuffer : public bytebuffer {
 		off64_t	setPositionRelativeToEnd(off64_t pos);
 
 		/** Returns the position in the internal buffer at which
-		 *  the next write will occur. */
+		 *  the next write will occur, in characters. */
 		off64_t	getPosition();
 
 		/** Writes "string" to the wstringbuffer at the current position
@@ -409,7 +412,9 @@ class RUDIMENTS_DLLSPEC wstringbuffer : public bytebuffer {
 		/** Empties the bytebuffer and attaches the buffer
 		 *  "initialcontents" to the instance as the initial contents.
 		 *  This buffer should not be freed by the calling program.
-		 *  Also resets the specified "initialsize" parameter.
+		 *  Also resets the specified "initialsize" parameter, in
+		 *  characters.  If "initialsize" characters would take more
+		 *  than SSIZE_MAX bytes then the initial size is 0.
 		 *
 		 *  Always returns true. */
 		bool	clear(wchar_t *initialcontents, size_t initialsize);

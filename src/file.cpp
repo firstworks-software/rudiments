@@ -398,6 +398,7 @@ ssize_t file::getContents(byte_t **buffer, size_t *buffersize,
 							bool terminate) {
 	byte_t	*intbuffer=NULL;
 	size_t	intbuffersize=0;
+	bool	readerror=false;
 	if (fd()!=-1) {
 		getCurrentProperties();
 		off64_t	curpos=getPosition();
@@ -423,6 +424,11 @@ ssize_t file::getContents(byte_t **buffer, size_t *buffersize,
 			byte_t	buf[16*1024];
 			for (;;) {
 				ssize_t	s=read(buf,sizeof(buf));
+				if (s<0) {
+					// cts frees what it accumulated
+					readerror=true;
+					break;
+				}
 				cts.append(buf,s);
 				if (s<(ssize_t)sizeof(buf)) {
 					if (terminate) {
@@ -442,7 +448,7 @@ ssize_t file::getContents(byte_t **buffer, size_t *buffersize,
 	if (buffersize) {
 		*buffersize=intbuffersize;
 	}
-	return intbuffersize;
+	return (readerror)?-1:intbuffersize;
 }
 
 ssize_t file::getContents(const char *name, byte_t **buffer,

@@ -5,12 +5,108 @@
 #include <rudiments/wcharstring.h>
 #include <rudiments/bytestring.h>
 #include <rudiments/sys.h>
+#include <rudiments/signalclasses.h>
 #include <rudiments/stdio.h>
 #include "test.cpp"
+
+// getString, getPosition and attached contents; these need no printf
+static void stringBufferBasics() {
+
+	signalmanager::alarm(60);
+	stdoutput.printf("getString, getPosition and initialsize...\n");
+
+	// getString removes one character, not one byte
+	wstringbuffer	*sb=new wstringbuffer();
+	sb->append(L"ab");
+	test("getString ab",!wcharstring::compare(sb->getString(),L"ab"));
+	test("getSize ab",sb->getSize()==2*sizeof(wchar_t));
+	test("getPosition ab",sb->getPosition()==2);
+	sb->append(L"c");
+	test("getString abc",!wcharstring::compare(sb->getString(),L"abc"));
+	test("getSize abc",sb->getSize()==3*sizeof(wchar_t));
+	test("getStringLength abc",sb->getStringLength()==3);
+
+	// getString, append and getStringLength repeated
+	sb->clear();
+	wchar_t	expected[201];
+	bool	ok=true;
+	for (size_t i=0; i<200; i++) {
+		wchar_t	c=(wchar_t)(L'a'+(i%26));
+		sb->append(c);
+		expected[i]=c;
+		expected[i+1]=0;
+		if (sb->getStringLength()!=i+1 ||
+			wcharstring::compare(sb->getString(),expected) ||
+			sb->getSize()!=(i+1)*sizeof(wchar_t) ||
+			sb->getPosition()!=(off64_t)(i+1)) {
+			ok=false;
+		}
+	}
+	test("repeated getString and append",ok);
+
+	// no append after getString
+	sb->clear();
+	sb->append(L"hello");
+	sb->getString();
+	sb->getString();
+	test("getString twice",
+		!wcharstring::compare(sb->getString(),L"hello"));
+	test("getSize twice",sb->getSize()==5*sizeof(wchar_t));
+	delete sb;
+
+	// positions count characters
+	sb=new wstringbuffer();
+	sb->append(L"abc");
+	test("position 3",sb->getPosition()==3);
+	sb->setPositionRelativeToBeginning(1);
+	test("position begin 1",sb->getPosition()==1);
+	sb->setPositionRelativeToCurrent(1);
+	test("position current 1",sb->getPosition()==2);
+	sb->setPositionRelativeToEnd(-1);
+	test("position end -1",sb->getPosition()==2);
+	sb->setPositionRelativeToEnd(0);
+	test("position end 0",sb->getPosition()==3);
+	sb->setPositionRelativeToBeginning(1);
+	sb->write(L"X");
+	test("position write",sb->getPosition()==2);
+	test("write contents",!wcharstring::compare(sb->getString(),L"aXc"));
+	delete sb;
+
+	// an initialsize that would wrap attaches as size 0
+	size_t	huge=((size_t)1<<(sizeof(size_t)*8-2))+1;
+	wchar_t	*buf=new wchar_t[4];
+	wcharstring::copy(buf,L"abc");
+	sb=new wstringbuffer(buf,huge);
+	test("huge initialsize",sb->getSize()==0);
+	sb->append(L"xy");
+	test("huge append",!wcharstring::compare(sb->getString(),L"xy"));
+	buf=new wchar_t[4];
+	wcharstring::copy(buf,L"abc");
+	sb->clear(buf,huge);
+	test("huge clear",sb->getSize()==0);
+	sb->append(L"xyz");
+	test("huge clear append",
+		!wcharstring::compare(sb->getString(),L"xyz"));
+	delete sb;
+
+	// exact-size attached contents still work
+	buf=new wchar_t[3];
+	wcharstring::copy(buf,L"ab");
+	sb=new wstringbuffer(buf,2);
+	test("attach size",sb->getSize()==2*sizeof(wchar_t));
+	sb->append(L"c");
+	test("attach append",!wcharstring::compare(sb->getString(),L"abc"));
+	delete sb;
+
+	stdoutput.printf("\n");
+	signalmanager::alarm(0);
+}
 
 int main(int argc, const char **argv) {
 
 	header("wstringbuffer");
+
+	stringBufferBasics();
 
 	if (!wcharstring::supportsPrintf()) {
 		stdoutput.printf("	not supported\n\n");

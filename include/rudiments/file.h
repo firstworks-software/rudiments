@@ -133,7 +133,9 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  No end-of-line translation is performed.
 		 * 
 		 *  Returns the number of bytes copied into "buffer" or
-		 *  -1 on error. */
+		 *  -1 on error.  If reading a file of unknown size fails,
+		 *  then -1 is returned, "buffer" is set to NULL and
+		 *  "buffersize" is set to 0. */
 		virtual ssize_t	getContents(byte_t **buffer,
 							size_t *buffersize);
 
@@ -963,7 +965,9 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  No end-of-line translation is performed.
 		 * 
 		 *  Returns the number of bytes copied into "buffer" or
-		 *  -1 on error. */
+		 *  -1 on error.  If reading a file of unknown size fails,
+		 *  then -1 is returned, "buffer" is set to NULL and
+		 *  "buffersize" is set to 0. */
 		virtual ssize_t	getContents(const char *name,
 						byte_t **buffer,
 						size_t *buffersize);

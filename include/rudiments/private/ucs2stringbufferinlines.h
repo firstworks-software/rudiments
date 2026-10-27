@@ -56,8 +56,9 @@ inline
 const ucs2_t *ucs2stringbuffer::getString() {
 	bytebuffer::append((ucs2_t)0);
 	const ucs2_t	*retval=(const ucs2_t *)getBuffer();
-	_position(_position()-1);
-	_size(_size()-1);
+	bytebuffer::setPositionRelativeToBeginning(
+					_position()-sizeof(ucs2_t));
+	_size(_size()-sizeof(ucs2_t));
 	return retval;
 }
 
@@ -74,7 +75,7 @@ ucs2_t *ucs2stringbuffer::detachString() {
 
 inline
 off64_t ucs2stringbuffer::getPosition() {
-	return bytebuffer::getPosition();
+	return bytebuffer::getPosition()/sizeof(ucs2_t);
 }
 
 inline

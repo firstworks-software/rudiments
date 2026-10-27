@@ -376,23 +376,31 @@ class RUDIMENTS_DLLSPEC charstring {
 							char needle);
 
 		/** Returns a pointer to the last occurrance of "needle"
-		 *  in "haystack" or NULL if not found. */
+		 *  in "haystack" or NULL if not found. An empty "needle"
+		 *  gives a pointer to the NULL terminator at the end of
+		 *  "haystack". */
 		static	const char	*findLast(const char *haystack,
 							const char *needle);
 
-		/** Returns a pointer to the last occurrance of "needle"
-		 *  in "haystack", ignoring case, or NULL if not found. */
+		/** Returns a pointer to the last occurrance of "needle" in
+		 *  "haystack", ignoring case, or NULL if not found. An empty
+		 *  "needle" gives a pointer to the NULL terminator at the end
+		 *  of "haystack". */
 		static	const char	*findLastIgnoringCase(
 							const char *haystack,
 							const char *needle);
 
 		/** Returns a pointer to the last occurrance of "needle"
-		 *  in "haystack" or NULL if not found. */
+		 *  in "haystack" or NULL if not found. A "needle" of 0
+		 *  gives a pointer to the NULL terminator at the end of
+		 *  "haystack". */
 		static	const char	*findLast(const char *haystack,
 							char needle);
 
-		/** Returns a pointer to the last occurrance of "needle"
-		 *  in "haystack", ignoring case, or NULL if not found. */
+		/** Returns a pointer to the last occurrance of "needle" in
+		 *  "haystack", ignoring case, or NULL if not found. A "needle"
+		 *  of 0 gives a pointer to the NULL terminator at the end of
+		 *  "haystack". */
 		static	const char	*findLastIgnoringCase(
 							const char *haystack,
 							char needle);
@@ -428,20 +436,28 @@ class RUDIMENTS_DLLSPEC charstring {
 							const char *needle);
 
 		/** Returns a pointer to the last occurrance of "needle"
-		 *  in "haystack" or NULL if not found. */
+		 *  in "haystack" or NULL if not found. An empty "needle"
+		 *  gives a pointer to the NULL terminator at the end of
+		 *  "haystack". */
 		static	char	*findLast(char *haystack, const char *needle);
 
-		/** Returns a pointer to the last occurrance of "needle"
-		 *  in "haystack", ignoring case, or NULL if not found. */
+		/** Returns a pointer to the last occurrance of "needle" in
+		 *  "haystack", ignoring case, or NULL if not found. An empty
+		 *  "needle" gives a pointer to the NULL terminator at the end
+		 *  of "haystack". */
 		static	char	*findLastIgnoringCase(char *haystack,
 							const char *needle);
 
 		/** Returns a pointer to the last occurrance of "needle"
-		 *  in "haystack" or NULL if not found. */
+		 *  in "haystack" or NULL if not found. A "needle" of 0
+		 *  gives a pointer to the NULL terminator at the end of
+		 *  "haystack". */
 		static	char	*findLast(char *haystack, char needle);
 
-		/** Returns a pointer to the last occurrance of "needle"
-		 *  in "haystack", ignoring case, or NULL if not found. */
+		/** Returns a pointer to the last occurrance of "needle" in
+		 *  "haystack", ignoring case, or NULL if not found. A "needle"
+		 *  of 0 gives a pointer to the NULL terminator at the end of
+		 *  "haystack". */
 		static	char	*findLastIgnoringCase(char *haystack,
 								char needle);
 
@@ -946,11 +962,13 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  results for differently-encoded strings. */
 		static void	capitalize(char *str);
 
-		/** Trims all spaces off of the right hand side of "str". */
+		/** Trims all spaces off of the right hand side of "str".
+		 *  A string of only spaces becomes empty. */
 		static	void	rightTrim(char *str);
 
 		/** Trims all "character"'s off of the right hand side
-		 *  of "str". */
+		 *  of "str".  A string of only "character"'s becomes
+		 *  empty. */
 		static	void	rightTrim(char *str, char character);
 
 		/** Trims all spaces off of the left hand side of "str". */
@@ -973,7 +991,9 @@ class RUDIMENTS_DLLSPEC charstring {
 
 		/** Strips all instances of "str2" from "str1".
 		 *  Returns true if any characters were stripped and
-		 *  false if no characters were stripped. */
+		 *  false if no characters were stripped.
+		 *  If "str2" is empty or NULL, nothing is stripped and
+		 *  false is returned. */
 		static	bool	strip(char *str1, const char *str2);
 
 		/** Strips all instances of any character in "set" from
@@ -993,7 +1013,9 @@ class RUDIMENTS_DLLSPEC charstring {
 
 		/** Returns a new string which is a copy of "str" in which
 		 *  all instances of "oldstr" have been replaced with
-		 *  "newstr" */
+		 *  "newstr".
+		 *  An empty or NULL "oldstr" matches nothing, so the new
+		 *  string is a plain copy of "str". */
 		static	char	*replace(const char *str,
 						const char *oldstr,
 						const char *newstr);
@@ -1003,7 +1025,9 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  array "oldstrset", have been replaced with the
 		 *  commensurate string found in the NULL-terminated array
 		 *  "newstrset", which must have the same number of members as
-		 *  "oldstrset" */
+		 *  "oldstrset".
+		 *  A member of "oldstrset" that is empty is skipped, but the
+		 *  other members are still replaced. */
 		static	char	*replace(const char *str,
 						const char * const *oldstrset,
 						const char * const *newstrset);
@@ -1014,7 +1038,9 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  given by the array "oldstrlen", have been replaced with the
 		 *  commensurate string found in the NULL-terminated array
 		 *  "newstrset", which must have the same number of members as
-		 *  "oldstrset" */
+		 *  "oldstrset".
+		 *  A member of "oldstrset" whose length in "oldstrlen" is 0 is
+		 *  skipped, but the other members are still replaced. */
 		static	char	*replace(const char *str,
 						const char * const *oldstrset,
 						size_t *oldstrlen,
@@ -1032,7 +1058,9 @@ class RUDIMENTS_DLLSPEC charstring {
 
 		/** Returns a new string which is a copy of "str" in which
 		 *  all instances of "oldstr" have been replaced with
-		 *  "newstr", ignoring case */
+		 *  "newstr", ignoring case.
+		 *  An empty or NULL "oldstr" matches nothing, so the new
+		 *  string is a plain copy of "str". */
 		static	char	*replaceIgnoringCase(const char *str,
 							const char *oldstr,
 							const char *newstr);
@@ -1042,7 +1070,9 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  array "oldstrset", have been replaced with the
 		 *  commensurate string found in the NULL-terminated array
 		 *  "newstrset", which must have the same number of members as
-		 *  "oldstrset", ignoring case */
+		 *  "oldstrset", ignoring case.
+		 *  A member of "oldstrset" that is empty is skipped, but the
+		 *  other members are still replaced. */
 		static	char	*replaceIgnoringCase(const char *str,
 						const char * const *oldstrset,
 						const char * const *newstrset);
@@ -1053,7 +1083,9 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  given by the array "oldstrlen", have been replaced with the
 		 *  commensurate string found in the NULL-terminated array
 		 *  "newstrset", which must have the same number of members as
-		 *  "oldstrset", ignoring set */
+		 *  "oldstrset", ignoring case.
+		 *  A member of "oldstrset" whose length in "oldstrlen" is 0 is
+		 *  skipped, but the other members are still replaced. */
 		static	char	*replaceIgnoringCase(const char *str,
 						const char * const *oldstrset,
 						size_t *oldstrlen,
@@ -1123,15 +1155,21 @@ class RUDIMENTS_DLLSPEC charstring {
 						bool global);
 
 		/** Returns the number of characters needed to represent
-		 *  "number" as a string. */
+		 *  "number" as a string, including the minus sign of a
+		 *  negative number.  This is exact for the minimum value
+		 *  too. */
 		static	uint16_t	getIntegerLength(int16_t number);
 
 		/** Returns the number of characters needed to represent
-		 *  "number" as a string. */
+		 *  "number" as a string, including the minus sign of a
+		 *  negative number.  This is exact for the minimum value
+		 *  too. */
 		static	uint16_t	getIntegerLength(int32_t number);
 
 		/** Returns the number of characters needed to represent
-		 *  "number" as a string. */
+		 *  "number" as a string, including the minus sign of a
+		 *  negative number.  This is exact for the minimum value
+		 *  too. */
 		static	uint16_t	getIntegerLength(int64_t number);
 
 		/** Returns the number of characters needed to represent
@@ -1151,7 +1189,9 @@ class RUDIMENTS_DLLSPEC charstring {
 		static	bool	isInteger(const char *val);
 
 		/** Returns true if the string "val" is an integer and
-		 *  false if it is not an integer. */
+		 *  false if it is not an integer.
+		 *  Only the first "len" characters are examined.
+		 *  Returns false if "len" is less than 1. */
 		static	bool	isInteger(const char *val, int32_t len);
 
 		/** Returns true the string "val" is a number and false
@@ -1159,7 +1199,9 @@ class RUDIMENTS_DLLSPEC charstring {
 		static	bool	isNumber(const char *val);
 
 		/** Returns true the string "val" is a number and false
-		 *  if it is not a number */
+		 *  if it is not a number.
+		 *  Only the first "len" characters are examined.
+		 *  Returns false if "len" is less than 1. */
 		static	bool	isNumber(const char *val, int32_t len);
 
 		/** Returns a string representing "number".  The string
@@ -1208,7 +1250,8 @@ class RUDIMENTS_DLLSPEC charstring {
 
 		/** Returns a string representing "number".  The string
 		 *  is allocated inside the function and must be deleted
-		 *  by the calling program. */
+		 *  by the calling program.  This is exact for the
+		 *  minimum value too. */
 		static	char	*parseNumber(int64_t number);
 
 		/** Returns a string representing "number".  The string
@@ -1218,7 +1261,11 @@ class RUDIMENTS_DLLSPEC charstring {
 
 		/** Returns a string representing "number".  The string
 		 *  is allocated inside the function and must be deleted
-		 *  by the calling program. */
+		 *  by the calling program.  The string is at least
+		 *  "zeropadding" characters long, counting the minus
+		 *  sign of a negative number, and is padded with zeros
+		 *  after the sign.  This is exact for the minimum value
+		 *  too. */
 		static	char	*parseNumber(int64_t number,
 						uint16_t zeropadding);
 
@@ -1364,6 +1411,10 @@ class RUDIMENTS_DLLSPEC charstring {
 		/** Converts "amount" which is assumed to be a number of
  		 *  pennies into a dollar amount string.
 		 *
+		 *  A negative amount has a minus sign after the dollar sign,
+		 *  as in $-0.05.  This is exact for every int64_t value,
+		 *  including the minimum.
+		 *
 		 *  Note that this method expects to operate on strings encoded
 		 *  using ASCII or extended ASCII, and may give unexpected
 		 *  results for differently-encoded strings. */
@@ -1373,7 +1424,8 @@ class RUDIMENTS_DLLSPEC charstring {
  		 *  pennies into a dollar amount string where there
  		 *  are "padding" places between the dollar sign and decimal
  		 *  point.   These will be space padded if the amount is
- 		 *  small enough not to fill them.
+		 *  small enough not to fill them.  The minus sign of a
+		 *  negative amount is part of the amount.
 		 *
 		 *  Note that this method expects to operate on strings encoded
 		 *  using ASCII or extended ASCII, and may give unexpected
@@ -2232,6 +2284,10 @@ class RUDIMENTS_DLLSPEC charstring {
 		/** Moves leading spaces to the end of "str" for
 		 *  "len" characters.
 		 *
+		 *  Only the first "len" characters of "str" are read
+		 *  and written.  "str" needs no terminator within them.
+		 *  Does nothing if "len" is less than 1.
+		 *
 		 *  Example: "   hello   " -> "hello      " 
 		 *
 		 *  Note that this method expects to operate on strings encoded
@@ -2242,6 +2298,10 @@ class RUDIMENTS_DLLSPEC charstring {
 		/** Moves trailing spaces to the beginning of "str" for
 		 *  "len" characters.
 		 *  
+		 *  Only the first "len" characters of "str" are read
+		 *  and written.  "str" needs no terminator within them.
+		 *  Does nothing if "len" is less than 1.
+		 *
 		 *  Example: "   hello   " -> "      hello"
 		 *
 		 *  Note that this method expects to operate on strings encoded
@@ -2250,6 +2310,10 @@ class RUDIMENTS_DLLSPEC charstring {
 		static	void	rightJustify(char *str, int32_t len);
 
 		/** Centers the text of "str" for "len" characters.
+		 *
+		 *  Only the first "len" characters of "str" are read
+		 *  and written.  "str" needs no terminator within them.
+		 *  Does nothing if "len" is less than 1.
 		 *
 		 *  Example: "hello      " -> "   hello   "
 		 *

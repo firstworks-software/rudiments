@@ -70,15 +70,21 @@ const char *charstring::findLast(const char *haystack, const char *needle) {
 	if (needlelen>haystacklen) {
 		return NULL;
 	}
-	
+	if (!needlelen) {
+		return haystack+haystacklen;
+	}
+
+	// test every position, including the first
 	const char	*ptr=haystack+haystacklen-needlelen;
-	while (ptr>haystack) {
+	for (;;) {
 		if (!compare(ptr,needle,needlelen)) {
 			return ptr;
 		}
+		if (ptr==haystack) {
+			return NULL;
+		}
 		ptr--;
 	}
-	return NULL;
 }
 
 const char *charstring::findLastIgnoringCase(const char *haystack,
@@ -93,15 +99,21 @@ const char *charstring::findLastIgnoringCase(const char *haystack,
 	if (needlelen>haystacklen) {
 		return NULL;
 	}
-	
+	if (!needlelen) {
+		return haystack+haystacklen;
+	}
+
+	// test every position, including the first
 	const char	*ptr=haystack+haystacklen-needlelen;
-	while (ptr>haystack) {
+	for (;;) {
 		if (!compareIgnoringCase(ptr,needle,needlelen)) {
 			return ptr;
 		}
+		if (ptr==haystack) {
+			return NULL;
+		}
 		ptr--;
 	}
-	return NULL;
 }
 
 void charstring::upper(char *str) {
@@ -141,17 +153,16 @@ void charstring::rightTrim(char *str, char character) {
 
 	if (!isNullOrEmpty(str)) {
 
-		// advance to the last character in the string
+		// advance to the end of the string
+		char	*start=str;
 		while (*str) {
 			str++;
 		}
-		str--;
 
 		// back up to the first instance of the character to trim
-		while (*str==character) { 
+		while (str>start && *(str-1)==character) {
 			str--;
 		}
-		str++;
 
 		// terminate the string there
 		*str='\0';
@@ -162,8 +173,8 @@ void charstring::leftTrim(char *str, char character) {
 
 	if (!isNullOrEmpty(str)) {
 
-		int32_t	i=0;
-		int32_t	j=0;
+		size_t	i=0;
+		size_t	j=0;
 
 		// advance past all of the characters we want to trim
 		while (str[i]==character) {
@@ -187,8 +198,8 @@ bool charstring::strip(char *str, char character) {
 		return false;
 	}
 
-	int32_t	index=0;
-	int32_t	total=0;
+	size_t	index=0;
+	size_t	total=0;
 	bool	retval=false;
 
 	while (str[index]) {
@@ -212,9 +223,15 @@ bool charstring::strip(char *str1, const char *str2) {
 		return false;
 	}
 
-	int32_t	str2len=getLength(str2);
-	int32_t	index=0;
-	int32_t	total=0;
+	size_t	str2len=getLength(str2);
+
+	// an empty str2 strips nothing
+	if (!str2len) {
+		return false;
+	}
+
+	size_t	index=0;
+	size_t	total=0;
 	bool	retval=false;
 
 	while (str1[index]) {
@@ -239,8 +256,8 @@ bool charstring::stripSet(char *str, const char *set) {
 		return false;
 	}
 
-	int32_t	index=0;
-	int32_t	total=0;
+	size_t	index=0;
+	size_t	total=0;
 	bool	retval=false;
 
 	while (str[index]) {
@@ -288,7 +305,8 @@ char *charstring::replace(const char *str, const char *oldstr,
 	const char	*ptr=str;
 	const char	*start=ptr;
 	while (*ptr) {
-		if (!compare(ptr,oldstr,oldstrlen)) {
+		// an empty oldstr matches nothing
+		if (oldstrlen && !compare(ptr,oldstr,oldstrlen)) {
 			newstring.append(start,ptr-start);
 			newstring.append(newstr);
 			ptr+=oldstrlen;
@@ -345,6 +363,11 @@ char *charstring::replace(const char *str, const char * const *oldstrset,
 		bool	found=false;
 		uint64_t i=0;
 		for (const char * const *oldptr=oldstrset; *oldptr; oldptr++) {
+			// skip empty members
+			if (!oldstrlen[i]) {
+				i++;
+				continue;
+			}
 			if (!compare(ptr,oldstrset[i],oldstrlen[i])) {
 				newstring.append(start,ptr-start);
 				newstring.append(newstrset[i]);
@@ -397,7 +420,9 @@ char *charstring::replaceIgnoringCase(const char *str,
 	const char	*ptr=str;
 	const char	*start=ptr;
 	while (*ptr) {
-		if (!compareIgnoringCase(ptr,oldstr,oldstrlen)) {
+		// an empty oldstr matches nothing
+		if (oldstrlen &&
+			!compareIgnoringCase(ptr,oldstr,oldstrlen)) {
 			newstring.append(start,ptr-start);
 			newstring.append(newstr);
 			ptr+=oldstrlen;
@@ -456,6 +481,11 @@ char *charstring::replaceIgnoringCase(const char *str,
 		bool	found=false;
 		uint64_t i=0;
 		for (const char * const *oldptr=oldstrset; *oldptr; oldptr++) {
+			// skip empty members
+			if (!oldstrlen[i]) {
+				i++;
+				continue;
+			}
 			if (!compareIgnoringCase(ptr,oldstrset[i],
 							oldstrlen[i])) {
 				newstring.append(start,ptr-start);
@@ -648,7 +678,7 @@ bool charstring::isInteger(const char *str) {
 
 bool charstring::isInteger(const char *str, int32_t len) {
 
-	if (!str || !len) {
+	if (!str || len<=0) {
 		return false;
 	}
 
@@ -689,7 +719,7 @@ bool charstring::isNumber(const char *str) {
 
 bool charstring::isNumber(const char *str, int32_t len) {
 
-	if (!str || !len) {
+	if (!str || len<=0) {
 		return false;
 	}
 
@@ -722,28 +752,29 @@ int64_t charstring::convertAmount(const char *amount) {
 	return (dollars*100+cents);
 }
 
+// returns the absolute value of "number", exact for the minimum int64_t
+static uint64_t magnitude(int64_t number) {
+	return (number<0)?(0-(uint64_t)number):(uint64_t)number;
+}
+
 char *charstring::convertAmount(int64_t amount) {
-	uint16_t	len=getIntegerLength(amount)+4;
-	if (len<6) {
-		len=6;
-	}
-	char	negative[2];
+	uint64_t	amt=magnitude(amount);
+	uint64_t	dollars=amt/100;
+	uint64_t	cents=amt%100;
+	uint16_t	len=getIntegerLength(dollars)+5;
 	if (amount<0) {
-		negative[0]='-';
-	} else {
-		negative[0]='\0';
+		len++;
 	}
-	negative[1]='\0';
 	char	*amountstr=new char[len];
-	int64_t	amt;
-	#ifdef RUDIMENTS_HAVE_LLABS
-		amt=llabs((long long)amount);
-	#else
-		amt=abs((long)amount);
-	#endif
-	printf(amountstr,len,
-			"$%s%lld.%02lld",negative,
-			amt/100,amt-(amt/100*100));
+	if (amount<0) {
+		printf(amountstr,len,"$-%llu.%02llu",
+			(unsigned long long)dollars,
+			(unsigned long long)cents);
+	} else {
+		printf(amountstr,len,"$%llu.%02llu",
+			(unsigned long long)dollars,
+			(unsigned long long)cents);
+	}
 	return amountstr;
 }
 
@@ -1841,12 +1872,12 @@ void charstring::center(char *str, int32_t len) {
 
 int32_t charstring::countLeadingSpaces(const char *str, int32_t len) {
 
-	if (!str) {
+	if (!str || len<=0) {
 		return 0;
 	}
 
 	int32_t	leadingspaces=0;
-	for (int32_t index=0; str[index]==' ' && index<len; index++) {
+	for (int32_t index=0; index<len && str[index]==' '; index++) {
 		leadingspaces++;
 	}
 	return leadingspaces;
@@ -1854,12 +1885,12 @@ int32_t charstring::countLeadingSpaces(const char *str, int32_t len) {
 
 int32_t charstring::countTrailingSpaces(const char *str, int32_t len) {
 
-	if (!str) {
+	if (!str || len<=0) {
 		return 0;
 	}
 
 	int32_t	trailingspaces=0;
-	for (int32_t index=len-1; str[index]==' ' && index>-1; index--) {
+	for (int32_t index=len-1; index>-1 && str[index]==' '; index--) {
 		trailingspaces++;
 	}
 	return trailingspaces;
@@ -1912,12 +1943,12 @@ char *charstring::parseNumber(int64_t number, uint16_t zeropadding) {
 	*ptr='-';
 	ptr+=strlen;
 	*ptr='\0';
-	number*=-1;
+	uint64_t	num=magnitude(number);
 	strlen--;
 	while (strlen) {
 		ptr--;
-		*ptr='0'+number%10;
-		number/=10;
+		*ptr='0'+num%10;
+		num/=10;
 		strlen--;
 	}
 	ptr--;
@@ -2015,7 +2046,7 @@ void charstring::bothTrim(char *string, char character) {
 
 uint16_t charstring::getIntegerLength(int16_t number) {
 	uint16_t	len=(number>0)?0:1;
-	for (int16_t num=((number>0)?number:(-1*number)); num>0; num=num/10) {
+	for (uint64_t num=magnitude(number); num>0; num=num/10) {
 		len++;
 	}
 	return len;
@@ -2023,7 +2054,7 @@ uint16_t charstring::getIntegerLength(int16_t number) {
 
 uint16_t charstring::getIntegerLength(int32_t number) {
 	uint16_t	len=(number>0)?0:1;
-	for (int32_t num=((number>0)?number:(-1*number)); num>0; num=num/10) {
+	for (uint64_t num=magnitude(number); num>0; num=num/10) {
 		len++;
 	}
 	return len;
@@ -2031,7 +2062,7 @@ uint16_t charstring::getIntegerLength(int32_t number) {
 
 uint16_t charstring::getIntegerLength(int64_t number) {
 	uint16_t	len=(number>0)?0:1;
-	for (int64_t num=((number>0)?number:(-1*number)); num>0; num=num/10) {
+	for (uint64_t num=magnitude(number); num>0; num=num/10) {
 		len++;
 	}
 	return len;
@@ -2717,8 +2748,21 @@ const char *charstring::findLast(const char *haystack, char needle) {
 
 const char *charstring::findLastIgnoringCase(const char *haystack,
 							char needle) {
-	return (char *)(findFirstOrEndIgnoringCase(
-					(const char *)(haystack),needle));
+	if (!haystack) {
+		return NULL;
+	}
+	size_t	haystacklen=getLength(haystack);
+	if (!needle) {
+		return haystack+haystacklen;
+	}
+	needle=character::lower(needle);
+	const char	*retval=NULL;
+	for (const char *ptr=haystack; ptr<haystack+haystacklen; ptr++) {
+		if (character::lower(*ptr)==needle) {
+			retval=ptr;
+		}
+	}
+	return retval;
 }
 
 char *charstring::findFirst(char *haystack, const char *needle) {
@@ -3152,17 +3196,16 @@ void charstring::rightTrim(char *str) {
 
 	if (!isNullOrEmpty(str)) {
 
-		// advance to the last character in the string
+		// advance to the end of the string
+		char	*start=str;
 		while (*str) {
 			str++;
 		}
-		str--;
 
 		// back up to the first instance of the character to trim
-		while (character::isWhitespace(*str)) { 
+		while (str>start && character::isWhitespace(*(str-1))) {
 			str--;
 		}
-		str++;
 
 		// terminate the string there
 		*str='\0';
@@ -3173,8 +3216,8 @@ void charstring::leftTrim(char *str) {
 
 	if (!isNullOrEmpty(str)) {
 
-		int32_t	i=0;
-		int32_t	j=0;
+		size_t	i=0;
+		size_t	j=0;
 
 		// advance past all of the characters we want to trim
 		while (character::isWhitespace(str[i])) {

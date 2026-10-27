@@ -227,7 +227,27 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   convertToFloatC() counting bytes instead of characters
 - fixed bytebuffer hangs, heap overflows, and state after a failed
   allocation
-- fixed charstring::insertString() hangs and over-reads
+- fixed charstring, wcharstring, and ucs2charstring insertString()
+  hangs, over-reads, and over-writes
+- fixed charstring, wcharstring, and ucs2charstring replace(),
+  replaceIgnoringCase(), and strip() hangs on empty patterns
+- fixed charstring, wcharstring, and ucs2charstring rightTrim(),
+  leftJustify(), rightJustify(), center(), isInteger(), and
+  isNumber() out-of-range reads and writes
+- fixed charstring, wcharstring, and ucs2charstring leftTrim(),
+  strip(), and stripSet() crashing on strings over 2 GiB
+- fixed charstring, wcharstring, and ucs2charstring findLast() and
+  findLastIgnoringCase() missing a match at position 0, and
+  findLastIgnoringCase(char) returning the wrong match
+- fixed charstring, wcharstring, and ucs2charstring convertAmount(),
+  getIntegerLength(), and parseNumber() results for negative amounts
+  and the minimum integer values
+- fixed wstringbuffer and ucs2stringbuffer getString() removing the
+  wrong amount and ucs2stringbuffer::getPosition() units
+- added a wstringbuffer initialsize overflow check
+- fixed file::getContents() ignoring a read error
+- defined the missing ucs2charstring::duplicate(const wchar_t *) forms
+  and fixed the bigendian one ignoring the byte order
 
 ### Security
 - fixed buffer overflow when unix socket file name is too long

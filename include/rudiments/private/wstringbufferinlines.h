@@ -16,7 +16,8 @@ wstringbuffer::wstringbuffer(size_t initialsize) : bytebuffer(initialsize) {
 inline
 wstringbuffer::wstringbuffer(wchar_t *initialcontents, size_t initialsize) :
 		bytebuffer((byte_t *)initialcontents,
-					initialsize*sizeof(wchar_t)) {
+				(initialsize>((size_t)-1>>1)/sizeof(wchar_t))?
+				0:initialsize*sizeof(wchar_t)) {
 }
 
 inline
@@ -57,8 +58,9 @@ inline
 const wchar_t *wstringbuffer::getString() {
 	bytebuffer::append(L'\0');
 	const wchar_t	*retval=(const wchar_t *)getBuffer();
-	_position(_position()-1);
-	_size(_size()-1);
+	bytebuffer::setPositionRelativeToBeginning(
+					_position()-sizeof(wchar_t));
+	_size(_size()-sizeof(wchar_t));
 	return retval;
 }
 
@@ -91,7 +93,8 @@ bool wstringbuffer::clear(size_t initialsize) {
 inline
 bool wstringbuffer::clear(wchar_t *initialcontents, size_t initialsize) {
 	return bytebuffer::clear((byte_t *)initialcontents,
-					initialsize*sizeof(wchar_t));
+				(initialsize>((size_t)-1>>1)/sizeof(wchar_t))?
+				0:initialsize*sizeof(wchar_t));
 }
 
 inline

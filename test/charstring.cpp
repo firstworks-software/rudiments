@@ -875,6 +875,233 @@ static void insertStringExactTest(const char *label, const char *dest,
 	delete[] s;
 }
 
+// returns an exact-size copy of the ASCII string "str"; NULL stays NULL
+static char *emptyPatternCopy(const char *str) {
+	return (str)?charstring::duplicate(str):NULL;
+}
+
+// true if "result" holds the ASCII string "expected", or both are NULL
+static bool emptyPatternMatches(const char *result, const char *expected) {
+	if (!result || !expected) {
+		return (!result && !expected);
+	}
+	char	*e=emptyPatternCopy(expected);
+	bool	match=!charstring::compare(result,e);
+	delete[] e;
+	return match;
+}
+
+// checks replace() and replaceIgnoringCase() on exact-size heap copies of
+// the inputs, so that AddressSanitizer sees any read outside them
+static void emptyPatternReplaceTest(const char *label, const char *str,
+					const char *oldstr,
+					const char *newstr,
+					const char *expected,
+					const char *expectedic) {
+	const char	*s=emptyPatternCopy(str);
+	const char	*o=emptyPatternCopy(oldstr);
+	const char	*n=emptyPatternCopy(newstr);
+	stringbuffer	name;
+	name.append(label)->append(" replace");
+	char	*result=charstring::replace(s,o,n);
+	test(name.getString(),emptyPatternMatches(result,expected));
+	delete[] result;
+	name.clear();
+	name.append(label)->append(" replaceIgnoringCase");
+	result=charstring::replaceIgnoringCase(s,o,n);
+	test(name.getString(),emptyPatternMatches(result,expectedic));
+	delete[] result;
+	delete[] s;
+	delete[] o;
+	delete[] n;
+}
+
+// checks the set forms of replace() and replaceIgnoringCase() on exact-size
+// heap copies of the inputs; if "lengths" is NULL, the lengths are those of
+// the members (the string forms are also checked)
+static void emptyPatternSetTest(const char *label, const char *str,
+					const char * const *oldset,
+					const size_t *lengths,
+					const char * const *newset,
+					const char *expected,
+					const char *expectedic) {
+	size_t	count=0;
+	while (oldset[count]) {
+		count++;
+	}
+	char		*s=emptyPatternCopy(str);
+	const char	**o=new const char *[count+1];
+	const char	**n=new const char *[count+1];
+	size_t		*l=new size_t[count+1];
+	for (size_t i=0; i<count; i++) {
+		o[i]=emptyPatternCopy(oldset[i]);
+		n[i]=emptyPatternCopy(newset[i]);
+		l[i]=(lengths)?lengths[i]:charstring::getLength(o[i]);
+	}
+	o[count]=NULL;
+	n[count]=NULL;
+	stringbuffer	name;
+	char	*result=NULL;
+	if (!lengths) {
+		name.append(label)->append(" replace");
+		result=charstring::replace(s,o,n);
+		test(name.getString(),emptyPatternMatches(result,expected));
+		delete[] result;
+		name.clear();
+		name.append(label)->append(" replaceIgnoringCase");
+		result=charstring::replaceIgnoringCase(s,o,n);
+		test(name.getString(),emptyPatternMatches(result,expectedic));
+		delete[] result;
+	}
+	name.clear();
+	name.append(label)->append(" replace length");
+	result=charstring::replace(s,o,l,n);
+	test(name.getString(),emptyPatternMatches(result,expected));
+	delete[] result;
+	name.clear();
+	name.append(label)->append(" replaceIgnoringCase length");
+	result=charstring::replaceIgnoringCase(s,o,l,n);
+	test(name.getString(),emptyPatternMatches(result,expectedic));
+	delete[] result;
+	for (size_t i=0; i<count; i++) {
+		delete[] o[i];
+		delete[] n[i];
+	}
+	delete[] o;
+	delete[] n;
+	delete[] l;
+	delete[] s;
+}
+
+// checks strip(str1,str2) on exact-size heap copies of the inputs
+static void emptyPatternStripTest(const char *label, const char *str1,
+					const char *str2,
+					const char *expected,
+					bool expectedreturn) {
+	char	*s=emptyPatternCopy(str1);
+	const char	*p=emptyPatternCopy(str2);
+	bool	retval=charstring::strip(s,p);
+	test(label,retval==expectedreturn &&
+			emptyPatternMatches(s,expected));
+	delete[] s;
+	delete[] p;
+}
+
+// checks findLast and findLastIgnoringCase, string and character forms,
+// const and non-const, on exact-size heap copies; the expected values are
+// offsets into the haystack, or -1 for NULL
+static void findLastTest(const char *label, const char *hay,
+				const char *needle,
+				int exp, int expic) {
+	char	*h=emptyPatternCopy(hay);
+	char	*n=emptyPatternCopy(needle);
+	const char	*ch=h;
+	const char	*r;
+	stringbuffer	name;
+	name.append(label)->append(" findLast");
+	r=charstring::findLast(ch,(const char *)n);
+	test(name.getString(),(r)?(r-h==exp):(exp==-1));
+	r=charstring::findLast(h,(const char *)n);
+	name.clear();
+	name.append(label)->append(" findLast non-const");
+	test(name.getString(),(r)?(r-h==exp):(exp==-1));
+	r=charstring::findLastIgnoringCase(ch,(const char *)n);
+	name.clear();
+	name.append(label)->append(" findLastIgnoringCase");
+	test(name.getString(),(r)?(r-h==expic):(expic==-1));
+	r=charstring::findLastIgnoringCase(h,(const char *)n);
+	name.clear();
+	name.append(label)->append(" findLastIgnoringCase non-const");
+	test(name.getString(),(r)?(r-h==expic):(expic==-1));
+	if (n[0] && !n[1]) {
+		r=charstring::findLast(ch,n[0]);
+		name.clear();
+		name.append(label)->append(" findLast char");
+		test(name.getString(),(r)?(r-h==exp):(exp==-1));
+		r=charstring::findLastIgnoringCase(ch,n[0]);
+		name.clear();
+		name.append(label)->append(" findLastIgnoringCase char");
+		test(name.getString(),(r)?(r-h==expic):(expic==-1));
+		r=charstring::findLast(h,n[0]);
+		name.clear();
+		name.append(label)->append(" findLast char non-const");
+		test(name.getString(),(r)?(r-h==exp):(exp==-1));
+		r=charstring::findLastIgnoringCase(h,n[0]);
+		name.clear();
+		name.append(label);
+		name.append(" findLastIgnoringCase char non-const");
+		test(name.getString(),(r)?(r-h==expic):(expic==-1));
+	}
+	if (!n[0]) {
+		r=charstring::findLast(ch,(char)0);
+		name.clear();
+		name.append(label)->append(" findLast terminator");
+		test(name.getString(),r==h+charstring::getLength(h));
+		r=charstring::findLastIgnoringCase(ch,(char)0);
+		name.clear();
+		name.append(label)->append(" findLastIgnoringCase terminator");
+		test(name.getString(),r==h+charstring::getLength(h));
+	}
+	delete[] h;
+	delete[] n;
+}
+
+// checks the NULL arguments of findLast and findLastIgnoringCase
+static void findLastNullTest() {
+	char	*h=emptyPatternCopy("abc");
+	const char	*ch=h;
+	test("findLast NULL haystack",
+		charstring::findLast((const char *)NULL,ch)==NULL);
+	test("findLast NULL needle",
+		charstring::findLast(ch,(const char *)NULL)==NULL);
+	test("findLastIgnoringCase NULL haystack",
+		charstring::findLastIgnoringCase((const char *)NULL,ch)==NULL);
+	test("findLastIgnoringCase NULL needle",
+		charstring::findLastIgnoringCase(ch,(const char *)NULL)==NULL);
+	test("findLast char NULL haystack",
+		charstring::findLast((const char *)NULL,(char)'a')==NULL);
+	test("findLast char 0, NULL haystack",
+		charstring::findLast((const char *)NULL,(char)0)==NULL);
+	test("findLastIgnoringCase char NULL haystack",
+		charstring::findLastIgnoringCase((const char *)NULL,
+							(char)'a')==NULL);
+	test("findLastIgnoringCase char 0, NULL haystack",
+		charstring::findLastIgnoringCase((const char *)NULL,
+							(char)0)==NULL);
+	delete[] h;
+}
+
+// checks leftTrim, strip and stripSet on exact-size heap copies; which is
+// 0 leftTrim(str), 1 leftTrim(str,ch), 2 strip(str,ch), 3 strip(str1,str2),
+// 4 stripSet(str,set); ch is x, str2 is "xy" and set is "xy"
+static void sizeIndexTest(const char *label, int which, const char *str,
+				const char *expected, bool expectedreturn) {
+	char	*s=emptyPatternCopy(str);
+	char	*xy=emptyPatternCopy("xy");
+	bool	retval=expectedreturn;
+	switch (which) {
+		case 0:
+			charstring::leftTrim(s);
+			break;
+		case 1:
+			charstring::leftTrim(s,'x');
+			break;
+		case 2:
+			retval=charstring::strip(s,'x');
+			break;
+		case 3:
+			retval=charstring::strip(s,(const char *)xy);
+			break;
+		default:
+			retval=charstring::stripSet(s,(const char *)xy);
+			break;
+	}
+	test(label,retval==expectedreturn &&
+			emptyPatternMatches(s,expected));
+	delete[] s;
+	delete[] xy;
+}
+
 // checks the length-taking forms of duplicate() and duplicateUcs2() for
 // one length of a string that is at least that long
 static void duplicateLengthTest(const char *label, const char *str,
@@ -976,6 +1203,293 @@ static void nullDecodeTest(const char *label,
 	f2b(NULL,inputlen,&output,&outputlen);
 	test(name.getString(),!output && !outputlen);
 	delete[] output;
+}
+
+// returns a heap array of exactly "n" elements that holds the first "n"
+// ASCII characters of "src"; there is no terminator unless "src" has one
+static char *rangeMake(const char *src, size_t n) {
+	char	*buf=new char[n];
+	for (size_t i=0; i<n; i++) {
+		buf[i]=(char)(unsigned char)src[i];
+	}
+	return buf;
+}
+
+// true if the first "n" elements of "buf" are the ASCII characters of "exp"
+static bool rangeEqual(const char *buf, const char *exp, size_t n) {
+	for (size_t i=0; i<n; i++) {
+		if (buf[i]!=(char)(unsigned char)exp[i]) {
+			return false;
+		}
+	}
+	return true;
+}
+
+static const int32_t rangeMinLen=(int32_t)(-2147483647-1);
+
+static bool rangeIsWhitespace(char c) {
+	return (c==' ' || c=='\t' || c=='\n');
+}
+
+// makes the "m"th string of length "n" over the characters of "alpha"
+static void rangeString(char *str, const char *alpha, size_t k,
+						size_t n, size_t m) {
+	for (size_t i=0; i<n; i++) {
+		str[i]=alpha[m%k];
+		m/=k;
+	}
+	str[n]='\0';
+}
+
+static size_t rangeCount(size_t k, size_t n) {
+	size_t	total=1;
+	for (size_t i=0; i<n; i++) {
+		total*=k;
+	}
+	return total;
+}
+
+// checks rightTrim() on every string over "alpha" of 0 to 5 characters, in
+// exact-size heap buffers; "ch" is the character to trim, or 0 for whitespace
+static void rangeRightTrimTest(const char *label, const char *alpha, char ch) {
+	size_t	k=0;
+	while (alpha[k]) {
+		k++;
+	}
+	bool	ok=true;
+	for (size_t n=0; n<=5; n++) {
+		size_t	total=rangeCount(k,n);
+		for (size_t m=0; m<total; m++) {
+			char	str[8];
+			rangeString(str,alpha,k,n,m);
+			size_t	e=n;
+			while (e && ((ch)?str[e-1]==ch:
+					rangeIsWhitespace(str[e-1]))) {
+				e--;
+			}
+			char	*buf=rangeMake(str,n+1);
+			if (ch) {
+				charstring::rightTrim(buf,(char)ch);
+			} else {
+				charstring::rightTrim(buf);
+			}
+			ok=(ok && rangeEqual(buf,str,e) && !buf[e]);
+			delete[] buf;
+		}
+	}
+	test(label,ok);
+}
+
+// checks that rightTrim() of "n" elements of "fill" empties the string
+// without touching the elements in front of it, which are a sentinel and
+// then more "fill"
+static void rangeRightTrimGuardTest(const char *label, size_t n, char fill,
+							bool usech) {
+	char	buf[1+8+5+1];
+	buf[0]=(char)'X';
+	for (size_t i=1; i<1+8+n; i++) {
+		buf[i]=(char)fill;
+	}
+	buf[1+8+n]=(char)0;
+	if (usech) {
+		charstring::rightTrim(buf+1+8,(char)fill);
+	} else {
+		charstring::rightTrim(buf+1+8);
+	}
+	bool	ok=(buf[0]==(char)'X' && !buf[1+8]);
+	for (size_t i=1; i<1+8; i++) {
+		ok=(ok && buf[i]==(char)fill);
+	}
+	test(label,ok);
+}
+
+// checks leftJustify(), rightJustify() or center() ("which" 0, 1 or 2) on
+// every string over space, a and b of 1 to 5 characters, in exact-size heap
+// buffers that have no terminator
+static void rangeJustifyTest(const char *label, int which) {
+	const char	*alpha=" ab";
+	bool		ok=true;
+	for (size_t n=1; n<=5; n++) {
+		size_t	total=rangeCount(3,n);
+		for (size_t m=0; m<total; m++) {
+			char	str[8];
+			rangeString(str,alpha,3,n,m);
+			size_t	lead=0;
+			while (lead<n && str[lead]==' ') {
+				lead++;
+			}
+			size_t	trail=0;
+			while (trail<n && str[n-1-trail]==' ') {
+				trail++;
+			}
+			char	exp[8];
+			for (size_t i=0; i<n; i++) {
+				exp[i]=' ';
+			}
+			exp[n]='\0';
+			if (lead<n) {
+				size_t	textlen=n-lead-trail;
+				size_t	pad=0;
+				if (which==0) {
+					pad=0;
+				} else if (which==1) {
+					pad=n-textlen;
+				} else {
+					pad=(lead+trail)/2;
+				}
+				for (size_t i=0; i<textlen; i++) {
+					exp[pad+i]=str[lead+i];
+				}
+			}
+			char	*buf=rangeMake(str,n);
+			if (which==0) {
+				charstring::leftJustify(buf,(int32_t)n);
+			} else if (which==1) {
+				charstring::rightJustify(buf,(int32_t)n);
+			} else {
+				charstring::center(buf,(int32_t)n);
+			}
+			ok=(ok && rangeEqual(buf,exp,n));
+			delete[] buf;
+		}
+	}
+	test(label,ok);
+}
+
+// checks that leftJustify(), rightJustify() and center() do nothing and
+// touch nothing for a length that is 0 or negative
+static void rangeJustifyLengthTest(const char *label, int32_t len) {
+	bool	ok=true;
+	for (size_t n=0; n<=3; n+=3) {
+		char	*buf=rangeMake(" a ",n);
+		charstring::leftJustify(buf,len);
+		charstring::rightJustify(buf,len);
+		charstring::center(buf,len);
+		ok=(ok && rangeEqual(buf," a ",n));
+		delete[] buf;
+	}
+	test(label,ok);
+}
+
+// checks isInteger() and isNumber() with a length that is 0 or negative; the
+// element in front of the string is not '-' and would give true if it were
+// read
+static void rangeNumberLengthTest(const char *label, int32_t len) {
+	char	buf[4];
+	buf[0]=(char)'x';
+	buf[1]=(char)'1';
+	buf[2]=(char)'2';
+	buf[3]=(char)'3';
+	bool	ok=(!charstring::isInteger(buf+1,len) &&
+			!charstring::isNumber(buf+1,len));
+	char	*exact=rangeMake("123",3);
+	ok=(ok && !charstring::isInteger(exact,len) &&
+			!charstring::isNumber(exact,len));
+	delete[] exact;
+	test(label,ok);
+}
+
+// checks isInteger() and isNumber() with a length, in an exact-size heap
+// buffer that has no terminator
+static void rangeNumberTest(const char *str, size_t n, bool isinteger,
+							bool isnumber) {
+	char	*buf=rangeMake(str,n);
+	bool	ok=(charstring::isInteger(buf,(int32_t)n)==isinteger &&
+			charstring::isNumber(buf,(int32_t)n)==isnumber);
+	delete[] buf;
+	stringbuffer	name;
+	name.append("isInteger/isNumber, length form ")->append(str);
+	test(name.getString(),ok);
+}
+
+// one convertAmount() argument and its dollar string
+struct amountcase {
+	int64_t		amount;
+	const char	*text;
+};
+
+static const int64_t numberMin=(-9223372036854775807LL-1);
+static const int64_t numberMax=9223372036854775807LL;
+
+static const amountcase amountcases[]={
+	{-9,"$-0.09"},{-8,"$-0.08"},{-7,"$-0.07"},{-6,"$-0.06"},
+	{-5,"$-0.05"},{-4,"$-0.04"},{-3,"$-0.03"},{-2,"$-0.02"},
+	{-1,"$-0.01"},{-10,"$-0.10"},{-99,"$-0.99"},{-100,"$-1.00"},
+	{-101,"$-1.01"},{-12345,"$-123.45"},
+	{0,"$0.00"},{1,"$0.01"},{2,"$0.02"},{3,"$0.03"},{4,"$0.04"},
+	{5,"$0.05"},{6,"$0.06"},{7,"$0.07"},{8,"$0.08"},{9,"$0.09"},
+	{10,"$0.10"},{99,"$0.99"},{100,"$1.00"},{101,"$1.01"},
+	{12345,"$123.45"},
+	{numberMax,"$92233720368547758.07"},
+	{numberMin,"$-92233720368547758.08"},
+	{numberMin+1,"$-92233720368547758.07"},
+	{numberMin+100,"$-92233720368547757.08"},
+	{numberMin+101,"$-92233720368547757.07"},
+	{numberMax-100,"$92233720368547757.07"}
+};
+
+// checks convertAmount() with and without spaces on "c"; the padded
+// string is the unpadded one without its dollar sign, right justified
+static void amountCaseTest(const amountcase *c) {
+	stringbuffer	name;
+	char	*r=charstring::convertAmount(c->amount);
+	name.append("convertAmount ")->append(c->text);
+	test(name.getString(),emptyPatternMatches(r,c->text));
+	delete[] r;
+	static const uint16_t	spaces[]={0,1,3,8,12,25};
+	size_t	digits=charstring::getLength(c->text+1);
+	for (size_t i=0; i<sizeof(spaces)/sizeof(spaces[0]); i++) {
+		size_t	real=(digits+1>spaces[i])?digits+1:spaces[i];
+		char	*expected=new char[real+1];
+		bytestring::set(expected,' ',real);
+		expected[real]='\0';
+		bytestring::copy(expected+real-digits,c->text+1,digits);
+		if (expected[0]==' ') {
+			expected[0]='$';
+		}
+		r=charstring::convertAmount(c->amount,spaces[i]);
+		name.clear();
+		name.append("convertAmount ")->append(c->text);
+		name.append(" spaces ")->append((uint64_t)spaces[i]);
+		test(name.getString(),emptyPatternMatches(r,expected));
+		delete[] r;
+		delete[] expected;
+	}
+}
+
+// checks parseNumber(number) and parseNumber(number,zeropadding)
+static void parseNumberTest(const char *label, int64_t number,
+				uint16_t zeropadding, const char *expected) {
+	stringbuffer	name;
+	char	*r=charstring::parseNumber(number,zeropadding);
+	name.append("parseNumber ")->append(label);
+	name.append(" padding ")->append((uint64_t)zeropadding);
+	test(name.getString(),emptyPatternMatches(r,expected));
+	delete[] r;
+	if (zeropadding==1) {
+		r=charstring::parseNumber(number);
+		name.clear();
+		name.append("parseNumber ")->append(label);
+		test(name.getString(),emptyPatternMatches(r,expected));
+		delete[] r;
+	}
+}
+
+// checks that appending "number" to a string buffer gives "expected"
+static void appendNumberTest(const char *label, int64_t number,
+				uint16_t zeropadding, const char *expected) {
+	stringbuffer	name;
+	stringbuffer	sb;
+	if (zeropadding==1) {
+		sb.append(number);
+	} else {
+		sb.append(number,zeropadding);
+	}
+	char	*e=emptyPatternCopy(expected);
+	name.append("append ")->append(label);
+	name.append(" padding ")->append((uint64_t)zeropadding);
+	test(name.getString(),!charstring::compare(sb.getString(),e));
+	delete[] e;
 }
 
 int main(int argc, const char **argv) {
@@ -4909,6 +5423,323 @@ int main(int argc, const char **argv) {
 	}
 	stdoutput.printf("\n");
 
+	// an empty or NULL pattern matches nothing; an alarm turns a hang
+	// into a failure
+	stdoutput.printf("replace/strip empty pattern...\n");
+	signalmanager::alarm(60);
+	emptyPatternReplaceTest("empty oldstr","abc","","X","abc","abc");
+	emptyPatternReplaceTest("empty oldstr, empty newstr",
+					"abc","","","abc","abc");
+	emptyPatternReplaceTest("empty oldstr, NULL newstr",
+					"abc","",NULL,"abc","abc");
+	emptyPatternReplaceTest("NULL oldstr","abc",NULL,"X","abc","abc");
+	emptyPatternReplaceTest("NULL oldstr, NULL newstr",
+					"abc",NULL,NULL,"abc","abc");
+	emptyPatternReplaceTest("one char, empty oldstr","a","","X","a","a");
+	emptyPatternReplaceTest("empty str, empty oldstr","","","X","","");
+	emptyPatternReplaceTest("empty str, NULL oldstr","",NULL,"X","","");
+	emptyPatternReplaceTest("empty str, oldstr","","a","X","","");
+	emptyPatternReplaceTest("NULL str, empty oldstr",
+					NULL,"","X",NULL,NULL);
+	emptyPatternReplaceTest("NULL str, oldstr",NULL,"a","X",NULL,NULL);
+	emptyPatternReplaceTest("oldstr","abcabc","b","X","aXcaXc","aXcaXc");
+	emptyPatternReplaceTest("oldstr case","aBcAbC","b","X",
+					"aBcAXC","aXcAXC");
+	emptyPatternReplaceTest("oldstr deleted","abcabc","bc","","aa","aa");
+	emptyPatternReplaceTest("oldstr grows","abc","b","XYZ",
+					"aXYZc","aXYZc");
+	emptyPatternReplaceTest("oldstr is str","abc","abc","X","X","X");
+	emptyPatternReplaceTest("oldstr at ends","abcab","ab","X",
+					"XcX","XcX");
+	emptyPatternReplaceTest("oldstr not found","abc","d","X","abc","abc");
+	emptyPatternReplaceTest("oldstr longer than str","ab","abc","X",
+					"ab","ab");
+
+	const char	*setnone[]={NULL};
+	const char	*setnew1[]={"1",NULL};
+	const char	*setnew2[]={"1","2",NULL};
+	const char	*setnew3[]={"1","2","3",NULL};
+	const char	*setempty[]={"",NULL};
+	const char	*set2empty[]={"","",NULL};
+	const char	*setfirst[]={"","b",NULL};
+	const char	*setmiddle[]={"a","","c",NULL};
+	const char	*setlast[]={"b","",NULL};
+	const char	*setabc[]={"a","b","c",NULL};
+	const char	*setac[]={"a","c",NULL};
+	const char	*setupper[]={"A","C",NULL};
+	const char	*setmulti[]={"ab","bc",NULL};
+	const char	*setbc[]={"a","bc",NULL};
+	const char	*setwhole[]={"abc",NULL};
+	emptyPatternSetTest("set no members","abc",setnone,NULL,setnone,
+					"abc","abc");
+	emptyPatternSetTest("set only empty","abc",setempty,NULL,setnew1,
+					"abc","abc");
+	emptyPatternSetTest("set two empty","abc",set2empty,NULL,setnew2,
+					"abc","abc");
+	emptyPatternSetTest("set empty first","abc",setfirst,NULL,setnew2,
+					"a2c","a2c");
+	emptyPatternSetTest("set empty middle","abc",setmiddle,NULL,setnew3,
+					"1b3","1b3");
+	emptyPatternSetTest("set empty last","abc",setlast,NULL,setnew2,
+					"a1c","a1c");
+	emptyPatternSetTest("set empty first, empty str","",setfirst,NULL,
+					setnew2,"","");
+	emptyPatternSetTest("set empty first, one char","b",setfirst,NULL,
+					setnew2,"2","2");
+	emptyPatternSetTest("set empty middle, repeats","acac",setmiddle,NULL,
+					setnew3,"1313","1313");
+	emptyPatternSetTest("set","abcabc",setac,NULL,setnew2,
+					"1b2" "1b2","1b2" "1b2");
+	emptyPatternSetTest("set case","aBc",setupper,NULL,setnew2,
+					"aBc","1B2");
+	emptyPatternSetTest("set order","abc",setmulti,NULL,setnew2,
+					"1c","1c");
+	emptyPatternSetTest("set every member","abc",setabc,NULL,setnew3,
+					"123","123");
+	size_t	len10[]={1,0};
+	size_t	len01[]={0,2};
+	size_t	len00[]={0,0};
+	size_t	len0[]={0};
+	size_t	len2[]={2};
+	size_t	len111[]={1,1,1};
+	emptyPatternSetTest("length 0 last","abc",setbc,len10,setnew2,
+					"1bc","1bc");
+	emptyPatternSetTest("length 0 first","abc",setbc,len01,setnew2,
+					"a2","a2");
+	emptyPatternSetTest("lengths all 0","abc",setbc,len00,setnew2,
+					"abc","abc");
+	emptyPatternSetTest("length 0 whole","abc",setwhole,len0,setnew1,
+					"abc","abc");
+	emptyPatternSetTest("length 0, empty str","",setwhole,len0,setnew1,
+					"","");
+	emptyPatternSetTest("length short","abcabc",setwhole,len2,setnew1,
+					"1c1c","1c1c");
+	emptyPatternSetTest("length","abc",setabc,len111,setnew3,
+					"123","123");
+	emptyPatternSetTest("length case","aBc",setupper,len10,setnew2,
+					"aBc","1Bc");
+
+	emptyPatternStripTest("strip empty str2","abc","","abc",false);
+	emptyPatternStripTest("strip NULL str2","abc",NULL,"abc",false);
+	emptyPatternStripTest("strip empty str1, empty str2","","","",false);
+	emptyPatternStripTest("strip empty str1","","a","",false);
+	emptyPatternStripTest("strip NULL str1, empty str2",
+						NULL,"",NULL,false);
+	emptyPatternStripTest("strip NULL str1",NULL,"a",NULL,false);
+	emptyPatternStripTest("strip str2","abcabc","bc","aa",true);
+	emptyPatternStripTest("strip all","abcabc","abc","",true);
+	emptyPatternStripTest("strip repeats","xxxx","xx","",true);
+	emptyPatternStripTest("strip not found","abc","x","abc",false);
+	emptyPatternStripTest("strip str2 longer","abc","abcd","abc",false);
+	signalmanager::alarm(0);
+	stdoutput.printf("\n");
+
+	// leftTrim, strip and stripSet use size_t indexes
+	stdoutput.printf("leftTrim/strip/stripSet indexes...\n");
+	sizeIndexTest("leftTrim",0,"  \t ab c ","ab c ",false);
+	sizeIndexTest("leftTrim, all space",0,"   ","",false);
+	sizeIndexTest("leftTrim, none",0,"ab","ab",false);
+	sizeIndexTest("leftTrim ch",1,"xxabx","abx",false);
+	sizeIndexTest("leftTrim ch, all",1,"xxx","",false);
+	sizeIndexTest("leftTrim ch, none",1,"ab","ab",false);
+	sizeIndexTest("strip ch",2,"xaxbxx","ab",true);
+	sizeIndexTest("strip ch, all",2,"xxx","",true);
+	sizeIndexTest("strip ch, none",2,"ab","ab",false);
+	sizeIndexTest("strip str2",3,"xyaxybxyxy","ab",true);
+	sizeIndexTest("strip str2, all",3,"xyxy","",true);
+	sizeIndexTest("strip str2, partial",3,"xaxyb","xab",true);
+	sizeIndexTest("strip str2, none",3,"xayb","xayb",false);
+	sizeIndexTest("stripSet",4,"xaybxyc","abc",true);
+	sizeIndexTest("stripSet, all",4,"xyyx","",true);
+	sizeIndexTest("stripSet, none",4,"abc","abc",false);
+	stdoutput.printf("\n");
+
+	// findLast and findLastIgnoringCase test every position
+	stdoutput.printf("findLast...\n");
+	signalmanager::alarm(60);
+	findLastTest("abc / abc",
+			"abc","abc",0,0);
+	findLastTest("abc / a",
+			"abc","a",0,0);
+	findLastTest("ABC / abc",
+			"ABC","abc",-1,0);
+	findLastTest("abc / ABC",
+			"abc","ABC",-1,0);
+	findLastTest("abc / ",
+			"abc","",3,3);
+	findLastTest(" / ",
+			"","",0,0);
+	findLastTest(" / a",
+			"","a",-1,-1);
+	findLastTest("abcabc / abc",
+			"abcabc","abc",3,3);
+	findLastTest("abcabc / ABC",
+			"abcabc","ABC",-1,3);
+	findLastTest("abcabc / bc",
+			"abcabc","bc",4,4);
+	findLastTest("abca / a",
+			"abca","a",3,3);
+	findLastTest("xabc / abc",
+			"xabc","abc",1,1);
+	findLastTest("abc / abcd",
+			"abc","abcd",-1,-1);
+	findLastTest("abc / x",
+			"abc","x",-1,-1);
+	findLastTest("abcabc / b",
+			"abcabc","b",4,4);
+	findLastTest("abcabc / B",
+			"abcabc","B",-1,4);
+	findLastTest("abcabc / z",
+			"abcabc","z",-1,-1);
+	findLastTest("aAaA / A",
+			"aAaA","A",3,3);
+	findLastTest("aAaA / a",
+			"aAaA","a",2,3);
+	findLastTest("ab / b",
+			"ab","b",1,1);
+	findLastTest("a / a",
+			"a","a",0,0);
+	findLastTest("a / A",
+			"a","A",-1,0);
+	findLastTest("AbcaBC / bc",
+			"AbcaBC","bc",1,4);
+	findLastTest("abAB / ab",
+			"abAB","ab",0,2);
+	findLastNullTest();
+	signalmanager::alarm(0);
+	stdoutput.printf("\n");
+
+	// out-of-range reads; an alarm turns a hang into a failure
+	stdoutput.printf("trim/justify/isInteger out of range...\n");
+	signalmanager::alarm(60);
+	rangeRightTrimTest("rightTrim, every string"," \ta",0);
+	rangeRightTrimTest("rightTrim ch, every string","xya",'x');
+	rangeRightTrimTest("rightTrim ch, every string with spaces","x y",'x');
+	rangeRightTrimGuardTest("rightTrim, 1 space",1,' ',false);
+	rangeRightTrimGuardTest("rightTrim, 2 spaces",2,' ',false);
+	rangeRightTrimGuardTest("rightTrim, 3 spaces",3,' ',false);
+	rangeRightTrimGuardTest("rightTrim, 4 spaces",4,' ',false);
+	rangeRightTrimGuardTest("rightTrim, 5 spaces",5,' ',false);
+	rangeRightTrimGuardTest("rightTrim, 1 tab",1,'\t',false);
+	rangeRightTrimGuardTest("rightTrim, 3 tabs",3,'\t',false);
+	rangeRightTrimGuardTest("rightTrim ch, 1",1,'x',true);
+	rangeRightTrimGuardTest("rightTrim ch, 2",2,'x',true);
+	rangeRightTrimGuardTest("rightTrim ch, 3",3,'x',true);
+	rangeRightTrimGuardTest("rightTrim ch, 4",4,'x',true);
+	rangeRightTrimGuardTest("rightTrim ch, 5",5,'x',true);
+	{
+	charstring::rightTrim((char *)NULL);
+	charstring::rightTrim((char *)NULL,(char)'x');
+	char	*empty=rangeMake("",1);
+	charstring::rightTrim(empty);
+	charstring::rightTrim(empty,(char)'x');
+	test("rightTrim NULL and empty",!empty[0]);
+	delete[] empty;
+	}
+	rangeJustifyTest("leftJustify, every string",0);
+	rangeJustifyTest("rightJustify, every string",1);
+	rangeJustifyTest("center, every string",2);
+	rangeJustifyLengthTest("justify, length 0",0);
+	rangeJustifyLengthTest("justify, length -1",-1);
+	rangeJustifyLengthTest("justify, length -5",-5);
+	rangeJustifyLengthTest("justify, length INT32_MIN",rangeMinLen);
+	rangeNumberLengthTest("isInteger/isNumber, length 0",0);
+	rangeNumberLengthTest("isInteger/isNumber, length -1",-1);
+	rangeNumberLengthTest("isInteger/isNumber, length -5",-5);
+	rangeNumberLengthTest("isInteger/isNumber, length INT32_MIN",
+					rangeMinLen);
+	{
+	test("isInteger/isNumber NULL, length -1",
+			!charstring::isInteger((const char *)NULL,-1) &&
+			!charstring::isNumber((const char *)NULL,-1));
+	}
+	rangeNumberTest("1",1,true,true);
+	rangeNumberTest("123",3,true,true);
+	rangeNumberTest("-12",3,true,true);
+	rangeNumberTest("12-",3,false,false);
+	rangeNumberTest("-",1,false,false);
+	rangeNumberTest("1.5",3,false,true);
+	rangeNumberTest(".",1,false,false);
+	rangeNumberTest("1.",2,false,false);
+	rangeNumberTest("1.5.2",5,false,false);
+	rangeNumberTest("12x",3,false,false);
+	signalmanager::alarm(0);
+	stdoutput.printf("\n");
+
+	// amounts, integer lengths and number strings at the extremes of
+	// int64_t; an alarm turns a hang into a failure
+	stdoutput.printf("amounts and numbers at the extremes...\n");
+	signalmanager::alarm(60);
+	for (size_t i=0; i<sizeof(amountcases)/sizeof(amountcases[0]); i++) {
+		amountCaseTest(&amountcases[i]);
+	}
+	{
+	char	*r=charstring::convertAmount((int64_t)-1,8);
+	test("convertAmount -1, 8 spaces",emptyPatternMatches(r,"$  -0.01"));
+	delete[] r;
+	r=charstring::convertAmount(numberMin,8);
+	test("convertAmount minimum, 8 spaces",
+		emptyPatternMatches(r,"$-92233720368547758.08"));
+	delete[] r;
+	}
+	test("getIntegerLength INT16_MIN",
+		charstring::getIntegerLength((int16_t)(-32767-1))==6);
+	test("getIntegerLength INT16_MIN+1",
+		charstring::getIntegerLength((int16_t)-32767)==6);
+	test("getIntegerLength INT16_MAX",
+		charstring::getIntegerLength((int16_t)32767)==5);
+	test("getIntegerLength int16 -1",
+		charstring::getIntegerLength((int16_t)-1)==2);
+	test("getIntegerLength int16 0",
+		charstring::getIntegerLength((int16_t)0)==1);
+	test("getIntegerLength INT32_MIN",
+		charstring::getIntegerLength((int32_t)(-2147483647-1))==11);
+	test("getIntegerLength INT32_MIN+1",
+		charstring::getIntegerLength((int32_t)-2147483647)==11);
+	test("getIntegerLength INT32_MAX",
+		charstring::getIntegerLength((int32_t)2147483647)==10);
+	test("getIntegerLength int32 -1",
+		charstring::getIntegerLength((int32_t)-1)==2);
+	test("getIntegerLength int32 0",
+		charstring::getIntegerLength((int32_t)0)==1);
+	test("getIntegerLength INT64_MIN",
+		charstring::getIntegerLength(numberMin)==20);
+	test("getIntegerLength INT64_MIN+1",
+		charstring::getIntegerLength(numberMin+1)==20);
+	test("getIntegerLength INT64_MAX",
+		charstring::getIntegerLength(numberMax)==19);
+	parseNumberTest("INT64_MIN",numberMin,1,"-9223372036854775808");
+	parseNumberTest("INT64_MIN",numberMin,0,"-9223372036854775808");
+	parseNumberTest("INT64_MIN",numberMin,20,"-9223372036854775808");
+	parseNumberTest("INT64_MIN",numberMin,21,"-09223372036854775808");
+	parseNumberTest("INT64_MIN",numberMin,25,"-000009223372036854775808");
+	parseNumberTest("INT64_MIN+1",numberMin+1,1,"-9223372036854775807");
+	parseNumberTest("INT64_MIN+1",numberMin+1,22,
+					"-009223372036854775807");
+	parseNumberTest("INT64_MAX",numberMax,1,"9223372036854775807");
+	parseNumberTest("INT64_MAX",numberMax,25,"0000009223372036854775807");
+	parseNumberTest("-5",-5,1,"-5");
+	parseNumberTest("-5",-5,3,"-05");
+	parseNumberTest("-1",-1,0,"-1");
+	parseNumberTest("0",0,3,"000");
+	parseNumberTest("INT32_MIN",(int32_t)(-2147483647-1),1,"-2147483648");
+	parseNumberTest("INT16_MIN",(int16_t)(-32767-1),8,"-0032768");
+	{
+	char	*r=charstring::parseNumber((int32_t)(-2147483647-1));
+	test("parseNumber int32 INT32_MIN",
+		emptyPatternMatches(r,"-2147483648"));
+	delete[] r;
+	r=charstring::parseNumber((int16_t)(-32767-1));
+	test("parseNumber int16 INT16_MIN",
+		emptyPatternMatches(r,"-32768"));
+	delete[] r;
+	}
+	appendNumberTest("INT64_MIN",numberMin,1,"-9223372036854775808");
+	appendNumberTest("INT64_MIN",numberMin,25,"-000009223372036854775808");
+	appendNumberTest("INT64_MIN+1",numberMin+1,1,"-9223372036854775807");
+	appendNumberTest("-5",-5,3,"-05");
+	signalmanager::alarm(0);
+	stdoutput.printf("\n");
 
 #if 0
 	// hosttonet/nettohost (why are these here?)

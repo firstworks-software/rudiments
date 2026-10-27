@@ -14,6 +14,9 @@
 #include <rudiments/error.h>
 #include <rudiments/stringbuffer.h>
 #include <rudiments/filesystem.h>
+#include <rudiments/signalclasses.h>
+#include <rudiments/charstring.h>
+#include <rudiments/bytestring.h>
 #include "test.cpp"
 
 #ifndef WIN32
@@ -21,6 +24,116 @@ const char	*testfiletxt="/tmp/testfile.txt";
 #else
 const char	*testfiletxt="testfile.txt";
 #endif
+
+#ifndef WIN32
+const char	*contentsfile="/tmp/testfilecontents.txt";
+#else
+const char	*contentsfile="testfilecontents.txt";
+#endif
+
+// getContents on files of known and unknown size and on read errors
+static void contentsTests() {
+
+	signalmanager::alarm(60);
+
+	file::remove(contentsfile);
+	file	fl;
+	byte_t	*buf;
+	size_t	size;
+	char	*str;
+
+	// empty file opened write-only: read fails
+	test("create empty",fl.create(contentsfile,
+			permissions::parsePermString("rw-rw----")));
+	test("close empty",fl.close());
+	test("open empty write-only",fl.open(contentsfile,O_WRONLY));
+	str=fl.getContents();
+	test("write-only empty, char *",!str);
+	delete[] str;
+	buf=(byte_t *)1;
+	size=1;
+	test("write-only empty, byte_t **",
+			fl.getContents(&buf,&size)==-1);
+	test("write-only empty, buffer NULL",!buf);
+	test("write-only empty, size 0",!size);
+	buf=(byte_t *)1;
+	size=1;
+	test("write-only empty, no size",
+			fl.getContents(&buf,NULL)==-1 && !buf);
+	test("write-only empty, no buffer",
+			fl.getContents(NULL,&size)==-1 && !size);
+	test("write-only empty, repeat",
+			fl.getContents(&buf,&size)==-1 && !buf && !size);
+	test("close write-only",fl.close());
+
+	// empty file opened read-only: success
+	test("open empty read-only",fl.open(contentsfile,O_RDONLY));
+	str=fl.getContents();
+	test("read-only empty, char *",str && !str[0]);
+	delete[] str;
+	buf=NULL;
+	size=1;
+	test("read-only empty, byte_t **",
+			fl.getContents(&buf,&size)==0 && !size);
+	delete[] buf;
+	test("close read-only",fl.close());
+	str=file::getContents(contentsfile);
+	test("name empty, char *",str && !str[0]);
+	delete[] str;
+	buf=NULL;
+	size=1;
+	test("name empty, byte_t **",
+			fl.getContents(contentsfile,&buf,&size)==0 &&
+			!size);
+	delete[] buf;
+
+	// file of known size
+	test("create contents",fl.create(contentsfile,
+			permissions::parsePermString("rw-rw----")));
+	test("write contents",fl.write("hello")==5);
+	test("close contents",fl.close());
+	str=file::getContents(contentsfile);
+	test("name hello, char *",
+			str && !charstring::compare(str,"hello"));
+	delete[] str;
+	buf=NULL;
+	size=0;
+	test("name hello, byte_t **",
+			fl.getContents(contentsfile,&buf,&size)==5 &&
+			size==5 && buf && !bytestring::compare(buf,"hello",5));
+	delete[] buf;
+	test("open hello write-only",fl.open(contentsfile,O_WRONLY));
+	str=fl.getContents();
+	test("write-only hello, char *",!str);
+	delete[] str;
+	test("close hello",fl.close());
+
+	// nonexistent file
+	str=file::getContents("/tmp/testfilenonexistent.txt");
+	test("nonexistent, char *",!str);
+	delete[] str;
+
+	#ifdef __linux__
+	// size 0 in st_size but has contents
+	if (file::exists("/proc/self/status")) {
+		str=file::getContents("/proc/self/status");
+		test("proc, char *",str &&
+			!charstring::compareIgnoringCase(str,"Name:",5));
+		delete[] str;
+		buf=NULL;
+		size=0;
+		test("proc, byte_t **",
+			fl.getContents("/proc/self/status",&buf,&size)>0 &&
+			buf && size>5 &&
+			!bytestring::compare(buf,"Name:",5));
+		delete[] buf;
+	}
+	#endif
+
+	file::remove(contentsfile);
+
+	signalmanager::alarm(0);
+}
 
 int main(int argc, const char **argv) {
 
@@ -369,6 +482,9 @@ int main(int argc, const char **argv) {
 		fl.close();
 
 		file::remove(testfiletxt);
+
+		stdoutput.printf("\ngetContents\n");
+		contentsTests();
 
 	} else {
 

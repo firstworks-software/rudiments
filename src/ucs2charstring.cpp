@@ -73,15 +73,21 @@ const ucs2_t *ucs2charstring::findLast(const ucs2_t *haystack,
 	if (needlelen>haystacklen) {
 		return NULL;
 	}
-	
+	if (!needlelen) {
+		return haystack+haystacklen;
+	}
+
+	// test every position, including the first
 	const ucs2_t	*ptr=haystack+haystacklen-needlelen;
-	while (ptr>haystack) {
+	for (;;) {
 		if (!compare(ptr,needle,needlelen)) {
 			return ptr;
 		}
+		if (ptr==haystack) {
+			return NULL;
+		}
 		ptr--;
 	}
-	return NULL;
 }
 
 const ucs2_t *ucs2charstring::findLastIgnoringCase(const ucs2_t *haystack,
@@ -96,15 +102,21 @@ const ucs2_t *ucs2charstring::findLastIgnoringCase(const ucs2_t *haystack,
 	if (needlelen>haystacklen) {
 		return NULL;
 	}
-	
+	if (!needlelen) {
+		return haystack+haystacklen;
+	}
+
+	// test every position, including the first
 	const ucs2_t	*ptr=haystack+haystacklen-needlelen;
-	while (ptr>haystack) {
+	for (;;) {
 		if (!compareIgnoringCase(ptr,needle,needlelen)) {
 			return ptr;
 		}
+		if (ptr==haystack) {
+			return NULL;
+		}
 		ptr--;
 	}
-	return NULL;
 }
 
 void ucs2charstring::upper(ucs2_t *str) {
@@ -153,17 +165,16 @@ void ucs2charstring::rightTrim(ucs2_t *str, ucs2_t character) {
 
 	if (!isNullOrEmpty(str)) {
 
-		// advance to the last character in the string
+		// advance to the end of the string
+		ucs2_t	*start=str;
 		while (*str) {
 			str++;
 		}
-		str--;
 
 		// back up to the first instance of the character to trim
-		while (*str==character) { 
+		while (str>start && *(str-1)==character) {
 			str--;
 		}
-		str++;
 
 		// terminate the string there
 		*str=(ucs2_t)'\0';
@@ -174,8 +185,8 @@ void ucs2charstring::leftTrim(ucs2_t *str, ucs2_t character) {
 
 	if (!isNullOrEmpty(str)) {
 
-		int32_t	i=0;
-		int32_t	j=0;
+		size_t	i=0;
+		size_t	j=0;
 
 		// advance past all of the characters we want to trim
 		while (str[i]==character) {
@@ -199,8 +210,8 @@ bool ucs2charstring::strip(ucs2_t *str, ucs2_t character) {
 		return false;
 	}
 
-	int32_t	index=0;
-	int32_t	total=0;
+	size_t	index=0;
+	size_t	total=0;
 	bool	retval=false;
 
 	while (str[index]) {
@@ -224,9 +235,15 @@ bool ucs2charstring::strip(ucs2_t *str1, const ucs2_t *str2) {
 		return false;
 	}
 
-	int32_t	str2len=getLength(str2);
-	int32_t	index=0;
-	int32_t	total=0;
+	size_t	str2len=getLength(str2);
+
+	// an empty str2 strips nothing
+	if (!str2len) {
+		return false;
+	}
+
+	size_t	index=0;
+	size_t	total=0;
 	bool	retval=false;
 
 	while (str1[index]) {
@@ -251,8 +268,8 @@ bool ucs2charstring::stripSet(ucs2_t *str, const ucs2_t *set) {
 		return false;
 	}
 
-	int32_t	index=0;
-	int32_t	total=0;
+	size_t	index=0;
+	size_t	total=0;
 	bool	retval=false;
 
 	while (str[index]) {
@@ -302,7 +319,8 @@ ucs2_t *ucs2charstring::replace(const ucs2_t *str,
 	const ucs2_t	*ptr=str;
 	const ucs2_t	*start=ptr;
 	while (*ptr) {
-		if (!compare(ptr,oldstr,oldstrlen)) {
+		// an empty oldstr matches nothing
+		if (oldstrlen && !compare(ptr,oldstr,oldstrlen)) {
 			newstring.appendUcs2(start,ptr-start);
 			newstring.appendUcs2(newstr);
 			ptr+=oldstrlen;
@@ -362,6 +380,11 @@ ucs2_t *ucs2charstring::replace(const ucs2_t *str,
 		uint64_t i=0;
 		for (const ucs2_t * const *oldptr=oldstrset;
 							*oldptr; oldptr++) {
+			// skip empty members
+			if (!oldstrlen[i]) {
+				i++;
+				continue;
+			}
 			if (!compare(ptr,oldstrset[i],oldstrlen[i])) {
 				newstring.appendUcs2(start,ptr-start);
 				newstring.appendUcs2(newstrset[i]);
@@ -417,7 +440,9 @@ ucs2_t *ucs2charstring::replaceIgnoringCase(const ucs2_t *str,
 	const ucs2_t	*ptr=str;
 	const ucs2_t	*start=ptr;
 	while (*ptr) {
-		if (!compareIgnoringCase(ptr,oldstr,oldstrlen)) {
+		// an empty oldstr matches nothing
+		if (oldstrlen &&
+			!compareIgnoringCase(ptr,oldstr,oldstrlen)) {
 			newstring.appendUcs2(start,ptr-start);
 			newstring.appendUcs2(newstr);
 			ptr+=oldstrlen;
@@ -477,6 +502,11 @@ ucs2_t *ucs2charstring::replaceIgnoringCase(const ucs2_t *str,
 		uint64_t i=0;
 		for (const ucs2_t * const *oldptr=oldstrset;
 							*oldptr; oldptr++) {
+			// skip empty members
+			if (!oldstrlen[i]) {
+				i++;
+				continue;
+			}
 			if (!compareIgnoringCase(ptr,oldstrset[i],
 							oldstrlen[i])) {
 				newstring.appendUcs2(start,ptr-start);
@@ -518,7 +548,7 @@ bool ucs2charstring::isInteger(const ucs2_t *str) {
 
 bool ucs2charstring::isInteger(const ucs2_t *str, int32_t len) {
 
-	if (!str || !len) {
+	if (!str || len<=0) {
 		return false;
 	}
 
@@ -562,7 +592,7 @@ bool ucs2charstring::isNumber(const ucs2_t *str) {
 
 bool ucs2charstring::isNumber(const ucs2_t *str, int32_t len) {
 
-	if (!str || !len) {
+	if (!str || len<=0) {
 		return false;
 	}
 
@@ -595,6 +625,11 @@ int64_t ucs2charstring::convertAmount(const ucs2_t *amount) {
 	const ucs2_t	*centsstr=findFirst(amount,(ucs2_t)'.');
 	uint64_t	cents=(centsstr)?convertToUnsignedInteger(centsstr+1):0;
 	return (dollars*100+cents);
+}
+
+// returns the absolute value of "number", exact for the minimum int64_t
+static uint64_t magnitude(int64_t number) {
+	return (number<0)?(0-(uint64_t)number):(uint64_t)number;
 }
 
 ucs2_t *ucs2charstring::convertAmount(int64_t amount) {
@@ -840,13 +875,13 @@ void ucs2charstring::center(ucs2_t *str, int32_t len) {
 
 int32_t ucs2charstring::countLeadingSpaces(const ucs2_t *str, int32_t len) {
 
-	if (!str) {
+	if (!str || len<=0) {
 		return 0;
 	}
 
 	int32_t	leadingspaces=0;
 	for (int32_t index=0;
-			str[index]==(ucs2_t)' ' && index<len;
+			index<len && str[index]==(ucs2_t)' ';
 			index++) {
 		leadingspaces++;
 	}
@@ -855,13 +890,13 @@ int32_t ucs2charstring::countLeadingSpaces(const ucs2_t *str, int32_t len) {
 
 int32_t ucs2charstring::countTrailingSpaces(const ucs2_t *str, int32_t len) {
 
-	if (!str) {
+	if (!str || len<=0) {
 		return 0;
 	}
 
 	int32_t	trailingspaces=0;
 	for (int32_t index=len-1;
-			str[index]==(ucs2_t)' ' && index>-1;
+			index>-1 && str[index]==(ucs2_t)' ';
 			index--) {
 		trailingspaces++;
 	}
@@ -915,12 +950,12 @@ ucs2_t *ucs2charstring::parseNumber(int64_t number, uint16_t zeropadding) {
 	*ptr=(ucs2_t)'-';
 	ptr+=strlen;
 	*ptr=(ucs2_t)'\0';
-	number*=-1;
+	uint64_t	num=magnitude(number);
 	strlen--;
 	while (strlen) {
 		ptr--;
-		*ptr=(ucs2_t)('0'+number%10);
-		number/=10;
+		*ptr=(ucs2_t)('0'+num%10);
+		num/=10;
 		strlen--;
 	}
 	ptr--;
@@ -1024,7 +1059,7 @@ void ucs2charstring::bothTrim(ucs2_t *string, ucs2_t character) {
 
 uint16_t ucs2charstring::getIntegerLength(int16_t number) {
 	uint16_t	len=(number>0)?0:1;
-	for (int16_t num=((number>0)?number:(-1*number)); num>0; num=num/10) {
+	for (uint64_t num=magnitude(number); num>0; num=num/10) {
 		len++;
 	}
 	return len;
@@ -1032,7 +1067,7 @@ uint16_t ucs2charstring::getIntegerLength(int16_t number) {
 
 uint16_t ucs2charstring::getIntegerLength(int32_t number) {
 	uint16_t	len=(number>0)?0:1;
-	for (int32_t num=((number>0)?number:(-1*number)); num>0; num=num/10) {
+	for (uint64_t num=magnitude(number); num>0; num=num/10) {
 		len++;
 	}
 	return len;
@@ -1040,7 +1075,7 @@ uint16_t ucs2charstring::getIntegerLength(int32_t number) {
 
 uint16_t ucs2charstring::getIntegerLength(int64_t number) {
 	uint16_t	len=(number>0)?0:1;
-	for (int64_t num=((number>0)?number:(-1*number)); num>0; num=num/10) {
+	for (uint64_t num=magnitude(number); num>0; num=num/10) {
 		len++;
 	}
 	return len;
@@ -1844,8 +1879,21 @@ const ucs2_t *ucs2charstring::findLast(const ucs2_t *haystack,
 
 const ucs2_t *ucs2charstring::findLastIgnoringCase(const ucs2_t *haystack,
 							ucs2_t needle) {
-	return (ucs2_t *)(findFirstOrEndIgnoringCase(
-					(const ucs2_t *)(haystack),needle));
+	if (!haystack) {
+		return NULL;
+	}
+	size_t	haystacklen=getLength(haystack);
+	if (!needle) {
+		return haystack+haystacklen;
+	}
+	needle=(ucs2_t)ucs2character::lower(needle);
+	const ucs2_t	*retval=NULL;
+	for (const ucs2_t *ptr=haystack; ptr<haystack+haystacklen; ptr++) {
+		if ((ucs2_t)ucs2character::lower(*ptr)==needle) {
+			retval=ptr;
+		}
+	}
+	return retval;
 }
 
 ucs2_t *ucs2charstring::findFirst(ucs2_t *haystack,
@@ -2237,7 +2285,7 @@ ucs2_t *ucs2charstring::duplicate(const wchar_t *string, size_t len) {
 
 ucs2_t *ucs2charstring::duplicate(const wchar_t *string, bool bigendian) {
 	return duplicate(string,wcharstring::getLength(string),
-				(ucs2_t)'?',sys::isBigEndian());
+				(ucs2_t)'?',bigendian);
 }
 
 ucs2_t *ucs2charstring::duplicate(const wchar_t *string, size_t len,
@@ -2249,6 +2297,18 @@ ucs2_t *ucs2charstring::duplicate(const wchar_t *string,
 					ucs2_t replacement) {
 	return duplicate(string,wcharstring::getLength(string),
 				replacement,sys::isBigEndian());
+}
+
+ucs2_t *ucs2charstring::duplicate(const wchar_t *string, size_t len,
+							ucs2_t replacement) {
+	return duplicate(string,len,replacement,sys::isBigEndian());
+}
+
+ucs2_t *ucs2charstring::duplicate(const wchar_t *string,
+							ucs2_t replacement,
+							bool bigendian) {
+	return duplicate(string,wcharstring::getLength(string),
+							replacement,bigendian);
 }
 
 ucs2_t *ucs2charstring::duplicate(const wchar_t *string, size_t len,
@@ -2274,17 +2334,16 @@ void ucs2charstring::rightTrim(ucs2_t *str) {
 
 	if (!isNullOrEmpty(str)) {
 
-		// advance to the last character in the string
+		// advance to the end of the string
+		ucs2_t	*start=str;
 		while (*str) {
 			str++;
 		}
-		str--;
 
 		// back up to the first instance of the character to trim
-		while (ucs2character::isWhitespace(*str)) { 
+		while (str>start && ucs2character::isWhitespace(*(str-1))) {
 			str--;
 		}
-		str++;
 
 		// terminate the string there
 		*str=(ucs2_t)'\0';
@@ -2295,8 +2354,8 @@ void ucs2charstring::leftTrim(ucs2_t *str) {
 
 	if (!isNullOrEmpty(str)) {
 
-		int32_t	i=0;
-		int32_t	j=0;
+		size_t	i=0;
+		size_t	j=0;
 
 		// advance past all of the characters we want to trim
 		while (ucs2character::isWhitespace(str[i])) {
@@ -2599,21 +2658,28 @@ ucs2_t *ucs2charstring::insertString(const ucs2_t *dest,
 					const ucs2_t *src,
 					uint64_t index) {
 
+	uint64_t	destsize=getLength(dest);
 	uint64_t	srcsize=getLength(src);
-	uint64_t	size=getLength(dest)+srcsize+1;
+	uint64_t	size=destsize+srcsize+1;
 	size_t		bufsize;
 	if (!bufferSize(size,1,0,sizeof(ucs2_t),&bufsize)) {
 		return NULL;
 	}
 	ucs2_t		*retval=new ucs2_t[bufsize];
-	for (uint64_t i=0,j=0; i<size;) {
-		if (i==index) {
-			for (uint64_t k=0; k<srcsize; k++) {
-				retval[i++]=src[k];
-			}
-		} else {
-			retval[i++]=dest[j++];
-		}
+
+	// clamp the index to the end of dest
+	uint64_t	at=(index<destsize)?index:destsize;
+
+	// copy the head of dest, then src, then the rest of dest
+	uint64_t	k=0;
+	for (uint64_t i=0; i<at; i++) {
+		retval[k++]=dest[i];
+	}
+	for (uint64_t i=0; i<srcsize; i++) {
+		retval[k++]=src[i];
+	}
+	for (uint64_t i=at; i<destsize; i++) {
+		retval[k++]=dest[i];
 	}
 	retval[size-1]=(ucs2_t)'\0';
 	return retval;
