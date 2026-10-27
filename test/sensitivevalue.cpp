@@ -3,8 +3,150 @@
 
 #include <rudiments/sensitivevalue.h>
 #include <rudiments/directory.h>
+#include <rudiments/file.h>
+#include <rudiments/permissions.h>
+#include <rudiments/signalclasses.h>
+#include <rudiments/charstring.h>
+#include <rudiments/bytestring.h>
 #include <rudiments/stdio.h>
 #include "test.cpp"
+
+#ifndef WIN32
+const char	*svtestfile="/tmp/svtestfile";
+const char	*svtestdir="/tmp/svtestdir";
+const char	*svtestdirfile="/tmp/svtestdir.txt";
+#else
+const char	*svtestfile="svtestfile";
+const char	*svtestdir="svtestdir";
+const char	*svtestdirfile="svtestdir.txt";
+#endif
+
+static void writeFile(const char *name, const char *data, size_t size) {
+	file	f;
+	if (f.open(name,O_WRONLY|O_CREAT|O_TRUNC,
+				permissions::getOwnerReadWrite())) {
+		f.write(data,size);
+		f.close();
+	}
+}
+
+// checks that "in" parses to exactly "expected" of "expectedsize" bytes and
+// that the value is followed by a NULL
+static bool parsesTo(sensitivevalue *sv, const char *in,
+				const char *expected, uint64_t expectedsize) {
+	sv->parse(in);
+	return (sv->getValueSize()==expectedsize &&
+		sv->getValue() &&
+		!bytestring::compare(sv->getValue(),expected,expectedsize) &&
+		!sv->getValue()[expectedsize]);
+}
+
+// files that open but cannot be read, files that are shorter than they
+// report and the size of the value
+static void fileTests() {
+
+	signalmanager::alarm(60);
+
+	file::remove(svtestfile);
+	file::remove(svtestdirfile);
+	directory::remove(svtestdir);
+
+	stdoutput.printf("file - directory\n");
+	sensitivevalue	dv;
+	test("text, default chomp",parsesTo(&dv,"[/etc]","[/etc]",6));
+	dv.setChompTextFile(false);
+	test("text, no chomp",parsesTo(&dv,"[/etc]","[/etc]",6));
+	dv.setFileFormat(FORMAT_HEX);
+	test("hex",parsesTo(&dv,"[/etc]","[/etc]",6));
+	stdoutput.printf("\n\n");
+
+	stdoutput.printf("file - directory, then the next name\n");
+	test("create directory",directory::create(svtestdir,
+				permissions::getOwnerReadWriteExecute()));
+	writeFile(svtestdirfile,"next\n",5);
+	sensitivevalue	nv;
+	nv.setTextExtension("txt");
+	test("text extension after a directory",
+			parsesTo(&nv,"[/tmp/svtestdir]","next",4));
+	sensitivevalue	hv;
+	hv.setFileFormat(FORMAT_HEX);
+	hv.setHexExtension("txt");
+	writeFile(svtestdirfile,"4e657874",8);
+	test("hex extension after a directory",
+			parsesTo(&hv,"[/tmp/svtestdir]","Next",4));
+	sensitivevalue	pv;
+	pv.setPath("/tmp");
+	test("path after a directory",
+			parsesTo(&pv,"[svtestdir]","[svtestdir]",11));
+	file::remove(svtestdirfile);
+	directory::remove(svtestdir);
+	stdoutput.printf("\n\n");
+
+	stdoutput.printf("file - sizes\n");
+	sensitivevalue	sv;
+	writeFile(svtestfile,"",0);
+	test("empty",parsesTo(&sv,"[/tmp/svtestfile]","",0));
+	writeFile(svtestfile,"\n",1);
+	test("1 byte, newline",parsesTo(&sv,"[/tmp/svtestfile]","",0));
+	writeFile(svtestfile,"x",1);
+	test("1 byte",parsesTo(&sv,"[/tmp/svtestfile]","x",1));
+	writeFile(svtestfile,"ab\r\n",4);
+	test("crlf",parsesTo(&sv,"[/tmp/svtestfile]","ab",2));
+	writeFile(svtestfile,"ab\n\r",4);
+	test("lfcr",parsesTo(&sv,"[/tmp/svtestfile]","ab",2));
+	writeFile(svtestfile,"ab\r",3);
+	test("cr",parsesTo(&sv,"[/tmp/svtestfile]","ab",2));
+	writeFile(svtestfile,"a\nb",3);
+	test("inner newline",parsesTo(&sv,"[/tmp/svtestfile]","a\nb",3));
+	writeFile(svtestfile,"a\0b\n",4);
+	test("binary",parsesTo(&sv,"[/tmp/svtestfile]","a\0b",3));
+	sv.setFileFormat(FORMAT_HEX);
+	writeFile(svtestfile,"",0);
+	test("hex, empty",parsesTo(&sv,"[/tmp/svtestfile]","",0));
+	writeFile(svtestfile,"4142\n",5);
+	test("hex, trailing newline",parsesTo(&sv,"[/tmp/svtestfile]","AB",2));
+	writeFile(svtestfile,"41424344",8);
+	test("hex",parsesTo(&sv,"[/tmp/svtestfile]","ABCD",4));
+	file::remove(svtestfile);
+	stdoutput.printf("\n\n");
+
+	#ifdef __linux__
+	// st_size is 4096 but the file has less data
+	const char	*sysfile="/sys/devices/system/cpu/online";
+	if (file::exists(sysfile)) {
+		stdoutput.printf("file - shorter than its size\n");
+		char	*contents=file::getContents(sysfile);
+		test("read the file",contents!=NULL);
+		uint64_t	len=charstring::getLength(contents);
+		while (len && (contents[len-1]=='\n' ||
+					contents[len-1]=='\r')) {
+			len--;
+		}
+		sensitivevalue	ssv;
+		char	in[64];
+		charstring::copy(in,"[");
+		charstring::append(in,sysfile);
+		charstring::append(in,"]");
+		test("text",parsesTo(&ssv,in,contents,len));
+		test("text, text value length",
+				ssv.getTextValueLength()==len);
+		ssv.setChompTextFile(false);
+		ssv.parse(in);
+		test("no chomp, size is the data read",
+				ssv.getValueSize()==charstring::getLength(
+								contents));
+		ssv.setFileFormat(FORMAT_HEX);
+		ssv.parse(in);
+		test("hex, no read past the data",
+				ssv.getValueSize()<=
+				charstring::getLength(contents)/2);
+		delete[] contents;
+		stdoutput.printf("\n\n");
+	}
+	#endif
+
+	signalmanager::alarm(0);
+}
 
 int main(int argc, const char **argv) {
 
@@ -200,6 +342,8 @@ int main(int argc, const char **argv) {
 			!bytestring::compare(textval,svstring,textvalsize));
 	delete[] textval;
 	stdoutput.printf("\n\n");
+
+	fileTests();
 
 	return 0;
 }

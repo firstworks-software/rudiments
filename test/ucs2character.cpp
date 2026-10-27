@@ -3,7 +3,74 @@
 
 #include <rudiments/ucs2character.h>
 #include <rudiments/stdio.h>
+#include <rudiments/sys.h>
 #include "test.cpp"
+
+// returns the 2 bytes of "c" as the first byte, then the second byte
+static uint16_t bytesOf(ucs2_t c) {
+	const byte_t	*b=(const byte_t *)&c;
+	return (uint16_t)((b[0]<<8)|b[1]);
+}
+
+static void duplicateWcharTests() {
+
+	stdoutput.printf("duplicate (wchar_t, bigendian)...\n");
+	const wchar_t	chars[]={L'A',L'z',L'0',L'?',(wchar_t)0x00e9,
+					(wchar_t)0x0100,(wchar_t)0x4e2d,
+					(wchar_t)0xff21};
+	bool		host=sys::isBigEndian();
+	for (uint16_t i=0; i<sizeof(chars)/sizeof(chars[0]); i++) {
+		wchar_t		c=chars[i];
+		uint16_t	cu=(uint16_t)c;
+
+		// requested order, as the bytes in memory
+		test("\tbig endian",
+			bytesOf(ucs2character::duplicate(c,true))==cu);
+		test("\tlittle endian",
+			bytesOf(ucs2character::duplicate(c,false))==
+				(uint16_t)(((cu&0xff)<<8)|(cu>>8)));
+
+		// 3 argument form
+		test("\tbig endian, replacement",
+			bytesOf(ucs2character::duplicate(
+					c,(ucs2_t)'?',true))==cu);
+		test("\tlittle endian, replacement",
+			bytesOf(ucs2character::duplicate(
+					c,(ucs2_t)'?',false))==
+				(uint16_t)(((cu&0xff)<<8)|(cu>>8)));
+
+		// the char form agrees for ascii
+		if (c<0x80) {
+			test("\tagrees with char, big endian",
+				ucs2character::duplicate(c,true)==
+				ucs2character::duplicate((char)c,true));
+			test("\tagrees with char, little endian",
+				ucs2character::duplicate(c,false)==
+				ucs2character::duplicate((char)c,false));
+		}
+
+		// no byte order means the order of the system
+		test("\thost order",
+			ucs2character::duplicate(c)==
+				ucs2character::duplicate(c,host));
+		test("\thost order, replacement",
+			ucs2character::duplicate(c,(ucs2_t)'?')==
+				ucs2character::duplicate(c,host));
+	}
+
+	// a character that is not in UCS-2 gives the replacement, which
+	// is not swapped
+	if (sizeof(wchar_t)>2) {
+		wchar_t	c=(wchar_t)0x10000;
+		test("\tnot in UCS-2, '?'",
+			ucs2character::duplicate(c,true)=='?' &&
+			ucs2character::duplicate(c,false)=='?');
+		test("\tnot in UCS-2, replacement",
+			ucs2character::duplicate(c,(ucs2_t)'x',true)=='x' &&
+			ucs2character::duplicate(c,(ucs2_t)'x',false)=='x');
+	}
+	stdoutput.printf("\n");
+}
 
 int main(int argc, const char **argv) {
 
@@ -346,6 +413,8 @@ int main(int argc, const char **argv) {
 		test("\tduplicate (char)",
 			ucs2character::duplicate((char)c)==(ucs2_t)c);
 	}
+
+	duplicateWcharTests();
 
 	return 0;
 }

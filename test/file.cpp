@@ -130,6 +130,90 @@ static void contentsTests() {
 	}
 	#endif
 
+	// file that is not open
+	file	nf;
+	str=nf.getContents();
+	test("not open, char *",!str);
+	delete[] str;
+	buf=(byte_t *)1;
+	size=1;
+	test("not open, byte_t **",nf.getContents(&buf,&size)==-1);
+	test("not open, buffer NULL",!buf);
+	test("not open, size 0",!size);
+	buf=(byte_t *)1;
+	test("not open, no size",nf.getContents(&buf,NULL)==-1 && !buf);
+	size=1;
+	test("not open, no buffer",nf.getContents(NULL,&size)==-1 && !size);
+	test("open for close",nf.open(contentsfile,O_RDONLY));
+	test("close for not open",nf.close());
+	buf=(byte_t *)1;
+	size=1;
+	test("closed, byte_t **",
+			nf.getContents(&buf,&size)==-1 && !buf && !size);
+	str=nf.getContents();
+	test("closed, char *",!str);
+	delete[] str;
+
+	#ifdef __linux__
+	// directory: st_size is not 0 but read fails
+	if (file::exists("/etc")) {
+		test("open directory",fl.open("/etc",O_RDONLY));
+		buf=(byte_t *)1;
+		size=1;
+		test("directory, byte_t **",
+			fl.getContents(&buf,&size)==-1 && !buf && !size);
+		str=fl.getContents();
+		test("directory, char *",!str);
+		delete[] str;
+		test("close directory",fl.close());
+		buf=(byte_t *)1;
+		size=1;
+		test("directory by name, byte_t **",
+			fl.getContents("/etc",&buf,&size)==-1 &&
+			!buf && !size);
+		str=file::getContents("/etc");
+		test("directory by name, char *",!str);
+		delete[] str;
+	}
+
+	// st_size is more than the data: short read is not an error
+	const char	*sysfile="/sys/devices/system/cpu/online";
+	if (file::exists(sysfile)) {
+		buf=NULL;
+		size=0;
+		ssize_t	bytes=fl.getContents(sysfile,&buf,&size);
+		test("sys, byte_t **",bytes>0 && (size_t)bytes==size && buf);
+		test("sys, shorter than st_size",size<4096);
+		str=file::getContents(sysfile);
+		test("sys, char *",str && charstring::getLength(str)==size &&
+			!bytestring::compare(str,buf,size) &&
+			!str[size]);
+		delete[] str;
+		delete[] buf;
+		test("open sys",fl.open(sysfile,O_RDONLY));
+		buf=NULL;
+		size=0;
+		test("sys open, byte_t **",
+			fl.getContents(&buf,&size)>0 && size>0 && buf);
+		delete[] buf;
+		test("sys open, position restored",fl.getPosition()==0);
+		test("close sys",fl.close());
+	}
+	#endif
+
+	// file larger than the limit on the size of a buffer
+	if (sizeof(size_t)>=8 && file::truncate(contentsfile,
+					(((off64_t)1<<62)-1)*2+1)) {
+		test("open huge",fl.open(contentsfile,O_RDONLY));
+		str=fl.getContents();
+		test("huge, char *",!str);
+		delete[] str;
+		test("close huge",fl.close());
+		str=file::getContents(contentsfile);
+		test("huge by name, char *",!str);
+		delete[] str;
+	}
+
 	file::remove(contentsfile);
 
 	signalmanager::alarm(0);

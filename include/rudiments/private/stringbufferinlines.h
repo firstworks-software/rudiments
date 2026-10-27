@@ -260,7 +260,7 @@ ssize_t stringbuffer::write(int32_t number) {
 
 inline
 ssize_t stringbuffer::write(int64_t number) {
-	return printf("%lld",number);
+	return printf("%lld",(long long)number);
 }
 
 inline
@@ -270,17 +270,17 @@ ssize_t stringbuffer::write(byte_t character) {
 
 inline
 ssize_t stringbuffer::write(uint16_t number) {
-	return printf("%hd",number);
+	return printf("%hu",(unsigned int)number);
 }
 
 inline
 ssize_t stringbuffer::write(uint32_t number) {
-	return printf("%d",number);
+	return printf("%u",(unsigned int)number);
 }
 
 inline
 ssize_t stringbuffer::write(uint64_t number) {
-	return bytebuffer::printf("%lld",number);
+	return printf("%llu",(unsigned long long)number);
 }
 
 inline

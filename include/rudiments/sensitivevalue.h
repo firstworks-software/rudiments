@@ -227,11 +227,15 @@ class RUDIMENTS_DLLSPEC sensitivevalue {
 		 *        (if not NULL) and the extension defined by
 		 *        setHexExtension() appended (if not NULL)
 		 *
-		 *    * If the file is not found then "in" will be interpreted
-		 *      as not having been a file after all.  See the previous
-		 *      section for details.
+		 *    * If the file is not found, or if it is found but cannot
+		 *      be read (a directory, for example), then "in" will be
+		 *      interpreted as not having been a file after all.  See
+		 *      the previous section for details.
 		 *
 		 *    * If the file is found then the contents will be fetched.
+		 *      The size of the data is the number of bytes that were
+		 *      read, which may be less than the size that the file
+		 *      reports (as with some files in /sys).
 		 *
 		 *    * If the file format was FORMAT_TEXT, either:
 		 *    	  * by default

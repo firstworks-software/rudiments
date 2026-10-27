@@ -3,6 +3,7 @@
 
 #include <rudiments/ucs2charstring.h>
 #include <rudiments/ucs2character.h>
+#include <rudiments/charstring.h>
 
 inline
 ucs2stringbuffer::ucs2stringbuffer() : bytebuffer() {
@@ -36,20 +37,59 @@ ucs2stringbuffer::~ucs2stringbuffer() {
 
 inline
 off64_t ucs2stringbuffer::setPositionRelativeToBeginning(off64_t offset) {
+
+	// refuse an offset whose byte count does not fit an off64_t,
+	// or a position before the start
+	const off64_t	max=(((off64_t)1<<(sizeof(off64_t)*8-2))-1)*2+1;
+	if (offset>max/(off64_t)sizeof(ucs2_t) || offset<0) {
+		return -1;
+	}
+
+	// the byte position divided down to characters
 	return bytebuffer::setPositionRelativeToBeginning(
-						offset*sizeof(ucs2_t));
+			offset*(off64_t)sizeof(ucs2_t))/(off64_t)sizeof(ucs2_t);
 }
 
 inline
 off64_t ucs2stringbuffer::setPositionRelativeToCurrent(off64_t offset) {
+
+	// refuse an offset whose byte count does not fit an off64_t
+	const off64_t	max=(((off64_t)1<<(sizeof(off64_t)*8-2))-1)*2+1;
+	if (offset>max/(off64_t)sizeof(ucs2_t) ||
+		offset<(-max-1)/(off64_t)sizeof(ucs2_t)) {
+		return -1;
+	}
+
+	// refuse a position before the start
+	if (offset<0 &&
+		(uint64_t)(-offset)*sizeof(ucs2_t)>(uint64_t)_position()) {
+		return -1;
+	}
+
+	// the byte position divided down to characters
 	return bytebuffer::setPositionRelativeToCurrent(
-						offset*sizeof(ucs2_t));
+			offset*(off64_t)sizeof(ucs2_t))/(off64_t)sizeof(ucs2_t);
 }
 
 inline
 off64_t ucs2stringbuffer::setPositionRelativeToEnd(off64_t offset) {
+
+	// refuse an offset whose byte count does not fit an off64_t
+	const off64_t	max=(((off64_t)1<<(sizeof(off64_t)*8-2))-1)*2+1;
+	if (offset>max/(off64_t)sizeof(ucs2_t) ||
+		offset<(-max-1)/(off64_t)sizeof(ucs2_t)) {
+		return -1;
+	}
+
+	// refuse a position before the start
+	if (offset<0 &&
+		(uint64_t)(-offset)*sizeof(ucs2_t)>(uint64_t)_size()) {
+		return -1;
+	}
+
+	// the byte position divided down to characters
 	return bytebuffer::setPositionRelativeToEnd(
-						offset*sizeof(ucs2_t));
+			offset*(off64_t)sizeof(ucs2_t))/(off64_t)sizeof(ucs2_t);
 }
 
 inline
@@ -204,15 +244,13 @@ ucs2stringbuffer *ucs2stringbuffer::append(float number) {
 
 inline
 ucs2stringbuffer *ucs2stringbuffer::append(float number, uint16_t scale) {
-	printf("%.*f",scale,number);
-	return this;
+	return append((double)number,scale);
 }
 
 inline
 ucs2stringbuffer *ucs2stringbuffer::append(float number, uint16_t precision,
 							uint16_t scale) {
-	printf("%*.*f",precision,scale,number);
-	return this;
+	return append((double)number,precision,scale);
 }
 
 inline
@@ -222,14 +260,23 @@ ucs2stringbuffer *ucs2stringbuffer::append(double number) {
 
 inline
 ucs2stringbuffer *ucs2stringbuffer::append(double number, uint16_t scale) {
-	printf("%.*f",scale,number);
-	return this;
+
+	// a width of 0 is the scale-only format
+	return append(number,(uint16_t)0,scale);
 }
 
 inline
 ucs2stringbuffer *ucs2stringbuffer::append(double number, uint16_t precision,
 							uint16_t scale) {
-	printf("%*.*f",precision,scale,number);
+
+	// format as narrow text, then widen
+	char	*num=NULL;
+	if (charstring::printf(&num,"%*.*f",precision,scale,number)!=-1) {
+		ucs2_t	*wide=ucs2charstring::duplicate(num);
+		appendUcs2(wide);
+		delete[] wide;
+	}
+	delete[] num;
 	return this;
 }
 
@@ -261,17 +308,20 @@ ssize_t ucs2stringbuffer::writeUcs2(ucs2_t character) {
 
 inline
 ssize_t ucs2stringbuffer::write(int16_t number) {
-	return printf("%hd",number);
+	return write((int64_t)number);
 }
 
 inline
 ssize_t ucs2stringbuffer::write(int32_t number) {
-	return printf("%d",number);
+	return write((int64_t)number);
 }
 
 inline
 ssize_t ucs2stringbuffer::write(int64_t number) {
-	return printf("%lld",number);
+	ucs2_t	*num=ucs2charstring::parseNumber(number);
+	ssize_t	retval=writeUcs2(num);
+	delete[] num;
+	return retval;
 }
 
 inline
@@ -281,17 +331,20 @@ ssize_t ucs2stringbuffer::write(byte_t character) {
 
 inline
 ssize_t ucs2stringbuffer::write(uint16_t number) {
-	return printf("%hd",number);
+	return write((uint64_t)number);
 }
 
 inline
 ssize_t ucs2stringbuffer::write(uint32_t number) {
-	return printf("%d",number);
+	return write((uint64_t)number);
 }
 
 inline
 ssize_t ucs2stringbuffer::write(uint64_t number) {
-	return bytebuffer::printf("%lld",number);
+	ucs2_t	*num=ucs2charstring::parseNumber(number);
+	ssize_t	retval=writeUcs2(num);
+	delete[] num;
+	return retval;
 }
 
 inline
@@ -301,13 +354,13 @@ ssize_t ucs2stringbuffer::write(float number) {
 
 inline
 ssize_t ucs2stringbuffer::write(float number, uint16_t scale) {
-	return printf("%.*f",scale,number);
+	return write((double)number,scale);
 }
 
 inline
 ssize_t ucs2stringbuffer::write(float number,
 				uint16_t precision, uint16_t scale) {
-	return printf("%*.*f",precision,scale,number);
+	return write((double)number,precision,scale);
 }
 
 inline
@@ -317,21 +370,41 @@ ssize_t ucs2stringbuffer::write(double number) {
 
 inline
 ssize_t ucs2stringbuffer::write(double number, uint16_t scale) {
-	return printf("%.*f",scale,number);
+
+	// a width of 0 is the scale-only format
+	return write(number,(uint16_t)0,scale);
 }
 
 inline
 ssize_t ucs2stringbuffer::write(double number,
 				uint16_t precision, uint16_t scale) {
-	return printf("%*.*f",precision,scale,number);
+
+	// format as narrow text, then widen
+	char	*num=NULL;
+	ssize_t	retval=charstring::printf(&num,"%*.*f",precision,scale,number);
+	if (retval!=-1) {
+		ucs2_t	*wide=ucs2charstring::duplicate(num);
+		retval=writeUcs2(wide);
+		delete[] wide;
+	}
+	delete[] num;
+	return retval;
 }
 
 inline
 void ucs2stringbuffer::truncate(size_t pos) {
-	bytebuffer::truncate(pos);
+
+	// a position too large for a byte count truncates nothing
+	if (pos>(size_t)-1/sizeof(ucs2_t)) {
+		return;
+	}
+	bytebuffer::truncate(pos*sizeof(ucs2_t));
 }
 
 inline
 void ucs2stringbuffer::truncate() {
-	bytebuffer::truncate();
+
+	// The inherited truncate() would call the virtual truncate(size_t),
+	// which takes characters, with a byte count.
+	bytebuffer::truncate(_position());
 }

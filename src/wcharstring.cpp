@@ -335,6 +335,11 @@ wchar_t *wcharstring::replace(const wchar_t *str,
 		return NULL;
 	}
 
+	// a NULL array is an empty set
+	if (!oldstrset || !oldstrlen || !newstrset) {
+		return duplicate(str);
+	}
+
 	// search and replace
 	wstringbuffer	newstring;
 	const wchar_t	*ptr=str;
@@ -425,6 +430,11 @@ wchar_t *wcharstring::replaceIgnoringCase(const wchar_t *str,
 					const wchar_t * const *newstrset) {
 	if (!str) {
 		return NULL;
+	}
+
+	// a NULL array is an empty set
+	if (!oldstrset || !oldstrlen || !newstrset) {
+		return duplicate(str);
 	}
 
 	// search and replace
@@ -796,7 +806,7 @@ void wcharstring::center(wchar_t *str, int32_t length) {
 	int32_t	leadingspaces=countLeadingSpaces(str,length);
 	int32_t	trailingspaces=countTrailingSpaces(str,length);
 
-	int32_t	leftpad=(leadingspaces+trailingspaces)/2;
+	int32_t	leftpad=(int32_t)(((int64_t)leadingspaces+trailingspaces)/2);
 
 	if (leftpad>leadingspaces) {
 		// shift everything right

@@ -314,14 +314,32 @@ bool sensitivevalue::getValueFromFile(const char *filename,
 						bool hexdecode, bool chomp) {
 	file	f;
 	if (f.open(filename,O_RDONLY)) {
+
+		// read the file, a file that opens but can't be read is
+		// handled like a file that can't be opened
+		byte_t	*contents=NULL;
+		size_t	contentssize=0;
+		if (f.getContents(&contents,&contentssize)==-1) {
+			return false;
+		}
+
+		// the size is the number of bytes that were read
 		if (hexdecode) {
-			charstring::hexDecode(f.getContents(),
-							f.getSize(),
-							&(pvt->_value),
-							&(pvt->_valuesize));
+			charstring::hexDecode((contents)?
+						(const char *)contents:"",
+						contentssize,
+						&(pvt->_value),
+						&(pvt->_valuesize));
+			delete[] contents;
 		} else {
-			pvt->_valuesize=f.getSize();
-			pvt->_value=(byte_t *)f.getContents();
+			pvt->_value=new byte_t[contentssize+1];
+			if (contentssize) {
+				bytestring::copy(pvt->_value,
+						contents,contentssize);
+			}
+			pvt->_value[contentssize]='\0';
+			pvt->_valuesize=contentssize;
+			delete[] contents;
 		}
 		if (chomp) {
 			if (pvt->_valuesize>=2) {

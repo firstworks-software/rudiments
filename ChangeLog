@@ -239,15 +239,30 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - fixed charstring, wcharstring, and ucs2charstring findLast() and
   findLastIgnoringCase() missing a match at position 0, and
   findLastIgnoringCase(char) returning the wrong match
+- fixed bytestring::findLast() forming a pointer before the haystack,
+  and crashing or over-reading when needlesize > haystacksize
 - fixed charstring, wcharstring, and ucs2charstring convertAmount(),
   getIntegerLength(), and parseNumber() results for negative amounts
   and the minimum integer values
 - fixed wstringbuffer and ucs2stringbuffer getString() removing the
-  wrong amount and ucs2stringbuffer::getPosition() units
+  wrong amount, setPosition*() and truncate() units and range checks,
+  and ucs2stringbuffer::getPosition() units
 - added a wstringbuffer initialsize overflow check
-- fixed file::getContents() ignoring a read error
+- fixed file::getContents() ignoring a read error or an unopened
+  file, failing on a short read, and mishandling an oversized file
 - defined the missing ucs2charstring::duplicate(const wchar_t *) forms
-  and fixed the bigendian one ignoring the byte order
+  and fixed the bigendian ones ignoring the byte order, also
+  ucs2character::duplicate(wchar_t,bool)
+- fixed charstring, wcharstring, and ucs2charstring center() overflow
+  on huge all-space lengths
+- fixed charstring, wcharstring, and ucs2charstring replace() and
+  replaceIgnoringCase() crashing on NULL string set arrays
+- fixed unsigned write() formats in the stringbuffer, wstringbuffer, and
+  ucs2stringbuffer, and ucs2stringbuffer numeric output using
+  narrow printf
+- documented the ucs2stringbuffer initial size as bytes
+- fixed sensitivevalue::parse() crashing on an unreadable file,
+  using the file size instead of the bytes read, and leaking
 
 ### Security
 - fixed buffer overflow when unix socket file name is too long

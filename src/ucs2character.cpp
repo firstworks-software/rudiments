@@ -127,7 +127,7 @@ ucs2_t ucs2character::duplicate(wchar_t c, ucs2_t replacement) {
 }
 
 ucs2_t ucs2character::duplicate(wchar_t c, bool bigendian) {
-	return duplicate(c,(ucs2_t)'?',sys::isBigEndian());
+	return duplicate(c,(ucs2_t)'?',bigendian);
 }
 
 ucs2_t ucs2character::duplicate(wchar_t c, ucs2_t replacement, bool bigendian) {

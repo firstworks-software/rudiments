@@ -107,7 +107,14 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  No end-of-line translation is performed.
 		 * 
 		 *  If the file contains no data, then an empty string is
-		 *  returned.  If an error occurs then a NULL is returned. */
+		 *  returned.  If an error occurs then a NULL is returned.
+		 *  An error occurs if the file is not open, if a read fails,
+		 *  or if the file is larger than the largest string that
+		 *  can be allocated (SSIZE_MAX bytes including the NULL).
+		 *
+		 *  If the file has less data than its size reports, as with
+		 *  some files in /sys, then the string holds the data that
+		 *  was read. */
 		virtual char	*getContents();
 
 		/** Reads the contents of the currently open file into
@@ -133,9 +140,16 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  No end-of-line translation is performed.
 		 * 
 		 *  Returns the number of bytes copied into "buffer" or
-		 *  -1 on error.  If reading a file of unknown size fails,
-		 *  then -1 is returned, "buffer" is set to NULL and
-		 *  "buffersize" is set to 0. */
+		 *  -1 on error.  On error, "buffer" is set to NULL and
+		 *  "buffersize" is set to 0.  An error occurs if the file
+		 *  is not open, if a read fails, or if the file is larger
+		 *  than the largest buffer that can be allocated (SSIZE_MAX
+		 *  bytes).
+		 *
+		 *  If the file has less data than its size reports, as with
+		 *  some files in /sys, then that is not an error.  The bytes
+		 *  that were read are returned and "buffersize" is set to
+		 *  that number. */
 		virtual ssize_t	getContents(byte_t **buffer,
 							size_t *buffersize);
 
@@ -939,7 +953,14 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 * 
 		 *  If the file contains no data, then an empty string is
 		 *  returned.  If an error occurs then a NULL
-		 *  is returned. */
+		 *  is returned.  An error occurs if the file cannot be
+		 *  opened, if a read fails, or if the file is larger than
+		 *  the largest string that can be allocated (SSIZE_MAX bytes
+		 *  including the NULL).
+		 *
+		 *  If the file has less data than its size reports, as with
+		 *  some files in /sys, then the string holds the data that
+		 *  was read. */
 		static	char	*getContents(const char *name);
 
 		/** Reads the contents of the file "name" into
@@ -965,9 +986,16 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  No end-of-line translation is performed.
 		 * 
 		 *  Returns the number of bytes copied into "buffer" or
-		 *  -1 on error.  If reading a file of unknown size fails,
-		 *  then -1 is returned, "buffer" is set to NULL and
-		 *  "buffersize" is set to 0. */
+		 *  -1 on error.  On error, "buffer" is set to NULL and
+		 *  "buffersize" is set to 0.  An error occurs if the file
+		 *  cannot be opened, if a read fails, or if the file is larger
+		 *  than the largest buffer that can be allocated (SSIZE_MAX
+		 *  bytes).
+		 *
+		 *  If the file has less data than its size reports, as with
+		 *  some files in /sys, then that is not an error.  The bytes
+		 *  that were read are returned and "buffersize" is set to
+		 *  that number. */
 		virtual ssize_t	getContents(const char *name,
 						byte_t **buffer,
 						size_t *buffersize);

@@ -103,14 +103,12 @@ const void *bytestring::findLast(const void *haystack,
 		return (haystack)?
 			memrchr(haystack,needle,size):NULL;
 	#else
-		if (haystack && size) {
-			byte_t	realneedle=needle;
-			// start at the last byte, not one past it
-			for (const byte_t *ptr=((const byte_t *)haystack)+
-								size-1;
-						ptr>=(const byte_t *)haystack;
-						ptr--) {
-				if (*ptr==realneedle) {
+		if (haystack) {
+			// count down so no pointer before the start is formed
+			for (size_t i=size; i>0; i--) {
+				const byte_t	*ptr=
+					(const byte_t *)haystack+i-1;
+				if (*ptr==needle) {
 					return (const void *)ptr;
 				}
 			}
@@ -151,15 +149,20 @@ const void *bytestring::findFirst(const void *haystack, size_t haystacksize,
 const void *bytestring::findLast(const void *haystack, size_t haystacksize,
 					const void *needle, size_t needlesize) {
 
-	if (haystack && needle) {
-		for (const byte_t *ptr=(const byte_t *)haystack+
-						haystacksize-needlesize;
-					ptr>=(const byte_t *)haystack;
-					ptr--) {
+	if (haystack && needle && needlesize<=haystacksize) {
 
+		// offset is the last position the needle can start at,
+		// count down so no pointer before the start is formed
+		size_t	offset=haystacksize-needlesize;
+		for (;;) {
+			const byte_t	*ptr=(const byte_t *)haystack+offset;
 			if (!memcmp(ptr,needle,needlesize)) {
-				return (void *)ptr;
+				return (const void *)ptr;
 			}
+			if (!offset) {
+				break;
+			}
+			offset--;
 		}
 	}
 	return NULL;

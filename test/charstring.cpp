@@ -973,6 +973,88 @@ static void emptyPatternSetTest(const char *label, const char *str,
 	delete[] s;
 }
 
+// checks one result of a set form of replace() or replaceIgnoringCase():
+// it must be a new copy, equal to "expected"
+static void nullSetCheck(const char *label, const char *str, char *result,
+							const char *expected) {
+	test(label,(result && result!=str &&
+			emptyPatternMatches(result,expected)));
+	delete[] result;
+}
+
+// checks the set forms of replace() and replaceIgnoringCase() with a NULL
+// oldstrset, newstrset or oldstrlen, which each count as an empty set, on
+// exact-size heap copies of the inputs; a NULL member of newstrset deletes
+// its match; "bx" is the result of replacing b with X
+static void nullSetTest(const char *label, const char *str, const char *bx,
+							const char *nob) {
+	char		*s=emptyPatternCopy(str);
+	const char	**o=new const char *[2];
+	const char	**n=new const char *[2];
+	const char	**d=new const char *[2];
+	size_t		*l=new size_t[1];
+	o[0]=emptyPatternCopy("b");
+	o[1]=NULL;
+	n[0]=emptyPatternCopy("X");
+	n[1]=NULL;
+	d[0]=NULL;
+	d[1]=NULL;
+	l[0]=1;
+	const char * const	*nullset=NULL;
+	size_t			*nulllen=NULL;
+	stringbuffer		name;
+	for (int ic=0; ic<2; ic++) {
+		const char	*fn=(ic)?" replaceIgnoringCase":" replace";
+		#define NULLSETNAME(what) \
+			name.clear(); \
+			name.append(label)->append(fn)->append(what)
+		#define NULLSETCALL(args) \
+			((ic)?charstring::replaceIgnoringCase args: \
+				charstring::replace args)
+		NULLSETNAME(" NULL oldstrset");
+		nullSetCheck(name.getString(),s,
+			NULLSETCALL((s,nullset,n)),str);
+		NULLSETNAME(" NULL newstrset");
+		nullSetCheck(name.getString(),s,
+			NULLSETCALL((s,o,nullset)),str);
+		NULLSETNAME(" NULL oldstrset, length");
+		nullSetCheck(name.getString(),s,
+			NULLSETCALL((s,nullset,l,n)),str);
+		NULLSETNAME(" NULL oldstrlen");
+		nullSetCheck(name.getString(),s,
+			NULLSETCALL((s,o,nulllen,n)),str);
+		NULLSETNAME(" NULL newstrset, length");
+		nullSetCheck(name.getString(),s,
+			NULLSETCALL((s,o,l,nullset)),str);
+		NULLSETNAME(" NULL str");
+		test(name.getString(),!NULLSETCALL((NULL,nullset,nullset)));
+		NULLSETNAME(" NULL str, length");
+		test(name.getString(),
+			!NULLSETCALL((NULL,nullset,nulllen,nullset)));
+		NULLSETNAME(" valid arrays");
+		nullSetCheck(name.getString(),s,
+			NULLSETCALL((s,o,n)),bx);
+		NULLSETNAME(" valid arrays, length");
+		nullSetCheck(name.getString(),s,
+			NULLSETCALL((s,o,l,n)),bx);
+		NULLSETNAME(" NULL member of newstrset");
+		nullSetCheck(name.getString(),s,
+			NULLSETCALL((s,o,d)),nob);
+		NULLSETNAME(" NULL member of newstrset, length");
+		nullSetCheck(name.getString(),s,
+			NULLSETCALL((s,o,l,d)),nob);
+		#undef NULLSETNAME
+		#undef NULLSETCALL
+	}
+	delete[] o[0];
+	delete[] n[0];
+	delete[] o;
+	delete[] n;
+	delete[] d;
+	delete[] l;
+	delete[] s;
+}
+
 // checks strip(str1,str2) on exact-size heap copies of the inputs
 static void emptyPatternStripTest(const char *label, const char *str1,
 					const char *str2,
@@ -1367,6 +1449,40 @@ static void rangeJustifyLengthTest(const char *label, int32_t len) {
 		charstring::center(buf,len);
 		ok=(ok && rangeEqual(buf," a ",n));
 		delete[] buf;
+	}
+	test(label,ok);
+}
+
+// checks center() on all-space strings and on one character in a long run of
+// spaces, in exact-size heap buffers that have no terminator
+static void rangeCenterSpacesTest(const char *label) {
+	bool	ok=true;
+	const size_t	lens[]={1,2,3,7,100,70001};
+	for (size_t l=0; l<sizeof(lens)/sizeof(lens[0]); l++) {
+		size_t	n=lens[l];
+		char	*str=new char[n];
+		for (size_t i=0; i<n; i++) {
+			str[i]=' ';
+		}
+		char	*buf=rangeMake(str,n);
+		charstring::center(buf,(int32_t)n);
+		ok=(ok && rangeEqual(buf,str,n));
+		delete[] buf;
+		if (n>2) {
+			// "x" in the first position moves to the middle
+			str[0]='x';
+			char	*exp=new char[n];
+			for (size_t i=0; i<n; i++) {
+				exp[i]=' ';
+			}
+			exp[(n-1)/2]='x';
+			buf=rangeMake(str,n);
+			charstring::center(buf,(int32_t)n);
+			ok=(ok && rangeEqual(buf,exp,n));
+			delete[] buf;
+			delete[] exp;
+		}
+		delete[] str;
 	}
 	test(label,ok);
 }
@@ -5519,6 +5635,11 @@ int main(int argc, const char **argv) {
 	emptyPatternSetTest("length case","aBc",setupper,len10,setnew2,
 					"aBc","1Bc");
 
+	// a NULL array is an empty set, so the result is a copy of str
+	nullSetTest("NULL array","abcabc","aXcaXc","acac");
+	nullSetTest("NULL array, empty str","","","");
+	nullSetTest("NULL array, no match","aaa","aaa","aaa");
+
 	emptyPatternStripTest("strip empty str2","abc","","abc",false);
 	emptyPatternStripTest("strip NULL str2","abc",NULL,"abc",false);
 	emptyPatternStripTest("strip empty str1, empty str2","","","",false);
@@ -5643,6 +5764,7 @@ int main(int argc, const char **argv) {
 	rangeJustifyLengthTest("justify, length -1",-1);
 	rangeJustifyLengthTest("justify, length -5",-5);
 	rangeJustifyLengthTest("justify, length INT32_MIN",rangeMinLen);
+	rangeCenterSpacesTest("center, all spaces and one character");
 	rangeNumberLengthTest("isInteger/isNumber, length 0",0);
 	rangeNumberLengthTest("isInteger/isNumber, length -1",-1);
 	rangeNumberLengthTest("isInteger/isNumber, length -5",-5);

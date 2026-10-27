@@ -1032,7 +1032,10 @@ class RUDIMENTS_DLLSPEC ucs2charstring {
 		 *  "newstrset", which must have the same number of members as
 		 *  "oldstrset".
 		 *  A member of "oldstrset" that is empty is skipped, but the
-		 *  other members are still replaced. */
+		 *  other members are still replaced.
+		 *  A NULL "oldstrset" or "newstrset" is an empty set, so the
+		 *  new string is a plain copy of "str".
+		 *  A NULL member of "newstrset" deletes its match. */
 		static	ucs2_t	*replace(const ucs2_t *str,
 					const ucs2_t * const *oldstrset,
 					const ucs2_t * const *newstrset);
@@ -1045,7 +1048,10 @@ class RUDIMENTS_DLLSPEC ucs2charstring {
 		 *  "newstrset", which must have the same number of members as
 		 *  "oldstrset".
 		 *  A member of "oldstrset" whose length in "oldstrlen" is 0 is
-		 *  skipped, but the other members are still replaced. */
+		 *  skipped, but the other members are still replaced.
+		 *  A NULL "oldstrset", "oldstrlen" or "newstrset" is an
+		 *  empty set, so the new string is a plain copy of "str".
+		 *  A NULL member of "newstrset" deletes its match. */
 		static	ucs2_t	*replace(const ucs2_t *str,
 					const ucs2_t * const *oldstrset,
 					size_t *oldstrlen,
@@ -1079,7 +1085,10 @@ class RUDIMENTS_DLLSPEC ucs2charstring {
 		 *  "newstrset", which must have the same number of members as
 		 *  "oldstrset", ignoring case.
 		 *  A member of "oldstrset" that is empty is skipped, but the
-		 *  other members are still replaced. */
+		 *  other members are still replaced.
+		 *  A NULL "oldstrset" or "newstrset" is an empty set, so the
+		 *  new string is a plain copy of "str".
+		 *  A NULL member of "newstrset" deletes its match. */
 		static	ucs2_t	*replaceIgnoringCase(const ucs2_t *str,
 					const ucs2_t * const *oldstrset,
 					const ucs2_t * const *newstrset);
@@ -1092,7 +1101,10 @@ class RUDIMENTS_DLLSPEC ucs2charstring {
 		 *  "newstrset", which must have the same number of members as
 		 *  "oldstrset", ignoring case.
 		 *  A member of "oldstrset" whose length in "oldstrlen" is 0 is
-		 *  skipped, but the other members are still replaced. */
+		 *  skipped, but the other members are still replaced.
+		 *  A NULL "oldstrset", "oldstrlen" or "newstrset" is an
+		 *  empty set, so the new string is a plain copy of "str".
+		 *  A NULL member of "newstrset" deletes its match. */
 		static	ucs2_t	*replaceIgnoringCase(const ucs2_t *str,
 					const ucs2_t * const *oldstrset,
 					size_t *oldstrlen,

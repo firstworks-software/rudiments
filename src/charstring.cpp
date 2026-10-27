@@ -325,6 +325,11 @@ char *charstring::replace(const char *str, const char * const *oldstrset,
 		return NULL;
 	}
 
+	// a NULL array is an empty set
+	if (!oldstrset || !newstrset) {
+		return duplicate(str);
+	}
+
 	// count members of oldstrset
 	uint64_t	i=0;
 	for (const char * const *o=oldstrset; *o; o++) {
@@ -353,6 +358,11 @@ char *charstring::replace(const char *str, const char * const *oldstrset,
 						const char * const *newstrset) {
 	if (!str) {
 		return NULL;
+	}
+
+	// a NULL array is an empty set
+	if (!oldstrset || !oldstrlen || !newstrset) {
+		return duplicate(str);
 	}
 
 	// search and replace
@@ -442,6 +452,11 @@ char *charstring::replaceIgnoringCase(const char *str,
 		return NULL;
 	}
 
+	// a NULL array is an empty set
+	if (!oldstrset || !newstrset) {
+		return duplicate(str);
+	}
+
 	// count members of oldstrset
 	uint64_t	i=0;
 	for (const char * const *o=oldstrset; *o; o++) {
@@ -471,6 +486,11 @@ char *charstring::replaceIgnoringCase(const char *str,
 					const char * const *newstrset) {
 	if (!str) {
 		return NULL;
+	}
+
+	// a NULL array is an empty set
+	if (!oldstrset || !oldstrlen || !newstrset) {
+		return duplicate(str);
 	}
 
 	// search and replace
@@ -1845,7 +1865,7 @@ void charstring::center(char *str, int32_t len) {
 	int32_t	leadingspaces=countLeadingSpaces(str,len);
 	int32_t	trailingspaces=countTrailingSpaces(str,len);
 
-	int32_t	leftpad=(leadingspaces+trailingspaces)/2;
+	int32_t	leftpad=(int32_t)(((int64_t)leadingspaces+trailingspaces)/2);
 
 	if (leftpad>leadingspaces) {
 		// shift everything right

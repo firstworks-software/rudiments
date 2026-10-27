@@ -66,6 +66,18 @@
 #ifdef RUDIMENTS_HAVE_GLOB_H
 	#include <glob.h>
 #endif
+#ifdef RUDIMENTS_HAVE_LIMITS_H
+	#include <limits.h>
+#endif
+
+// if SSIZE_MAX is undefined, choose the largest value a size_t can hold
+// that is also positive when stored in an ssize_t
+#ifndef SSIZE_MAX
+	#define SSIZE_MAX ((size_t)-1>>1)
+#endif
+
+// the largest buffer getContents allocates, the largest value read() returns
+#define CONTENTS_LIMIT ((uint64_t)SSIZE_MAX)
 
 // windows doesn't define these, but we need them
 // internally to this file
@@ -398,23 +410,33 @@ ssize_t file::getContents(byte_t **buffer, size_t *buffersize,
 							bool terminate) {
 	byte_t	*intbuffer=NULL;
 	size_t	intbuffersize=0;
-	bool	readerror=false;
+	bool	failed=false;
 	if (fd()!=-1) {
 		getCurrentProperties();
 		off64_t	curpos=getPosition();
 		setPositionRelativeToBeginning(0);
 		if (pvt->_st.st_size) {
-			intbuffersize=pvt->_st.st_size;
-			intbuffer=new byte_t[intbuffersize+((terminate)?1:0)];
-			if (terminate) {
-				intbuffer[intbuffersize]='\0';
-			}
-			if (intbuffersize &&
-				(size_t)read(intbuffer,intbuffersize)!=
-								intbuffersize) {
-				delete[] intbuffer;
-				intbuffer=NULL;
-				intbuffersize=0;
+			// refuse a size that cannot be addressed
+			uint64_t	extra=(terminate)?1:0;
+			uint64_t	filesize=(uint64_t)pvt->_st.st_size;
+			if (filesize>CONTENTS_LIMIT-extra) {
+				failed=true;
+			} else {
+				intbuffersize=filesize;
+				intbuffer=new byte_t[intbuffersize+extra];
+				ssize_t	bytes=read(intbuffer,intbuffersize);
+				if (bytes<0) {
+					delete[] intbuffer;
+					intbuffer=NULL;
+					intbuffersize=0;
+					failed=true;
+				} else {
+					// st_size may be more than the data
+					intbuffersize=bytes;
+					if (terminate) {
+						intbuffer[intbuffersize]='\0';
+					}
+				}
 			}
 		} else {
 			bytebuffer	cts;
@@ -426,21 +448,23 @@ ssize_t file::getContents(byte_t **buffer, size_t *buffersize,
 				ssize_t	s=read(buf,sizeof(buf));
 				if (s<0) {
 					// cts frees what it accumulated
-					readerror=true;
+					failed=true;
 					break;
 				}
 				cts.append(buf,s);
 				if (s<(ssize_t)sizeof(buf)) {
+					intbuffersize=cts.getSize();
 					if (terminate) {
 						cts.append('\0');
 					}
-					intbuffersize=cts.getSize();
 					intbuffer=cts.detachBuffer();
 					break;
 				}
 			}
 		}
 		setPositionRelativeToBeginning(curpos);
+	} else {
+		failed=true;
 	}
 	if (buffer) {
 		*buffer=intbuffer;
@@ -448,7 +472,7 @@ ssize_t file::getContents(byte_t **buffer, size_t *buffersize,
 	if (buffersize) {
 		*buffersize=intbuffersize;
 	}
-	return (readerror)?-1:intbuffersize;
+	return (failed)?-1:intbuffersize;
 }
 
 ssize_t file::getContents(const char *name, byte_t **buffer,

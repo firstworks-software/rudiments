@@ -70,8 +70,7 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 		 *  the data that was written.  If necessary, the internal
 		 *  buffer will grow to accommodate the new data.
 		 *
-		 *  Returns a pointer to "this" to enable chaining such as:
-		 *	sb->write("numbers: ")->write(5)->write(5.5); */
+		 *  Returns the number of bytes written or -1 on error. */
 		ssize_t	write(const byte_t *string);
 
 		/** Writes the first "size" bytes of "string" to the
@@ -80,8 +79,7 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 		 *  written.  If necessary, the internal buffer will grow to
 		 *  accommodate the new data.
 		 *
-		 *  Returns a pointer to "this" to enable chaining such as:
-		 *	sb->write("numbers: ")->write(5)->write(5.5); */
+		 *  Returns the number of bytes written or -1 on error. */
 		ssize_t	write(const byte_t *string, size_t size);
 
 		/** Writes "string" to the stringbuffer at the current position
@@ -89,8 +87,7 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 		 *  the data that was written.  If necessary, the internal
 		 *  buffer will grow to accommodate the new data.
 		 *
-		 *  Returns a pointer to "this" to enable chaining such as:
-		 *	sb->write("numbers: ")->write(5)->write(5.5); */
+		 *  Returns the number of bytes written or -1 on error. */
 		ssize_t	write(const char *string);
 
 		/** Writes the first "length" characters of "string" to the
@@ -99,8 +96,7 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 		 *  written.  If necessary, the internal buffer will grow to
 		 *  accommodate the new data.
 		 *
-		 *  Returns a pointer to "this" to enable chaining such as:
-		 *	sb->write("numbers: ")->write(5)->write(5.5); */
+		 *  Returns the number of bytes written or -1 on error. */
 		ssize_t	write(const char *string, size_t length);
 
 		/** Writes "character" to the stringbuffer at the current
@@ -108,8 +104,7 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 		 *  byte after the data that was written.  If necessary, the
 		 *  internal buffer will grow to accommodate the new data.
 		 *
-		 *  Returns a pointer to "this" to enable chaining such as:
-		 *	sb->write("numbers: ")->write(5)->write(5.5); */
+		 *  Returns the number of bytes written or -1 on error. */
 		ssize_t	write(char character);
 
 		/** Converts "number" to a string and writes it to the
@@ -118,8 +113,7 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 		 *  written.  If necessary, the internal buffer will grow to
 		 *  accommodate the new data.
 		 *
-		 *  Returns a pointer to "this" to enable chaining such as:
-		 *	sb->write("numbers: ")->write(5)->write(5.5); */
+		 *  Returns the number of bytes written or -1 on error. */
 		ssize_t	write(int16_t number);
 
 		/** Converts "number" to a string and writes it to the
@@ -128,8 +122,7 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 		 *  written.  If necessary, the internal buffer will grow to
 		 *  accommodate the new data.
 		 *
-		 *  Returns a pointer to "this" to enable chaining such as:
-		 *	sb->write("numbers: ")->write(5)->write(5.5); */
+		 *  Returns the number of bytes written or -1 on error. */
 		ssize_t	write(int32_t number);
 
 		/** Converts "number" to a string and writes it to the
@@ -138,8 +131,7 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 		 *  written.  If necessary, the inernal buffer will grow to
 		 *  accommodate the new data.
 		 *
-		 *  Returns a pointer to "this" to enable chaining such as:
-		 *	sb->write("numbers: ")->write(5)->write(5.5); */
+		 *  Returns the number of bytes written or -1 on error. */
 		ssize_t	write(int64_t number);
 
 		/** Writes "character" to the stringbuffer at the current
@@ -147,8 +139,7 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 		 *  byte after the data that was written.  If necessary, the
 		 *  internal buffer will grow to accommodate the new data.
 		 *
-		 *  Returns a pointer to "this" to enable chaining such as:
-		 *	sb->write("numbers: ")->write(5)->write(5.5); */
+		 *  Returns the number of bytes written or -1 on error. */
 		ssize_t	write(byte_t character);
 
 		/** Converts "number" to a string and writes it to the
@@ -157,8 +148,7 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 		 *  written.  If necessary, the internal buffer will grow to
 		 *  accommodate the new data.
 		 *
-		 *  Returns a pointer to "this" to enable chaining such as:
-		 *	sb->write("numbers: ")->write(5)->write(5.5); */
+		 *  Returns the number of bytes written or -1 on error. */
 		ssize_t	write(uint16_t number);
 
 		/** Converts "number" to a string and writes it to the
@@ -167,8 +157,7 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 		 *  written.  If necessary, the internal buffer will grow to
 		 *  accommodate the new data.
 		 *
-		 *  Returns a pointer to "this" to enable chaining such as:
-		 *	sb->write("numbers: ")->write(5)->write(5.5); */
+		 *  Returns the number of bytes written or -1 on error. */
 		ssize_t	write(uint32_t number);
 
 		/** Converts "number" to a string and writes it to the
@@ -177,8 +166,7 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 		 *  written.  If necessary, the internal buffer will grow to
 		 *  accommodate the new data.
 		 *
-		 *  Returns a pointer to "this" to enable chaining such as:
-		 *	sb->write("numbers: ")->write(5)->write(5.5); */
+		 *  Returns the number of bytes written or -1 on error. */
 		ssize_t	write(uint64_t number);
 
 		/** Converts "number" to a string (using a default scale of 4)
@@ -187,8 +175,7 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 		 *  the data that was written.  If necessary, the interna
 		 *  buffer will grow to accommodate the new data.
 		 *
-		 *  Returns a pointer to "this" to enable chaining such as:
-		 *	sb->write("numbers: ")->write(5)->write(5.5); */
+		 *  Returns the number of bytes written or -1 on error. */
 		ssize_t	write(float number);
 
 		/** Converts "number" to a string using the specified "scale"
@@ -197,8 +184,7 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 		 *  the data that was written.  If necessary, the internal
 		 *  buffer will grow to accommodate the new data.
 		 *
-		 *  Returns a pointer to "this" to enable chaining such as:
-		 *	sb->write("numbers: ")->write(5)->write(5.5); */
+		 *  Returns the number of bytes written or -1 on error. */
 		ssize_t	write(float number, uint16_t scale);
 
 		/** Converts "number" to a string using the specified
@@ -208,8 +194,7 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 		 *  necessary, the internal buffer will grow to accommodate the
 		 *  new data.
 		 *
-		 *  Returns a pointer to "this" to enable chaining such as:
-		 *	sb->write("numbers: ")->write(5)->write(5.5); */
+		 *  Returns the number of bytes written or -1 on error. */
 		ssize_t	write(float number, uint16_t precision,
 							uint16_t scale);
 
@@ -219,8 +204,7 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 		 *  the data that was written.  If necessary, the internal
 		 *  buffer will grow to accommodate the new data.
 		 *
-		 *  Returns a pointer to "this" to enable chaining such as:
-		 *	sb->write("numbers: ")->write(5)->write(5.5); */
+		 *  Returns the number of bytes written or -1 on error. */
 		ssize_t	write(double number);
 
 		/** Converts "number" to a string using the specified "scale"
@@ -229,8 +213,7 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 		 *  the data that was written.  If necessary, the internal
 		 *  buffer will grow to accommodate the new data.
 		 *
-		 *  Returns a pointer to "this" to enable chaining such as:
-		 *	sb->write("numbers: ")->write(5)->write(5.5); */
+		 *  Returns the number of bytes written or -1 on error. */
 		ssize_t	write(double number, uint16_t scale);
 
 		/** Converts "number" to a string using the specified
@@ -240,8 +223,7 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 		 *  necessary, the internal buffer will grow to accommodate the
 		 *  new data.
 		 *
-		 *  Returns a pointer to "this" to enable chaining such as:
-		 *	sb->write("numbers: ")->write(5)->write(5.5); */
+		 *  Returns the number of bytes written or -1 on error. */
 		ssize_t	write(double number, uint16_t precision,
 							uint16_t scale);
 

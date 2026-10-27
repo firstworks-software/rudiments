@@ -38,20 +38,62 @@ wstringbuffer::~wstringbuffer() {
 
 inline
 off64_t wstringbuffer::setPositionRelativeToBeginning(off64_t offset) {
+
+	// refuse an offset whose byte count does not fit an off64_t,
+	// or a position before the start
+	const off64_t	max=(((off64_t)1<<(sizeof(off64_t)*8-2))-1)*2+1;
+	if (offset>max/(off64_t)sizeof(wchar_t) || offset<0) {
+		return -1;
+	}
+
+	// the byte position divided down to characters
 	return bytebuffer::setPositionRelativeToBeginning(
-					offset*sizeof(wchar_t));
+			offset*(off64_t)sizeof(wchar_t))/
+			(off64_t)sizeof(wchar_t);
 }
 
 inline
 off64_t wstringbuffer::setPositionRelativeToCurrent(off64_t offset) {
+
+	// refuse an offset whose byte count does not fit an off64_t
+	const off64_t	max=(((off64_t)1<<(sizeof(off64_t)*8-2))-1)*2+1;
+	if (offset>max/(off64_t)sizeof(wchar_t) ||
+		offset<(-max-1)/(off64_t)sizeof(wchar_t)) {
+		return -1;
+	}
+
+	// refuse a position before the start
+	if (offset<0 &&
+		(uint64_t)(-offset)*sizeof(wchar_t)>(uint64_t)_position()) {
+		return -1;
+	}
+
+	// the byte position divided down to characters
 	return bytebuffer::setPositionRelativeToCurrent(
-					offset*sizeof(wchar_t));
+			offset*(off64_t)sizeof(wchar_t))/
+			(off64_t)sizeof(wchar_t);
 }
 
 inline
 off64_t wstringbuffer::setPositionRelativeToEnd(off64_t offset) {
+
+	// refuse an offset whose byte count does not fit an off64_t
+	const off64_t	max=(((off64_t)1<<(sizeof(off64_t)*8-2))-1)*2+1;
+	if (offset>max/(off64_t)sizeof(wchar_t) ||
+		offset<(-max-1)/(off64_t)sizeof(wchar_t)) {
+		return -1;
+	}
+
+	// refuse a position before the start
+	if (offset<0 &&
+		(uint64_t)(-offset)*sizeof(wchar_t)>(uint64_t)_size()) {
+		return -1;
+	}
+
+	// the byte position divided down to characters
 	return bytebuffer::setPositionRelativeToEnd(
-					offset*sizeof(wchar_t));
+			offset*(off64_t)sizeof(wchar_t))/
+			(off64_t)sizeof(wchar_t);
 }
 
 inline
@@ -256,7 +298,7 @@ ssize_t wstringbuffer::write(int32_t number) {
 inline
 ssize_t wstringbuffer::write(int64_t number) {
 	if (wcharstring::supportsPrintf()) {
-		return printf(L"%lld",number);
+		return printf(L"%lld",(long long)number);
 	} else {
 		wchar_t	*s=wcharstring::parseNumber(number);
 		ssize_t	retval=write(s);
@@ -268,7 +310,7 @@ ssize_t wstringbuffer::write(int64_t number) {
 inline
 ssize_t wstringbuffer::write(uint16_t number) {
 	if (wcharstring::supportsPrintf()) {
-		return printf(L"%hd",number);
+		return printf(L"%hu",(unsigned int)number);
 	} else {
 		wchar_t	*s=wcharstring::parseNumber(number);
 		ssize_t	retval=write(s);
@@ -280,7 +322,7 @@ ssize_t wstringbuffer::write(uint16_t number) {
 inline
 ssize_t wstringbuffer::write(uint32_t number) {
 	if (wcharstring::supportsPrintf()) {
-		return printf(L"%d",number);
+		return printf(L"%u",(unsigned int)number);
 	} else {
 		wchar_t	*s=wcharstring::parseNumber(number);
 		ssize_t	retval=write(s);
@@ -292,7 +334,7 @@ ssize_t wstringbuffer::write(uint32_t number) {
 inline
 ssize_t wstringbuffer::write(uint64_t number) {
 	if (wcharstring::supportsPrintf()) {
-		return bytebuffer::printf(L"%lld",number);
+		return printf(L"%llu",(unsigned long long)number);
 	} else {
 		wchar_t	*s=wcharstring::parseNumber(number);
 		ssize_t	retval=write(s);
@@ -376,10 +418,18 @@ ssize_t wstringbuffer::write(double number,
 
 inline
 void wstringbuffer::truncate(size_t pos) {
-	bytebuffer::truncate(pos);
+
+	// a position too large for a byte count truncates nothing
+	if (pos>(size_t)-1/sizeof(wchar_t)) {
+		return;
+	}
+	bytebuffer::truncate(pos*sizeof(wchar_t));
 }
 
 inline
 void wstringbuffer::truncate() {
-	bytebuffer::truncate();
+
+	// The inherited truncate() would call the virtual truncate(size_t),
+	// which takes characters, with a byte count.
+	bytebuffer::truncate(_position());
 }

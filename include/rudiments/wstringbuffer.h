@@ -19,7 +19,7 @@ class RUDIMENTS_DLLSPEC wstringbuffer : public bytebuffer {
 		wstringbuffer();
 
 		/** Creates an instance of the wstringbuffer class with the
-		 *  specified "initialsize". */
+		 *  specified "initialsize", in bytes. */
 		wstringbuffer(size_t initialsize);
 
 		/** Creates an instance of the wstringbuffer class.
@@ -47,14 +47,24 @@ class RUDIMENTS_DLLSPEC wstringbuffer : public bytebuffer {
 		 *  characters.  If the position is set beyond the end of the
 		 *  buffer, the buffer will grow but the data between the
 		 *  current end of the buffer and the new position will be
-		 *  undefined. */
+		 *  undefined.
+		 *
+		 *  Returns the new position in characters or -1 if the
+		 *  offset, in bytes, does not fit in an off64_t or the new
+		 *  position would be before the start of the buffer.  In that
+		 *  case the position does not change. */
 		off64_t	setPositionRelativeToBeginning(off64_t pos);
 
 		/** Advances the position at which the next read or write will
 		 *  occur by "offset" characters.  If the position is set
 		 *  beyond the end of the buffer, the buffer will grow but the
 		 *  data between the current end of the buffer and the new
-		 *  position will be undefined. */
+		 *  position will be undefined.
+		 *
+		 *  Returns the new position in characters or -1 if the
+		 *  offset, in bytes, does not fit in an off64_t or the new
+		 *  position would be before the start of the buffer.  In that
+		 *  case the position does not change. */
 		off64_t	setPositionRelativeToCurrent(off64_t pos);
 
 		/** Sets the position at which the next read or write will
@@ -62,7 +72,12 @@ class RUDIMENTS_DLLSPEC wstringbuffer : public bytebuffer {
 		 *  Generally, offset will be negative.  If it is positive
 		 *  then the buffer will grow, but the data between the current
 		 *  buffer will grow but the data between the current end of
-		 *  the buffer and the new position will be undefined. */
+		 *  the buffer and the new position will be undefined.
+		 *
+		 *  Returns the new position in characters or -1 if the
+		 *  offset, in bytes, does not fit in an off64_t or the new
+		 *  position would be before the start of the buffer.  In that
+		 *  case the position does not change. */
 		off64_t	setPositionRelativeToEnd(off64_t pos);
 
 		/** Returns the position in the internal buffer at which
@@ -74,8 +89,7 @@ class RUDIMENTS_DLLSPEC wstringbuffer : public bytebuffer {
 		 *  the data that was written.  If necessary, the internal
 		 *  buffer will grow to accommodate the new data.
 		 *
-		 *  Returns a pointer to "this" to enable chaining such as:
-		 *	sb->write("numbers: ")->write(5)->write(5.5); */
+		 *  Returns the number of bytes written or -1 on error. */
 		ssize_t	write(const wchar_t *string);
 
 		/** Writes the first "length" characters of "string" to the
@@ -84,8 +98,7 @@ class RUDIMENTS_DLLSPEC wstringbuffer : public bytebuffer {
 		 *  written.  If necessary, the internal buffer will grow to
 		 *  accommodate the new data.
 		 *
-		 *  Returns a pointer to "this" to enable chaining such as:
-		 *	sb->write("numbers: ")->write(5)->write(5.5); */
+		 *  Returns the number of bytes written or -1 on error. */
 		ssize_t	write(const wchar_t *string, size_t length);
 
 		/** Writes "character" to the wstringbuffer at the current
@@ -93,8 +106,7 @@ class RUDIMENTS_DLLSPEC wstringbuffer : public bytebuffer {
 		 *  byte after the data that was written.  If necessary, the
 		 *  internal buffer will grow to accommodate the new data.
 		 *
-		 *  Returns a pointer to "this" to enable chaining such as:
-		 *	sb->write("numbers: ")->write(5)->write(5.5); */
+		 *  Returns the number of bytes written or -1 on error. */
 		ssize_t	write(wchar_t character);
 
 		/** Converts "number" to a string and writes it to the
@@ -103,8 +115,7 @@ class RUDIMENTS_DLLSPEC wstringbuffer : public bytebuffer {
 		 *  written.  If necessary, the internal buffer will grow to
 		 *  accommodate the new data.
 		 *
-		 *  Returns a pointer to "this" to enable chaining such as:
-		 *	sb->write("numbers: ")->write(5)->write(5.5); */
+		 *  Returns -1 on error. */
 		ssize_t	write(int16_t number);
 
 		/** Converts "number" to a string and writes it to the
@@ -113,8 +124,7 @@ class RUDIMENTS_DLLSPEC wstringbuffer : public bytebuffer {
 		 *  written.  If necessary, the internal buffer will grow to
 		 *  accommodate the new data.
 		 *
-		 *  Returns a pointer to "this" to enable chaining such as:
-		 *	sb->write("numbers: ")->write(5)->write(5.5); */
+		 *  Returns -1 on error. */
 		ssize_t	write(int32_t number);
 
 		/** Converts "number" to a string and writes it to the
@@ -123,8 +133,7 @@ class RUDIMENTS_DLLSPEC wstringbuffer : public bytebuffer {
 		 *  written.  If necessary, the inernal buffer will grow to
 		 *  accommodate the new data.
 		 *
-		 *  Returns a pointer to "this" to enable chaining such as:
-		 *	sb->write("numbers: ")->write(5)->write(5.5); */
+		 *  Returns -1 on error. */
 		ssize_t	write(int64_t number);
 
 		/** Converts "number" to a string and writes it to the
@@ -133,8 +142,7 @@ class RUDIMENTS_DLLSPEC wstringbuffer : public bytebuffer {
 		 *  written.  If necessary, the internal buffer will grow to
 		 *  accommodate the new data.
 		 *
-		 *  Returns a pointer to "this" to enable chaining such as:
-		 *	sb->write("numbers: ")->write(5)->write(5.5); */
+		 *  Returns -1 on error. */
 		ssize_t	write(uint16_t number);
 
 		/** Converts "number" to a string and writes it to the
@@ -143,8 +151,7 @@ class RUDIMENTS_DLLSPEC wstringbuffer : public bytebuffer {
 		 *  written.  If necessary, the internal buffer will grow to
 		 *  accommodate the new data.
 		 *
-		 *  Returns a pointer to "this" to enable chaining such as:
-		 *	sb->write("numbers: ")->write(5)->write(5.5); */
+		 *  Returns -1 on error. */
 		ssize_t	write(uint32_t number);
 
 		/** Converts "number" to a string and writes it to the
@@ -153,8 +160,7 @@ class RUDIMENTS_DLLSPEC wstringbuffer : public bytebuffer {
 		 *  written.  If necessary, the internal buffer will grow to
 		 *  accommodate the new data.
 		 *
-		 *  Returns a pointer to "this" to enable chaining such as:
-		 *	sb->write("numbers: ")->write(5)->write(5.5); */
+		 *  Returns -1 on error. */
 		ssize_t	write(uint64_t number);
 
 		/** Converts "number" to a string (using a default scale of 4)
@@ -163,8 +169,7 @@ class RUDIMENTS_DLLSPEC wstringbuffer : public bytebuffer {
 		 *  the data that was written.  If necessary, the interna
 		 *  buffer will grow to accommodate the new data.
 		 *
-		 *  Returns a pointer to "this" to enable chaining such as:
-		 *	sb->write("numbers: ")->write(5)->write(5.5); */
+		 *  Returns -1 on error. */
 		ssize_t	write(float number);
 
 		/** Converts "number" to a string using the specified "scale"
@@ -173,8 +178,7 @@ class RUDIMENTS_DLLSPEC wstringbuffer : public bytebuffer {
 		 *  the data that was written.  If necessary, the internal
 		 *  buffer will grow to accommodate the new data.
 		 *
-		 *  Returns a pointer to "this" to enable chaining such as:
-		 *	sb->write("numbers: ")->write(5)->write(5.5); */
+		 *  Returns -1 on error. */
 		ssize_t	write(float number, uint16_t scale);
 
 		/** Converts "number" to a string using the specified
@@ -184,8 +188,7 @@ class RUDIMENTS_DLLSPEC wstringbuffer : public bytebuffer {
 		 *  necessary, the internal buffer will grow to accommodate the
 		 *  new data.
 		 *
-		 *  Returns a pointer to "this" to enable chaining such as:
-		 *	sb->write("numbers: ")->write(5)->write(5.5); */
+		 *  Returns -1 on error. */
 		ssize_t	write(float number, uint16_t precision,
 							uint16_t scale);
 
@@ -195,8 +198,7 @@ class RUDIMENTS_DLLSPEC wstringbuffer : public bytebuffer {
 		 *  the data that was written.  If necessary, the internal
 		 *  buffer will grow to accommodate the new data.
 		 *
-		 *  Returns a pointer to "this" to enable chaining such as:
-		 *	sb->write("numbers: ")->write(5)->write(5.5); */
+		 *  Returns -1 on error. */
 		ssize_t	write(double number);
 
 		/** Converts "number" to a string using the specified "scale"
@@ -205,8 +207,7 @@ class RUDIMENTS_DLLSPEC wstringbuffer : public bytebuffer {
 		 *  the data that was written.  If necessary, the internal
 		 *  buffer will grow to accommodate the new data.
 		 *
-		 *  Returns a pointer to "this" to enable chaining such as:
-		 *	sb->write("numbers: ")->write(5)->write(5.5); */
+		 *  Returns -1 on error. */
 		ssize_t	write(double number, uint16_t scale);
 
 		/** Converts "number" to a string using the specified
@@ -216,8 +217,7 @@ class RUDIMENTS_DLLSPEC wstringbuffer : public bytebuffer {
 		 *  necessary, the internal buffer will grow to accommodate the
 		 *  new data.
 		 *
-		 *  Returns a pointer to "this" to enable chaining such as:
-		 *	sb->write("numbers: ")->write(5)->write(5.5); */
+		 *  Returns -1 on error. */
 		ssize_t	write(double number, uint16_t precision,
 							uint16_t scale);
 
@@ -392,10 +392,14 @@ class RUDIMENTS_DLLSPEC wstringbuffer : public bytebuffer {
 		wstringbuffer	*append(double number, uint16_t precision,
 							uint16_t scale);
 
-		/** Trucnates the wstringbuffer at position "pos". */
+		/** Truncates the wstringbuffer at position "pos", in
+		 *  characters.  If "pos" is not less than the current size,
+		 *  the size is unchanged. */
 		void	truncate(size_t pos);
 
-		/** Trucnates the wstringbuffer at the current position. */
+		/** Truncates the wstringbuffer at the current position.  If the
+		 *  position is not less than the current size, the size is
+		 *  unchanged. */
 		void	truncate();
 
 		/** Empties the wstringbuffer.
@@ -404,7 +408,7 @@ class RUDIMENTS_DLLSPEC wstringbuffer : public bytebuffer {
 		bool	clear();
 
 		/** Empties the bytebuffer and resets the specified
-		 *  "initialsize" parameter.
+		 *  "initialsize" parameter, in bytes.
 		 *  
 		 *  Always returns true. */
 		bool	clear(size_t initialsize);

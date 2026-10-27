@@ -8,10 +8,120 @@
 #include <rudiments/stdio.h>
 #include "test.cpp"
 
+// check the text and the return value of one number write
+static void checkWrite(const char *name, stringbuffer *sb,
+				ssize_t result, const char *expected) {
+	test(name,result==(ssize_t)charstring::getLength(expected) &&
+		!charstring::compare(sb->getString(),expected));
+}
+
+// number output, including the unsigned values above the signed range
+static void numberOutput() {
+
+	stdoutput.printf("number output...\n");
+
+	const uint64_t	tento19=(uint64_t)100000*100000*1000000000;
+	const uint64_t	max64=(uint64_t)-1;
+	const int64_t	maxint64=(int64_t)(((uint64_t)1<<63)-1);
+	const int64_t	minint64=-maxint64-1;
+	stringbuffer	sb;
+
+	sb.clear();
+	checkWrite("write uint16 0",&sb,sb.write((uint16_t)0),"0");
+	sb.clear();
+	checkWrite("write uint16 12345",&sb,sb.write((uint16_t)12345),"12345");
+	sb.clear();
+	checkWrite("write uint16 32768",&sb,sb.write((uint16_t)32768),"32768");
+	sb.clear();
+	checkWrite("write uint16 40000",&sb,sb.write((uint16_t)40000),"40000");
+	sb.clear();
+	checkWrite("write uint16 65535",&sb,sb.write((uint16_t)65535),"65535");
+
+	sb.clear();
+	checkWrite("write uint32 0",&sb,sb.write((uint32_t)0),"0");
+	sb.clear();
+	checkWrite("write uint32 123456789",&sb,
+			sb.write((uint32_t)123456789),"123456789");
+	sb.clear();
+	checkWrite("write uint32 2147483648",&sb,
+			sb.write((uint32_t)2147483648U),"2147483648");
+	sb.clear();
+	checkWrite("write uint32 3000000000",&sb,
+			sb.write((uint32_t)3000000000U),"3000000000");
+	sb.clear();
+	checkWrite("write uint32 4294967295",&sb,
+			sb.write((uint32_t)4294967295U),"4294967295");
+
+	sb.clear();
+	checkWrite("write uint64 0",&sb,sb.write((uint64_t)0),"0");
+	sb.clear();
+	checkWrite("write uint64 4294967296",&sb,
+			sb.write((uint64_t)4294967296ULL),"4294967296");
+	sb.clear();
+	checkWrite("write uint64 9223372036854775807",&sb,
+			sb.write((uint64_t)maxint64),"9223372036854775807");
+	sb.clear();
+	checkWrite("write uint64 9223372036854775808",&sb,
+			sb.write((uint64_t)maxint64+1),"9223372036854775808");
+	sb.clear();
+	checkWrite("write uint64 10000000000000000000",&sb,
+			sb.write(tento19),"10000000000000000000");
+	sb.clear();
+	checkWrite("write uint64 18446744073709551615",&sb,
+			sb.write(max64),"18446744073709551615");
+
+	sb.clear();
+	checkWrite("write int16 -32768",&sb,
+			sb.write((int16_t)-32768),"-32768");
+	sb.clear();
+	checkWrite("write int16 32767",&sb,sb.write((int16_t)32767),"32767");
+	sb.clear();
+	checkWrite("write int32 -2147483648",&sb,
+			sb.write((int32_t)-2147483647-1),"-2147483648");
+	sb.clear();
+	checkWrite("write int32 2147483647",&sb,
+			sb.write((int32_t)2147483647),"2147483647");
+	sb.clear();
+	checkWrite("write int64 -9223372036854775808",&sb,
+			sb.write(minint64),"-9223372036854775808");
+	sb.clear();
+	checkWrite("write int64 9223372036854775807",&sb,
+			sb.write(maxint64),"9223372036854775807");
+
+	// every unsigned write agrees with the append of the same number
+	stringbuffer	ap;
+	bool		ok=true;
+	for (uint64_t n=max64; n!=0; n>>=3) {
+		sb.clear();
+		ap.clear();
+		sb.write((uint16_t)n);
+		ap.append((uint16_t)n);
+		sb.write((uint32_t)n);
+		ap.append((uint32_t)n);
+		sb.write(n);
+		ap.append(n);
+		if (charstring::compare(sb.getString(),ap.getString())) {
+			ok=false;
+		}
+	}
+	test("write and append agree",ok);
+
+	// the number writes append one after another
+	sb.clear();
+	sb.write((uint16_t)65535);
+	sb.write((uint32_t)4294967295U);
+	sb.write(max64);
+	test("write sequence",!charstring::compare(sb.getString(),
+				"65535""4294967295""18446744073709551615"));
+
+	stdoutput.printf("\n");
+}
 
 int main(int argc, const char **argv) {
 
 	header("stringbuffer");
+
+	numberOutput();
 
 	const char	alphabet[]="abcdefghijklmnopqrstuvwxyz";
 	const uint32_t	iterations=5;

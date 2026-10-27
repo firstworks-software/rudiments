@@ -91,16 +91,20 @@ class RUDIMENTS_DLLSPEC bytestring {
 		static void	*findFirst(void *haystack,
 						size_t haystacksize,
 						const void *needle, 
-						size_t needleize);
+						size_t needlesize);
 
 		/** Returns a pointer to the last occurrance
-		 *  of "needle" in the first "size" bytes of
-		 *  "haystack".
-		 *  Returns NULL if no match is found. */
+		 *  of the "needlesize" bytes of "needle" in the first
+		 *  "haystacksize" bytes of "haystack".
+		 *  Returns NULL if no match is found, if "haystack" or
+		 *  "needle" is NULL, or if "needlesize" is greater than
+		 *  "haystacksize".
+		 *  If "needlesize" is 0 then a pointer to the end of
+		 *  "haystack" ("haystack"+"haystacksize") is returned. */
 		static void	*findLast(void *haystack,
 						size_t haystacksize,
 						const void *needle, 
-						size_t needleize);
+						size_t needlesize);
 
 		/** Returns a pointer to the first occurrance
 		 *  of "needle" in the first "size" bytes of
@@ -128,9 +132,13 @@ class RUDIMENTS_DLLSPEC bytestring {
 							size_t needlesize);
 
 		/** Returns a pointer to the last occurrance
-		 *  of "needle" in the first "size" bytes of
-		 *  "haystack".
-		 *  Returns NULL if no match is found. */
+		 *  of the "needlesize" bytes of "needle" in the first
+		 *  "haystacksize" bytes of "haystack".
+		 *  Returns NULL if no match is found, if "haystack" or
+		 *  "needle" is NULL, or if "needlesize" is greater than
+		 *  "haystacksize".
+		 *  If "needlesize" is 0 then a pointer to the end of
+		 *  "haystack" ("haystack"+"haystacksize") is returned. */
 		static const void	*findLast(const void *haystack,
 							size_t haystacksize,
 							const void *needle, 
