@@ -6,6 +6,7 @@
 #include <rudiments/stringbuffer.h>
 #include <rudiments/filedescriptor.h>
 #include <rudiments/stdio.h>
+#include <rudiments/signalclasses.h>
 #include <limits.h>
 #include "test.cpp"
 
@@ -848,6 +849,30 @@ static void insertStringTest(const char *label, const char *dest,
 	char	*result=charstring::insertString(dest,src,index);
 	test(label,result && !charstring::compare(result,expected));
 	delete[] result;
+}
+
+// checks insertString() on exact-size heap copies of the inputs, so that
+// AddressSanitizer sees any read outside them; a NULL stays NULL
+static void insertStringExactTest(const char *label, const char *dest,
+					const char *src, uint64_t index,
+					const char *expected) {
+	size_t	destlen=charstring::getLength(dest);
+	size_t	srclen=charstring::getLength(src);
+	char	*d=NULL;
+	if (dest) {
+		d=new char[destlen+1];
+		bytestring::copy(d,dest,destlen+1);
+	}
+	char	*s=NULL;
+	if (src) {
+		s=new char[srclen+1];
+		bytestring::copy(s,src,srclen+1);
+	}
+	char	*result=charstring::insertString(d,s,index);
+	test(label,result && !charstring::compare(result,expected));
+	delete[] result;
+	delete[] d;
+	delete[] s;
 }
 
 // checks the length-taking forms of duplicate() and duplicateUcs2() for
@@ -3694,6 +3719,47 @@ int main(int argc, const char **argv) {
 	insertStringTest("insertString end","hello","XY",5,"helloXY");
 	insertStringTest("insertString empty dest","","XY",0,"XY");
 	insertStringTest("insertString one","hello","-",3,"hel-lo");
+
+	// empty and NULL arguments and out-of-range indices; an alarm turns
+	// a hang into a failure
+	signalmanager::alarm(60);
+	const char	*isdest="abc";
+	for (uint64_t i=0; i<=6; i++) {
+		stringbuffer	name;
+		name.append("insertString empty src, index ");
+		name.append(i);
+		insertStringExactTest(name.getString(),isdest,"",i,isdest);
+		name.clear();
+		name.append("insertString src, index ");
+		name.append(i);
+		const char	*expected[]={
+			"XYabc","aXYbc","abXYc","abcXY",
+			"abcXY","abcXY","abcXY"
+		};
+		insertStringExactTest(name.getString(),isdest,"XY",i,
+							expected[i]);
+	}
+	insertStringExactTest("insertString empty both","","",0,"");
+	insertStringExactTest("insertString empty both, 3","","",3,"");
+	insertStringExactTest("insertString NULL src",isdest,NULL,1,isdest);
+	insertStringExactTest("insertString NULL src, 0",isdest,NULL,0,isdest);
+	insertStringExactTest("insertString NULL src, past",
+						isdest,NULL,10,isdest);
+	insertStringExactTest("insertString NULL dest",NULL,"XY",0,"XY");
+	insertStringExactTest("insertString NULL dest, 5",NULL,"XY",5,"XY");
+	insertStringExactTest("insertString NULL dest, empty src",
+							NULL,"",0,"");
+	insertStringExactTest("insertString both NULL",NULL,NULL,0,"");
+	insertStringExactTest("insertString both NULL, 7",NULL,NULL,7,"");
+	insertStringExactTest("insertString len+1",isdest,"XY",4,"abcXY");
+	insertStringExactTest("insertString len+100",isdest,"XY",103,"abcXY");
+	insertStringExactTest("insertString UINT64_MAX",
+				isdest,"XY",(uint64_t)-1,"abcXY");
+	insertStringExactTest("insertString empty src, len+1",
+						isdest,"",4,isdest);
+	insertStringExactTest("insertString empty src, UINT64_MAX",
+				isdest,"",(uint64_t)-1,isdest);
+	signalmanager::alarm(0);
 	const char	*dupstr="hello world";
 	const wchar_t	*dupwstr=L"hello world";
 	ucs2_t		dupustr[12];

@@ -2341,9 +2341,16 @@ class RUDIMENTS_DLLSPEC charstring {
 		static char	*getSubString(const char *str, size_t start);
 
 		/** Creates a new string with "src" inserted into "dest" at
-		 *  "index".  Returns NULL if the new string would be too
-		 *  large for a size_t, which can only happen where size_t
-		 *  is 32 bits. */
+		 *  "index".
+		 *
+		 *  A NULL "dest" or "src" is treated as an empty string.
+		 *  If "index" is greater than the length of "dest" then
+		 *  "src" is inserted at the end of "dest".
+		 *
+		 *  The new string must be deleted by the caller using
+		 *  delete[].  Returns NULL only if the new string would be
+		 *  too large for a size_t, which can only happen where
+		 *  size_t is 32 bits. */
 		static char	*insertString(const char *dest,
 						const char *src,
 						uint64_t index);

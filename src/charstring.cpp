@@ -4128,22 +4128,22 @@ void charstring::hexDecode(const char *input, uint64_t inputlen,
 char *charstring::insertString(const char *dest,
 				const char *src, uint64_t index) {
 
+	uint64_t	destsize=getLength(dest);
 	uint64_t	srcsize=getLength(src);
-	uint64_t	size=getLength(dest)+srcsize+1;
+	uint64_t	size=destsize+srcsize+1;
 	size_t		bufsize;
 	if (!bufferSize(size,1,0,&bufsize)) {
 		return NULL;
 	}
 	char		*retval=new char[bufsize];
-	for (uint64_t i=0,j=0; i<size;) {
-		if (i==index) {
-			for (uint64_t k=0; k<srcsize; k++) {
-				retval[i++]=src[k];
-			}
-		} else {
-			retval[i++]=dest[j++];
-		}
-	}
+
+	// clamp the index to the end of dest
+	uint64_t	at=(index<destsize)?index:destsize;
+
+	// copy the head of dest, then src, then the rest of dest
+	bytestring::copy(retval,dest,at);
+	bytestring::copy(retval+at,src,srcsize);
+	bytestring::copy(retval+at+srcsize,dest+at,destsize-at);
 	retval[size-1]='\0';
 	return retval;
 }

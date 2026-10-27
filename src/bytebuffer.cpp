@@ -6,6 +6,7 @@
 #include <rudiments/wcharstring.h>
 #include <rudiments/ucs2charstring.h>
 #include <rudiments/bytestring.h>
+#include <rudiments/resultcodes.h>
 
 #ifdef RUDIMENTS_HAVE_STRING_H
 	#include <string.h>
@@ -18,7 +19,61 @@
 	#endif
 #endif
 
+#ifdef RUDIMENTS_HAVE_LIMITS_H
+	#include <limits.h>
+#endif
+
+// if SSIZE_MAX is undefined, choose the largest value a size_t can hold
+// that is also positive when stored in an ssize_t
+#ifndef SSIZE_MAX
+	#define SSIZE_MAX ((size_t)-1>>1)
+#endif
+
 #define DEFAULT_INITIALSIZE 32
+
+// the largest size a buffer can have, the largest value write() can return
+#define BUFFER_LIMIT ((size_t)SSIZE_MAX)
+
+// computes count*multiplier+addend, false if it exceeds limit
+static bool bufferSizeWithin(uint64_t count, uint64_t multiplier,
+				uint64_t addend, size_t limit, size_t *size) {
+	if (addend>limit || (multiplier && count>(limit-addend)/multiplier)) {
+		return false;
+	}
+	*size=count*multiplier+addend;
+	return true;
+}
+
+// computes count*multiplier+addend, false if it exceeds the buffer limit
+static bool bufferSize(uint64_t count, uint64_t multiplier,
+				uint64_t addend, size_t *size) {
+	return bufferSizeWithin(count,multiplier,addend,BUFFER_LIMIT,size);
+}
+
+// grows actualsize by half, or by one when it is too small to grow by half,
+// until it holds requiredsize
+static size_t growSizeWithin(size_t actualsize, size_t requiredsize,
+							size_t limit) {
+	size_t	size=actualsize;
+	while (size<requiredsize) {
+		size_t	step=size/2;
+		if (!step) {
+			step=1;
+		}
+
+		// a step past the limit grows to exactly the required size
+		if (size>limit || step>limit-size) {
+			return requiredsize;
+		}
+		size+=step;
+	}
+	return size;
+}
+
+// grows actualsize to hold requiredsize, without passing the buffer limit
+static size_t growSize(size_t actualsize, size_t requiredsize) {
+	return growSizeWithin(actualsize,requiredsize,BUFFER_LIMIT);
+}
 
 class bytebufferprivate {
 	friend class bytebuffer;
@@ -44,20 +99,26 @@ bytebuffer::bytebuffer(byte_t *initialcontents, size_t initialsize) :
 }
 
 void bytebuffer::construct(byte_t *initialcontents, size_t initialsize) {
-	if (!initialsize) {
-		initialsize=DEFAULT_INITIALSIZE;
-	}
 	pvt=new bytebufferprivate;
 	if (initialcontents) {
+
+		// attached contents hold exactly initialsize bytes, even 0
 		pvt->_buffer=initialcontents;
 		pvt->_size=initialsize;
 		pvt->_pos=initialsize;
+		pvt->_actualsize=initialsize;
+		if (!initialsize) {
+			initialsize=DEFAULT_INITIALSIZE;
+		}
 	} else {
+		if (!initialsize) {
+			initialsize=DEFAULT_INITIALSIZE;
+		}
 		pvt->_buffer=new byte_t[initialsize];
 		pvt->_size=0;
 		pvt->_pos=0;
+		pvt->_actualsize=initialsize;
 	}
-	pvt->_actualsize=initialsize;
 	pvt->_initialsize=initialsize;
 }
 
@@ -67,9 +128,12 @@ bytebuffer::bytebuffer(bytebuffer &v) {
 
 bytebuffer &bytebuffer::operator=(bytebuffer &v) {
 	if (this!=&v) {
-		delete[] pvt->_buffer;
-		delete pvt;
+
+		// copy first so a failed allocation leaves this unchanged
+		bytebufferprivate	*oldpvt=pvt;
 		clone(v);
+		delete[] oldpvt->_buffer;
+		delete oldpvt;
 	}
 	return *this;
 }
@@ -80,9 +144,14 @@ bytebuffer::~bytebuffer() {
 }
 
 void bytebuffer::clone(bytebuffer &v) {
+
+	// the copy has the same capacity, but only the used bytes are copied
+	byte_t	*buffer=new byte_t[v.pvt->_actualsize];
+	if (v.pvt->_size) {
+		memcpy(buffer,v.pvt->_buffer,v.pvt->_size);
+	}
 	pvt=new bytebufferprivate;
-	pvt->_buffer=(byte_t *)bytestring::duplicate(
-					v.pvt->_buffer,v.pvt->_size);
+	pvt->_buffer=buffer;
 	pvt->_size=v.pvt->_size;
 	pvt->_actualsize=v.pvt->_actualsize;
 	pvt->_pos=v.pvt->_pos;
@@ -107,7 +176,12 @@ ssize_t bytebuffer::read(byte_t *data, size_t size) {
 }
 
 ssize_t bytebuffer::write(const byte_t *data, size_t size) {
-	size_t	finalpos=pvt->_pos+size;
+
+	// fail if the data would end past the limit
+	size_t	finalpos;
+	if (!bufferSize(pvt->_pos,1,size,&finalpos)) {
+		return RESULT_ERROR;
+	}
 	if (finalpos>pvt->_actualsize) {
 		extend(finalpos);
 	}
@@ -121,16 +195,13 @@ ssize_t bytebuffer::write(const byte_t *data, size_t size) {
 
 void bytebuffer::extend(size_t requiredsize) {
 
-	do {
-		pvt->_actualsize=pvt->_actualsize*3/2;
-	} while (requiredsize>pvt->_actualsize);
-
-	// FIXME: we need a growth cap
-
-	byte_t	*newbuffer=new byte_t[pvt->_actualsize];
+	// if new throws then the buffer is unchanged
+	size_t	newsize=growSize(pvt->_actualsize,requiredsize);
+	byte_t	*newbuffer=new byte_t[newsize];
 	memcpy(newbuffer,pvt->_buffer,pvt->_size);
 	delete[] pvt->_buffer;
 	pvt->_buffer=newbuffer;
+	pvt->_actualsize=newsize;
 }
 
 ssize_t bytebuffer::write(const char *string, size_t length) {
@@ -142,21 +213,27 @@ ssize_t bytebuffer::write(const char *string) {
 }
 
 ssize_t bytebuffer::write(const wchar_t *string, size_t length) {
-	return write((const byte_t *)string,length*sizeof(wchar_t));
+	size_t	size;
+	if (!bufferSize(length,sizeof(wchar_t),0,&size)) {
+		return RESULT_ERROR;
+	}
+	return write((const byte_t *)string,size);
 }
 
 ssize_t bytebuffer::write(const wchar_t *string) {
-	return write((const byte_t *)string,
-				wcharstring::getLength(string)*sizeof(wchar_t));
+	return write(string,wcharstring::getLength(string));
 }
 
 ssize_t bytebuffer::writeUcs2(const ucs2_t *string, size_t length) {
-	return write((const byte_t *)string,length*sizeof(ucs2_t));
+	size_t	size;
+	if (!bufferSize(length,sizeof(ucs2_t),0,&size)) {
+		return RESULT_ERROR;
+	}
+	return write((const byte_t *)string,size);
 }
 
 ssize_t bytebuffer::writeUcs2(const ucs2_t *string) {
-	return write((const byte_t *)string,
-			ucs2charstring::getLength(string)*sizeof(ucs2_t));
+	return writeUcs2(string,ucs2charstring::getLength(string));
 }
 
 ssize_t bytebuffer::write(char character) {
@@ -219,14 +296,10 @@ ssize_t bytebuffer::printfDelegate(const char *format, va_list *argp) {
 	#endif
 	if (size!=-1) {
 
-		// extend the list of buffers to accommodate
-		// "size" bytes beyond the current position
-		if (pvt->_pos+size>pvt->_actualsize) {
-			extend(pvt->_pos+size);
-		}
-
 		// write the buffer
-		write(buffer,size);
+		if (write(buffer,size)==RESULT_ERROR) {
+			size=RESULT_ERROR;
+		}
 	}
 
 	// clean up
@@ -246,14 +319,10 @@ ssize_t bytebuffer::printfDelegate(const wchar_t *format, va_list *argp) {
 	ssize_t	size=wcharstring::printf(&buffer,format,argp);
 	if (size!=-1) {
 
-		// extend the list of buffers to accommodate
-		// "size" bytes beyond the current position
-		if (pvt->_pos+size>pvt->_actualsize) {
-			extend(pvt->_pos+size);
-		}
-
 		// write the buffer
-		write(buffer,size);
+		if (write(buffer,size)==RESULT_ERROR) {
+			size=RESULT_ERROR;
+		}
 	}
 
 	// clean up
@@ -269,14 +338,10 @@ ssize_t bytebuffer::printfUcs2Delegate(const ucs2_t *format, va_list *argp) {
 	ssize_t	size=ucs2charstring::printf(&buffer,format,argp);
 	if (size!=-1) {
 
-		// extend the list of buffers to accommodate
-		// "size" bytes beyond the current position
-		if (pvt->_pos+size>pvt->_actualsize) {
-			extend(pvt->_pos+size);
-		}
-
 		// write the buffer
-		writeUcs2(buffer,size);
+		if (writeUcs2(buffer,size)==RESULT_ERROR) {
+			size=RESULT_ERROR;
+		}
 	}
 
 	// clean up
@@ -292,8 +357,11 @@ bool bytebuffer::clear() {
 }
 
 bool bytebuffer::clear(size_t initialsize) {
+
+	// allocate first so a failed allocation leaves this unchanged
+	byte_t	*buffer=new byte_t[initialsize];
 	delete[] pvt->_buffer;
-	pvt->_buffer=new byte_t[initialsize];
+	pvt->_buffer=buffer;
 	pvt->_size=0;
 	pvt->_actualsize=initialsize;
 	pvt->_pos=0;
@@ -356,23 +424,23 @@ off64_t bytebuffer::setPositionRelativeToEnd(off64_t offset) {
 }
 
 bytebuffer *bytebuffer::append(const byte_t *data, size_t size) {
-	if (pvt->_size+size>pvt->_actualsize) {
-		extend(pvt->_size+size);
+
+	// append nothing if the data would end past the limit
+	size_t	finalsize;
+	if (!bufferSize(pvt->_size,1,size,&finalsize)) {
+		return this;
+	}
+	if (finalsize>pvt->_actualsize) {
+		extend(finalsize);
 	}
 	memcpy(pvt->_buffer+pvt->_size,data,size);
-	pvt->_size+=size;
+	pvt->_size=finalsize;
 	pvt->_pos=pvt->_size;
 	return this;
 }
 
 bytebuffer *bytebuffer::append(const char *data, size_t length) {
-	if (pvt->_size+length>pvt->_actualsize) {
-		extend(pvt->_size+length);
-	}
-	memcpy(pvt->_buffer+pvt->_size,data,length);
-	pvt->_size+=length;
-	pvt->_pos=pvt->_size;
-	return this;
+	return append((const byte_t *)data,length);
 }
 
 bytebuffer *bytebuffer::append(const char *string) {
@@ -380,21 +448,27 @@ bytebuffer *bytebuffer::append(const char *string) {
 }
 
 bytebuffer *bytebuffer::append(const wchar_t *string, size_t length) {
-	return append((const byte_t *)string,length*sizeof(wchar_t));
+	size_t	size;
+	if (!bufferSize(length,sizeof(wchar_t),0,&size)) {
+		return this;
+	}
+	return append((const byte_t *)string,size);
 }
 
 bytebuffer *bytebuffer::append(const wchar_t *string) {
-	return append((const byte_t *)string,
-				wcharstring::getLength(string)*sizeof(wchar_t));
+	return append(string,wcharstring::getLength(string));
 }
 
 bytebuffer *bytebuffer::appendUcs2(const ucs2_t *string, size_t length) {
-	return append((const byte_t *)string,length*sizeof(ucs2_t));
+	size_t	size;
+	if (!bufferSize(length,sizeof(ucs2_t),0,&size)) {
+		return this;
+	}
+	return append((const byte_t *)string,size);
 }
 
 bytebuffer *bytebuffer::appendUcs2(const ucs2_t *string) {
-	return append((const byte_t *)string,
-			ucs2charstring::getLength(string)*sizeof(ucs2_t));
+	return appendUcs2(string,ucs2charstring::getLength(string));
 }
 
 bytebuffer *bytebuffer::append(char character) {
@@ -446,11 +520,15 @@ bytebuffer *bytebuffer::append(double number) {
 }
 
 void bytebuffer::truncate(size_t pos) {
-	pvt->_size=pos;
+
+	// truncating past the end leaves the size alone
+	if (pos<pvt->_size) {
+		pvt->_size=pos;
+	}
 }
 
 void bytebuffer::truncate() {
-	pvt->_size=pvt->_pos;
+	truncate(pvt->_pos);
 }
 
 size_t bytebuffer::_size() {

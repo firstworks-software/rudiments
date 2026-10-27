@@ -6,7 +6,8 @@
 
 #include <rudiments/private/bytebufferincludes.h>
 
-/** The bytebuffer class can be used to store binary data of arbitrary length.
+/** The bytebuffer class can be used to store binary data of arbitrary length,
+ *  up to SSIZE_MAX bytes.
  *
  *  It is generally more efficient to reuse the same bytebuffer over and
  *  over than to allocate a new one for each operation. */
@@ -18,21 +19,25 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		bytebuffer();
 
 		/** Creates an instance of the bytebuffer class with
-		 *  the specified "initialsize". */
+		 *  the specified "initialsize".  If "initialsize" is 0, the
+		 *  default initial size is used. */
 		bytebuffer(size_t initialsize);
 
 		/** Creates an instance of the bytebuffer class.
 		 *  The buffer "initialcontents" will be attached to the
 		 *  instance and used as the initial contents.  This buffer
-		 *  should not be freed by the calling program. */
+		 *  should not be freed by the calling program.
+		 *  The buffer is taken to hold exactly "initialsize" bytes. */
 		bytebuffer(byte_t *initialcontents, size_t initialsize);
 
 		/** Creates an instance of the bytebuffer class
-		 *  that is a copy of "v". */
+		 *  that is a copy of "v", with the same contents, position,
+		 *  and capacity. */
 		bytebuffer(bytebuffer &v);
 
 		/** Makes this instance of the bytebuffer class
-		 *  identical to "v". */
+		 *  identical to "v".  If memory for the copy cannot be
+		 *  allocated, this instance is left unchanged. */
 		bytebuffer	&operator=(bytebuffer &v);
 
 		/** Deletes this instance of the bytebuffer class. */
@@ -70,7 +75,10 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  written.  If necessary, the internal buffer will grow to
 		 *  accommodate the new data.
 		 *
-		 *  Returns the number of bytes written. */
+		 *  Returns the number of bytes written, or RESULT_ERROR (and
+		 *  writes nothing) if the data would end beyond SSIZE_MAX
+		 *  bytes.  If memory cannot be allocated, the bytebuffer is
+		 *  left unchanged. */
 		ssize_t	write(const byte_t *data, size_t size);
 
 		/** Writes the first "length" characters of "string" to the
@@ -79,7 +87,10 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  written.  If necessary, the internal buffer will grow to
 		 *  accommodate the new data.
 		 *
-		 *  Returns the number of bytes written. */
+		 *  Returns the number of bytes written, or RESULT_ERROR (and
+		 *  writes nothing) if the data would end beyond SSIZE_MAX
+		 *  bytes.  If memory cannot be allocated, the bytebuffer is
+		 *  left unchanged. */
 		ssize_t	write(const char *string, size_t length);
 
 		/** Writes "string" to the bytebuffer at the current
@@ -87,7 +98,10 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  byte after the data that was written.  If necessary, the
 		 *  internal buffer will grow to accommodate the new data.
 		 *
-		 *  Returns the number of bytes written. */
+		 *  Returns the number of bytes written, or RESULT_ERROR (and
+		 *  writes nothing) if the data would end beyond SSIZE_MAX
+		 *  bytes.  If memory cannot be allocated, the bytebuffer is
+		 *  left unchanged. */
 		ssize_t	write(const char *string);
 
 		/** Writes the first "length" characters of "string" to the
@@ -96,7 +110,10 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  written.  If necessary, the internal buffer will grow to
 		 *  accommodate the new data.
 		 *
-		 *  Returns the number of bytes written. */
+		 *  Returns the number of bytes written, or RESULT_ERROR (and
+		 *  writes nothing) if the data would end beyond SSIZE_MAX
+		 *  bytes.  If memory cannot be allocated, the bytebuffer is
+		 *  left unchanged. */
 		ssize_t	write(const wchar_t *string, size_t length);
 
 		/** Writes "string" to the bytebuffer at the current
@@ -104,7 +121,10 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  byte after the data that was written.  If necessary, the
 		 *  internal buffer will grow to accommodate the new data.
 		 *
-		 *  Returns the number of bytes written. */
+		 *  Returns the number of bytes written, or RESULT_ERROR (and
+		 *  writes nothing) if the data would end beyond SSIZE_MAX
+		 *  bytes.  If memory cannot be allocated, the bytebuffer is
+		 *  left unchanged. */
 		ssize_t	write(const wchar_t *string);
 
 		/** Writes the first "length" characters of "string" to the
@@ -113,7 +133,10 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  written.  If necessary, the internal buffer will grow to
 		 *  accommodate the new data.
 		 *
-		 *  Returns the number of bytes written. */
+		 *  Returns the number of bytes written, or RESULT_ERROR (and
+		 *  writes nothing) if the data would end beyond SSIZE_MAX
+		 *  bytes.  If memory cannot be allocated, the bytebuffer is
+		 *  left unchanged. */
 		ssize_t	writeUcs2(const ucs2_t *string, size_t length);
 
 		/** Writes "string" to the bytebuffer at the current
@@ -121,7 +144,10 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  byte after the data that was written.  If necessary, the
 		 *  internal buffer will grow to accommodate the new data.
 		 *
-		 *  Returns the number of bytes written. */
+		 *  Returns the number of bytes written, or RESULT_ERROR (and
+		 *  writes nothing) if the data would end beyond SSIZE_MAX
+		 *  bytes.  If memory cannot be allocated, the bytebuffer is
+		 *  left unchanged. */
 		ssize_t	writeUcs2(const ucs2_t *string);
 
 		/** Writes "character" to the bytebuffer at the current
@@ -129,7 +155,10 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  byte after the data that was written.  If necessary, the
 		 *  internal buffer will grow to accommodate the new data.
 		 *
-		 *  Returns the number of bytes written. */
+		 *  Returns the number of bytes written, or RESULT_ERROR (and
+		 *  writes nothing) if the data would end beyond SSIZE_MAX
+		 *  bytes.  If memory cannot be allocated, the bytebuffer is
+		 *  left unchanged. */
 		ssize_t	write(char character);
 
 		/** Writes "character" to the bytebuffer at the current
@@ -137,7 +166,10 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  byte after the data that was written.  If necessary, the
 		 *  internal buffer will grow to accommodate the new data.
 		 *
-		 *  Returns the number of bytes written. */
+		 *  Returns the number of bytes written, or RESULT_ERROR (and
+		 *  writes nothing) if the data would end beyond SSIZE_MAX
+		 *  bytes.  If memory cannot be allocated, the bytebuffer is
+		 *  left unchanged. */
 		ssize_t	write(wchar_t character);
 
 		/** Writes "character" to the bytebuffer at the current
@@ -145,7 +177,10 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  byte after the data that was written.  If necessary, the
 		 *  internal buffer will grow to accommodate the new data.
 		 *
-		 *  Returns the number of bytes written. */
+		 *  Returns the number of bytes written, or RESULT_ERROR (and
+		 *  writes nothing) if the data would end beyond SSIZE_MAX
+		 *  bytes.  If memory cannot be allocated, the bytebuffer is
+		 *  left unchanged. */
 		ssize_t	writeUcs2(ucs2_t character);
 
 		/** Writes "number" to the bytebuffer at the current
@@ -153,7 +188,10 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  byte after the data that was written.  If necessary, the
 		 *  internal buffer will grow to accommodate the new data.
 		 *
-		 *  Returns the number of bytes written. */
+		 *  Returns the number of bytes written, or RESULT_ERROR (and
+		 *  writes nothing) if the data would end beyond SSIZE_MAX
+		 *  bytes.  If memory cannot be allocated, the bytebuffer is
+		 *  left unchanged. */
 		ssize_t	write(int16_t number);
 
 		/** Writes "number" to the bytebuffer at the current
@@ -161,7 +199,10 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  byte after the data that was written.  If necessary, the
 		 *  internal buffer will grow to accommodate the new data.
 		 *
-		 *  Returns the number of bytes written. */
+		 *  Returns the number of bytes written, or RESULT_ERROR (and
+		 *  writes nothing) if the data would end beyond SSIZE_MAX
+		 *  bytes.  If memory cannot be allocated, the bytebuffer is
+		 *  left unchanged. */
 		ssize_t	write(int32_t number);
 
 		/** Writes "number" to the bytebuffer at the current
@@ -169,7 +210,10 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  byte after the data that was written.  If necessary, the
 		 *  internal buffer will grow to accommodate the new data.
 		 *
-		 *  Returns the number of bytes written. */
+		 *  Returns the number of bytes written, or RESULT_ERROR (and
+		 *  writes nothing) if the data would end beyond SSIZE_MAX
+		 *  bytes.  If memory cannot be allocated, the bytebuffer is
+		 *  left unchanged. */
 		ssize_t	write(int64_t number);
 
 		/** Writes "character" to the bytebuffer at the current
@@ -177,7 +221,10 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  byte after the data that was written.  If necessary, the
 		 *  internal buffer will grow to accommodate the new data.
 		 *
-		 *  Returns the number of bytes written. */
+		 *  Returns the number of bytes written, or RESULT_ERROR (and
+		 *  writes nothing) if the data would end beyond SSIZE_MAX
+		 *  bytes.  If memory cannot be allocated, the bytebuffer is
+		 *  left unchanged. */
 		ssize_t	write(byte_t character);
 
 		/** Writes "number" to the bytebuffer at the current
@@ -185,7 +232,10 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  byte after the data that was written.  If necessary, the
 		 *  internal buffer will grow to accommodate the new data.
 		 *
-		 *  Returns the number of bytes written. */
+		 *  Returns the number of bytes written, or RESULT_ERROR (and
+		 *  writes nothing) if the data would end beyond SSIZE_MAX
+		 *  bytes.  If memory cannot be allocated, the bytebuffer is
+		 *  left unchanged. */
 		ssize_t	write(uint16_t number);
 
 		/** Writes "number" to the bytebuffer at the current
@@ -193,7 +243,10 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  byte after the data that was written.  If necessary, the
 		 *  internal buffer will grow to accommodate the new data.
 		 *
-		 *  Returns the number of bytes written. */
+		 *  Returns the number of bytes written, or RESULT_ERROR (and
+		 *  writes nothing) if the data would end beyond SSIZE_MAX
+		 *  bytes.  If memory cannot be allocated, the bytebuffer is
+		 *  left unchanged. */
 		ssize_t	write(uint32_t number);
 
 		/** Writes "number" to the bytebuffer at the current
@@ -201,7 +254,10 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  byte after the data that was written.  If necessary, the
 		 *  internal buffer will grow to accommodate the new data.
 		 *
-		 *  Returns the number of bytes written. */
+		 *  Returns the number of bytes written, or RESULT_ERROR (and
+		 *  writes nothing) if the data would end beyond SSIZE_MAX
+		 *  bytes.  If memory cannot be allocated, the bytebuffer is
+		 *  left unchanged. */
 		ssize_t	write(uint64_t number);
 
 		/** Writes "number" to the bytebuffer at the current
@@ -209,7 +265,10 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  byte after the data that was written.  If necessary, the
 		 *  internal buffer will grow to accommodate the new data.
 		 *
-		 *  Returns the number of bytes written. */
+		 *  Returns the number of bytes written, or RESULT_ERROR (and
+		 *  writes nothing) if the data would end beyond SSIZE_MAX
+		 *  bytes.  If memory cannot be allocated, the bytebuffer is
+		 *  left unchanged. */
 		ssize_t	write(float number);
 
 		/** Writes "number" to the bytebuffer at the current
@@ -217,12 +276,19 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  byte after the data that was written.  If necessary, the
 		 *  internal buffer will grow to accommodate the new data.
 		 *
-		 *  Returns the number of bytes written. */
+		 *  Returns the number of bytes written, or RESULT_ERROR (and
+		 *  writes nothing) if the data would end beyond SSIZE_MAX
+		 *  bytes.  If memory cannot be allocated, the bytebuffer is
+		 *  left unchanged. */
 		ssize_t	write(double number);
 
 		/** Appends the first "size" bytes of "data" to the
 		 *  bytebuffer, growing the internal buffer as necessary
 		 *  to accommodate the new data. 
+		 *
+		 *  If the data would end beyond SSIZE_MAX bytes, nothing is
+		 *  appended.  If memory cannot be allocated, the bytebuffer
+		 *  is left unchanged.
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
@@ -232,12 +298,20 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  bytebuffer, growing the internal buffer as necessary
 		 *  to accommodate the new data. 
 		 *
+		 *  If the data would end beyond SSIZE_MAX bytes, nothing is
+		 *  appended.  If memory cannot be allocated, the bytebuffer
+		 *  is left unchanged.
+		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
 		bytebuffer	*append(const char *string, size_t length);
 
 		/** Appends "string" to the bytebuffer, growing the
 		 *  internal buffer as necessary to accommodate the new data. 
+		 *
+		 *  If the data would end beyond SSIZE_MAX bytes, nothing is
+		 *  appended.  If memory cannot be allocated, the bytebuffer
+		 *  is left unchanged.
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
@@ -247,12 +321,20 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  bytebuffer, growing the internal buffer as necessary
 		 *  to accommodate the new data. 
 		 *
+		 *  If the data would end beyond SSIZE_MAX bytes, nothing is
+		 *  appended.  If memory cannot be allocated, the bytebuffer
+		 *  is left unchanged.
+		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
 		bytebuffer	*append(const wchar_t *string, size_t length);
 
 		/** Appends "string" to the bytebuffer, growing the
 		 *  internal buffer as necessary to accommodate the new data. 
+		 *
+		 *  If the data would end beyond SSIZE_MAX bytes, nothing is
+		 *  appended.  If memory cannot be allocated, the bytebuffer
+		 *  is left unchanged.
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
@@ -262,6 +344,10 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		 *  bytebuffer, growing the internal buffer as necessary
 		 *  to accommodate the new data. 
 		 *
+		 *  If the data would end beyond SSIZE_MAX bytes, nothing is
+		 *  appended.  If memory cannot be allocated, the bytebuffer
+		 *  is left unchanged.
+		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
 		bytebuffer	*appendUcs2(const ucs2_t *string,
@@ -270,12 +356,20 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		/** Appends "string" to the bytebuffer, growing the
 		 *  internal buffer as necessary to accommodate the new data. 
 		 *
+		 *  If the data would end beyond SSIZE_MAX bytes, nothing is
+		 *  appended.  If memory cannot be allocated, the bytebuffer
+		 *  is left unchanged.
+		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
 		bytebuffer	*appendUcs2(const ucs2_t *string);
 
 		/** Appends "character" to the bytebuffer, growing the
 		 *  internal buffer as necessary to accommodate the new data. 
+		 *
+		 *  If the data would end beyond SSIZE_MAX bytes, nothing is
+		 *  appended.  If memory cannot be allocated, the bytebuffer
+		 *  is left unchanged.
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
@@ -284,12 +378,20 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		/** Appends "character" to the bytebuffer, growing the
 		 *  internal buffer as necessary to accommodate the new data. 
 		 *
+		 *  If the data would end beyond SSIZE_MAX bytes, nothing is
+		 *  appended.  If memory cannot be allocated, the bytebuffer
+		 *  is left unchanged.
+		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
 		bytebuffer	*append(wchar_t character);
 
 		/** Appends "character" to the bytebuffer, growing the
 		 *  internal buffer as necessary to accommodate the new data. 
+		 *
+		 *  If the data would end beyond SSIZE_MAX bytes, nothing is
+		 *  appended.  If memory cannot be allocated, the bytebuffer
+		 *  is left unchanged.
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
@@ -298,12 +400,20 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		/** Appends "number" to the bytebuffer, growing the
 		 *  internal buffer as necessary to accommodate the new data. 
 		 *
+		 *  If the data would end beyond SSIZE_MAX bytes, nothing is
+		 *  appended.  If memory cannot be allocated, the bytebuffer
+		 *  is left unchanged.
+		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
 		bytebuffer	*append(int16_t number);
 
 		/** Appends "number" to the bytebuffer, growing the
 		 *  internal buffer as necessary to accommodate the new data. 
+		 *
+		 *  If the data would end beyond SSIZE_MAX bytes, nothing is
+		 *  appended.  If memory cannot be allocated, the bytebuffer
+		 *  is left unchanged.
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
@@ -312,12 +422,20 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		/** Appends "number" to the bytebuffer, growing the
 		 *  internal buffer as necessary to accommodate the new data. 
 		 *
+		 *  If the data would end beyond SSIZE_MAX bytes, nothing is
+		 *  appended.  If memory cannot be allocated, the bytebuffer
+		 *  is left unchanged.
+		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
 		bytebuffer	*append(int64_t number);
 
 		/** Appends "character" to the bytebuffer, growing the
 		 *  internal buffer as necessary to accommodate the new data. 
+		 *
+		 *  If the data would end beyond SSIZE_MAX bytes, nothing is
+		 *  appended.  If memory cannot be allocated, the bytebuffer
+		 *  is left unchanged.
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
@@ -326,12 +444,20 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		/** Appends "number" to the bytebuffer, growing the
 		 *  internal buffer as necessary to accommodate the new data. 
 		 *
+		 *  If the data would end beyond SSIZE_MAX bytes, nothing is
+		 *  appended.  If memory cannot be allocated, the bytebuffer
+		 *  is left unchanged.
+		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
 		bytebuffer	*append(uint16_t number);
 
 		/** Appends "number" to the bytebuffer, growing the
 		 *  internal buffer as necessary to accommodate the new data. 
+		 *
+		 *  If the data would end beyond SSIZE_MAX bytes, nothing is
+		 *  appended.  If memory cannot be allocated, the bytebuffer
+		 *  is left unchanged.
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
@@ -340,12 +466,20 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		/** Appends "number" to the bytebuffer, growing the
 		 *  internal buffer as necessary to accommodate the new data. 
 		 *
+		 *  If the data would end beyond SSIZE_MAX bytes, nothing is
+		 *  appended.  If memory cannot be allocated, the bytebuffer
+		 *  is left unchanged.
+		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
 		bytebuffer	*append(uint64_t number);
 
 		/** Appends "number" to the bytebuffer, growing the
 		 *  internal buffer as necessary to accommodate the new data. 
+		 *
+		 *  If the data would end beyond SSIZE_MAX bytes, nothing is
+		 *  appended.  If memory cannot be allocated, the bytebuffer
+		 *  is left unchanged.
 		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
@@ -354,15 +488,22 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		/** Appends "number" to the bytebuffer, growing the
 		 *  internal buffer as necessary to accommodate the new data. 
 		 *
+		 *  If the data would end beyond SSIZE_MAX bytes, nothing is
+		 *  appended.  If memory cannot be allocated, the bytebuffer
+		 *  is left unchanged.
+		 *
 		 *  Returns a pointer to "this" to enable chaining such as:
 		 *  	vb->append("numbers: ")->append(5)->append(5.5); */
 		bytebuffer	*append(double number);
 
 
-		/** Truncates the bytebuffer at position "pos". */
+		/** Truncates the bytebuffer at position "pos".  If "pos" is
+		 *  not less than the current size, the size is unchanged. */
 		virtual void	truncate(size_t pos);
 
-		/** Truncates the bytebuffer at the current position. */
+		/** Truncates the bytebuffer at the current position.  If the
+		 *  position is not less than the current size, the size is
+		 *  unchanged. */
 		virtual void	truncate();
 
 
@@ -378,7 +519,10 @@ class RUDIMENTS_DLLSPEC bytebuffer : public output {
 		bool	clear();
 
 		/** Empties the bytebuffer and resets the specified
-		 *  "initialsize" parameter.
+		 *  "initialsize" parameter.  If memory for the new buffer
+		 *  cannot be allocated, the bytebuffer is left unchanged.
+		 *  Unlike bytebuffer(0), an "initialsize" of 0 gives a
+		 *  buffer with a capacity of 0.
 		 *  
 		 *  Always returns true. */
 		bool	clear(size_t initialsize);
