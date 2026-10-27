@@ -5,6 +5,7 @@
 #include <rudiments/private/inttypes.h>
 
 #include <rudiments/regularexpression.h>
+#include <rudiments/output.h>
 
 #include <sys/types.h>
 

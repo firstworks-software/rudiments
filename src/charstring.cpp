@@ -762,161 +762,332 @@ char *charstring::convertAmount(int64_t amount, uint16_t spaces) {
 	return buffer;
 }
 
-char *charstring::urlEncode(const char *input) {
+// buffers output * writes in chunks, discarding all after the first failure
+struct chunkedwriter {
+	output	*out;
+	bool	binary;
+	bool	failed;
+	size_t	used;
+	char	buffer[256];
+};
 
-	if (!input) {
-		return NULL;
-	}
+static void chunkedWriterInit(chunkedwriter *cw, output *out, bool binary) {
+	cw->out=out;
+	cw->binary=binary;
+	cw->failed=false;
+	cw->used=0;
+}
 
-	size_t		outputlen=getLength(input)*3+1;
-	char		*output=new char[outputlen];
-	char		*outptr=output;
-	const byte_t	*ptr=(byte_t *)input;
-	
-	while (*ptr) {
-		if (*ptr==' ') {
-			(*outptr)='+';
-		} else if (character::isAlphanumeric(*ptr) ||
-				character::isInSet(*ptr,"$-_.!*'(),")) {
-			(*outptr)=*ptr;
-		} else {
-			(*outptr)='%';
-			outptr++;
-			outputlen--;
-			byte_t	upper=(*ptr)>>4;
-			if (upper<10) {
-				*outptr=upper+'0';
-			} else {
-				*outptr=upper-10+'A';
-			}
-			outptr++;
-			outputlen--;
-			byte_t	lower=(*ptr)&0x0F;
-			if (lower<10) {
-				*outptr=lower+'0';
-			} else {
-				*outptr=lower-10+'A';
-			}
+static void chunkedWriterFlush(chunkedwriter *cw) {
+	if (cw->used && !cw->failed) {
+		ssize_t	result=(cw->binary)?
+				cw->out->write((const byte_t *)cw->buffer,
+								cw->used):
+				cw->out->write(cw->buffer,cw->used);
+		if (result!=(ssize_t)cw->used) {
+			cw->failed=true;
 		}
-		outptr++;
-		outputlen--;
-		ptr++;
 	}
-	(*outptr)='\0';
+	cw->used=0;
+}
 
+static void chunkedWriterAppend(chunkedwriter *cw,
+					const void *data, size_t size) {
+	const char	*ptr=(const char *)data;
+	while (size && !cw->failed) {
+		size_t	chunk=sizeof(cw->buffer)-cw->used;
+		if (chunk>size) {
+			chunk=size;
+		}
+		bytestring::copy(cw->buffer+cw->used,ptr,chunk);
+		cw->used+=chunk;
+		ptr+=chunk;
+		size-=chunk;
+		if (cw->used==sizeof(cw->buffer)) {
+			chunkedWriterFlush(cw);
+		}
+	}
+}
+
+static const char	hexdigits[]="0123456789abcdef";
+
+// writes 2 lowercase hex digits to "out"
+static void hexEncodeByte(byte_t b, char *out) {
+	out[0]=hexdigits[b>>4];
+	out[1]=hexdigits[b&0x0F];
+}
+
+// returns false and sets "value" to 0 if "c" is not a hex digit
+static bool hexDigitValue(char c, byte_t *value) {
+	if (c>='A' && c<='F') {
+		*value=c-'A'+10;
+	} else if (c>='a' && c<='f') {
+		*value=c-'a'+10;
+	} else if (c>='0' && c<='9') {
+		*value=c-'0';
+	} else {
+		*value=0;
+		return false;
+	}
+	return true;
+}
+
+// decodes the 2 characters at "in", counting a non-hex digit as 0
+static byte_t hexDecodePair(const char *in) {
+	byte_t	sixteens;
+	byte_t	ones;
+	hexDigitValue(in[0],&sixteens);
+	hexDigitValue(in[1],&ones);
+	return sixteens*16+ones;
+}
+
+static const char	upperhexdigits[]="0123456789ABCDEF";
+
+// url-encodes "b" at "out", returns the characters written, 1 or 3
+static size_t urlEncodeByte(byte_t b, char *out) {
+	if (b==' ') {
+		out[0]='+';
+		return 1;
+	}
+	if (character::isAlphanumeric(b) ||
+			character::isInSet(b,"$-_.!*'(),")) {
+		out[0]=b;
+		return 1;
+	}
+	out[0]='%';
+	out[1]=upperhexdigits[b>>4];
+	out[2]=upperhexdigits[b&0x0F];
+	return 3;
+}
+
+// url-decodes one character or %XX at "in" to "out", returns the characters
+// consumed, a malformed % is copied as-is
+static size_t urlDecodeSequence(const char *in, const char *end, char *out) {
+	byte_t	sixteens;
+	byte_t	ones;
+	if (*in=='+') {
+		*out=' ';
+		return 1;
+	}
+	if (*in=='%' && end-in>=3 &&
+			hexDigitValue(in[1],&sixteens) &&
+			hexDigitValue(in[2],&ones)) {
+		*out=sixteens*16+ones;
+		return 3;
+	}
+	*out=*in;
+	return 1;
+}
+
+char *charstring::urlEncode(const char *input) {
+	return urlEncode(input,getLength(input));
+}
+
+char *charstring::urlEncode(const char *input, uint64_t inputlen) {
+	char		*output;
+	uint64_t	outputlen;
+	urlEncode(input,inputlen,&output,&outputlen);
 	return output;
+}
+
+void charstring::urlEncode(const char *input,
+				char **output, uint64_t *outputlen) {
+	urlEncode(input,getLength(input),output,outputlen);
+}
+
+void charstring::urlEncode(const char *input, uint64_t inputlen,
+				char **output, uint64_t *outputlen) {
+
+	// handle null input
+	(*output)=NULL;
+	(*outputlen)=0;
+	if (!input) {
+		return;
+	}
+
+	// encode
+	(*output)=new char[inputlen*3+1];
+	char		*oi=*output;
+	const char	*end=input+inputlen;
+	for (const char *c=input; c!=end; c++) {
+		oi+=urlEncodeByte(*c,oi);
+	}
+	*oi='\0';
+	(*outputlen)=oi-(*output);
+}
+
+void charstring::urlEncode(const char *input, output *out) {
+	urlEncode(input,getLength(input),out);
+}
+
+void charstring::urlEncode(const char *input, uint64_t inputlen, output *out) {
+
+	// handle null input or output
+	if (!input || !out) {
+		return;
+	}
+
+	chunkedwriter	cw;
+	chunkedWriterInit(&cw,out,false);
+	const char	*end=input+inputlen;
+	char		encoded[3];
+	for (const char *c=input; c!=end && !cw.failed; c++) {
+		chunkedWriterAppend(&cw,encoded,urlEncodeByte(*c,encoded));
+	}
+	chunkedWriterFlush(&cw);
 }
 
 char *charstring::urlDecode(const char *input) {
+	return urlDecode(input,getLength(input));
+}
 
-	if (!input) {
-		return NULL;
-	}
-
-	char		*output=new char[getLength(input)+1];
-	char		*outptr=output;
-	const char	*ptr=input;
-	
-	while (*ptr) {
-		if (*ptr=='+') {
-			(*outptr)=' ';
-		} else if (*ptr=='%') {
-			ptr++;
-			char	hex[5];
-			hex[0]='0';
-			hex[2]='x';
-			if (*ptr) {
-				hex[0]=*ptr;
-				ptr++;
-				if (*ptr) {
-					hex[1]=*ptr;
-				} else {
-					(*outptr)='%';
-					outptr++;
-					(*outptr)=*ptr;
-					outptr++;
-					break;
-				}
-				hex[2]='\0';
-				char	ch=convertToInteger(hex,16);
-				(*outptr)=ch;
-			} else {
-				(*outptr)='%';
-				outptr++;
-				break;
-			}
-		} else {
-			(*outptr)=*ptr;
-		}
-		outptr++;
-		ptr++;
-	}
-	(*outptr)='\0';
-
+char *charstring::urlDecode(const char *input, uint64_t inputlen) {
+	char		*output;
+	uint64_t	outputlen;
+	urlDecode(input,inputlen,&output,&outputlen);
 	return output;
 }
 
-char *charstring::htmlEncode(const char *input) {
+void charstring::urlDecode(const char *input,
+				char **output, uint64_t *outputlen) {
+	urlDecode(input,getLength(input),output,outputlen);
+}
 
+void charstring::urlDecode(const char *input, uint64_t inputlen,
+				char **output, uint64_t *outputlen) {
+
+	// handle null input
+	(*output)=NULL;
+	(*outputlen)=0;
+	if (!input) {
+		return;
+	}
+
+	// decode
+	(*output)=new char[inputlen+1];
+	char		*oi=*output;
+	const char	*end=input+inputlen;
+	for (const char *c=input; c!=end; oi++) {
+		c+=urlDecodeSequence(c,end,oi);
+	}
+	*oi='\0';
+	(*outputlen)=oi-(*output);
+}
+
+void charstring::urlDecode(const char *input, output *out) {
+	urlDecode(input,getLength(input),out);
+}
+
+void charstring::urlDecode(const char *input, uint64_t inputlen, output *out) {
+
+	// handle null input or output
+	if (!input || !out) {
+		return;
+	}
+
+	chunkedwriter	cw;
+	chunkedWriterInit(&cw,out,false);
+	const char	*end=input+inputlen;
+	char		decoded;
+	for (const char *c=input; c!=end && !cw.failed; ) {
+		c+=urlDecodeSequence(c,end,&decoded);
+		chunkedWriterAppend(&cw,&decoded,1);
+	}
+	chunkedWriterFlush(&cw);
+}
+
+// returns the entity for "c" and its length, or NULL if "c" is copied as-is
+static const char *htmlEncodeChar(char c, size_t *len) {
+	switch (c) {
+		case '&':
+			*len=5;
+			return "&amp;";
+		case '<':
+			*len=4;
+			return "&lt;";
+		case '>':
+			*len=4;
+			return "&gt;";
+		case '"':
+			*len=6;
+			return "&quot;";
+		case '\'':
+			*len=5;
+			return "&#39;";
+	}
+	*len=1;
+	return NULL;
+}
+
+char *charstring::htmlEncode(const char *input) {
+	return htmlEncode(input,getLength(input));
+}
+
+char *charstring::htmlEncode(const char *input, uint64_t inputlen) {
+	char		*output;
+	uint64_t	outputlen;
+	htmlEncode(input,inputlen,&output,&outputlen);
+	return output;
+}
+
+void charstring::htmlEncode(const char *input,
+				char **output, uint64_t *outputlen) {
+	htmlEncode(input,getLength(input),output,outputlen);
+}
+
+void charstring::htmlEncode(const char *input, uint64_t inputlen,
+				char **output, uint64_t *outputlen) {
+
+	// handle null input
 	if (!input) {
 		input="";
+		inputlen=0;
 	}
 
 	// size the output
-	size_t	outputlen=1;
-	for (const char *ptr=input; *ptr; ptr++) {
-		switch (*ptr) {
-			case '&':
-			case '\'':
-				outputlen+=5;
-				break;
-			case '<':
-			case '>':
-				outputlen+=4;
-				break;
-			case '"':
-				outputlen+=6;
-				break;
-			default:
-				outputlen++;
-				break;
-		}
+	const char	*end=input+inputlen;
+	size_t		replen;
+	(*outputlen)=0;
+	for (const char *c=input; c!=end; c++) {
+		htmlEncodeChar(*c,&replen);
+		(*outputlen)+=replen;
 	}
 
-	// copy the input, replacing the five characters
-	char	*output=new char[outputlen];
-	char	*outptr=output;
-	for (const char *ptr=input; *ptr; ptr++) {
-		const char	*rep=NULL;
-		switch (*ptr) {
-			case '&':
-				rep="&amp;";
-				break;
-			case '<':
-				rep="&lt;";
-				break;
-			case '>':
-				rep="&gt;";
-				break;
-			case '"':
-				rep="&quot;";
-				break;
-			case '\'':
-				rep="&#39;";
-				break;
-			default:
-				(*outptr)=*ptr;
-				outptr++;
-				break;
-		}
+	// encode
+	(*output)=new char[(*outputlen)+1];
+	char	*oi=*output;
+	for (const char *c=input; c!=end; c++) {
+		const char	*rep=htmlEncodeChar(*c,&replen);
 		if (rep) {
-			copy(outptr,rep);
-			outptr+=getLength(rep);
+			bytestring::copy(oi,rep,replen);
+		} else {
+			*oi=*c;
 		}
+		oi+=replen;
 	}
-	(*outptr)='\0';
+	*oi='\0';
+}
 
-	return output;
+void charstring::htmlEncode(const char *input, output *out) {
+	htmlEncode(input,getLength(input),out);
+}
+
+void charstring::htmlEncode(const char *input, uint64_t inputlen, output *out) {
+
+	// handle null input or output
+	if (!input || !out) {
+		return;
+	}
+
+	chunkedwriter	cw;
+	chunkedWriterInit(&cw,out,false);
+	const char	*end=input+inputlen;
+	size_t		replen;
+	for (const char *c=input; c!=end && !cw.failed; c++) {
+		const char	*rep=htmlEncodeChar(*c,&replen);
+		chunkedWriterAppend(&cw,(rep)?rep:c,replen);
+	}
+	chunkedWriterFlush(&cw);
 }
 
 static char *writeUtf8(char *outptr, uint32_t cp) {
@@ -942,53 +1113,35 @@ static const char	*htmlentities[]={
 	"&amp;","&","&lt;","<","&gt;",">","&quot;","\"","&apos;","'",NULL
 };
 
-char *charstring::htmlDecode(const char *input) {
+// html-decodes one character or entity at "in" to "out", returns the
+// characters consumed, an unknown or malformed entity copies only its &
+static size_t htmlDecodeSequence(const char *in, const char *end,
+						char *out, size_t *outlen) {
 
-	if (!input) {
-		input="";
-	}
-
-	// no entity decodes to more bytes than it occupies
-	char		*output=new char[getLength(input)+1];
-	char		*outptr=output;
-	const char	*ptr=input;
-
-	while (*ptr) {
-
-		if (*ptr!='&') {
-			(*outptr)=*ptr;
-			outptr++;
-			ptr++;
-			continue;
-		}
+	if (*in=='&') {
 
 		// named entities
-		bool	found=false;
+		size_t	avail=end-in;
 		for (const char **e=htmlentities; *e; e+=2) {
-			size_t	len=getLength(*e);
-			if (!compare(ptr,*e,len)) {
-				(*outptr)=**(e+1);
-				outptr++;
-				ptr+=len;
-				found=true;
-				break;
+			size_t	len=charstring::getLength(*e);
+			if (len<=avail && !bytestring::compare(in,*e,len)) {
+				*out=**(e+1);
+				*outlen=1;
+				return len;
 			}
-		}
-		if (found) {
-			continue;
 		}
 
 		// numeric references
-		if (ptr[1]=='#') {
-			const char	*p=ptr+2;
-			bool		hex=(*p=='x' || *p=='X');
+		if (avail>1 && in[1]=='#') {
+			const char	*p=in+2;
+			bool		hex=(p!=end && (*p=='x' || *p=='X'));
 			if (hex) {
 				p++;
 			}
 			const char	*digits=p;
 			uint32_t	cp=0;
 			bool		valid=true;
-			for (;;) {
+			for (; p!=end; p++) {
 				unsigned char	ch=(unsigned char)*p;
 				uint32_t	d;
 				if (character::isDigit(ch)) {
@@ -1007,114 +1160,245 @@ char *charstring::htmlDecode(const char *input) {
 						valid=false;
 					}
 				}
-				p++;
 			}
-			if (p>digits && *p==';' && valid && cp &&
+			if (p>digits && p!=end && *p==';' && valid && cp &&
 					(cp<0xD800 || cp>0xDFFF)) {
-				outptr=writeUtf8(outptr,cp);
-				ptr=p+1;
-				continue;
+				*outlen=writeUtf8(out,cp)-out;
+				return p+1-in;
 			}
 		}
-
-		// leave anything else as typed
-		(*outptr)=*ptr;
-		outptr++;
-		ptr++;
 	}
-	(*outptr)='\0';
 
+	// leave anything else as typed
+	*out=*in;
+	*outlen=1;
+	return 1;
+}
+
+char *charstring::htmlDecode(const char *input) {
+	return htmlDecode(input,getLength(input));
+}
+
+char *charstring::htmlDecode(const char *input, uint64_t inputlen) {
+	char		*output;
+	uint64_t	outputlen;
+	htmlDecode(input,inputlen,&output,&outputlen);
 	return output;
 }
 
+void charstring::htmlDecode(const char *input,
+				char **output, uint64_t *outputlen) {
+	htmlDecode(input,getLength(input),output,outputlen);
+}
+
+void charstring::htmlDecode(const char *input, uint64_t inputlen,
+				char **output, uint64_t *outputlen) {
+
+	// handle null input
+	if (!input) {
+		input="";
+		inputlen=0;
+	}
+
+	// no entity decodes to more bytes than it occupies
+	(*output)=new char[inputlen+1];
+
+	// decode
+	char		*oi=*output;
+	const char	*end=input+inputlen;
+	size_t		decodedlen;
+	for (const char *c=input; c!=end; oi+=decodedlen) {
+		c+=htmlDecodeSequence(c,end,oi,&decodedlen);
+	}
+	*oi='\0';
+	(*outputlen)=oi-(*output);
+}
+
+void charstring::htmlDecode(const char *input, output *out) {
+	htmlDecode(input,getLength(input),out);
+}
+
+void charstring::htmlDecode(const char *input, uint64_t inputlen, output *out) {
+
+	// handle null input or output
+	if (!input || !out) {
+		return;
+	}
+
+	chunkedwriter	cw;
+	chunkedWriterInit(&cw,out,false);
+	const char	*end=input+inputlen;
+	char		decoded[4];
+	size_t		decodedlen;
+	for (const char *c=input; c!=end && !cw.failed; ) {
+		c+=htmlDecodeSequence(c,end,decoded,&decodedlen);
+		chunkedWriterAppend(&cw,decoded,decodedlen);
+	}
+	chunkedWriterFlush(&cw);
+}
+
+// true if escape() puts a backslash before "c" (contains() matches a NULL "c"
+// when "characters" is non-NULL, so that is escaped too)
+static bool escapeNeedsBackslash(char c, const char *characters) {
+	return (c=='\\' || charstring::contains(characters,c));
+}
+
+// true if unescape() writes "c", tracks whether a backslash precedes it
+static bool unescapeChar(char c, bool *escaped) {
+	if (!*escaped && c=='\\') {
+		*escaped=true;
+		return false;
+	}
+	*escaped=false;
+	return true;
+}
+
 char *charstring::escape(const char *input, const char *characters) {
+	return escape(input,getLength(input),characters);
+}
+
+char *charstring::escape(const char *input, uint64_t inputlen,
+						const char *characters) {
 	char		*output;
 	uint64_t	outputlength;
-	escape(input,getLength(input),&output,&outputlength,characters);
+	escape(input,inputlen,&output,&outputlength,characters);
 	return output;
+}
+
+void charstring::escape(const char *input,
+				char **output, uint64_t *outputlen,
+				const char *characters) {
+	escape(input,getLength(input),output,outputlen,characters);
 }
 
 void charstring::escape(const char *input, uint64_t inputlength,
 				char **output, uint64_t *outputlength,
 						const char *characters) {
 
+	// handle null input
 	(*output)=NULL;
 	(*outputlength)=0;
-
 	if (!input) {
 		return;
 	}
 
-	for (uint16_t pass=0; pass<2; pass++) {
-
-		uint64_t	outputindex=0;
-		for (uint64_t inputindex=0;
-				inputindex<inputlength;
-				inputindex++) {
-			if (contains(characters,input[inputindex]) ||
-						input[inputindex]=='\\') {
-				if (pass==0) {
-					(*outputlength)++;
-				} else {
-					(*output)[outputindex]='\\';
-					outputindex++;
-				}
-			}
-			if (pass==0) {
-				(*outputlength)++;
-			} else {
-				(*output)[outputindex]=input[inputindex];
-			}
-			outputindex++;
-		}
-		if (pass==0) {
-			(*output)=new char[(*outputlength)+1];
-			(*output)[(*outputlength)]='\0';
+	// size the output
+	const char	*end=input+inputlength;
+	(*outputlength)=inputlength;
+	for (const char *c=input; c!=end; c++) {
+		if (escapeNeedsBackslash(*c,characters)) {
+			(*outputlength)++;
 		}
 	}
+
+	// escape
+	(*output)=new char[(*outputlength)+1];
+	char	*oi=*output;
+	for (const char *c=input; c!=end; c++) {
+		if (escapeNeedsBackslash(*c,characters)) {
+			*oi='\\';
+			oi++;
+		}
+		*oi=*c;
+		oi++;
+	}
+	*oi='\0';
+}
+
+void charstring::escape(const char *input, output *out,
+					const char *characters) {
+	escape(input,getLength(input),out,characters);
+}
+
+void charstring::escape(const char *input, uint64_t inputlen,
+				output *out, const char *characters) {
+
+	// handle null input or output
+	if (!input || !out) {
+		return;
+	}
+
+	chunkedwriter	cw;
+	chunkedWriterInit(&cw,out,false);
+	const char	*end=input+inputlen;
+	for (const char *c=input; c!=end && !cw.failed; c++) {
+		if (escapeNeedsBackslash(*c,characters)) {
+			chunkedWriterAppend(&cw,"\\",1);
+		}
+		chunkedWriterAppend(&cw,c,1);
+	}
+	chunkedWriterFlush(&cw);
 }
 
 char *charstring::unescape(const char *input) {
+	return unescape(input,getLength(input));
+}
+
+char *charstring::unescape(const char *input, uint64_t inputlen) {
 	char		*output;
 	uint64_t	outputsize;
-	unescape(input,getLength(input),&output,&outputsize);
+	unescape(input,inputlen,&output,&outputsize);
 	return output;
+}
+
+void charstring::unescape(const char *input,
+				char **output, uint64_t *outputlen) {
+	unescape(input,getLength(input),output,outputlen);
 }
 
 void charstring::unescape(const char *input, uint64_t inputlength,
 				char **output, uint64_t *outputlength) {
 
+	// handle null input
 	(*output)=NULL;
 	(*outputlength)=0;
-
 	if (!input) {
 		return;
 	}
 
-	for (uint16_t pass=0; pass<2; pass++) {
-
-		bool		escaped=false;
-		uint64_t	outputindex=0;
-		for (uint64_t inputindex=0;
-				inputindex<inputlength;
-				inputindex++) {
-			if (!escaped && input[inputindex]=='\\') {
-				escaped=true;
-				continue;
-			}
-			if (pass==0) {
-				(*outputlength)++;
-			} else {
-				(*output)[outputindex]=input[inputindex];
-			}
-			outputindex++;
-			escaped=false;
-		}
-		if (pass==0) {
-			(*output)=new char[(*outputlength)+1];
-			(*output)[(*outputlength)]='\0';
+	// size the output
+	const char	*end=input+inputlength;
+	bool		escaped=false;
+	for (const char *c=input; c!=end; c++) {
+		if (unescapeChar(*c,&escaped)) {
+			(*outputlength)++;
 		}
 	}
+
+	// unescape
+	(*output)=new char[(*outputlength)+1];
+	char	*oi=*output;
+	escaped=false;
+	for (const char *c=input; c!=end; c++) {
+		if (unescapeChar(*c,&escaped)) {
+			*oi=*c;
+			oi++;
+		}
+	}
+	*oi='\0';
+}
+
+void charstring::unescape(const char *input, output *out) {
+	unescape(input,getLength(input),out);
+}
+
+void charstring::unescape(const char *input, uint64_t inputlen, output *out) {
+
+	// handle null input or output
+	if (!input || !out) {
+		return;
+	}
+
+	chunkedwriter	cw;
+	chunkedWriterInit(&cw,out,false);
+	const char	*end=input+inputlen;
+	bool		escaped=false;
+	for (const char *c=input; c!=end && !cw.failed; c++) {
+		if (unescapeChar(*c,&escaped)) {
+			chunkedWriterAppend(&cw,c,1);
+		}
+	}
+	chunkedWriterFlush(&cw);
 }
 
 void charstring::leftJustify(char *str, int32_t len) {
@@ -2836,6 +3120,35 @@ static signed char	b64dcode[]={-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,	// 0-9
 					39,40,41,42,43,44,45,46,47,48,
 					49,50,51,-1,-1,-1,-1,-1};
 
+// encodes 1-3 bytes as 4 characters, padded with =
+static void base64EncodeGroup(const byte_t *in, size_t size, char *out) {
+	byte_t	data[3];
+	bytestring::copy(data,in,size);
+	bytestring::zero(data+size,3-size);
+	out[0]=b64code[data[0]>>2];
+	out[1]=b64code[(data[0]<<4|data[1]>>4)&0x3F];
+	out[2]=(size>1)?b64code[(data[1]<<2|data[2]>>6)&0x3F]:'=';
+	out[3]=(size>2)?b64code[data[2]&0x3F]:'=';
+}
+
+// decodes 1-4 characters to 3 bytes, a missing character counts as = and
+// an invalid one (including bytes >= 0x80) as all one bits
+static void base64DecodeGroup(const char *in, size_t size, byte_t *out) {
+	byte_t	data[4];
+	for (size_t i=0; i<4; i++) {
+		byte_t	c=(i<size)?(byte_t)in[i]:(byte_t)'=';
+		data[i]=(c<sizeof(b64dcode))?(byte_t)b64dcode[c]:0xFF;
+	}
+	out[0]=data[0]<<2|data[1]>>4;
+	out[1]=(data[1]&0x0F)<<4|data[2]>>2;
+	out[2]=(data[2]&0x03)<<6|data[3];
+}
+
+void charstring::base64Encode(const byte_t *input,
+					char **output, uint64_t *outputlen) {
+	base64Encode(input,getLength((const char *)input),output,outputlen);
+}
+
 void charstring::base64Encode(const byte_t *input, uint64_t inputsize,
 					char **output, uint64_t *outputlen) {
 
@@ -2930,35 +3243,36 @@ void charstring::base64Encode(const byte_t *input, uint64_t inputsize,
 				inputsize+(1-((inputsize+2)%3/2))));
 	*output=new char [(*outputlen)+1];
 
-	uint64_t	outputindex=0;
-	byte_t		data[3];
-	uint64_t	bytesremaining=0;
-	for (uint64_t inputindex=0;
-			inputindex<inputsize;
-			inputindex=inputindex+3) {
-
-		bytesremaining=inputsize-inputindex;
-		if (bytesremaining>=3) {
-			bytestring::copy(data,input+inputindex,3);
-		} else {
-			bytestring::copy(data,input+inputindex,bytesremaining);
-			bytestring::zero(data+bytesremaining,3-(bytesremaining));
-		}
-
-		(*output)[outputindex++]=b64code[data[0]>>2];
-		(*output)[outputindex++]=b64code[(data[0]<<4|data[1]>>4)&0x3F];
-		(*output)[outputindex++]=b64code[(data[1]<<2|data[2]>>6)&0x3F];
-		(*output)[outputindex++]=b64code[data[2]&0x3F];
+	char	*oi=*output;
+	for (uint64_t ii=0; ii<inputsize; ii+=3) {
+		uint64_t	remaining=inputsize-ii;
+		base64EncodeGroup(input+ii,(remaining<3)?remaining:3,oi);
+		oi+=4;
 	}
-	(*output)[outputindex]='\0';
+	*oi='\0';
+}
 
-	// convert any excess A's to ='s
-	uint64_t	excess=3-bytesremaining;
-	for (uint64_t i=0; i<excess; i++) {
-		if ((*output)[--outputindex]=='A') {
-			(*output)[outputindex]='=';
-		}
+void charstring::base64Encode(const byte_t *input, output *out) {
+	base64Encode(input,getLength((const char *)input),out);
+}
+
+void charstring::base64Encode(const byte_t *input, uint64_t inputsize,
+							output *out) {
+
+	// handle null input or output
+	if (!input || !out) {
+		return;
 	}
+
+	chunkedwriter	cw;
+	chunkedWriterInit(&cw,out,false);
+	char	group[4];
+	for (uint64_t ii=0; ii<inputsize && !cw.failed; ii+=3) {
+		uint64_t	remaining=inputsize-ii;
+		base64EncodeGroup(input+ii,(remaining<3)?remaining:3,group);
+		chunkedWriterAppend(&cw,group,4);
+	}
+	chunkedWriterFlush(&cw);
 }
 
 byte_t *charstring::base64Decode(const char *input) {
@@ -2970,6 +3284,11 @@ byte_t *charstring::base64Decode(const char *input, uint64_t inputlen) {
 	uint64_t	retvalsize=0;
 	base64Decode(input,inputlen,&retval,&retvalsize);
 	return retval;
+}
+
+void charstring::base64Decode(const char *input,
+				byte_t **output, uint64_t *outputsize) {
+	base64Decode(input,getLength(input),output,outputsize);
 }
 
 void charstring::base64Decode(const char *input, uint64_t inputlen,
@@ -2990,27 +3309,25 @@ void charstring::base64Decode(const char *input, uint64_t inputlen,
 	}
 
 	// handle real input...
-	*outputsize=inputlen*3/4;
-	*output=new byte_t [(*outputsize)+1];
+	*output=new byte_t [((inputlen+3)/4)*3+1];
 	uint64_t	outputindex=0;
-	byte_t		data[4];
 	uint64_t	inputindex=0;
 	while (inputindex<inputlen) {
 
 		// ignore whitespace
-		if (character::isWhitespace(input[inputindex])) {
+		if (character::isWhitespace((byte_t)input[inputindex])) {
 			inputindex++;
 			continue;
 		}
 
-		data[0]=(byte_t)b64dcode[(int32_t)input[inputindex++]];
-		data[1]=(byte_t)b64dcode[(int32_t)input[inputindex++]];
-		data[2]=(byte_t)b64dcode[(int32_t)input[inputindex++]];
-		data[3]=(byte_t)b64dcode[(int32_t)input[inputindex++]];
-
-		(*output)[outputindex++]=data[0]<<2|data[1]>>4;
-		(*output)[outputindex++]=(data[1]&0x0F)<<4|data[2]>>2;
-		(*output)[outputindex++]=(data[2]&0x03)<<6|data[3];
+		uint64_t	remaining=inputlen-inputindex;
+		if (remaining>4) {
+			remaining=4;
+		}
+		base64DecodeGroup(input+inputindex,remaining,
+						(*output)+outputindex);
+		inputindex+=remaining;
+		outputindex+=3;
 	}
 	(*output)[outputindex]='\0';
 
@@ -3032,6 +3349,112 @@ void charstring::base64Decode(const char *input, uint64_t inputlen,
 				(input[inputlen-2]=='=');*/
 }
 
+void charstring::base64Decode(const char *input, output *out) {
+	base64Decode(input,getLength(input),out);
+}
+
+void charstring::base64Decode(const char *input, uint64_t inputlen,
+							output *out) {
+
+	// handle null input or output
+	if (!input || !out) {
+		return;
+	}
+
+	chunkedwriter	cw;
+	chunkedWriterInit(&cw,out,true);
+	byte_t		group[3];
+	uint64_t	inputindex=0;
+	while (inputindex<inputlen && !cw.failed) {
+
+		// ignore whitespace
+		if (character::isWhitespace((byte_t)input[inputindex])) {
+			inputindex++;
+			continue;
+		}
+
+		uint64_t	remaining=inputlen-inputindex;
+		if (remaining>4) {
+			remaining=4;
+		}
+		base64DecodeGroup(input+inputindex,remaining,group);
+		chunkedWriterAppend(&cw,group,3);
+		inputindex+=remaining;
+	}
+	chunkedWriterFlush(&cw);
+}
+
+// quoted-printable-encodes "b", returns the characters written, at most 6
+// (the soft line break comes first once "*column" reaches 77)
+static size_t quotedPrintableEncodeByte(byte_t b, uint16_t *column,
+								char *out) {
+	size_t	size=0;
+
+	// soft line break
+	if (*column>=77) {
+		out[size++]='=';
+		out[size++]='\r';
+		out[size++]='\n';
+		*column=0;
+	}
+
+	// hex-encode control characters, non-ascii bytes, and =
+	if (b<' ' || b>'~' || b=='=') {
+		out[size++]='=';
+		hexEncodeByte(b,out+size);
+		size+=2;
+		(*column)+=3;
+	} else {
+		out[size++]=(char)b;
+		(*column)++;
+	}
+	return size;
+}
+
+// decodes the = sequence at "*c" and advances it, returns 1 for a byte,
+// 0 for a soft line break or dropped invalid pair, -1 if the input ends first
+static int8_t quotedPrintableDecodeSequence(const char **c,
+						const char *end, byte_t *b) {
+
+	// skip the =
+	const char	*ptr=(*c)+1;
+	if (ptr==end || !*ptr) {
+		*c=ptr;
+		return -1;
+	}
+
+	// get the 1 or 2 characters after it
+	char	char1=*ptr;
+	char	char2='\0';
+	ptr++;
+	if (ptr!=end && *ptr) {
+		char2=*ptr;
+	} else if (char1!='\r' && char1!='\n') {
+		*c=ptr;
+		return -1;
+	}
+
+	// handle soft line breaks
+	if (char1=='\n' || char1=='\r') {
+		if ((char1=='\n' && char2=='\r') ||
+			(char1=='\r' && char2=='\n')) {
+			ptr++;
+		}
+		*c=ptr;
+		return 0;
+	}
+
+	// handle hex pairs
+	*c=ptr+1;
+	byte_t	sixteens;
+	byte_t	ones;
+	if (!hexDigitValue(char1,&sixteens) || !hexDigitValue(char2,&ones)) {
+		return 0;
+	}
+	*b=sixteens*16+ones;
+	return 1;
+}
+
 char *charstring::quotedPrintableEncode(const byte_t *input) {
 	return quotedPrintableEncode(input,getLength((const char *)input));
 }
@@ -3042,6 +3465,13 @@ char *charstring::quotedPrintableEncode(const byte_t *input,
 	uint64_t	retvalsize=0;
 	quotedPrintableEncode(input,inputsize,&retval,&retvalsize);
 	return retval;
+}
+
+void charstring::quotedPrintableEncode(const byte_t *input,
+						char **output,
+						uint64_t *outputlen) {
+	quotedPrintableEncode(input,getLength((const char *)input),
+							output,outputlen);
 }
 
 void charstring::quotedPrintableEncode(const byte_t *input,
@@ -3065,28 +3495,41 @@ void charstring::quotedPrintableEncode(const byte_t *input,
 
 	// handle real input...
 	stringbuffer	out;
-	uint16_t	index=0;
+	uint16_t	column=0;
+	char		encoded[6];
 	const byte_t	*end=input+inputsize;
 	for (const byte_t *c=input; c<end; c++) {
-
-		if (index>=77) {
-			// append soft-eol
-			out.append("=\r\n");
-			index=0;
-		}
-
-		if (*c<' ' || *c>'~' || *c=='=') {
-			// hex encode
-			out.printf("=%02x",*c);
-			index+=3;
-		} else {
-			out.append(*c);
-			index++;
-		}
+		out.append(encoded,
+			quotedPrintableEncodeByte(*c,&column,encoded));
 	}
 
 	*outputlen=out.getSize();
 	*output=out.detachString();
+}
+
+void charstring::quotedPrintableEncode(const byte_t *input, output *out) {
+	quotedPrintableEncode(input,getLength((const char *)input),out);
+}
+
+void charstring::quotedPrintableEncode(const byte_t *input,
+						uint64_t inputsize,
+						output *out) {
+
+	// handle null input or output
+	if (!input || !out) {
+		return;
+	}
+
+	chunkedwriter	cw;
+	chunkedWriterInit(&cw,out,false);
+	uint16_t	column=0;
+	char		encoded[6];
+	const byte_t	*end=input+inputsize;
+	for (const byte_t *c=input; c<end && !cw.failed; c++) {
+		chunkedWriterAppend(&cw,encoded,
+			quotedPrintableEncodeByte(*c,&column,encoded));
+	}
+	chunkedWriterFlush(&cw);
 }
 
 byte_t *charstring::quotedPrintableDecode(const char *input) {
@@ -3099,6 +3542,12 @@ byte_t *charstring::quotedPrintableDecode(const char *input,
 	uint64_t	retvalsize=0;
 	quotedPrintableDecode(input,inputlen,&retval,&retvalsize);
 	return retval;
+}
+
+void charstring::quotedPrintableDecode(const char *input,
+					byte_t **output,
+					uint64_t *outputsize) {
+	quotedPrintableDecode(input,getLength(input),output,outputsize);
 }
 
 void charstring::quotedPrintableDecode(const char *input,
@@ -3123,96 +3572,21 @@ void charstring::quotedPrintableDecode(const char *input,
 	// handle real input...
 	bytebuffer	out;
 	const char	*end=input+inputlen;
-	const char *c=input;
-	while (*c && c!=end) {
-
+	const char	*c=input;
+	byte_t		b;
+	while (c!=end && *c) {
 		if (*c=='=') {
-
-			char	char1='\0';
-			char	char2='\0';
-
-			// move on
-			c++;
-
-			// bail if we hit the EOL
-			if (c==end || *c=='\0') {
+			int8_t	result=
+				quotedPrintableDecodeSequence(&c,end,&b);
+			if (result==-1) {
 				break;
 			}
-
-			// get the char
-			char1=*c;
-
-			// move on
-			c++;
-
-			// if we hit EOL..
-			if (c==end || *c=='\0') {
- 
-				// The only potentially valid case where the
-				// second character past the = is the end of
-				// line is a soft-eol.  Bail if we don't find
-				// that.
-				if (char1!='\r' && char1!='\n') {
-					break;
-				}
-
-			} else {
-
-				// get the char
-				char2=*c;
+			if (result) {
+				out.append(b);
 			}
-
-			// handle soft eol
-			if (char1=='\n') {
-				if (char2=='\r') {
-					c++;
-				} else {
-					// don't increment c
-				}
-
-			} else if (char1=='\r') {
-				if (char2=='\n') {
-					c++;
-				} else {
-					// don't increment c
-				}
-
-			// handle hex chars
-			} else {
-
-				bool	good=true;
-
-				byte_t	sixteens=character::upper(char1);
-				if (sixteens>='A' && sixteens<='F') {
-					sixteens=sixteens-'A'+10;
-				} else if (sixteens>='0' && sixteens<='9') {
-					sixteens-='0';
-				} else {
-					good=false;
-				}
-
-				byte_t	ones=character::upper(char2);
-				if (ones>='A' && ones<='F') {
-					ones=ones-'A'+10;
-				} else if (ones>='0' && ones<='9') {
-					ones-='0';
-				} else {
-					good=false;
-				}
-
-				// if both were valid hex chars then
-				// append the hex value, otherwise ignore
-				// the encoding altogether
-				if (good) {
-					out.append((byte_t)(sixteens*16+ones));
-				}
-
-				c++;
-			}
-
 		} else {
 			out.append(*c);
- 			c++;
+			c++;
 		}
 	}
 
@@ -3224,6 +3598,42 @@ void charstring::quotedPrintableDecode(const char *input,
 	*output=out.detachBuffer();
 }
 
+void charstring::quotedPrintableDecode(const char *input, output *out) {
+	quotedPrintableDecode(input,getLength(input),out);
+}
+
+void charstring::quotedPrintableDecode(const char *input,
+					uint64_t inputlen,
+					output *out) {
+
+	// handle null input or output
+	if (!input || !out) {
+		return;
+	}
+
+	chunkedwriter	cw;
+	chunkedWriterInit(&cw,out,true);
+	const char	*end=input+inputlen;
+	const char	*c=input;
+	byte_t		b;
+	while (c!=end && *c && !cw.failed) {
+		if (*c=='=') {
+			int8_t	result=
+				quotedPrintableDecodeSequence(&c,end,&b);
+			if (result==-1) {
+				break;
+			}
+			if (result) {
+				chunkedWriterAppend(&cw,&b,1);
+			}
+		} else {
+			chunkedWriterAppend(&cw,c,1);
+			c++;
+		}
+	}
+	chunkedWriterFlush(&cw);
+}
+
 char *charstring::hexEncode(const byte_t *input) {
 	return hexEncode(input,getLength((const char *)input));
 }
@@ -3233,6 +3643,11 @@ char *charstring::hexEncode(const byte_t *input, uint64_t inputsize) {
 	uint64_t	retvalsize=0;
 	hexEncode(input,inputsize,&retval,&retvalsize);
 	return retval;
+}
+
+void charstring::hexEncode(const byte_t *input,
+					char **output, uint64_t *outputlen) {
+	hexEncode(input,getLength((const char *)input),output,outputlen);
 }
 
 void charstring::hexEncode(const byte_t *input, uint64_t inputsize,
@@ -3256,10 +3671,32 @@ void charstring::hexEncode(const byte_t *input, uint64_t inputsize,
 	*output=new char[*outputlen+1];
 	char	*oi=*output;
 	for (uint64_t ii=0; ii<inputsize; ii++) {
-		printf(oi,3,"%02x",input[ii]);
+		hexEncodeByte(input[ii],oi);
 		oi+=2;
 	}
 	*oi='\0';
+}
+
+void charstring::hexEncode(const byte_t *input, output *out) {
+	hexEncode(input,getLength((const char *)input),out);
+}
+
+void charstring::hexEncode(const byte_t *input, uint64_t inputsize,
+							output *out) {
+
+	// handle null input or output
+	if (!input || !out) {
+		return;
+	}
+
+	chunkedwriter	cw;
+	chunkedWriterInit(&cw,out,false);
+	char	hex[2];
+	for (uint64_t ii=0; ii<inputsize && !cw.failed; ii++) {
+		hexEncodeByte(input[ii],hex);
+		chunkedWriterAppend(&cw,hex,2);
+	}
+	chunkedWriterFlush(&cw);
 }
 
 byte_t *charstring::hexDecode(const char *input) {
@@ -3271,6 +3708,11 @@ byte_t *charstring::hexDecode(const char *input, uint64_t inputlen) {
 	uint64_t	retvalsize=0;
 	hexDecode(input,inputlen,&retval,&retvalsize);
 	return retval;
+}
+
+void charstring::hexDecode(const char *input,
+				byte_t **output, uint64_t *outputsize) {
+	hexDecode(input,getLength(input),output,outputsize);
 }
 
 void charstring::hexDecode(const char *input, uint64_t inputlen,
@@ -3302,32 +3744,40 @@ void charstring::hexDecode(const char *input, uint64_t inputlen,
 	// convert...
 	const char	*end=input+inputlen;
 	while (input!=end) {
-		byte_t	sixteens=*input;
-		if (sixteens>='A' && sixteens<='F') {
-			sixteens=sixteens-'A'+10;
-		} else if (sixteens>='a' && sixteens<='f') {
-			sixteens=sixteens-'a'+10;
-		} else if (sixteens>='0' && sixteens<='9') {
-			sixteens-='0';
-		} else {
-			sixteens=0;
-		}
-		input++;
-		byte_t	ones=*input;
-		if (ones>='A' && ones<='F') {
-			ones=ones-'A'+10;
-		} else if (ones>='a' && ones<='f') {
-			ones=ones-'a'+10;
-		} else if (ones>='0' && ones<='9') {
-			ones-='0';
-		} else {
-			ones=0;
-		}
-		input++;
-		(*output)[*outputsize]=sixteens*16+ones;
+		(*output)[*outputsize]=hexDecodePair(input);
 		(*outputsize)++;
+		input+=2;
 	}
 	(*output)[*outputsize]='\0';
+}
+
+void charstring::hexDecode(const char *input, output *out) {
+	hexDecode(input,getLength(input),out);
+}
+
+void charstring::hexDecode(const char *input, uint64_t inputlen,
+							output *out) {
+
+	// handle null input or output
+	if (!input || !out) {
+		return;
+	}
+
+	// deal with invalid input lengths
+	if (inputlen%2) {
+		inputlen--;
+	}
+
+	// convert...
+	chunkedwriter	cw;
+	chunkedWriterInit(&cw,out,true);
+	const char	*end=input+inputlen;
+	while (input!=end && !cw.failed) {
+		byte_t	b=hexDecodePair(input);
+		chunkedWriterAppend(&cw,&b,1);
+		input+=2;
+	}
+	chunkedWriterFlush(&cw);
 }
 
 char *charstring::insertString(const char *dest,

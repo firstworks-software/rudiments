@@ -9,11 +9,597 @@
 #include <limits.h>
 #include "test.cpp"
 
+// Accepts "limit" bytes in all, then fails each write, either with a short
+// write or with RESULT_ERROR.  Counts the byte_t and char writes apart.
+class limitedbuffer : public stringbuffer {
+	public:
+			limitedbuffer(size_t limit, bool error);
+		ssize_t	write(const byte_t *string, size_t size);
+		ssize_t	write(const char *string, size_t length);
+		size_t	bytewrites;
+		size_t	charwrites;
+	private:
+		ssize_t	limitedWrite(const byte_t *data, size_t size);
+		size_t	limit;
+		bool	error;
+};
+
+limitedbuffer::limitedbuffer(size_t limit, bool error) : stringbuffer() {
+	bytewrites=0;
+	charwrites=0;
+	this->limit=limit;
+	this->error=error;
+}
+
+ssize_t limitedbuffer::write(const byte_t *string, size_t size) {
+	bytewrites++;
+	return limitedWrite(string,size);
+}
+
+ssize_t limitedbuffer::write(const char *string, size_t length) {
+	charwrites++;
+	return limitedWrite((const byte_t *)string,length);
+}
+
+ssize_t limitedbuffer::limitedWrite(const byte_t *data, size_t size) {
+	if (getSize()+size<=limit) {
+		return stringbuffer::write(data,size);
+	}
+	if (error) {
+		return RESULT_ERROR;
+	}
+	return stringbuffer::write(data,limit-getSize());
+}
+
+// returns a copy of "input" with a NULL terminator after "size" bytes
+static char *terminatedCopy(const void *input, uint64_t size) {
+	if (!input) {
+		return NULL;
+	}
+	char	*copy=new char[size+1];
+	bytestring::copy(copy,input,size);
+	copy[size]='\0';
+	return copy;
+}
+
+// Returns a copy of "input" in a buffer of exactly "size" bytes, so that
+// AddressSanitizer catches a read past "size".
+static char *exactCopy(const void *input, uint64_t size) {
+	if (!input) {
+		return NULL;
+	}
+	char	*copy=new char[size];
+	bytestring::copy(copy,input,size);
+	return copy;
+}
+
+// Checks the result of one overload against "expected", the result of the
+// input-and-size, out-pointer overload.  Results from the overloads that
+// return a buffer carry no size, so their callers pass "expectedsize".
+static void consistencyCheck(const char *label, const char *overload,
+				const void *result, uint64_t resultsize,
+				const void *expected, uint64_t expectedsize) {
+	stringbuffer	name;
+	name.append(label)->append(" ")->append(overload);
+	test(name.getString(),
+		(!result && !expected) ||
+		(result && expected && resultsize==expectedsize &&
+		!bytestring::compare(result,expected,expectedsize)));
+}
+
+// checks what an output * overload wrote to "sb" against "expected"
+static void outputConsistencyCheck(const char *label, const char *overload,
+				stringbuffer *sb,
+				const void *expected, uint64_t expectedsize) {
+	stringbuffer	name;
+	name.append(label)->append(" ")->append(overload);
+	test(name.getString(),
+		sb->getSize()==expectedsize &&
+		(!expectedsize ||
+		!bytestring::compare(sb->getBuffer(),expected,expectedsize)));
+}
+
+typedef	char	*(*bytestochars1a_t)(const byte_t *);
+typedef	char	*(*bytestochars1b_t)(const byte_t *, uint64_t);
+typedef	void	(*bytestochars2a_t)(const byte_t *, char **, uint64_t *);
+typedef	void	(*bytestochars2b_t)(const byte_t *, uint64_t,
+							char **, uint64_t *);
+typedef	void	(*bytestochars3a_t)(const byte_t *, output *);
+typedef	void	(*bytestochars3b_t)(const byte_t *, uint64_t, output *);
+
+// Runs "input" through the six overloads of a byte_t-to-char family and
+// checks that they all agree with the input-and-size, out-pointer overload.
+// The NULL-terminated overloads only run if "input" has no NULL in its first
+// "inputsize" bytes.  The input-and-size overloads get an exact-size copy of
+// "input".  The output * overloads write to a stringbuffer, so their sizes
+// also prove that no NULL terminator was written.
+static void bytesToCharsConsistencyTest(const char *label,
+				bytestochars1a_t f1a, bytestochars1b_t f1b,
+				bytestochars2a_t f2a, bytestochars2b_t f2b,
+				bytestochars3a_t f3a, bytestochars3b_t f3b,
+				const byte_t *input, uint64_t inputsize) {
+
+	// make a NULL-terminated copy of the input
+	byte_t	*in=(byte_t *)terminatedCopy(input,inputsize);
+	bool	terminated=(!in ||
+			charstring::getLength((char *)in)==inputsize);
+	byte_t	*exact=(byte_t *)exactCopy(input,inputsize);
+
+	// get the expected result
+	char		*expected;
+	uint64_t	expectedlen;
+	f2b(exact,inputsize,&expected,&expectedlen);
+
+	// buffer-returning overloads
+	char	*result;
+	if (terminated) {
+		result=f1a(in);
+		consistencyCheck(label,"1a",result,expectedlen,
+						expected,expectedlen);
+		delete[] result;
+	}
+	result=f1b(exact,inputsize);
+	consistencyCheck(label,"1b",result,expectedlen,expected,expectedlen);
+	delete[] result;
+
+	// out-pointer overload
+	if (terminated) {
+		uint64_t	resultlen;
+		f2a(in,&result,&resultlen);
+		consistencyCheck(label,"2a",result,resultlen,
+						expected,expectedlen);
+		delete[] result;
+	}
+
+	// output * overloads, including a NULL output
+	stringbuffer	sb;
+	if (terminated) {
+		f3a(in,&sb);
+		outputConsistencyCheck(label,"3a",&sb,expected,expectedlen);
+		f3a(in,NULL);
+		sb.clear();
+	}
+	f3b(exact,inputsize,&sb);
+	outputConsistencyCheck(label,"3b",&sb,expected,expectedlen);
+	f3b(exact,inputsize,NULL);
+
+	delete[] expected;
+	delete[] exact;
+	delete[] in;
+}
+
+typedef	byte_t	*(*charstobytes1a_t)(const char *);
+typedef	byte_t	*(*charstobytes1b_t)(const char *, uint64_t);
+typedef	void	(*charstobytes2a_t)(const char *, byte_t **, uint64_t *);
+typedef	void	(*charstobytes2b_t)(const char *, uint64_t,
+							byte_t **, uint64_t *);
+typedef	void	(*charstobytes3a_t)(const char *, output *);
+typedef	void	(*charstobytes3b_t)(const char *, uint64_t, output *);
+
+// Similar to bytesToCharsConsistencyTest(), for a char-to-byte_t family.
+// base64Decode() is the one exception to all six overloads agreeing: its
+// out-pointer overloads report a size that counts the NULL terminator, unless
+// the size is 0, and its output * overloads write one byte less.  Its callers
+// set "sizecountsnull".
+static void charsToBytesConsistencyTest(const char *label,
+				charstobytes1a_t f1a, charstobytes1b_t f1b,
+				charstobytes2a_t f2a, charstobytes2b_t f2b,
+				charstobytes3a_t f3a, charstobytes3b_t f3b,
+				const char *input, uint64_t inputsize,
+				bool sizecountsnull) {
+
+	// make a NULL-terminated copy of the input
+	char	*in=terminatedCopy(input,inputsize);
+	bool	terminated=(!in || charstring::getLength(in)==inputsize);
+	char	*exact=exactCopy(input,inputsize);
+
+	// get the expected result
+	byte_t		*expected;
+	uint64_t	expectedsize;
+	f2b(exact,inputsize,&expected,&expectedsize);
+	uint64_t	writtensize=(sizecountsnull && expectedsize)?
+						expectedsize-1:expectedsize;
+
+	// buffer-returning overloads
+	byte_t	*result;
+	if (terminated) {
+		result=f1a(in);
+		consistencyCheck(label,"1a",result,expectedsize,
+						expected,expectedsize);
+		delete[] result;
+	}
+	result=f1b(exact,inputsize);
+	consistencyCheck(label,"1b",result,expectedsize,
+					expected,expectedsize);
+	delete[] result;
+
+	// out-pointer overload
+	if (terminated) {
+		uint64_t	resultsize;
+		f2a(in,&result,&resultsize);
+		consistencyCheck(label,"2a",result,resultsize,
+						expected,expectedsize);
+		delete[] result;
+	}
+
+	// output * overloads, including a NULL output
+	stringbuffer	sb;
+	if (terminated) {
+		f3a(in,&sb);
+		outputConsistencyCheck(label,"3a",&sb,expected,writtensize);
+		f3a(in,NULL);
+		sb.clear();
+	}
+	f3b(exact,inputsize,&sb);
+	outputConsistencyCheck(label,"3b",&sb,expected,writtensize);
+	f3b(exact,inputsize,NULL);
+
+	delete[] expected;
+	delete[] exact;
+	delete[] in;
+}
+
+typedef	char	*(*charstochars1a_t)(const char *);
+typedef	char	*(*charstochars1b_t)(const char *, uint64_t);
+typedef	void	(*charstochars2a_t)(const char *, char **, uint64_t *);
+typedef	void	(*charstochars2b_t)(const char *, uint64_t,
+							char **, uint64_t *);
+typedef	void	(*charstochars3a_t)(const char *, output *);
+typedef	void	(*charstochars3b_t)(const char *, uint64_t, output *);
+
+// similar to bytesToCharsConsistencyTest(), for a char-to-char family
+static void charsToCharsConsistencyTest(const char *label,
+				charstochars1a_t f1a, charstochars1b_t f1b,
+				charstochars2a_t f2a, charstochars2b_t f2b,
+				charstochars3a_t f3a, charstochars3b_t f3b,
+				const char *input, uint64_t inputsize) {
+
+	// make a NULL-terminated copy of the input
+	char	*in=terminatedCopy(input,inputsize);
+	bool	terminated=(!in || charstring::getLength(in)==inputsize);
+	char	*exact=exactCopy(input,inputsize);
+
+	// get the expected result
+	char		*expected;
+	uint64_t	expectedlen;
+	f2b(exact,inputsize,&expected,&expectedlen);
+
+	// buffer-returning overloads
+	char	*result;
+	if (terminated) {
+		result=f1a(in);
+		consistencyCheck(label,"1a",result,expectedlen,
+						expected,expectedlen);
+		delete[] result;
+	}
+	result=f1b(exact,inputsize);
+	consistencyCheck(label,"1b",result,expectedlen,expected,expectedlen);
+	delete[] result;
+
+	// out-pointer overload
+	if (terminated) {
+		uint64_t	resultlen;
+		f2a(in,&result,&resultlen);
+		consistencyCheck(label,"2a",result,resultlen,
+						expected,expectedlen);
+		delete[] result;
+	}
+
+	// output * overloads, including a NULL output
+	stringbuffer	sb;
+	if (terminated) {
+		f3a(in,&sb);
+		outputConsistencyCheck(label,"3a",&sb,expected,expectedlen);
+		f3a(in,NULL);
+		sb.clear();
+	}
+	f3b(exact,inputsize,&sb);
+	outputConsistencyCheck(label,"3b",&sb,expected,expectedlen);
+	f3b(exact,inputsize,NULL);
+
+	delete[] expected;
+	delete[] exact;
+	delete[] in;
+}
+
+typedef	char	*(*charstocharswithchars1a_t)(const char *,
+							const char *);
+typedef	char	*(*charstocharswithchars1b_t)(const char *, uint64_t,
+							const char *);
+typedef	void	(*charstocharswithchars2a_t)(const char *,
+							char **, uint64_t *,
+							const char *);
+typedef	void	(*charstocharswithchars2b_t)(const char *, uint64_t,
+							char **, uint64_t *,
+							const char *);
+typedef	void	(*charstocharswithchars3a_t)(const char *, output *,
+							const char *);
+typedef	void	(*charstocharswithchars3b_t)(const char *, uint64_t,
+							output *,
+							const char *);
+
+// Similar to charsToCharsConsistencyTest(), for a char-to-char family whose
+// overloads all take a trailing "characters" argument, like escape().
+static void charsToCharsWithCharactersConsistencyTest(const char *label,
+			charstocharswithchars1a_t f1a,
+			charstocharswithchars1b_t f1b,
+			charstocharswithchars2a_t f2a,
+			charstocharswithchars2b_t f2b,
+			charstocharswithchars3a_t f3a,
+			charstocharswithchars3b_t f3b,
+			const char *input, uint64_t inputsize,
+			const char *characters) {
+
+	// make a NULL-terminated copy of the input
+	char	*in=terminatedCopy(input,inputsize);
+	bool	terminated=(!in || charstring::getLength(in)==inputsize);
+	char	*exact=exactCopy(input,inputsize);
+
+	// get the expected result
+	char		*expected;
+	uint64_t	expectedlen;
+	f2b(exact,inputsize,&expected,&expectedlen,characters);
+
+	// buffer-returning overloads
+	char	*result;
+	if (terminated) {
+		result=f1a(in,characters);
+		consistencyCheck(label,"1a",result,expectedlen,
+						expected,expectedlen);
+		delete[] result;
+	}
+	result=f1b(exact,inputsize,characters);
+	consistencyCheck(label,"1b",result,expectedlen,expected,expectedlen);
+	delete[] result;
+
+	// out-pointer overload
+	if (terminated) {
+		uint64_t	resultlen;
+		f2a(in,&result,&resultlen,characters);
+		consistencyCheck(label,"2a",result,resultlen,
+						expected,expectedlen);
+		delete[] result;
+	}
+
+	// output * overloads, including a NULL output
+	stringbuffer	sb;
+	if (terminated) {
+		f3a(in,&sb,characters);
+		outputConsistencyCheck(label,"3a",&sb,expected,expectedlen);
+		f3a(in,NULL,characters);
+		sb.clear();
+	}
+	f3b(exact,inputsize,&sb,characters);
+	outputConsistencyCheck(label,"3b",&sb,expected,expectedlen);
+	f3b(exact,inputsize,NULL,characters);
+
+	delete[] expected;
+	delete[] exact;
+	delete[] in;
+}
+
+static void hexEncodeTest(const char *label,
+				const byte_t *input, uint64_t inputsize,
+				const char *expected) {
+	char		*result;
+	uint64_t	resultlen;
+	charstring::hexEncode(input,inputsize,&result,&resultlen);
+	test(label,(!result && !expected) ||
+			(result && expected &&
+			resultlen==charstring::getLength(expected) &&
+			!charstring::compare(result,expected)));
+	delete[] result;
+	bytesToCharsConsistencyTest(label,
+			charstring::hexEncode,charstring::hexEncode,
+			charstring::hexEncode,charstring::hexEncode,
+			charstring::hexEncode,charstring::hexEncode,
+			input,inputsize);
+}
+
+static void hexDecodeTest(const char *label,
+				const char *input, uint64_t inputsize,
+				const char *expected, uint64_t expectedsize) {
+	byte_t		*result;
+	uint64_t	resultsize;
+	charstring::hexDecode(input,inputsize,&result,&resultsize);
+	test(label,(!result && !expected) ||
+			(result && expected &&
+			resultsize==expectedsize &&
+			!bytestring::compare(result,expected,expectedsize)));
+	delete[] result;
+	charsToBytesConsistencyTest(label,
+			charstring::hexDecode,charstring::hexDecode,
+			charstring::hexDecode,charstring::hexDecode,
+			charstring::hexDecode,charstring::hexDecode,
+			input,inputsize,false);
+}
+
+static void base64EncodeTest(const char *label,
+				const byte_t *input, uint64_t inputsize,
+				const char *expected) {
+	byte_t		*in=(byte_t *)exactCopy(input,inputsize);
+	char		*result;
+	uint64_t	resultlen;
+	charstring::base64Encode(in,inputsize,&result,&resultlen);
+	test(label,(!result && !expected) ||
+			(result && expected &&
+			resultlen==charstring::getLength(expected) &&
+			!charstring::compare(result,expected)));
+	delete[] result;
+	delete[] in;
+	bytesToCharsConsistencyTest(label,
+			charstring::base64Encode,charstring::base64Encode,
+			charstring::base64Encode,charstring::base64Encode,
+			charstring::base64Encode,charstring::base64Encode,
+			input,inputsize);
+}
+
+// "expectedsize" is the size that the out-pointer overloads report, which
+// counts the NULL terminator, so "expected" includes the terminator
+static void base64DecodeTest(const char *label,
+				const char *input, uint64_t inputsize,
+				const char *expected, uint64_t expectedsize) {
+	char		*in=exactCopy(input,inputsize);
+	byte_t		*result;
+	uint64_t	resultsize;
+	charstring::base64Decode(in,inputsize,&result,&resultsize);
+	test(label,(!result && !expected) ||
+			(result && expected &&
+			resultsize==expectedsize &&
+			!bytestring::compare(result,expected,expectedsize)));
+	delete[] result;
+	delete[] in;
+	charsToBytesConsistencyTest(label,
+			charstring::base64Decode,charstring::base64Decode,
+			charstring::base64Decode,charstring::base64Decode,
+			charstring::base64Decode,charstring::base64Decode,
+			input,inputsize,true);
+}
+
+// appends "count" copies of "str" to "sb"
+static void appendRepeated(stringbuffer *sb, const char *str, uint64_t count) {
+	for (uint64_t i=0; i<count; i++) {
+		sb->append(str);
+	}
+}
+
+static void quotedPrintableEncodeTest(const char *label,
+				const byte_t *input, uint64_t inputsize,
+				const char *expected) {
+	byte_t		*in=(byte_t *)exactCopy(input,inputsize);
+	char		*result;
+	uint64_t	resultlen;
+	charstring::quotedPrintableEncode(in,inputsize,&result,&resultlen);
+	test(label,(!result && !expected) ||
+			(result && expected &&
+			resultlen==charstring::getLength(expected) &&
+			!charstring::compare(result,expected)));
+	delete[] result;
+	delete[] in;
+	bytesToCharsConsistencyTest(label,
+		charstring::quotedPrintableEncode,
+		charstring::quotedPrintableEncode,
+		charstring::quotedPrintableEncode,
+		charstring::quotedPrintableEncode,
+		charstring::quotedPrintableEncode,
+		charstring::quotedPrintableEncode,
+		input,inputsize);
+}
+
+static void quotedPrintableDecodeTest(const char *label,
+				const char *input, uint64_t inputsize,
+				const char *expected, uint64_t expectedsize) {
+	char		*in=exactCopy(input,inputsize);
+	byte_t		*result;
+	uint64_t	resultsize;
+	charstring::quotedPrintableDecode(in,inputsize,&result,&resultsize);
+	test(label,(!result && !expected) ||
+			(result && expected &&
+			resultsize==expectedsize &&
+			!bytestring::compare(result,expected,expectedsize)));
+	delete[] result;
+	delete[] in;
+	charsToBytesConsistencyTest(label,
+		charstring::quotedPrintableDecode,
+		charstring::quotedPrintableDecode,
+		charstring::quotedPrintableDecode,
+		charstring::quotedPrintableDecode,
+		charstring::quotedPrintableDecode,
+		charstring::quotedPrintableDecode,
+		input,inputsize,false);
+}
+
+static void escapeTest(const char *label,
+				const char *input, uint64_t inputsize,
+				const char *characters,
+				const char *expected, uint64_t expectedlen) {
+	char		*in=exactCopy(input,inputsize);
+	char		*result;
+	uint64_t	resultlen;
+	charstring::escape(in,inputsize,&result,&resultlen,characters);
+	test(label,(!result && !expected) ||
+			(result && expected &&
+			resultlen==expectedlen &&
+			!bytestring::compare(result,expected,expectedlen+1)));
+	delete[] result;
+	delete[] in;
+	charsToCharsWithCharactersConsistencyTest(label,
+			charstring::escape,charstring::escape,
+			charstring::escape,charstring::escape,
+			charstring::escape,charstring::escape,
+			input,inputsize,characters);
+}
+
+static void unescapeTest(const char *label,
+				const char *input, uint64_t inputsize,
+				const char *expected, uint64_t expectedlen) {
+	char		*in=exactCopy(input,inputsize);
+	char		*result;
+	uint64_t	resultlen;
+	charstring::unescape(in,inputsize,&result,&resultlen);
+	test(label,(!result && !expected) ||
+			(result && expected &&
+			resultlen==expectedlen &&
+			!bytestring::compare(result,expected,expectedlen+1)));
+	delete[] result;
+	delete[] in;
+	charsToCharsConsistencyTest(label,
+			charstring::unescape,charstring::unescape,
+			charstring::unescape,charstring::unescape,
+			charstring::unescape,charstring::unescape,
+			input,inputsize);
+}
+
+static void urlEncodeTest(const char *label,
+				const char *input, uint64_t inputsize,
+				const char *expected, uint64_t expectedlen) {
+	char		*in=exactCopy(input,inputsize);
+	char		*result;
+	uint64_t	resultlen;
+	charstring::urlEncode(in,inputsize,&result,&resultlen);
+	test(label,(!result && !expected) ||
+			(result && expected &&
+			resultlen==expectedlen &&
+			!bytestring::compare(result,expected,expectedlen+1)));
+	delete[] result;
+	delete[] in;
+	charsToCharsConsistencyTest(label,
+			charstring::urlEncode,charstring::urlEncode,
+			charstring::urlEncode,charstring::urlEncode,
+			charstring::urlEncode,charstring::urlEncode,
+			input,inputsize);
+}
+
+static void urlDecodeTest(const char *label,
+				const char *input, uint64_t inputsize,
+				const char *expected, uint64_t expectedlen) {
+	char		*in=exactCopy(input,inputsize);
+	char		*result;
+	uint64_t	resultlen;
+	charstring::urlDecode(in,inputsize,&result,&resultlen);
+	test(label,(!result && !expected) ||
+			(result && expected &&
+			resultlen==expectedlen &&
+			!bytestring::compare(result,expected,expectedlen+1)));
+	delete[] result;
+	delete[] in;
+	charsToCharsConsistencyTest(label,
+			charstring::urlDecode,charstring::urlDecode,
+			charstring::urlDecode,charstring::urlDecode,
+			charstring::urlDecode,charstring::urlDecode,
+			input,inputsize);
+}
+
 static void htmlEncodeTest(const char *label,
 				const char *input, const char *expected) {
 	char	*output=charstring::htmlEncode(input);
 	test(label,!charstring::compare(output,expected));
 	delete[] output;
+	charsToCharsConsistencyTest(label,
+			charstring::htmlEncode,charstring::htmlEncode,
+			charstring::htmlEncode,charstring::htmlEncode,
+			charstring::htmlEncode,charstring::htmlEncode,
+			input,charstring::getLength(input));
 }
 
 static void htmlDecodeTest(const char *label,
@@ -23,6 +609,11 @@ static void htmlDecodeTest(const char *label,
 			charstring::getLength(output)<=
 			charstring::getLength(input));
 	delete[] output;
+	charsToCharsConsistencyTest(label,
+			charstring::htmlDecode,charstring::htmlDecode,
+			charstring::htmlDecode,charstring::htmlDecode,
+			charstring::htmlDecode,charstring::htmlDecode,
+			input,charstring::getLength(input));
 }
 
 static void htmlRoundTripTest(const char *label, const char *input) {
@@ -31,6 +622,42 @@ static void htmlRoundTripTest(const char *label, const char *input) {
 	test(label,!charstring::compare(decoded,input));
 	delete[] encoded;
 	delete[] decoded;
+}
+
+static void htmlEncodeSizeTest(const char *label,
+				const char *input, uint64_t inputsize,
+				const char *expected, uint64_t expectedlen) {
+	char		*in=exactCopy(input,inputsize);
+	char		*result;
+	uint64_t	resultlen;
+	charstring::htmlEncode(in,inputsize,&result,&resultlen);
+	test(label,result && resultlen==expectedlen &&
+			!bytestring::compare(result,expected,expectedlen+1));
+	delete[] result;
+	delete[] in;
+	charsToCharsConsistencyTest(label,
+			charstring::htmlEncode,charstring::htmlEncode,
+			charstring::htmlEncode,charstring::htmlEncode,
+			charstring::htmlEncode,charstring::htmlEncode,
+			input,inputsize);
+}
+
+static void htmlDecodeSizeTest(const char *label,
+				const char *input, uint64_t inputsize,
+				const char *expected, uint64_t expectedlen) {
+	char		*in=exactCopy(input,inputsize);
+	char		*result;
+	uint64_t	resultlen;
+	charstring::htmlDecode(in,inputsize,&result,&resultlen);
+	test(label,result && resultlen==expectedlen &&
+			!bytestring::compare(result,expected,expectedlen+1));
+	delete[] result;
+	delete[] in;
+	charsToCharsConsistencyTest(label,
+			charstring::htmlDecode,charstring::htmlDecode,
+			charstring::htmlDecode,charstring::htmlDecode,
+			charstring::htmlDecode,charstring::htmlDecode,
+			input,inputsize);
 }
 
 int main(int argc, const char **argv) {
@@ -504,6 +1131,267 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("\n");
 
 
+	// hex encode
+	stdoutput.printf("hex-encode...\n");
+	uint64_t	zero=0;
+	hexEncodeTest("NULL",NULL,zero,NULL);
+	hexEncodeTest("NULL, size 3",NULL,3,NULL);
+	hexEncodeTest("empty",(const byte_t *)"",zero,"");
+	hexEncodeTest("abc, size 0",(const byte_t *)"abc",zero,"");
+	hexEncodeTest("A",(const byte_t *)"A",1,"41");
+	hexEncodeTest("\\x01\\xab\\xff",(const byte_t *)"\x01\xab\xff",3,
+								"01abff");
+	hexEncodeTest("a\\0b",(const byte_t *)"a\0b",3,"610062");
+	hexEncodeTest("\\0",(const byte_t *)"\0",1,"00");
+	stdoutput.printf("\n");
+
+
+	// hex decode
+	stdoutput.printf("hex-decode...\n");
+	hexDecodeTest("NULL",NULL,zero,NULL,0);
+	hexDecodeTest("NULL, size 3",NULL,3,NULL,0);
+	hexDecodeTest("empty","",zero,"",0);
+	hexDecodeTest("4142, size 0","4142",zero,"",0);
+	hexDecodeTest("41","41",2,"\x41",1);
+	hexDecodeTest("00abFF","00abFF",6,"\x00\xab\xff",3);
+	hexDecodeTest("4142","4142",4,"\x41\x42",2);
+	hexDecodeTest("aBcD","aBcD",4,"\xab\xcd",2);
+	hexDecodeTest("41\\0" "042","41\0" "042",6,"\x41\x00\x42",3);
+	stdoutput.printf("\n");
+
+
+	// hex decode odd lengths
+	stdoutput.printf("hex-decode odd lengths...\n");
+	hexDecodeTest("414","414",3,"\x41",1);
+	hexDecodeTest("4","4",1,"",0);
+	hexDecodeTest(" 41"," 41",3,"\x04",1);
+	stdoutput.printf("\n");
+
+
+	// hex decode bad digits
+	stdoutput.printf("hex-decode bad digits...\n");
+	hexDecodeTest("4G","4G",2,"\x40",1);
+	hexDecodeTest("G4","G4",2,"\x04",1);
+	hexDecodeTest("zz","zz",2,"\x00",1);
+	hexDecodeTest("0x41","0x41",4,"\x00\x41",2);
+	hexDecodeTest("\\xc3\\xa9","\xc3\xa9",2,"\x00",1);
+	stdoutput.printf("\n");
+
+
+	// hex large input, through several chunks of the output * overloads
+	stdoutput.printf("hex large input...\n");
+	bigbytes=new byte_t[bigsize];
+	for (uint64_t bi=0; bi<bigsize; bi++) {
+		bigbytes[bi]=(byte_t)(bi%256);
+	}
+	bytesToCharsConsistencyTest("encode",
+			charstring::hexEncode,charstring::hexEncode,
+			charstring::hexEncode,charstring::hexEncode,
+			charstring::hexEncode,charstring::hexEncode,
+			bigbytes,bigsize);
+	charstring::hexEncode(bigbytes,bigsize,&encodedbytes,&encodedlen);
+	charsToBytesConsistencyTest("decode",
+			charstring::hexDecode,charstring::hexDecode,
+			charstring::hexDecode,charstring::hexDecode,
+			charstring::hexDecode,charstring::hexDecode,
+			encodedbytes,encodedlen,false);
+	stringbuffer	hexsb;
+	charstring::hexDecode(encodedbytes,&hexsb);
+	test("decode 3a round trip",
+		hexsb.getSize()==bigsize &&
+		!bytestring::compare(hexsb.getBuffer(),bigbytes,bigsize));
+	stdoutput.printf("\n");
+
+
+	// hex output * overloads stop at the first failed or short write
+	stdoutput.printf("hex failed writes...\n");
+	limitedbuffer	shortenc(300,false);
+	charstring::hexEncode(bigbytes,bigsize,&shortenc);
+	test("encode short write",
+		shortenc.charwrites==2 && !shortenc.bytewrites &&
+		shortenc.getSize()==300 &&
+		!bytestring::compare(shortenc.getBuffer(),encodedbytes,300));
+	limitedbuffer	errorenc(300,true);
+	charstring::hexEncode(bigbytes,bigsize,&errorenc);
+	test("encode error",
+		errorenc.charwrites==2 && !errorenc.bytewrites &&
+		errorenc.getSize()==256 &&
+		!bytestring::compare(errorenc.getBuffer(),encodedbytes,256));
+	limitedbuffer	firstenc(0,true);
+	charstring::hexEncode(bigbytes,bigsize,&firstenc);
+	test("encode error on first write",
+		firstenc.charwrites==1 && !firstenc.bytewrites &&
+		!firstenc.getSize());
+	limitedbuffer	shortdec(300,false);
+	charstring::hexDecode(encodedbytes,encodedlen,&shortdec);
+	test("decode short write",
+		shortdec.bytewrites==2 && !shortdec.charwrites &&
+		shortdec.getSize()==300 &&
+		!bytestring::compare(shortdec.getBuffer(),bigbytes,300));
+	limitedbuffer	errordec(300,true);
+	charstring::hexDecode(encodedbytes,encodedlen,&errordec);
+	test("decode error",
+		errordec.bytewrites==2 && !errordec.charwrites &&
+		errordec.getSize()==256 &&
+		!bytestring::compare(errordec.getBuffer(),bigbytes,256));
+	delete[] bigbytes;
+	delete[] encodedbytes;
+	stdoutput.printf("\n");
+
+
+	// base64 encode
+	stdoutput.printf("base64-encode...\n");
+	base64EncodeTest("NULL",NULL,zero,NULL);
+	base64EncodeTest("NULL, size 3",NULL,3,NULL);
+	base64EncodeTest("empty",(const byte_t *)"",zero,"");
+	base64EncodeTest("abc, size 0",(const byte_t *)"abc",zero,"");
+	base64EncodeTest("M",(const byte_t *)"M",1,"TQ==");
+	base64EncodeTest("Ma",(const byte_t *)"Ma",2,"TWE=");
+	base64EncodeTest("Man",(const byte_t *)"Man",3,"TWFu");
+	base64EncodeTest("Mann",(const byte_t *)"Mann",4,"TWFubg==");
+	base64EncodeTest("hello world",(const byte_t *)"hello world",11,
+							"aGVsbG8gd29ybGQ=");
+	base64EncodeTest("AAA",(const byte_t *)"AAA",3,"QUFB");
+	base64EncodeTest("a\\0b",(const byte_t *)"a\0b",3,"YQBi");
+	base64EncodeTest("\\0",(const byte_t *)"\0",1,"AA==");
+	base64EncodeTest("\\0\\0\\0",(const byte_t *)"\0\0\0",3,"AAAA");
+	base64EncodeTest("\\xff\\xfe\\x80",(const byte_t *)"\xff\xfe\x80",3,
+									"//6A");
+	base64EncodeTest("\\xfb\\xff",(const byte_t *)"\xfb\xff",2,"+/8=");
+	stdoutput.printf("\n");
+
+
+	// base64 decode
+	stdoutput.printf("base64-decode...\n");
+	base64DecodeTest("NULL",NULL,zero,NULL,0);
+	base64DecodeTest("NULL, size 3",NULL,3,NULL,0);
+	base64DecodeTest("empty","",zero,"",0);
+	base64DecodeTest("TQ==, size 0","TQ==",zero,"",0);
+	base64DecodeTest("TQ==","TQ==",4,"M\0\0",4);
+	base64DecodeTest("TWE=","TWE=",4,"Ma\0",4);
+	base64DecodeTest("TWFu","TWFu",4,"Man",4);
+	base64DecodeTest("TWFubg==","TWFubg==",8,"Mann\0\0",7);
+	base64DecodeTest("aGVsbG8gd29ybGQ=","aGVsbG8gd29ybGQ=",16,
+							"hello world\0\0",13);
+	base64DecodeTest("QUFB","QUFB",4,"AAA",4);
+	base64DecodeTest("AAAA","AAAA",4,"\0\0\0",4);
+	base64DecodeTest("YQBi","YQBi",4,"a\0b",4);
+	base64DecodeTest("//7/","//7/",4,"\xff\xfe\xff",4);
+	base64DecodeTest("QQ==QQ==","QQ==QQ==",8,"A\0\0A\0\0",7);
+	base64DecodeTest("====","====",4,"\0\0\0",4);
+	base64DecodeTest("Q=Q=","Q=Q=",4,"\x40\x04\0",4);
+	stdoutput.printf("\n");
+
+
+	// base64 decode whitespace, skipped where a group starts
+	stdoutput.printf("base64-decode whitespace...\n");
+	base64DecodeTest("QUJD\\n","QUJD\n",5,"ABC",4);
+	base64DecodeTest("\\nQUJD","\nQUJD",5,"ABC",4);
+	base64DecodeTest("  QUJD","  QUJD",6,"ABC",4);
+	base64DecodeTest("QUJD QUJD","QUJD QUJD",9,"ABCABC",7);
+	base64DecodeTest("QUJD\\r\\nQUJD","QUJD\r\nQUJD",10,"ABCABC",7);
+	base64DecodeTest("2 spaces","  ",2,"",1);
+	stdoutput.printf("\n");
+
+
+	// base64 decode characters outside the alphabet
+	stdoutput.printf("base64-decode bad characters...\n");
+	base64DecodeTest("QU\\0D","QU\0D",4,"\x41\x7f\xc3",4);
+	base64DecodeTest("QU-_","QU-_",4,"\x41\x7f\xff",4);
+	base64DecodeTest("!!!!","!!!!",4,"\xff\xff\xff",4);
+	base64DecodeTest("\\x80\\x80\\x80\\x80","\x80\x80\x80\x80",4,
+							"\xff\xff\xff",4);
+	base64DecodeTest("\\xc3\\xa9AA","\xc3\xa9" "AA",4,"\xff\xf0\0",4);
+	base64DecodeTest("QUJ\\x80","QUJ\x80",4,"AB\xff",4);
+	stdoutput.printf("\n");
+
+
+	// base64 decode partial groups, missing characters count as =
+	stdoutput.printf("base64-decode partial groups...\n");
+	base64DecodeTest("A","A",1,"\0\0\0",4);
+	base64DecodeTest("QQ","QQ",2,"A\0\0",4);
+	base64DecodeTest("QQ=","QQ=",3,"A\0\0",4);
+	base64DecodeTest("QUJDR","QUJDR",5,"ABCD\0\0",7);
+	base64DecodeTest("QUJDRA","QUJDRA",6,"ABCD\0\0",7);
+	base64DecodeTest("QUJDRA=","QUJDRA=",7,"ABCD\0\0",7);
+	base64DecodeTest("QU JD","QU JD",5,"\x41\x7f\xc9\x0c\0\0",7);
+	base64DecodeTest("QU\\nJD==","QU\nJD==",7,"\x41\x7f\xc9\x0c\0\0",7);
+	base64DecodeTest("QQ==\\nQ","QQ==\nQ",6,"A\0\0@\0\0",7);
+	base64DecodeTest("QUJD\\x01","QUJD\x01",5,"ABC\xfc\0\0",7);
+	base64DecodeTest("QQ==QQ","QQ==QQ",6,"A\0\0A\0\0",7);
+	stdoutput.printf("\n");
+
+
+	// base64 large input, through several chunks of the output * overloads
+	stdoutput.printf("base64 large input...\n");
+	bigbytes=new byte_t[bigsize];
+	for (uint64_t bi=0; bi<bigsize; bi++) {
+		bigbytes[bi]=(byte_t)(bi%256);
+	}
+	bytesToCharsConsistencyTest("encode",
+			charstring::base64Encode,charstring::base64Encode,
+			charstring::base64Encode,charstring::base64Encode,
+			charstring::base64Encode,charstring::base64Encode,
+			bigbytes,bigsize);
+	charstring::base64Encode(bigbytes,bigsize,&encodedbytes,&encodedlen);
+	charsToBytesConsistencyTest("decode",
+			charstring::base64Decode,charstring::base64Decode,
+			charstring::base64Decode,charstring::base64Decode,
+			charstring::base64Decode,charstring::base64Decode,
+			encodedbytes,encodedlen,true);
+	stringbuffer	b64sb;
+	charstring::base64Decode(encodedbytes,&b64sb);
+	uint64_t	padsize=(3-bigsize%3)%3;
+	byte_t		padzeros[2]={0x00,0x00};
+	test("decode 3a round trip",
+		b64sb.getSize()==bigsize+padsize &&
+		!bytestring::compare(b64sb.getBuffer(),bigbytes,bigsize) &&
+		!bytestring::compare(b64sb.getBuffer()+bigsize,
+						padzeros,padsize));
+	stdoutput.printf("\n");
+
+
+	// base64 output * overloads stop at the first failed or short write
+	stdoutput.printf("base64 failed writes...\n");
+	limitedbuffer	b64shortenc(300,false);
+	charstring::base64Encode(bigbytes,bigsize,&b64shortenc);
+	test("encode short write",
+		b64shortenc.charwrites==2 && !b64shortenc.bytewrites &&
+		b64shortenc.getSize()==300 &&
+		!bytestring::compare(b64shortenc.getBuffer(),encodedbytes,300));
+	limitedbuffer	b64errorenc(300,true);
+	charstring::base64Encode(bigbytes,bigsize,&b64errorenc);
+	test("encode error",
+		b64errorenc.charwrites==2 && !b64errorenc.bytewrites &&
+		b64errorenc.getSize()==256 &&
+		!bytestring::compare(b64errorenc.getBuffer(),encodedbytes,256));
+	limitedbuffer	b64firstenc(0,true);
+	charstring::base64Encode(bigbytes,bigsize,&b64firstenc);
+	test("encode error on first write",
+		b64firstenc.charwrites==1 && !b64firstenc.bytewrites &&
+		!b64firstenc.getSize());
+	limitedbuffer	b64shortdec(300,false);
+	charstring::base64Decode(encodedbytes,encodedlen,&b64shortdec);
+	test("decode short write",
+		b64shortdec.bytewrites==2 && !b64shortdec.charwrites &&
+		b64shortdec.getSize()==300 &&
+		!bytestring::compare(b64shortdec.getBuffer(),bigbytes,300));
+	limitedbuffer	b64errordec(300,true);
+	charstring::base64Decode(encodedbytes,encodedlen,&b64errordec);
+	test("decode error",
+		b64errordec.bytewrites==2 && !b64errordec.charwrites &&
+		b64errordec.getSize()==256 &&
+		!bytestring::compare(b64errordec.getBuffer(),bigbytes,256));
+	limitedbuffer	b64firstdec(0,true);
+	charstring::base64Decode(encodedbytes,encodedlen,&b64firstdec);
+	test("decode error on first write",
+		b64firstdec.bytewrites==1 && !b64firstdec.charwrites &&
+		!b64firstdec.getSize());
+	delete[] bigbytes;
+	delete[] encodedbytes;
+	stdoutput.printf("\n");
+
+
 	// url encode the buffer
 	stdoutput.printf("url-encode...\n");
 	const char	*original="!@#$%^&*()hello-+£";
@@ -514,6 +1402,239 @@ int main(int argc, const char **argv) {
 	test("unescaped",!charstring::compare(unescbuffer,original));
 	delete[] escbuffer;
 	delete[] unescbuffer;
+	stdoutput.printf("\n");
+
+
+	// url overloads, called directly
+	stdoutput.printf("url overloads...\n");
+	const char	*urlin="a b+c/d";
+	uint64_t	urlinlen=charstring::getLength(urlin);
+	const char	*urlout="a+b%2Bc%2Fd";
+	uint64_t	urloutlen=charstring::getLength(urlout);
+	char		*urlresult;
+	uint64_t	urlresultlen;
+	urlresult=charstring::urlEncode(urlin,urlinlen);
+	test("encode 1b",!charstring::compare(urlresult,urlout));
+	delete[] urlresult;
+	charstring::urlEncode(urlin,&urlresult,&urlresultlen);
+	test("encode 2a",urlresultlen==urloutlen &&
+			!charstring::compare(urlresult,urlout));
+	delete[] urlresult;
+	charstring::urlEncode(urlin,urlinlen,&urlresult,&urlresultlen);
+	test("encode 2b",urlresultlen==urloutlen &&
+			!charstring::compare(urlresult,urlout));
+	delete[] urlresult;
+	stringbuffer	urlsb;
+	charstring::urlEncode(urlin,&urlsb);
+	test("encode 3a",urlsb.getSize()==urloutlen &&
+			!charstring::compare(urlsb.getString(),urlout));
+	urlsb.clear();
+	charstring::urlEncode(urlin,urlinlen,&urlsb);
+	test("encode 3b",urlsb.getSize()==urloutlen &&
+			!charstring::compare(urlsb.getString(),urlout));
+	urlsb.clear();
+	urlresult=charstring::urlDecode(urlout,urloutlen);
+	test("decode 1b",!charstring::compare(urlresult,urlin));
+	delete[] urlresult;
+	charstring::urlDecode(urlout,&urlresult,&urlresultlen);
+	test("decode 2a",urlresultlen==urlinlen &&
+			!charstring::compare(urlresult,urlin));
+	delete[] urlresult;
+	charstring::urlDecode(urlout,urloutlen,&urlresult,&urlresultlen);
+	test("decode 2b",urlresultlen==urlinlen &&
+			!charstring::compare(urlresult,urlin));
+	delete[] urlresult;
+	charstring::urlDecode(urlout,&urlsb);
+	test("decode 3a",urlsb.getSize()==urlinlen &&
+			!charstring::compare(urlsb.getString(),urlin));
+	urlsb.clear();
+	charstring::urlDecode(urlout,urloutlen,&urlsb);
+	test("decode 3b",urlsb.getSize()==urlinlen &&
+			!charstring::compare(urlsb.getString(),urlin));
+	urlsb.clear();
+	charstring::urlEncode(urlin,(output *)NULL);
+	charstring::urlEncode(urlin,urlinlen,(output *)NULL);
+	charstring::urlDecode(urlout,(output *)NULL);
+	charstring::urlDecode(urlout,urloutlen,(output *)NULL);
+	charstring::urlEncode((const char *)NULL,&urlsb);
+	charstring::urlEncode((const char *)NULL,urlinlen,&urlsb);
+	charstring::urlDecode((const char *)NULL,&urlsb);
+	charstring::urlDecode((const char *)NULL,urloutlen,&urlsb);
+	test("3a/3b NULL input",!urlsb.getSize());
+	stdoutput.printf("\n");
+
+
+	// url encode
+	stdoutput.printf("url-encode overloads...\n");
+	urlEncodeTest("NULL",NULL,zero,NULL,0);
+	urlEncodeTest("NULL, size 3",NULL,3,NULL,0);
+	urlEncodeTest("empty","",zero,"",0);
+	urlEncodeTest("abc, size 0","abc",zero,"",0);
+	urlEncodeTest("Hello World!/?&=~","Hello World!/?&=~",17,
+					"Hello+World!%2F%3F%26%3D%7E",27);
+	urlEncodeTest("AZaz09","AZaz09",6,"AZaz09",6);
+	urlEncodeTest("az09$-_.!*'(),","az09$-_.!*'(),",14,
+					"az09$-_.!*'(),",14);
+	urlEncodeTest("+%\\t\\r\\n","+%\t\r\n",5,"%2B%25%09%0D%0A",15);
+	urlEncodeTest("\" + \""," + ",3,"+%2B+",5);
+	urlEncodeTest("\\303\\251\\377\\200","\303\251\377\200",4,
+					"%C3%A9%FF%80",12);
+	stdoutput.printf("\n");
+
+
+	// url encode treats a NULL within the length as data
+	stdoutput.printf("url-encode embedded NULL...\n");
+	urlEncodeTest("a\\0b","a\0b",3,"a%00b",5);
+	urlEncodeTest("\\0","\0",1,"%00",3);
+	urlEncodeTest("ab\\0","ab\0",3,"ab%00",5);
+	stdoutput.printf("\n");
+
+
+	// url decode
+	stdoutput.printf("url-decode overloads...\n");
+	urlDecodeTest("NULL",NULL,zero,NULL,0);
+	urlDecodeTest("NULL, size 3",NULL,3,NULL,0);
+	urlDecodeTest("empty","",zero,"",0);
+	urlDecodeTest("%41, size 0","%41",zero,"",0);
+	urlDecodeTest("Hello+World%21%2f%2F","Hello+World%21%2f%2F",20,
+					"Hello World!//",14);
+	urlDecodeTest("%c3%A9","%c3%A9",6,"\xc3\xa9",2);
+	urlDecodeTest("abc","abc",3,"abc",3);
+	urlDecodeTest("%7e%7E","%7e%7E",6,"~~",2);
+	urlDecodeTest("+","+",1," ",1);
+	urlDecodeTest("%2B%20","%2B%20",6,"+ ",2);
+	urlDecodeTest("\\xff%FF\\x80","\xff%FF\x80",5,"\xff\xff\x80",3);
+	stdoutput.printf("\n");
+
+
+	// url decode copies a truncated or invalid % sequence as-is, and
+	// carries on decoding after the %
+	stdoutput.printf("url-decode malformed...\n");
+	urlDecodeTest("%","%",1,"%",1);
+	urlDecodeTest("a%","a%",2,"a%",2);
+	urlDecodeTest("%4","%4",2,"%4",2);
+	urlDecodeTest("a%4","a%4",3,"a%4",3);
+	urlDecodeTest("%41%4","%41%4",5,"A%4",3);
+	urlDecodeTest("%ZZ","%ZZ",3,"%ZZ",3);
+	urlDecodeTest("a%ZZb","a%ZZb",5,"a%ZZb",5);
+	urlDecodeTest("%-1","%-1",3,"%-1",3);
+	urlDecodeTest("%+1","%+1",3,"% 1",3);
+	urlDecodeTest("% 4","% 4",3,"% 4",3);
+	urlDecodeTest("%G1","%G1",3,"%G1",3);
+	urlDecodeTest("%1G","%1G",3,"%1G",3);
+	urlDecodeTest("%0x","%0x",3,"%0x",3);
+	urlDecodeTest("%%41","%%41",4,"%A",2);
+	urlDecodeTest("%41, size 2","%41",2,"%4",2);
+	urlDecodeTest("a%41, size 3","a%41",3,"a%4",3);
+	stdoutput.printf("\n");
+
+
+	// url decode treats a NULL within the length as data, and decodes %00
+	// to a NULL, which ends the string that the NULL-terminated overload
+	// returns
+	stdoutput.printf("url-decode embedded NULL...\n");
+	urlDecodeTest("%00x","%00x",4,"\0x",2);
+	urlDecodeTest("a%00b","a%00b",5,"a\0b",3);
+	urlDecodeTest("a\\0b","a\0b",3,"a\0b",3);
+	urlDecodeTest("%\\041","%\00041",4,"%\00041",4);
+	urlDecodeTest("%4\\01","%4\0001",4,"%4\0001",4);
+	urlresult=charstring::urlDecode("%00x");
+	test("%00x 1a",urlresult && !urlresult[0]);
+	delete[] urlresult;
+	stdoutput.printf("\n");
+
+
+	// url encode and decode large input, through several chunks of the
+	// output * overloads
+	stdoutput.printf("url large input...\n");
+	char	*urlbig=new char[bigsize];
+	for (uint64_t bi=0; bi<bigsize; bi++) {
+		urlbig[bi]=(char)(bi%255+1);
+	}
+	charsToCharsConsistencyTest("encode",
+			charstring::urlEncode,charstring::urlEncode,
+			charstring::urlEncode,charstring::urlEncode,
+			charstring::urlEncode,charstring::urlEncode,
+			urlbig,bigsize);
+	charstring::urlEncode(urlbig,bigsize,&encodedbytes,&encodedlen);
+	charsToCharsConsistencyTest("decode",
+			charstring::urlDecode,charstring::urlDecode,
+			charstring::urlDecode,charstring::urlDecode,
+			charstring::urlDecode,charstring::urlDecode,
+			encodedbytes,encodedlen);
+	charstring::urlDecode(encodedbytes,&urlsb);
+	test("decode 3a round trip",
+		urlsb.getSize()==bigsize &&
+		!bytestring::compare(urlsb.getBuffer(),urlbig,bigsize));
+	urlsb.clear();
+	stdoutput.printf("\n");
+
+
+	// url encode and decode output * overloads stop at the first failed or
+	// short write
+	stdoutput.printf("url failed writes...\n");
+	limitedbuffer	urlshortenc(300,false);
+	charstring::urlEncode(urlbig,bigsize,&urlshortenc);
+	test("encode short write",
+		urlshortenc.charwrites==2 && !urlshortenc.bytewrites &&
+		urlshortenc.getSize()==300 &&
+		!bytestring::compare(urlshortenc.getBuffer(),encodedbytes,300));
+	limitedbuffer	urlerrorenc(300,true);
+	charstring::urlEncode(urlbig,bigsize,&urlerrorenc);
+	test("encode error",
+		urlerrorenc.charwrites==2 && !urlerrorenc.bytewrites &&
+		urlerrorenc.getSize()==256 &&
+		!bytestring::compare(urlerrorenc.getBuffer(),encodedbytes,256));
+	limitedbuffer	urlfirstenc(0,true);
+	charstring::urlEncode(urlbig,bigsize,&urlfirstenc);
+	test("encode error on first write",
+		urlfirstenc.charwrites==1 && !urlfirstenc.bytewrites &&
+		!urlfirstenc.getSize());
+	limitedbuffer	urlshortdec(300,false);
+	charstring::urlDecode(encodedbytes,encodedlen,&urlshortdec);
+	test("decode short write",
+		urlshortdec.charwrites==2 && !urlshortdec.bytewrites &&
+		urlshortdec.getSize()==300 &&
+		!bytestring::compare(urlshortdec.getBuffer(),urlbig,300));
+	limitedbuffer	urlerrordec(300,true);
+	charstring::urlDecode(encodedbytes,encodedlen,&urlerrordec);
+	test("decode error",
+		urlerrordec.charwrites==2 && !urlerrordec.bytewrites &&
+		urlerrordec.getSize()==256 &&
+		!bytestring::compare(urlerrordec.getBuffer(),urlbig,256));
+	limitedbuffer	urlfirstdec(0,true);
+	charstring::urlDecode(encodedbytes,encodedlen,&urlfirstdec);
+	test("decode error on first write",
+		urlfirstdec.charwrites==1 && !urlfirstdec.bytewrites &&
+		!urlfirstdec.getSize());
+	delete[] encodedbytes;
+	stdoutput.printf("\n");
+
+
+	// url encode and decode large input with NULLs, through the
+	// input-and-size overloads
+	stdoutput.printf("url large input with NULLs...\n");
+	for (uint64_t bi=0; bi<bigsize; bi++) {
+		urlbig[bi]=(char)(bi%256);
+	}
+	charsToCharsConsistencyTest("encode",
+			charstring::urlEncode,charstring::urlEncode,
+			charstring::urlEncode,charstring::urlEncode,
+			charstring::urlEncode,charstring::urlEncode,
+			urlbig,bigsize);
+	charstring::urlEncode(urlbig,bigsize,&encodedbytes,&encodedlen);
+	charsToCharsConsistencyTest("decode",
+			charstring::urlDecode,charstring::urlDecode,
+			charstring::urlDecode,charstring::urlDecode,
+			charstring::urlDecode,charstring::urlDecode,
+			encodedbytes,encodedlen);
+	charstring::urlDecode(encodedbytes,encodedlen,&urlsb);
+	test("decode 3b round trip",
+		urlsb.getSize()==bigsize &&
+		!bytestring::compare(urlsb.getBuffer(),urlbig,bigsize));
+	urlsb.clear();
+	delete[] encodedbytes;
+	delete[] urlbig;
 	stdoutput.printf("\n");
 
 
@@ -651,6 +1772,303 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("\n");
 
 
+	// html overloads, called directly
+	stdoutput.printf("html overloads...\n");
+	const char	*htmlin="<a & b>";
+	uint64_t	htmlinlen=charstring::getLength(htmlin);
+	const char	*htmlout="&lt;a &amp; b&gt;";
+	uint64_t	htmloutlen=charstring::getLength(htmlout);
+	const char	*htmlnull=NULL;
+	char		*htmlresult;
+	uint64_t	htmlresultlen;
+	htmlresult=charstring::htmlEncode(htmlin,htmlinlen);
+	test("encode 1b",!charstring::compare(htmlresult,htmlout));
+	delete[] htmlresult;
+	charstring::htmlEncode(htmlin,&htmlresult,&htmlresultlen);
+	test("encode 2a",htmlresultlen==htmloutlen &&
+			!charstring::compare(htmlresult,htmlout));
+	delete[] htmlresult;
+	charstring::htmlEncode(htmlin,htmlinlen,&htmlresult,&htmlresultlen);
+	test("encode 2b",htmlresultlen==htmloutlen &&
+			!charstring::compare(htmlresult,htmlout));
+	delete[] htmlresult;
+	stringbuffer	htmlsb;
+	charstring::htmlEncode(htmlin,&htmlsb);
+	test("encode 3a",htmlsb.getSize()==htmloutlen &&
+			!charstring::compare(htmlsb.getString(),htmlout));
+	htmlsb.clear();
+	charstring::htmlEncode(htmlin,htmlinlen,&htmlsb);
+	test("encode 3b",htmlsb.getSize()==htmloutlen &&
+			!charstring::compare(htmlsb.getString(),htmlout));
+	htmlsb.clear();
+	htmlresult=charstring::htmlDecode(htmlout,htmloutlen);
+	test("decode 1b",!charstring::compare(htmlresult,htmlin));
+	delete[] htmlresult;
+	charstring::htmlDecode(htmlout,&htmlresult,&htmlresultlen);
+	test("decode 2a",htmlresultlen==htmlinlen &&
+			!charstring::compare(htmlresult,htmlin));
+	delete[] htmlresult;
+	charstring::htmlDecode(htmlout,htmloutlen,&htmlresult,&htmlresultlen);
+	test("decode 2b",htmlresultlen==htmlinlen &&
+			!charstring::compare(htmlresult,htmlin));
+	delete[] htmlresult;
+	charstring::htmlDecode(htmlout,&htmlsb);
+	test("decode 3a",htmlsb.getSize()==htmlinlen &&
+			!charstring::compare(htmlsb.getString(),htmlin));
+	htmlsb.clear();
+	charstring::htmlDecode(htmlout,htmloutlen,&htmlsb);
+	test("decode 3b",htmlsb.getSize()==htmlinlen &&
+			!charstring::compare(htmlsb.getString(),htmlin));
+	htmlsb.clear();
+	htmlresult=charstring::htmlEncode(htmlnull,htmlinlen);
+	test("encode 1b NULL",htmlresult && !htmlresult[0]);
+	delete[] htmlresult;
+	charstring::htmlEncode(htmlnull,&htmlresult,&htmlresultlen);
+	test("encode 2a NULL",htmlresult && !htmlresult[0] && !htmlresultlen);
+	delete[] htmlresult;
+	charstring::htmlEncode(htmlnull,htmlinlen,&htmlresult,&htmlresultlen);
+	test("encode 2b NULL",htmlresult && !htmlresult[0] && !htmlresultlen);
+	delete[] htmlresult;
+	htmlresult=charstring::htmlDecode(htmlnull,htmloutlen);
+	test("decode 1b NULL",htmlresult && !htmlresult[0]);
+	delete[] htmlresult;
+	charstring::htmlDecode(htmlnull,&htmlresult,&htmlresultlen);
+	test("decode 2a NULL",htmlresult && !htmlresult[0] && !htmlresultlen);
+	delete[] htmlresult;
+	charstring::htmlDecode(htmlnull,htmloutlen,&htmlresult,&htmlresultlen);
+	test("decode 2b NULL",htmlresult && !htmlresult[0] && !htmlresultlen);
+	delete[] htmlresult;
+	charstring::htmlEncode(htmlin,(output *)NULL);
+	charstring::htmlEncode(htmlin,htmlinlen,(output *)NULL);
+	charstring::htmlDecode(htmlout,(output *)NULL);
+	charstring::htmlDecode(htmlout,htmloutlen,(output *)NULL);
+	charstring::htmlEncode(htmlnull,&htmlsb);
+	charstring::htmlEncode(htmlnull,htmlinlen,&htmlsb);
+	charstring::htmlDecode(htmlnull,&htmlsb);
+	charstring::htmlDecode(htmlnull,htmloutlen,&htmlsb);
+	test("3a/3b NULL input",!htmlsb.getSize());
+	stdoutput.printf("\n");
+
+
+	// html encode
+	stdoutput.printf("html-encode overloads...\n");
+	htmlEncodeSizeTest("NULL",NULL,zero,"",0);
+	htmlEncodeSizeTest("NULL, size 3",NULL,3,"",0);
+	htmlEncodeSizeTest("empty","",zero,"",0);
+	htmlEncodeSizeTest("&<>, size 0","&<>",zero,"",0);
+	htmlEncodeSizeTest("plain","plain",5,"plain",5);
+	htmlEncodeSizeTest("&<>\"'","&<>\"'",5,"&amp;&lt;&gt;&quot;&#39;",24);
+	htmlEncodeSizeTest("a&b, size 2","a&b",2,"a&amp;",6);
+	htmlEncodeSizeTest("<>, size 1","<>",1,"&lt;",4);
+	htmlEncodeSizeTest("\\xff&\\x80","\xff&\x80",3,"\xff&amp;\x80",7);
+	htmlEncodeSizeTest("\\xc3\\xa9\\xff\\x80","\xc3\xa9\xff\x80",4,
+						"\xc3\xa9\xff\x80",4);
+	stdoutput.printf("\n");
+
+
+	// html encode treats a NULL within the length as data
+	stdoutput.printf("html-encode embedded NULL...\n");
+	htmlEncodeSizeTest("a\\0&","a\0&",3,"a\0&amp;",7);
+	htmlEncodeSizeTest("&\\0","&\0",2,"&amp;\0",6);
+	htmlEncodeSizeTest("\\0","\0",1,"\0",1);
+	stdoutput.printf("\n");
+
+
+	// html decode
+	stdoutput.printf("html-decode overloads...\n");
+	htmlDecodeSizeTest("NULL",NULL,zero,"",0);
+	htmlDecodeSizeTest("NULL, size 3",NULL,3,"",0);
+	htmlDecodeSizeTest("empty","",zero,"",0);
+	htmlDecodeSizeTest("&amp;, size 0","&amp;",zero,"",0);
+	htmlDecodeSizeTest("plain","plain",5,"plain",5);
+	htmlDecodeSizeTest("&amp;&lt;&gt;&quot;&#39;&apos;",
+				"&amp;&lt;&gt;&quot;&#39;&apos;",30,
+				"&<>\"''",6);
+	htmlDecodeSizeTest("&#x1F600;","&#x1F600;",9,"\xF0\x9F\x98\x80",4);
+	htmlDecodeSizeTest("\\xff&amp;\\x80","\xff&amp;\x80",7,
+						"\xff&\x80",3);
+	htmlDecodeSizeTest("\\xc3\\xa9&#233;","\xc3\xa9&#233;",8,
+						"\xc3\xa9\xc3\xa9",4);
+	htmlDecodeSizeTest("&\\xff;","&\xff;",3,"&\xff;",3);
+	htmlDecodeSizeTest("&#\\xff;","&#\xff;",4,"&#\xff;",4);
+	htmlDecodeSizeTest("&#x\\xe9;","&#x\xe9;",5,"&#x\xe9;",5);
+	stdoutput.printf("\n");
+
+
+	// html decode only decodes an entity that ends within the length
+	stdoutput.printf("html-decode entity cut off by the length...\n");
+	htmlDecodeSizeTest("&amp;amp;, size 3","&amp;amp;",3,"&am",3);
+	htmlDecodeSizeTest("&amp;amp;, size 4","&amp;amp;",4,"&amp",4);
+	htmlDecodeSizeTest("&amp;amp;, size 5","&amp;amp;",5,"&",1);
+	htmlDecodeSizeTest("&amp;amp;, size 9","&amp;amp;",9,"&amp;",5);
+	htmlDecodeSizeTest("&#65;, size 4","&#65;",4,"&#65",4);
+	htmlDecodeSizeTest("&#65;, size 5","&#65;",5,"A",1);
+	htmlDecodeSizeTest("&#x41;, size 5","&#x41;",5,"&#x41",5);
+	htmlDecodeSizeTest("&#x41;, size 3","&#x41;",3,"&#x",3);
+	htmlDecodeSizeTest("&#x41;, size 2","&#x41;",2,"&#",2);
+	htmlDecodeSizeTest("&#x41;, size 1","&#x41;",1,"&",1);
+	htmlDecodeSizeTest("&quot;, size 5","&quot;",5,"&quot",5);
+	htmlDecodeSizeTest("&#x1F600;, size 8","&#x1F600;",8,"&#x1F600",8);
+	htmlDecodeSizeTest("a&lt;, size 4","a&lt;",4,"a&lt",4);
+	htmlDecodeSizeTest("&lt;&gt;, size 7","&lt;&gt;",7,"<&gt",4);
+	stdoutput.printf("\n");
+
+
+	// html decode treats a NULL within the length as data, and no entity
+	// contains one
+	stdoutput.printf("html-decode embedded NULL...\n");
+	htmlDecodeSizeTest("&amp;\\0&lt;","&amp;\0&lt;",10,"&\0<",3);
+	htmlDecodeSizeTest("\\0&gt;","\0&gt;",5,"\0>",2);
+	htmlDecodeSizeTest("&#65;\\0","&#65;\0",6,"A\0",2);
+	htmlDecodeSizeTest("&\\0amp;","&\0amp;",6,"&\0amp;",6);
+	htmlDecodeSizeTest("&am\\0p;","&am\0p;",6,"&am\0p;",6);
+	htmlDecodeSizeTest("&#6\\05;","&#6\0" "5;",6,"&#6\0" "5;",6);
+	htmlDecodeSizeTest("&#x\\041;","&#x\0" "41;",7,"&#x\0" "41;",7);
+	stdoutput.printf("\n");
+
+
+	// html encode and decode entities that straddle a flush of the
+	// output * overloads
+	stdoutput.printf("html entities across flushes...\n");
+	stringbuffer	htmlplain;
+	stringbuffer	htmlencoded;
+	appendRepeated(&htmlplain,"a",254);
+	htmlplain.append("&b");
+	appendRepeated(&htmlencoded,"a",254);
+	htmlencoded.append("&amp;b");
+	htmlEncodeSizeTest("& at 254",
+			htmlplain.getString(),htmlplain.getSize(),
+			htmlencoded.getString(),htmlencoded.getSize());
+	htmlDecodeSizeTest("&amp; at 254",
+			htmlencoded.getString(),htmlencoded.getSize(),
+			htmlplain.getString(),htmlplain.getSize());
+	htmlplain.clear();
+	htmlencoded.clear();
+	appendRepeated(&htmlplain,"a",255);
+	htmlplain.append("\xE2\x82\xAC" "b");
+	appendRepeated(&htmlencoded,"a",255);
+	htmlencoded.append("&#x20AC;b");
+	htmlDecodeSizeTest("&#x20AC; at 255",
+			htmlencoded.getString(),htmlencoded.getSize(),
+			htmlplain.getString(),htmlplain.getSize());
+	htmlplain.clear();
+	htmlencoded.clear();
+	appendRepeated(&htmlplain,"x&<\xC3\xA9\xF0\x9F\x98\x80\"'<>&",300);
+	appendRepeated(&htmlencoded,
+			"x&amp;&lt;\xC3\xA9\xF0\x9F\x98\x80"
+			"&quot;&#39;&lt;&gt;&amp;",300);
+	htmlEncodeSizeTest("mixed, 300 times",
+			htmlplain.getString(),htmlplain.getSize(),
+			htmlencoded.getString(),htmlencoded.getSize());
+	htmlDecodeSizeTest("mixed, 300 times",
+			htmlencoded.getString(),htmlencoded.getSize(),
+			htmlplain.getString(),htmlplain.getSize());
+	htmlencoded.clear();
+	appendRepeated(&htmlencoded,
+			"x&amp;&lt;&#233;&#x1F600;&quot;&apos;&#60;&#x3E;&amp;",
+			300);
+	htmlDecodeSizeTest("mixed references, 300 times",
+			htmlencoded.getString(),htmlencoded.getSize(),
+			htmlplain.getString(),htmlplain.getSize());
+	stdoutput.printf("\n");
+
+
+	// html encode and decode large input, through several chunks of the
+	// output * overloads
+	stdoutput.printf("html large input...\n");
+	char	*htmlbig=new char[bigsize];
+	for (uint64_t bi=0; bi<bigsize; bi++) {
+		htmlbig[bi]=(char)(bi%255+1);
+	}
+	charsToCharsConsistencyTest("encode",
+			charstring::htmlEncode,charstring::htmlEncode,
+			charstring::htmlEncode,charstring::htmlEncode,
+			charstring::htmlEncode,charstring::htmlEncode,
+			htmlbig,bigsize);
+	charstring::htmlEncode(htmlbig,bigsize,&encodedbytes,&encodedlen);
+	charsToCharsConsistencyTest("decode",
+			charstring::htmlDecode,charstring::htmlDecode,
+			charstring::htmlDecode,charstring::htmlDecode,
+			charstring::htmlDecode,charstring::htmlDecode,
+			encodedbytes,encodedlen);
+	charstring::htmlDecode(encodedbytes,&htmlsb);
+	test("decode 3a round trip",
+		htmlsb.getSize()==bigsize &&
+		!bytestring::compare(htmlsb.getBuffer(),htmlbig,bigsize));
+	htmlsb.clear();
+	stdoutput.printf("\n");
+
+
+	// html encode and decode output * overloads stop at the first failed
+	// or short write
+	stdoutput.printf("html failed writes...\n");
+	limitedbuffer	htmlshortenc(300,false);
+	charstring::htmlEncode(htmlbig,bigsize,&htmlshortenc);
+	test("encode short write",
+		htmlshortenc.charwrites==2 && !htmlshortenc.bytewrites &&
+		htmlshortenc.getSize()==300 &&
+		!bytestring::compare(htmlshortenc.getBuffer(),
+							encodedbytes,300));
+	limitedbuffer	htmlerrorenc(300,true);
+	charstring::htmlEncode(htmlbig,bigsize,&htmlerrorenc);
+	test("encode error",
+		htmlerrorenc.charwrites==2 && !htmlerrorenc.bytewrites &&
+		htmlerrorenc.getSize()==256 &&
+		!bytestring::compare(htmlerrorenc.getBuffer(),
+							encodedbytes,256));
+	limitedbuffer	htmlfirstenc(0,true);
+	charstring::htmlEncode(htmlbig,bigsize,&htmlfirstenc);
+	test("encode error on first write",
+		htmlfirstenc.charwrites==1 && !htmlfirstenc.bytewrites &&
+		!htmlfirstenc.getSize());
+	limitedbuffer	htmlshortdec(300,false);
+	charstring::htmlDecode(encodedbytes,encodedlen,&htmlshortdec);
+	test("decode short write",
+		htmlshortdec.charwrites==2 && !htmlshortdec.bytewrites &&
+		htmlshortdec.getSize()==300 &&
+		!bytestring::compare(htmlshortdec.getBuffer(),htmlbig,300));
+	limitedbuffer	htmlerrordec(300,true);
+	charstring::htmlDecode(encodedbytes,encodedlen,&htmlerrordec);
+	test("decode error",
+		htmlerrordec.charwrites==2 && !htmlerrordec.bytewrites &&
+		htmlerrordec.getSize()==256 &&
+		!bytestring::compare(htmlerrordec.getBuffer(),htmlbig,256));
+	limitedbuffer	htmlfirstdec(0,true);
+	charstring::htmlDecode(encodedbytes,encodedlen,&htmlfirstdec);
+	test("decode error on first write",
+		htmlfirstdec.charwrites==1 && !htmlfirstdec.bytewrites &&
+		!htmlfirstdec.getSize());
+	delete[] encodedbytes;
+	stdoutput.printf("\n");
+
+
+	// html encode and decode large input with NULLs, through the
+	// input-and-size overloads
+	stdoutput.printf("html large input with NULLs...\n");
+	for (uint64_t bi=0; bi<bigsize; bi++) {
+		htmlbig[bi]=(char)(bi%256);
+	}
+	charsToCharsConsistencyTest("encode",
+			charstring::htmlEncode,charstring::htmlEncode,
+			charstring::htmlEncode,charstring::htmlEncode,
+			charstring::htmlEncode,charstring::htmlEncode,
+			htmlbig,bigsize);
+	charstring::htmlEncode(htmlbig,bigsize,&encodedbytes,&encodedlen);
+	charsToCharsConsistencyTest("decode",
+			charstring::htmlDecode,charstring::htmlDecode,
+			charstring::htmlDecode,charstring::htmlDecode,
+			charstring::htmlDecode,charstring::htmlDecode,
+			encodedbytes,encodedlen);
+	charstring::htmlDecode(encodedbytes,encodedlen,&htmlsb);
+	test("decode 3b round trip",
+		htmlsb.getSize()==bigsize &&
+		!bytestring::compare(htmlsb.getBuffer(),htmlbig,bigsize));
+	htmlsb.clear();
+	delete[] encodedbytes;
+	delete[] htmlbig;
+	stdoutput.printf("\n");
+
+
 	// quoted printable
 	stdoutput.printf("quoted printable...\n");
 	bytebuffer	bb;
@@ -685,13 +2103,511 @@ int main(int argc, const char **argv) {
 	test("decoded length",decodedlength==bb.getSize());
 	test("decoded",!bytestring::compare(decoded,
 					bb.getBuffer(),bb.getSize()));
+	bytesToCharsConsistencyTest("encoded",
+		charstring::quotedPrintableEncode,
+		charstring::quotedPrintableEncode,
+		charstring::quotedPrintableEncode,
+		charstring::quotedPrintableEncode,
+		charstring::quotedPrintableEncode,
+		charstring::quotedPrintableEncode,
+		bb.getBuffer(),bb.getSize());
+	charsToBytesConsistencyTest("decoded",
+		charstring::quotedPrintableDecode,
+		charstring::quotedPrintableDecode,
+		charstring::quotedPrintableDecode,
+		charstring::quotedPrintableDecode,
+		charstring::quotedPrintableDecode,
+		charstring::quotedPrintableDecode,
+		encoded,encodedlength,false);
 	delete[] encoded;
 	delete[] decoded;
 	stdoutput.printf("\n");
 
 
-	// sets
-	stdoutput.printf("sets...\n");
+	// quoted printable encode
+	stdoutput.printf("quoted-printable-encode...\n");
+	quotedPrintableEncodeTest("NULL",NULL,zero,NULL);
+	quotedPrintableEncodeTest("NULL, size 3",NULL,3,NULL);
+	quotedPrintableEncodeTest("empty",(const byte_t *)"",zero,"");
+	quotedPrintableEncodeTest("abc, size 0",(const byte_t *)"abc",zero,"");
+	quotedPrintableEncodeTest("hello",(const byte_t *)"hello",5,"hello");
+	quotedPrintableEncodeTest("a=b\\tc\\xff",
+				(const byte_t *)"a=b\tc\xff",6,"a=3db=09c=ff");
+	quotedPrintableEncodeTest("a\\0b",(const byte_t *)"a\0b",3,"a=00b");
+	quotedPrintableEncodeTest("line1\\r\\nline2",
+				(const byte_t *)"line1\r\nline2",12,
+				"line1=0d=0aline2");
+	quotedPrintableEncodeTest("trailing ",(const byte_t *)"trailing ",9,
+								"trailing ");
+	quotedPrintableEncodeTest("~ \\x7f",(const byte_t *)"~ \x7f",3,
+								"~ =7f");
+	stdoutput.printf("\n");
+
+
+	// quoted printable encode soft line breaks, checked before each byte
+	// once a line reaches 77 characters
+	stdoutput.printf("quoted-printable-encode soft line breaks...\n");
+	stringbuffer	qpin;
+	stringbuffer	qpout;
+	appendRepeated(&qpin,"a",77);
+	quotedPrintableEncodeTest("77 a's",
+			(const byte_t *)qpin.getString(),qpin.getSize(),
+			qpin.getString());
+	qpin.append("a");
+	appendRepeated(&qpout,"a",77);
+	qpout.append("=\r\na");
+	quotedPrintableEncodeTest("78 a's",
+			(const byte_t *)qpin.getString(),qpin.getSize(),
+			qpout.getString());
+	qpin.clear();
+	qpout.clear();
+	appendRepeated(&qpin,"a",76);
+	qpin.append("==");
+	appendRepeated(&qpout,"a",76);
+	qpout.append("=3d=\r\n=3d");
+	quotedPrintableEncodeTest("76 a's and ==",
+			(const byte_t *)qpin.getString(),qpin.getSize(),
+			qpout.getString());
+	qpin.clear();
+	qpout.clear();
+	appendRepeated(&qpin,"=",59);
+	appendRepeated(&qpout,"=3d",26);
+	qpout.append("=\r\n");
+	appendRepeated(&qpout,"=3d",26);
+	qpout.append("=\r\n");
+	appendRepeated(&qpout,"=3d",7);
+	quotedPrintableEncodeTest("59 ='s",
+			(const byte_t *)qpin.getString(),qpin.getSize(),
+			qpout.getString());
+	qpin.clear();
+	qpout.clear();
+	appendRepeated(&qpin,"a",158);
+	appendRepeated(&qpout,"a",77);
+	qpout.append("=\r\n");
+	appendRepeated(&qpout,"a",77);
+	qpout.append("=\r\naaaa");
+	quotedPrintableEncodeTest("158 a's",
+			(const byte_t *)qpin.getString(),qpin.getSize(),
+			qpout.getString());
+	stdoutput.printf("\n");
+
+
+	// quoted printable soft line breaks that straddle the 256-byte
+	// chunks of the output * overloads, 15 full lines and then a
+	// 78 or 79 character line, so the break starts at 1278 or 1279
+	stdoutput.printf("quoted-printable soft line breaks "
+					"across chunks...\n");
+	for (uint64_t qpa=75; qpa<77; qpa++) {
+		qpin.clear();
+		qpout.clear();
+		appendRepeated(&qpin,"a",77*15+qpa);
+		qpin.append("=a");
+		for (uint64_t qpl=0; qpl<15; qpl++) {
+			appendRepeated(&qpout,"a",77);
+			qpout.append("=\r\n");
+		}
+		appendRepeated(&qpout,"a",qpa);
+		qpout.append("=3d=\r\na");
+		uint64_t	qpbreak=1200+qpa+3;
+		test("break straddles chunks",
+			qpout.getSize()>qpbreak+3 &&
+			!bytestring::compare(qpout.getString()+qpbreak,
+								"=\r\n",3) &&
+			qpbreak<1280 && qpbreak+3>1280);
+		quotedPrintableEncodeTest("encode",
+			(const byte_t *)qpin.getString(),qpin.getSize(),
+			qpout.getString());
+		quotedPrintableDecodeTest("decode",
+			qpout.getString(),qpout.getSize(),
+			qpin.getString(),qpin.getSize());
+	}
+	stdoutput.printf("\n");
+
+
+	// quoted printable decode
+	stdoutput.printf("quoted-printable-decode...\n");
+	quotedPrintableDecodeTest("NULL",NULL,zero,NULL,0);
+	quotedPrintableDecodeTest("NULL, size 3",NULL,3,NULL,0);
+	quotedPrintableDecodeTest("empty","",zero,"",0);
+	quotedPrintableDecodeTest("=41, size 0","=41",zero,"",0);
+	quotedPrintableDecodeTest("hello","hello",5,"hello",5);
+	quotedPrintableDecodeTest("a=3Db=09c=FF","a=3Db=09c=FF",12,
+						"a=b\tc\xff",6);
+	quotedPrintableDecodeTest("=3d=ff","=3d=ff",6,"=\xff",2);
+	quotedPrintableDecodeTest("=a1","=a1",3,"\xa1",1);
+	quotedPrintableDecodeTest("a\\r\\nb","a\r\nb",4,"a\r\nb",4);
+	quotedPrintableDecodeTest("\\xc3\\xa9","\xc3\xa9",2,"\xc3\xa9",2);
+	qpin.clear();
+	qpout.clear();
+	appendRepeated(&qpin,"a",77);
+	qpin.append("=\r\naaa");
+	appendRepeated(&qpout,"a",80);
+	quotedPrintableDecodeTest("77 a's, soft break, aaa",
+			qpin.getString(),qpin.getSize(),
+			qpout.getString(),qpout.getSize());
+	stdoutput.printf("\n");
+
+
+	// quoted printable decode soft line breaks
+	stdoutput.printf("quoted-printable-decode soft line breaks...\n");
+	quotedPrintableDecodeTest("a=\\r\\nb","a=\r\nb",5,"ab",2);
+	quotedPrintableDecodeTest("a=\\nb","a=\nb",4,"ab",2);
+	quotedPrintableDecodeTest("a=\\rb","a=\rb",4,"ab",2);
+	quotedPrintableDecodeTest("a=\\n\\rb","a=\n\rb",5,"ab",2);
+	quotedPrintableDecodeTest("a=\\r\\n","a=\r\n",4,"a",1);
+	quotedPrintableDecodeTest("a=\\r","a=\r",3,"a",1);
+	quotedPrintableDecodeTest("a=\\n","a=\n",3,"a",1);
+	quotedPrintableDecodeTest("=\\r\\n=41","=\r\n=41",6,"A",1);
+	stdoutput.printf("\n");
+
+
+	// quoted printable decode malformed sequences, a bad pair is dropped
+	// and an = with fewer than 2 characters after it ends decoding
+	stdoutput.printf("quoted-printable-decode malformed...\n");
+	quotedPrintableDecodeTest("=4","=4",2,"",0);
+	quotedPrintableDecodeTest("a=4","a=4",3,"a",1);
+	quotedPrintableDecodeTest("=","=",1,"",0);
+	quotedPrintableDecodeTest("a=","a=",2,"a",1);
+	quotedPrintableDecodeTest("=41=","=41=",4,"A",1);
+	quotedPrintableDecodeTest("=ZZ","=ZZ",3,"",0);
+	quotedPrintableDecodeTest("a=ZZb","a=ZZb",5,"ab",2);
+	quotedPrintableDecodeTest("=4Zb","=4Zb",4,"b",1);
+	quotedPrintableDecodeTest("=Z4b","=Z4b",4,"b",1);
+	quotedPrintableDecodeTest("a= \\r\\nb","a= \r\nb",6,"a\nb",3);
+	stdoutput.printf("\n");
+
+
+	// quoted printable decode stops at a NULL, even within the length
+	stdoutput.printf("quoted-printable-decode embedded NULL...\n");
+	quotedPrintableDecodeTest("ab\\0cd=41","ab\0cd=41",8,"ab",2);
+	quotedPrintableDecodeTest("=\\0A","=\0A",3,"",0);
+	quotedPrintableDecodeTest("=4\\0A","=4\0A",4,"",0);
+	quotedPrintableDecodeTest("=\\r\\0b","=\r\0b",4,"",0);
+	quotedPrintableDecodeTest("\\0a","\0a",2,"",0);
+	stdoutput.printf("\n");
+
+
+	// quoted printable large input, through several chunks of the
+	// output * overloads
+	stdoutput.printf("quoted-printable large input...\n");
+	bigbytes=new byte_t[bigsize];
+	for (uint64_t bi=0; bi<bigsize; bi++) {
+		bigbytes[bi]=(byte_t)(bi%256);
+	}
+	bytesToCharsConsistencyTest("encode",
+		charstring::quotedPrintableEncode,
+		charstring::quotedPrintableEncode,
+		charstring::quotedPrintableEncode,
+		charstring::quotedPrintableEncode,
+		charstring::quotedPrintableEncode,
+		charstring::quotedPrintableEncode,
+		bigbytes,bigsize);
+	charstring::quotedPrintableEncode(bigbytes,bigsize,
+						&encodedbytes,&encodedlen);
+	charsToBytesConsistencyTest("decode",
+		charstring::quotedPrintableDecode,
+		charstring::quotedPrintableDecode,
+		charstring::quotedPrintableDecode,
+		charstring::quotedPrintableDecode,
+		charstring::quotedPrintableDecode,
+		charstring::quotedPrintableDecode,
+		encodedbytes,encodedlen,false);
+	stringbuffer	qpsb;
+	charstring::quotedPrintableDecode(encodedbytes,&qpsb);
+	test("decode 3a round trip",
+		qpsb.getSize()==bigsize &&
+		!bytestring::compare(qpsb.getBuffer(),bigbytes,bigsize));
+	stdoutput.printf("\n");
+
+
+	// quoted printable output * overloads stop at the first failed or
+	// short write
+	stdoutput.printf("quoted-printable failed writes...\n");
+	limitedbuffer	qpshortenc(300,false);
+	charstring::quotedPrintableEncode(bigbytes,bigsize,&qpshortenc);
+	test("encode short write",
+		qpshortenc.charwrites==2 && !qpshortenc.bytewrites &&
+		qpshortenc.getSize()==300 &&
+		!bytestring::compare(qpshortenc.getBuffer(),encodedbytes,300));
+	limitedbuffer	qperrorenc(300,true);
+	charstring::quotedPrintableEncode(bigbytes,bigsize,&qperrorenc);
+	test("encode error",
+		qperrorenc.charwrites==2 && !qperrorenc.bytewrites &&
+		qperrorenc.getSize()==256 &&
+		!bytestring::compare(qperrorenc.getBuffer(),encodedbytes,256));
+	limitedbuffer	qpfirstenc(0,true);
+	charstring::quotedPrintableEncode(bigbytes,bigsize,&qpfirstenc);
+	test("encode error on first write",
+		qpfirstenc.charwrites==1 && !qpfirstenc.bytewrites &&
+		!qpfirstenc.getSize());
+	limitedbuffer	qpshortdec(300,false);
+	charstring::quotedPrintableDecode(encodedbytes,encodedlen,&qpshortdec);
+	test("decode short write",
+		qpshortdec.bytewrites==2 && !qpshortdec.charwrites &&
+		qpshortdec.getSize()==300 &&
+		!bytestring::compare(qpshortdec.getBuffer(),bigbytes,300));
+	limitedbuffer	qperrordec(300,true);
+	charstring::quotedPrintableDecode(encodedbytes,encodedlen,&qperrordec);
+	test("decode error",
+		qperrordec.bytewrites==2 && !qperrordec.charwrites &&
+		qperrordec.getSize()==256 &&
+		!bytestring::compare(qperrordec.getBuffer(),bigbytes,256));
+	limitedbuffer	qpfirstdec(0,true);
+	charstring::quotedPrintableDecode(encodedbytes,encodedlen,&qpfirstdec);
+	test("decode error on first write",
+		qpfirstdec.bytewrites==1 && !qpfirstdec.charwrites &&
+		!qpfirstdec.getSize());
+	delete[] bigbytes;
+	delete[] encodedbytes;
+	stdoutput.printf("\n");
+
+
+	// escape overloads, called directly
+	stdoutput.printf("escape overloads...\n");
+	const char	*escin="it's \"x\"\\";
+	uint64_t	escinlen=charstring::getLength(escin);
+	const char	*escchars="\"'";
+	const char	*escout="it\\'s \\\"x\\\"\\\\";
+	uint64_t	escoutlen=charstring::getLength(escout);
+	char		*escresult;
+	uint64_t	escresultlen;
+	escresult=charstring::escape(escin,escchars);
+	test("1a",!charstring::compare(escresult,escout));
+	delete[] escresult;
+	escresult=charstring::escape(escin,escinlen,escchars);
+	test("1b",!charstring::compare(escresult,escout));
+	delete[] escresult;
+	charstring::escape(escin,&escresult,&escresultlen,escchars);
+	test("2a",escresultlen==escoutlen &&
+			!charstring::compare(escresult,escout));
+	delete[] escresult;
+	charstring::escape(escin,escinlen,&escresult,&escresultlen,escchars);
+	test("2b",escresultlen==escoutlen &&
+			!charstring::compare(escresult,escout));
+	delete[] escresult;
+	stringbuffer	escsb;
+	charstring::escape(escin,&escsb,escchars);
+	test("3a",escsb.getSize()==escoutlen &&
+			!charstring::compare(escsb.getString(),escout));
+	escsb.clear();
+	charstring::escape(escin,escinlen,&escsb,escchars);
+	test("3b",escsb.getSize()==escoutlen &&
+			!charstring::compare(escsb.getString(),escout));
+	escsb.clear();
+	charstring::escape(escin,(output *)NULL,escchars);
+	charstring::escape(escin,escinlen,(output *)NULL,escchars);
+	charstring::escape((const char *)NULL,&escsb,escchars);
+	charstring::escape((const char *)NULL,escinlen,&escsb,escchars);
+	test("3a/3b NULL input",!escsb.getSize());
+	const char	*escnullout="it's \"x\"\\\\";
+	escresult=charstring::escape(escin,escinlen,(const char *)NULL);
+	test("1b NULL characters",!charstring::compare(escresult,escnullout));
+	delete[] escresult;
+	charstring::escape(escin,escinlen,&escsb,(const char *)NULL);
+	test("3b NULL characters",
+			!charstring::compare(escsb.getString(),escnullout));
+	escsb.clear();
+	stdoutput.printf("\n");
+
+
+	// unescape overloads, called directly
+	stdoutput.printf("unescape overloads...\n");
+	escresult=charstring::unescape(escout);
+	test("1a",!charstring::compare(escresult,escin));
+	delete[] escresult;
+	escresult=charstring::unescape(escout,escoutlen);
+	test("1b",!charstring::compare(escresult,escin));
+	delete[] escresult;
+	charstring::unescape(escout,&escresult,&escresultlen);
+	test("2a",escresultlen==escinlen &&
+			!charstring::compare(escresult,escin));
+	delete[] escresult;
+	charstring::unescape(escout,escoutlen,&escresult,&escresultlen);
+	test("2b",escresultlen==escinlen &&
+			!charstring::compare(escresult,escin));
+	delete[] escresult;
+	charstring::unescape(escout,&escsb);
+	test("3a",escsb.getSize()==escinlen &&
+			!charstring::compare(escsb.getString(),escin));
+	escsb.clear();
+	charstring::unescape(escout,escoutlen,&escsb);
+	test("3b",escsb.getSize()==escinlen &&
+			!charstring::compare(escsb.getString(),escin));
+	escsb.clear();
+	charstring::unescape(escout,(output *)NULL);
+	charstring::unescape(escout,escoutlen,(output *)NULL);
+	charstring::unescape((const char *)NULL,&escsb);
+	charstring::unescape((const char *)NULL,escoutlen,&escsb);
+	test("3a/3b NULL input",!escsb.getSize());
+	stdoutput.printf("\n");
+
+
+	// escape
+	stdoutput.printf("escape...\n");
+	escapeTest("NULL",NULL,zero,"x",NULL,0);
+	escapeTest("NULL, size 3",NULL,3,"x",NULL,0);
+	escapeTest("NULL, NULL characters",NULL,zero,(const char *)NULL,NULL,0);
+	escapeTest("empty","",zero,"\"'","",0);
+	escapeTest("empty, NULL characters","",zero,(const char *)NULL,"",0);
+	escapeTest("abc, size 0","abc",zero,"abc","",0);
+	escapeTest("a\"b'c\\d","a\"b'c\\d",7,"\"'","a\\\"b\\'c\\\\d",10);
+	escapeTest("abc, characters abc","abc",3,"abc","\\a\\b\\c",6);
+	escapeTest("\"\"''","\"\"''",4,"\"'","\\\"\\\"\\'\\'",8);
+	escapeTest("\\xe9\\xff, characters \\xe9","\xe9\xff",2,"\xe9",
+							"\\\xe9\xff",3);
+	stdoutput.printf("\n");
+
+
+	// escape always escapes a backslash, even with NULL characters, and
+	// only once when characters has one too
+	stdoutput.printf("escape backslashes...\n");
+	escapeTest("a\"b\\, NULL characters","a\"b\\",4,(const char *)NULL,
+							"a\"b\\\\",5);
+	escapeTest("ab\\","ab\\",3,"x","ab\\\\",4);
+	escapeTest("a\\\\b","a\\\\b",4,"x","a\\\\\\\\b",6);
+	escapeTest("\\","\\",1,"x","\\\\",2);
+	escapeTest("a\\b, characters \\","a\\b",3,"\\","a\\\\b",4);
+	stdoutput.printf("\n");
+
+
+	// escape treats a NULL within the length as data, and escapes it too
+	// unless characters is NULL
+	stdoutput.printf("escape embedded NULL...\n");
+	escapeTest("a\\0b","a\0b",3,"x","a\\\0b",4);
+	escapeTest("a\\0b, empty characters","a\0b",3,"","a\\\0b",4);
+	escapeTest("a\\0b, NULL characters","a\0b",3,(const char *)NULL,
+							"a\0b",3);
+	escapeTest("a\\0b\\\\c, NULL characters","a\0b\\c",5,
+					(const char *)NULL,"a\0b\\\\c",6);
+	escapeTest("\\0","\0",1,"x","\\\0",2);
+	escapeTest("ab\\0","ab\0",3,"x","ab\\\0",4);
+	stdoutput.printf("\n");
+
+
+	// unescape
+	stdoutput.printf("unescape...\n");
+	unescapeTest("NULL",NULL,zero,NULL,0);
+	unescapeTest("NULL, size 3",NULL,3,NULL,0);
+	unescapeTest("empty","",zero,"",0);
+	unescapeTest("a\\\\b, size 0","a\\b",zero,"",0);
+	unescapeTest("a\\\"b\\\\c","a\\\"b\\\\c",7,"a\"b\\c",5);
+	unescapeTest("abc","abc",3,"abc",3);
+	unescapeTest("a\\0b\\n","a\\0b\\n",6,"a0bn",4);
+	unescapeTest("\\xe9\\\\\\xff","\xe9\\\xff",3,"\xe9\xff",2);
+	stdoutput.printf("\n");
+
+
+	// unescape drops a trailing lone backslash
+	stdoutput.printf("unescape backslashes...\n");
+	unescapeTest("ab\\","ab\\",3,"ab",2);
+	unescapeTest("a\\\\b","a\\\\b",4,"a\\b",3);
+	unescapeTest("\\\\","\\\\",2,"\\",1);
+	unescapeTest("\\\\\\","\\\\\\",3,"\\",1);
+	unescapeTest("\\","\\",1,"",0);
+	stdoutput.printf("\n");
+
+
+	// unescape treats a NULL within the length as data
+	stdoutput.printf("unescape embedded NULL...\n");
+	unescapeTest("a\\0b\\\\\\0c","a\0b\\\0c",6,"a\0b\0c",5);
+	unescapeTest("\\\\\\0a","\\\0a",3,"\0a",2);
+	unescapeTest("a\\0\\\\","a\0\\",3,"a\0",2);
+	stdoutput.printf("\n");
+
+
+	// escape and unescape large input, through several chunks of the
+	// output * overloads
+	stdoutput.printf("escape/unescape large input...\n");
+	char	*bigchars=new char[bigsize];
+	for (uint64_t bi=0; bi<bigsize; bi++) {
+		bigchars[bi]=(char)(bi%255+1);
+	}
+	charsToCharsWithCharactersConsistencyTest("escape",
+			charstring::escape,charstring::escape,
+			charstring::escape,charstring::escape,
+			charstring::escape,charstring::escape,
+			bigchars,bigsize,escchars);
+	charstring::escape(bigchars,bigsize,&encodedbytes,&encodedlen,escchars);
+	charsToCharsConsistencyTest("unescape",
+			charstring::unescape,charstring::unescape,
+			charstring::unescape,charstring::unescape,
+			charstring::unescape,charstring::unescape,
+			encodedbytes,encodedlen);
+	charstring::unescape(encodedbytes,&escsb);
+	test("unescape 3a round trip",
+		escsb.getSize()==bigsize &&
+		!bytestring::compare(escsb.getBuffer(),bigchars,bigsize));
+	escsb.clear();
+	stdoutput.printf("\n");
+
+
+	// escape and unescape output * overloads stop at the first failed or
+	// short write
+	stdoutput.printf("escape/unescape failed writes...\n");
+	limitedbuffer	escshort(300,false);
+	charstring::escape(bigchars,bigsize,&escshort,escchars);
+	test("escape short write",
+		escshort.charwrites==2 && !escshort.bytewrites &&
+		escshort.getSize()==300 &&
+		!bytestring::compare(escshort.getBuffer(),encodedbytes,300));
+	limitedbuffer	escerror(300,true);
+	charstring::escape(bigchars,bigsize,&escerror,escchars);
+	test("escape error",
+		escerror.charwrites==2 && !escerror.bytewrites &&
+		escerror.getSize()==256 &&
+		!bytestring::compare(escerror.getBuffer(),encodedbytes,256));
+	limitedbuffer	escfirst(0,true);
+	charstring::escape(bigchars,bigsize,&escfirst,escchars);
+	test("escape error on first write",
+		escfirst.charwrites==1 && !escfirst.bytewrites &&
+		!escfirst.getSize());
+	limitedbuffer	unescshort(300,false);
+	charstring::unescape(encodedbytes,encodedlen,&unescshort);
+	test("unescape short write",
+		unescshort.charwrites==2 && !unescshort.bytewrites &&
+		unescshort.getSize()==300 &&
+		!bytestring::compare(unescshort.getBuffer(),bigchars,300));
+	limitedbuffer	unescerror(300,true);
+	charstring::unescape(encodedbytes,encodedlen,&unescerror);
+	test("unescape error",
+		unescerror.charwrites==2 && !unescerror.bytewrites &&
+		unescerror.getSize()==256 &&
+		!bytestring::compare(unescerror.getBuffer(),bigchars,256));
+	limitedbuffer	unescfirst(0,true);
+	charstring::unescape(encodedbytes,encodedlen,&unescfirst);
+	test("unescape error on first write",
+		unescfirst.charwrites==1 && !unescfirst.bytewrites &&
+		!unescfirst.getSize());
+	delete[] encodedbytes;
+	stdoutput.printf("\n");
+
+
+	// escape and unescape large input with NULLs, through the
+	// input-and-size overloads
+	stdoutput.printf("escape/unescape large input with NULLs...\n");
+	for (uint64_t bi=0; bi<bigsize; bi++) {
+		bigchars[bi]=(char)(bi%256);
+	}
+	charsToCharsWithCharactersConsistencyTest("escape",
+			charstring::escape,charstring::escape,
+			charstring::escape,charstring::escape,
+			charstring::escape,charstring::escape,
+			bigchars,bigsize,escchars);
+	charstring::escape(bigchars,bigsize,&encodedbytes,&encodedlen,escchars);
+	charsToCharsConsistencyTest("unescape",
+			charstring::unescape,charstring::unescape,
+			charstring::unescape,charstring::unescape,
+			charstring::unescape,charstring::unescape,
+			encodedbytes,encodedlen);
+	charstring::unescape(encodedbytes,encodedlen,&escsb);
+	test("unescape 3b round trip",
+		escsb.getSize()==bigsize &&
+		!bytestring::compare(escsb.getBuffer(),bigchars,bigsize));
+	escsb.clear();
+	delete[] encodedbytes;
+	delete[] bigchars;
+	stdoutput.printf("\n");
+
 	const char	*alphabet=
 		"aabbccddeeffgghhiijjkkllmmnnooppqqrrssttuuvvwwxxyyzz";
 	test("lengthContainingSet",

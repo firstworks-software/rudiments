@@ -1371,42 +1371,218 @@ class RUDIMENTS_DLLSPEC charstring {
 		/** escapes all characters in "characters" found in
 		 *  "input" using \'s and returns it in a buffer
 		 *  allocated inside the function.  This buffer must be
-		 *  deleted by the calling program. */
+		 *  deleted by the calling program.
+		 *
+		 *  A backslash is always escaped, even if "characters" is
+		 *  NULL.  If "input" is NULL then NULL is returned. */
 		static	char	*escape(const char *input,
 					const char *characters);
 
-		/** unescapes all \-escaped characters found in
-		 *  "input" and returns the result in a buffer
-		 *  allocated inside the function.  This buffer must be
-		 *  deleted by the calling program. */
-		static	char	*unescape(const char *input);
+		/** similar to escape() above but only escapes the first
+		 *  "inputlen" characters of "input".  A NULL among them is
+		 *  copied like any other character, and is escaped too
+		 *  unless "characters" is NULL. */
+		static	char	*escape(const char *input,
+					uint64_t inputlen,
+					const char *characters);
 
-		/** similar to escape() above, but takes an "inputlen"
-		 *  parameter and returns the result in "output" and
-		 *  "outputlen" rather than in a return value */
+		/** escapes "input" as escape() above does, and returns
+		 *  the result in "output" and "outputlen" rather than in a
+		 *  return value.  "output" is allocated inside the function
+		 *  and must be deleted by the calling program.  If "input"
+		 *  is NULL then "output" is set to NULL and "outputlen" to
+		 *  0. */
+		static	void	escape(const char *input,
+					char **output,
+					uint64_t *outputlen,
+					const char *characters);
+
+		/** similar to escape() above but only escapes the first
+		 *  "inputlen" characters of "input", and treats a NULL
+		 *  among them as the "inputlen" form of escape() does.  If
+		 *  "inputlen" is 0 then "output" is set to an empty string
+		 *  and "outputlen" to 0. */
 		static	void	escape(const char *input,
 						uint64_t inputlen,
 						char **output,
 						uint64_t *outputlen,
 						const char *characters);
 
-		/** similar to unescape() above, but takes an "inputlen"
-		 *  parameter and returns the result in "output" and
-		 *  "outputlen" rather than in a return value */
+		/** escapes "input" as escape() above does, and writes the
+		 *  result to "out".  Does nothing if "out" is NULL and
+		 *  writes nothing if "input" is NULL.  Never writes a NULL
+		 *  terminator.  Stops at the first failed or short write to
+		 *  "out". */
+		static	void	escape(const char *input,
+					output *out,
+					const char *characters);
+
+		/** similar to escape() above but only escapes the first
+		 *  "inputlen" characters of "input", and treats a NULL
+		 *  among them as the "inputlen" form of escape() does.
+		 *  Writes nothing if "inputlen" is 0. */
+		static	void	escape(const char *input,
+					uint64_t inputlen,
+					output *out,
+					const char *characters);
+
+		/** unescapes all \-escaped characters found in
+		 *  "input" and returns the result in a buffer
+		 *  allocated inside the function.  This buffer must be
+		 *  deleted by the calling program.
+		 *
+		 *  A backslash followed by any character is replaced by
+		 *  that character, and a backslash at the end of "input"
+		 *  is dropped.  If "input" is NULL then NULL is
+		 *  returned. */
+		static	char	*unescape(const char *input);
+
+		/** similar to unescape() above but only unescapes the
+		 *  first "inputlen" characters of "input".  A NULL among
+		 *  them is copied like any other character. */
+		static	char	*unescape(const char *input,
+						uint64_t inputlen);
+
+		/** unescapes "input" as unescape() above does, and
+		 *  returns the result in "output" and "outputlen" rather
+		 *  than in a return value.  "output" is allocated inside
+		 *  the function and must be deleted by the calling
+		 *  program.  If "input" is NULL then "output" is set to
+		 *  NULL and "outputlen" to 0. */
+		static	void	unescape(const char *input,
+						char **output,
+						uint64_t *outputlen);
+
+		/** similar to unescape() above but only unescapes the
+		 *  first "inputlen" characters of "input".  A NULL among
+		 *  them is copied like any other character.  If
+		 *  "inputlen" is 0 then "output" is set to an empty
+		 *  string and "outputlen" to 0. */
 		static	void	unescape(const char *input,
 						uint64_t inputlen,
 						char **output,
 						uint64_t *outputlen);
 
+		/** unescapes "input" as unescape() above does, and writes
+		 *  the result to "out".  Does nothing if "out" is NULL and
+		 *  writes nothing if "input" is NULL.  Never writes a NULL
+		 *  terminator.  Stops at the first failed or short write to
+		 *  "out". */
+		static	void	unescape(const char *input, output *out);
+
+		/** similar to unescape() above but only unescapes the
+		 *  first "inputlen" characters of "input".  A NULL among
+		 *  them is copied like any other character.  Writes
+		 *  nothing if "inputlen" is 0. */
+		static	void	unescape(const char *input,
+						uint64_t inputlen,
+						output *out);
+
 		/** URL-encodes "input" and returns it in a buffer
 		 *  allocated inside the function.  This buffer must be
-		 *  deleted by the calling program. */
+		 *  deleted by the calling program.
+		 *
+		 *  A space becomes +, letters, digits, and $-_.!*'(),
+		 *  are copied as-is, and every other byte becomes \% and 2
+		 *  uppercase hex digits.  If "input" is NULL then NULL is
+		 *  returned. */
 		static	char	*urlEncode(const char *input);
+
+		/** similar to urlEncode() above but only encodes the first
+		 *  "inputlen" characters of "input".  A NULL among them is
+		 *  encoded as \%00. */
+		static	char	*urlEncode(const char *input,
+						uint64_t inputlen);
+
+		/** URL-encodes "input" as urlEncode() above does, and
+		 *  returns the result in "output" and "outputlen" rather
+		 *  than in a return value.  "output" is allocated inside
+		 *  the function and must be deleted by the calling
+		 *  program.  If "input" is NULL then "output" is set to
+		 *  NULL and "outputlen" to 0. */
+		static	void	urlEncode(const char *input,
+						char **output,
+						uint64_t *outputlen);
+
+		/** similar to urlEncode() above but only encodes the first
+		 *  "inputlen" characters of "input".  A NULL among them is
+		 *  encoded as \%00.  If "inputlen" is 0 then "output" is
+		 *  set to an empty string and "outputlen" to 0. */
+		static	void	urlEncode(const char *input,
+						uint64_t inputlen,
+						char **output,
+						uint64_t *outputlen);
+
+		/** URL-encodes "input" as urlEncode() above does, and
+		 *  writes the result to "out".  Does nothing if "out" is
+		 *  NULL and writes nothing if "input" is NULL.  Never
+		 *  writes a NULL terminator.  Stops at the first failed or
+		 *  short write to "out". */
+		static	void	urlEncode(const char *input, output *out);
+
+		/** similar to urlEncode() above but only encodes the first
+		 *  "inputlen" characters of "input".  A NULL among them is
+		 *  encoded as \%00.  Writes nothing if "inputlen" is 0. */
+		static	void	urlEncode(const char *input,
+						uint64_t inputlen,
+						output *out);
 
 		/** URL-decodes "input" and returns it in a buffer
 		 *  allocated inside the function.  This buffer must be
-		 *  deleted by the calling program. */
+		 *  deleted by the calling program.
+		 *
+		 *  A + becomes a space, and \% and 2 hex digits, in either
+		 *  case, become that byte.  Any other character, including
+		 *  a \% that is not followed by 2 hex digits, is copied
+		 *  as-is.  \%00 decodes to a NULL, which ends the returned
+		 *  string.  If "input" is NULL then NULL is returned. */
 		static	char	*urlDecode(const char *input);
+
+		/** similar to urlDecode() above but only decodes the first
+		 *  "inputlen" characters of "input".  A NULL among them is
+		 *  copied like any other character, and a \% sequence must
+		 *  end within "inputlen" to be decoded. */
+		static	char	*urlDecode(const char *input,
+						uint64_t inputlen);
+
+		/** URL-decodes "input" as urlDecode() above does, and
+		 *  returns the result in "output" and "outputlen" rather
+		 *  than in a return value.  "output" is allocated inside
+		 *  the function and must be deleted by the calling
+		 *  program.  "outputlen" counts any NULL that \%00 decodes
+		 *  to.  If "input" is NULL then "output" is set to NULL
+		 *  and "outputlen" to 0. */
+		static	void	urlDecode(const char *input,
+						char **output,
+						uint64_t *outputlen);
+
+		/** similar to urlDecode() above but only decodes the first
+		 *  "inputlen" characters of "input".  A NULL among them is
+		 *  copied like any other character, and a \% sequence must
+		 *  end within "inputlen" to be decoded.  If "inputlen" is
+		 *  0 then "output" is set to an empty string and
+		 *  "outputlen" to 0. */
+		static	void	urlDecode(const char *input,
+						uint64_t inputlen,
+						char **output,
+						uint64_t *outputlen);
+
+		/** URL-decodes "input" as urlDecode() above does, and
+		 *  writes the result to "out", including any NULL that \%00
+		 *  decodes to.  Does nothing if "out" is NULL and writes
+		 *  nothing if "input" is NULL.  Never writes a NULL
+		 *  terminator.  Stops at the first failed or short write
+		 *  to "out". */
+		static	void	urlDecode(const char *input, output *out);
+
+		/** similar to urlDecode() above but only decodes the first
+		 *  "inputlen" characters of "input".  A NULL among them is
+		 *  copied like any other character, and a \% sequence must
+		 *  end within "inputlen" to be decoded.  Writes nothing if
+		 *  "inputlen" is 0. */
+		static	void	urlDecode(const char *input,
+						uint64_t inputlen,
+						output *out);
 
 		/** HTML-encodes "input", replacing \& \< \> " and ' with
 		 *  \&amp; \&lt; \&gt; \&quot; and \&#39;, and returns it in a
@@ -1415,6 +1591,48 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  urlEncode(), a NULL "input" returns an empty string
 		 *  rather than NULL. */
 		static	char	*htmlEncode(const char *input);
+
+		/** similar to htmlEncode() above but only encodes the
+		 *  first "inputlen" characters of "input".  A NULL among
+		 *  them is copied like any other character. */
+		static	char	*htmlEncode(const char *input,
+						uint64_t inputlen);
+
+		/** HTML-encodes "input" as htmlEncode() above does, and
+		 *  returns the result in "output" and "outputlen" rather
+		 *  than in a return value.  "output" is allocated inside
+		 *  the function and must be deleted by the calling
+		 *  program.  Unlike urlEncode(), if "input" is NULL then
+		 *  "output" is set to an empty string rather than NULL,
+		 *  and "outputlen" to 0. */
+		static	void	htmlEncode(const char *input,
+						char **output,
+						uint64_t *outputlen);
+
+		/** similar to htmlEncode() above but only encodes the
+		 *  first "inputlen" characters of "input".  A NULL among
+		 *  them is copied like any other character.  If "inputlen"
+		 *  is 0 then "output" is set to an empty string and
+		 *  "outputlen" to 0. */
+		static	void	htmlEncode(const char *input,
+						uint64_t inputlen,
+						char **output,
+						uint64_t *outputlen);
+
+		/** HTML-encodes "input" as htmlEncode() above does, and
+		 *  writes the result to "out".  Does nothing if "out" is
+		 *  NULL and writes nothing if "input" is NULL.  Never
+		 *  writes a NULL terminator.  Stops at the first failed or
+		 *  short write to "out". */
+		static	void	htmlEncode(const char *input, output *out);
+
+		/** similar to htmlEncode() above but only encodes the
+		 *  first "inputlen" characters of "input".  A NULL among
+		 *  them is copied like any other character.  Writes nothing
+		 *  if "inputlen" is 0. */
+		static	void	htmlEncode(const char *input,
+						uint64_t inputlen,
+						output *out);
 
 		/** HTML-decodes "input" and returns it in a buffer
 		 *  allocated inside the function.  This buffer must be
@@ -1428,6 +1646,52 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  NULL. */
 		static	char	*htmlDecode(const char *input);
 
+		/** similar to htmlDecode() above but only decodes the
+		 *  first "inputlen" characters of "input".  A NULL among
+		 *  them is copied like any other character, and an entity
+		 *  must end within "inputlen" to be decoded. */
+		static	char	*htmlDecode(const char *input,
+						uint64_t inputlen);
+
+		/** HTML-decodes "input" as htmlDecode() above does, and
+		 *  returns the result in "output" and "outputlen" rather
+		 *  than in a return value.  "output" is allocated inside
+		 *  the function and must be deleted by the calling
+		 *  program.  "outputlen" is never more than the length of
+		 *  "input".  Unlike urlDecode(), if "input" is NULL then
+		 *  "output" is set to an empty string rather than NULL,
+		 *  and "outputlen" to 0. */
+		static	void	htmlDecode(const char *input,
+						char **output,
+						uint64_t *outputlen);
+
+		/** similar to htmlDecode() above but only decodes the
+		 *  first "inputlen" characters of "input".  A NULL among
+		 *  them is copied like any other character, and an entity
+		 *  must end within "inputlen" to be decoded.  If
+		 *  "inputlen" is 0 then "output" is set to an empty string
+		 *  and "outputlen" to 0. */
+		static	void	htmlDecode(const char *input,
+						uint64_t inputlen,
+						char **output,
+						uint64_t *outputlen);
+
+		/** HTML-decodes "input" as htmlDecode() above does, and
+		 *  writes the result to "out".  Does nothing if "out" is
+		 *  NULL and writes nothing if "input" is NULL.  Never
+		 *  writes a NULL terminator.  Stops at the first failed or
+		 *  short write to "out". */
+		static	void	htmlDecode(const char *input, output *out);
+
+		/** similar to htmlDecode() above but only decodes the
+		 *  first "inputlen" characters of "input".  A NULL among
+		 *  them is copied like any other character, and an entity
+		 *  must end within "inputlen" to be decoded.  Writes
+		 *  nothing if "inputlen" is 0. */
+		static	void	htmlDecode(const char *input,
+						uint64_t inputlen,
+						output *out);
+
 		/** base64-encodes "input" and returns it in a buffer
 		 *  allocated inside the function.  This buffer must be
 		 *  deleted by the calling program. */
@@ -1438,17 +1702,49 @@ class RUDIMENTS_DLLSPEC charstring {
 		static	char	*base64Encode(const byte_t *input,
 							uint64_t inputsize);
 
-		/** similar to base64Encode() above, but returns the
-		 *  result in "output" and "outputlen" (in characters)
-		 *  rather than in a return value */
+		/** base64-encodes "input" and returns the result in
+		 *  "output" and "outputlen" (in characters) rather than in
+		 *  a return value.  "output" is allocated inside the
+		 *  function and must be deleted by the calling program.
+		 *  If "input" is NULL then "output" is set to NULL and
+		 *  "outputlen" to 0. */
+		static	void	base64Encode(const byte_t *input,
+						char **output,
+						uint64_t *outputlen);
+
+		/** similar to base64Encode() above but only encodes
+		 *  the first "inputsize" bytes of "input".  If "inputsize"
+		 *  is 0 then "output" is set to an empty string and
+		 *  "outputlen" to 0. */
 		static	void	base64Encode(const byte_t *input,
 							uint64_t inputsize,
 							char **output,
 							uint64_t *outputlen);
 
+		/** base64-encodes "input" and writes the result to "out".
+		 *  Does nothing if "out" is NULL and writes nothing if
+		 *  "input" is NULL.  Never writes a NULL terminator.
+		 *  Stops at the first failed or short write to "out". */
+		static	void	base64Encode(const byte_t *input, output *out);
+
+		/** similar to base64Encode() above but only encodes
+		 *  the first "inputsize" bytes of "input".  Writes nothing
+		 *  if "inputsize" is 0. */
+		static	void	base64Encode(const byte_t *input,
+						uint64_t inputsize,
+						output *out);
+
 		/** base64-decodes "input" and returns it in a buffer
 		 *  allocated inside the function.  This buffer must be
-		 *  deleted by the calling program. */
+		 *  deleted by the calling program.
+		 *
+		 *  Each group of 4 characters decodes to 3 bytes, and the
+		 *  zero bytes that "=" padding stands for are kept.
+		 *  Whitespace is skipped where a group starts.  A missing
+		 *  character in a short final group counts as "=".  A
+		 *  character outside the base64 alphabet, including any
+		 *  byte at or above 0x80, does not stop decoding but
+		 *  decodes to unspecified bits. */
 		static	byte_t	*base64Decode(const char *input);
 
 		/** similar to base64Decode above but only decodes
@@ -1456,17 +1752,54 @@ class RUDIMENTS_DLLSPEC charstring {
 		static	byte_t	*base64Decode(const char *input,
 							uint64_t inputlen);
 
-		/** similar to base64Decode() above, but returns the
-		 *  result in "output" and "outputsize" (in bytes) rather
-		 *  than in a return value */
+		/** base64-decodes "input" as base64Decode() above does,
+		 *  and returns the result in "output" and "outputsize"
+		 *  rather than in a return value.  "output" is allocated
+		 *  inside the function and must be deleted by the calling
+		 *  program.  For non-empty input, "outputsize" is 1 more
+		 *  than the number of decoded bytes, padding zero bytes
+		 *  included.  If "input" is NULL then "output" is set to NULL
+		 *  and "outputsize" to 0. */
+		static	void	base64Decode(const char *input,
+						byte_t **output,
+						uint64_t *outputsize);
+
+		/** similar to base64Decode() above but only decodes
+		 *  the first "inputlen" characters of "input".  If
+		 *  "inputlen" is 0 then "output" is set to an empty
+		 *  string and "outputsize" to 0. */
 		static	void	base64Decode(const char *input,
 						uint64_t inputlen,
 						byte_t **output,
 						uint64_t *outputsize);
 
+		/** base64-decodes "input" as base64Decode() above does,
+		 *  and writes the result to "out".  Writes the decoded
+		 *  bytes, padding zero bytes included, which for
+		 *  non-empty input is 1 less than the "outputsize" that
+		 *  the out-pointer forms of base64Decode() report.  Does
+		 *  nothing if "out" is NULL and writes nothing if "input"
+		 *  is NULL.  Never writes a NULL terminator.  Stops at the
+		 *  first failed or short write to "out". */
+		static	void	base64Decode(const char *input, output *out);
+
+		/** similar to base64Decode() above but only decodes
+		 *  the first "inputlen" characters of "input".  Writes
+		 *  nothing if "inputlen" is 0. */
+		static	void	base64Decode(const char *input,
+						uint64_t inputlen,
+						output *out);
+
 		/** Quoted-printable-encodes "input" and returns it in a buffer
 		 *  allocated inside the function.  This buffer must be
-		 *  deleted by the calling program. */
+		 *  deleted by the calling program.
+		 *
+		 *  Bytes outside of printable ASCII, including CR and LF,
+		 *  and "=" are written as "=" and 2 lowercase hex digits.
+		 *  Spaces, including a trailing space, are written as is.
+		 *  A soft line break ("=" CR LF) is written before any
+		 *  byte that would start past column 77, so a line can
+		 *  reach 79 characters plus the soft line break. */
 		static	char	*quotedPrintableEncode(
 						const byte_t *input);
 
@@ -1476,32 +1809,102 @@ class RUDIMENTS_DLLSPEC charstring {
 						const byte_t *input,
 						uint64_t inputsize);
 
-		/** similar to quotedPrintableEncode() above, but returns the
+		/** quoted-printable-encodes "input" as
+		 *  quotedPrintableEncode() above does, and returns the
 		 *  result in "output" and "outputlen" (in characters)
-		 *  rather than in a return value */
+		 *  rather than in a return value.  "output" is allocated
+		 *  inside the function and must be deleted by the calling
+		 *  program.  If "input" is NULL then "output" is set to
+		 *  NULL and "outputlen" to 0. */
+		static	void	quotedPrintableEncode(
+						const byte_t *input,
+						char **output,
+						uint64_t *outputlen);
+
+		/** similar to quotedPrintableEncode() above but only
+		 *  encodes the first "inputsize" bytes of "input".  If
+		 *  "inputsize" is 0 then "output" is set to an empty
+		 *  string and "outputlen" to 0. */
 		static	void	quotedPrintableEncode(
 						const byte_t *input,
 						uint64_t inputsize,
 						char **output,
 						uint64_t *outputlen);
 
+		/** quoted-printable-encodes "input" as
+		 *  quotedPrintableEncode() above does, and writes the
+		 *  result to "out".  Does nothing if "out" is NULL and
+		 *  writes nothing if "input" is NULL.  Never writes a NULL
+		 *  terminator.  Stops at the first failed or short write
+		 *  to "out". */
+		static	void	quotedPrintableEncode(
+						const byte_t *input,
+						output *out);
+
+		/** similar to quotedPrintableEncode() above but only
+		 *  encodes the first "inputsize" bytes of "input".  Writes
+		 *  nothing if "inputsize" is 0. */
+		static	void	quotedPrintableEncode(
+						const byte_t *input,
+						uint64_t inputsize,
+						output *out);
+
 		/** Quoted-printable-decodes "input" and returns it in a buffer
 		 *  allocated inside the function.  This buffer must be
-		 *  deleted by the calling program. */
+		 *  deleted by the calling program.
+		 *
+		 *  "=" and 2 hex digits, in either case, decode to a byte.
+		 *  "=" followed by CR, LF, CR LF, or LF CR is a soft line
+		 *  break and decodes to nothing.  "=" followed by 2
+		 *  characters that are not both hex digits decodes to
+		 *  nothing and drops both characters.  Decoding stops at
+		 *  an "=" with fewer than 2 characters after it, unless the
+		 *  first is a CR or LF, and at a NULL. */
 		static	byte_t	*quotedPrintableDecode(const char *input);
 
 		/** similar to quotedPrintableDecode above but only decodes
-		 *  the first "inputlen" characters of "input" */
+		 *  the first "inputlen" characters of "input".  Decoding
+		 *  still stops at a NULL within them. */
 		static	byte_t	*quotedPrintableDecode(const char *input,
 							uint64_t inputlen);
 
-		/** similar to quotedPrintableDecode() above, but returns the
-		 *  result in "output" and "outputlen" (in characters) rather
-		 *  than in a return value */
+		/** quoted-printable-decodes "input" as
+		 *  quotedPrintableDecode() above does, and returns the
+		 *  result in "output" and "outputlen" (in bytes) rather
+		 *  than in a return value.  "output" is allocated inside
+		 *  the function and must be deleted by the calling
+		 *  program.  If "input" is NULL then "output" is set to
+		 *  NULL and "outputlen" to 0. */
+		static	void	quotedPrintableDecode(const char *input,
+							byte_t **output,
+							uint64_t *outputlen);
+
+		/** similar to quotedPrintableDecode() above but only
+		 *  decodes the first "inputlen" characters of "input".
+		 *  Decoding still stops at a NULL within them.  If
+		 *  "inputlen" is 0 then "output" is set to an empty
+		 *  string and "outputlen" to 0. */
 		static	void	quotedPrintableDecode(const char *input,
 							uint64_t inputlen,
 							byte_t **output,
 							uint64_t *outputlen);
+
+		/** quoted-printable-decodes "input" as
+		 *  quotedPrintableDecode() above does, and writes the
+		 *  result to "out".  Does nothing if "out" is NULL and
+		 *  writes nothing if "input" is NULL.  Never writes a NULL
+		 *  terminator.  Stops at the first failed or short write
+		 *  to "out". */
+		static	void	quotedPrintableDecode(const char *input,
+							output *out);
+
+		/** similar to quotedPrintableDecode() above but only
+		 *  decodes the first "inputlen" characters of "input".
+		 *  Decoding still stops at a NULL within them.  Writes
+		 *  nothing if "inputlen" is 0. */
+		static	void	quotedPrintableDecode(const char *input,
+							uint64_t inputlen,
+							output *out);
 
 
 		/** hex-encodes "input" and returns it in a buffer
@@ -1514,17 +1917,42 @@ class RUDIMENTS_DLLSPEC charstring {
 		static	char	*hexEncode(const byte_t *input,
 							uint64_t inputsize);
 
-		/** similar to hexEncode() above, but returns the
-		 *  result in "output" and "outputlen" (in characters) rather
-		 *  than in a return value */
+		/** hex-encodes "input" and returns the result in "output"
+		 *  and "outputlen" (in characters) rather than in a return
+		 *  value.  "output" is allocated inside the function and
+		 *  must be deleted by the calling program.  If "input" is
+		 *  NULL then "output" is set to NULL and "outputlen" to 0. */
+		static	void	hexEncode(const byte_t *input,
+						char **output,
+						uint64_t *outputlen);
+
+		/** similar to hexEncode() above but only encodes
+		 *  the first "inputsize" bytes of "input".  If "inputsize"
+		 *  is 0 then "output" is set to an empty string and
+		 *  "outputlen" to 0. */
 		static	void	hexEncode(const byte_t *input,
 						uint64_t inputsize,
 						char **output,
 						uint64_t *outputlen);
 
+		/** hex-encodes "input" and writes the result to "out".
+		 *  Does nothing if "out" is NULL and writes nothing if
+		 *  "input" is NULL.  Never writes a NULL terminator.
+		 *  Stops at the first failed or short write to "out". */
+		static	void	hexEncode(const byte_t *input, output *out);
+
+		/** similar to hexEncode() above but only encodes
+		 *  the first "inputsize" bytes of "input".  Writes nothing
+		 *  if "inputsize" is 0. */
+		static	void	hexEncode(const byte_t *input,
+						uint64_t inputsize,
+						output *out);
+
 		/** hex-decodes "input" and returns it in a buffer
 		 *  allocated inside the function.  This buffer must be
-		 *  deleted by the calling program. */
+		 *  deleted by the calling program.  A character that is
+		 *  not a hex digit counts as 0, and an odd final character
+		 *  is ignored. */
 		static	byte_t	*hexDecode(const char *input);
 
 		/** similar to hexDecode above but only decodes
@@ -1532,13 +1960,37 @@ class RUDIMENTS_DLLSPEC charstring {
 		static	byte_t	*hexDecode(const char *input,
 							uint64_t inputlen);
 
-		/** similar to hexDecode() above, but returns the
-		 *  result in "output" and "outputsize" rather than in a
-		 *  return value */
+		/** hex-decodes "input" and returns the result in "output"
+		 *  and "outputsize" (in bytes) rather than in a return
+		 *  value.  "output" is allocated inside the function and
+		 *  must be deleted by the calling program.  If "input" is
+		 *  NULL then "output" is set to NULL and "outputsize" to
+		 *  0. */
+		static	void	hexDecode(const char *input,
+						byte_t **output,
+						uint64_t *outputsize);
+
+		/** similar to hexDecode() above but only decodes
+		 *  the first "inputlen" characters of "input".  If
+		 *  "inputlen" is 0 then "output" is set to an empty
+		 *  string and "outputsize" to 0. */
 		static	void	hexDecode(const char *input,
 						uint64_t inputlen,
 						byte_t **output,
 						uint64_t *outputsize);
+
+		/** hex-decodes "input" and writes the result to "out".
+		 *  Does nothing if "out" is NULL and writes nothing if
+		 *  "input" is NULL.  Never writes a NULL terminator.
+		 *  Stops at the first failed or short write to "out". */
+		static	void	hexDecode(const char *input, output *out);
+
+		/** similar to hexDecode() above but only decodes
+		 *  the first "inputlen" characters of "input".  Writes
+		 *  nothing if "inputlen" is 0. */
+		static	void	hexDecode(const char *input,
+						uint64_t inputlen,
+						output *out);
 
 		/** Obfuscates "str" by adding 128 to each character. */
 		static void	obfuscate(char *str);

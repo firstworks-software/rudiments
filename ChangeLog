@@ -86,6 +86,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - added an rng base class, renamed randomnumber to prng and
   csrandomnumber to csprng, added generateBytes() methods to each
 - added charstring::htmlEncode() and htmlDecode()
+- added size and output * overloads to the charstring encode and decode
+  methods
 
 ### Changed
 - encryption and hash isSupported() is a non-pure virtual now, defaulting
@@ -214,6 +216,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - jsonsax decodes \u escapes to UTF-8 and accepts exponents
 - jsonsax rejects invalid numbers such as leading zeros
 - jsondom escapes quotes, backslashes and control characters when writing
+- fixed charstring::base64Decode() overruns on malformed input
+- fixed charstring::urlDecode() handling of malformed % sequences
+- fixed charstring::quotedPrintableDecode() reading one byte past the
+  given length
 
 ### Security
 - fixed buffer overflow when unix socket file name is too long
