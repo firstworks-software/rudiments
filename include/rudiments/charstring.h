@@ -742,7 +742,9 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  "str" and returns a pointer to it.  Note that this
 		 *  method allocates a buffer for the duplicate string
 		 *  internally and returns it.  The calling program must
-		 *  deallocate this buffer. */
+		 *  deallocate this buffer.
+		 *
+		 *  Returns NULL if "len"+1 does not fit in a size_t. */
 		static	char	*duplicate(const char *str, size_t len);
 
 		/** Creates a duplicate of "str", converting each wide character
@@ -761,7 +763,9 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *
 		 *  Note that this method allocates a buffer for the duplicate
 		 *  string internally and returns it.  The calling program must
-		 *  deallocate this buffer. */
+		 *  deallocate this buffer.
+		 *
+		 *  Returns NULL if "len"+1 does not fit in a size_t. */
 		static	char	*duplicate(const wchar_t *str, size_t len);
 
 		/** Creates a duplicate of "str", converting each wide character
@@ -783,7 +787,9 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *
 		 *  Note that this method allocates a buffer for the duplicate
 		 *  string internally and returns it.  The calling program must
-		 *  deallocate this buffer. */
+		 *  deallocate this buffer.
+		 *
+		 *  Returns NULL if "len"+1 does not fit in a size_t. */
 		static	char	*duplicate(const wchar_t *str, size_t len,
 							char replacement);
 
@@ -811,7 +817,9 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *
 		 *  Note that this method allocates a buffer for the duplicate
 		 *  string internally and returns it.  The calling program must
-		 *  deallocate this buffer. */
+		 *  deallocate this buffer.
+		 *
+		 *  Returns NULL if "len"+1 does not fit in a size_t. */
 		static	char	*duplicateUcs2(const ucs2_t *str, size_t len);
 
 		/** Creates a duplicate of "str", converting each UCS-2
@@ -841,7 +849,9 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *
 		 *  Note that this method allocates a buffer for the duplicate
 		 *  string internally and returns it.  The calling program must
-		 *  deallocate this buffer. */
+		 *  deallocate this buffer.
+		 *
+		 *  Returns NULL if "len"+1 does not fit in a size_t. */
 		static	char	*duplicateUcs2(const ucs2_t *str,
 							size_t len,
 							bool bigendian);
@@ -871,7 +881,9 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *
 		 *  Note that this method allocates a buffer for the duplicate
 		 *  string internally and returns it.  The calling program must
-		 *  deallocate this buffer. */
+		 *  deallocate this buffer.
+		 *
+		 *  Returns NULL if "len"+1 does not fit in a size_t. */
 		static	char	*duplicateUcs2(const ucs2_t *str,
 							size_t len,
 							char replacement);
@@ -904,7 +916,9 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *
 		 *  Note that this method allocates a buffer for the duplicate
 		 *  string internally and returns it.  The calling program must
-		 *  deallocate this buffer. */
+		 *  deallocate this buffer.
+		 *
+		 *  Returns NULL if "len"+1 does not fit in a size_t. */
 		static	char	*duplicateUcs2(const ucs2_t *str,
 							size_t len,
 							char replacement,
@@ -1374,14 +1388,18 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  deleted by the calling program.
 		 *
 		 *  A backslash is always escaped, even if "characters" is
-		 *  NULL.  If "input" is NULL then NULL is returned. */
+		 *  NULL.  If "input" is NULL then NULL is returned.  Also
+		 *  returns NULL if the result would be too large for a
+		 *  size_t, which can only happen where size_t is 32 bits. */
 		static	char	*escape(const char *input,
 					const char *characters);
 
 		/** similar to escape() above but only escapes the first
 		 *  "inputlen" characters of "input".  A NULL among them is
 		 *  copied like any other character, and is escaped too
-		 *  unless "characters" is NULL. */
+		 *  unless "characters" is NULL.  Also returns NULL if
+		 *  "inputlen" is so large that the result would not fit in
+		 *  a size_t. */
 		static	char	*escape(const char *input,
 					uint64_t inputlen,
 					const char *characters);
@@ -1391,7 +1409,9 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  return value.  "output" is allocated inside the function
 		 *  and must be deleted by the calling program.  If "input"
 		 *  is NULL then "output" is set to NULL and "outputlen" to
-		 *  0. */
+		 *  0.  Also sets "output" to NULL and "outputlen" to 0 if
+		 *  the result would be too large for a size_t, which can
+		 *  only happen where size_t is 32 bits. */
 		static	void	escape(const char *input,
 					char **output,
 					uint64_t *outputlen,
@@ -1401,7 +1421,9 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  "inputlen" characters of "input", and treats a NULL
 		 *  among them as the "inputlen" form of escape() does.  If
 		 *  "inputlen" is 0 then "output" is set to an empty string
-		 *  and "outputlen" to 0. */
+		 *  and "outputlen" to 0.  If "inputlen" is so large that
+		 *  the result would not fit in a size_t then "output" is
+		 *  set to NULL and "outputlen" to 0. */
 		static	void	escape(const char *input,
 						uint64_t inputlen,
 						char **output,
@@ -1439,7 +1461,8 @@ class RUDIMENTS_DLLSPEC charstring {
 
 		/** similar to unescape() above but only unescapes the
 		 *  first "inputlen" characters of "input".  A NULL among
-		 *  them is copied like any other character. */
+		 *  them is copied like any other character.  Also returns
+		 *  NULL if "inputlen"+1 does not fit in a size_t. */
 		static	char	*unescape(const char *input,
 						uint64_t inputlen);
 
@@ -1457,7 +1480,9 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  first "inputlen" characters of "input".  A NULL among
 		 *  them is copied like any other character.  If
 		 *  "inputlen" is 0 then "output" is set to an empty
-		 *  string and "outputlen" to 0. */
+		 *  string and "outputlen" to 0.  If "inputlen"+1 does not
+		 *  fit in a size_t then "output" is set to NULL and
+		 *  "outputlen" to 0. */
 		static	void	unescape(const char *input,
 						uint64_t inputlen,
 						char **output,
@@ -1485,12 +1510,15 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  A space becomes +, letters, digits, and $-_.!*'(),
 		 *  are copied as-is, and every other byte becomes \% and 2
 		 *  uppercase hex digits.  If "input" is NULL then NULL is
-		 *  returned. */
+		 *  returned.  Also returns NULL if the result would be too
+		 *  large for a size_t, which can only happen where size_t
+		 *  is 32 bits. */
 		static	char	*urlEncode(const char *input);
 
 		/** similar to urlEncode() above but only encodes the first
 		 *  "inputlen" characters of "input".  A NULL among them is
-		 *  encoded as \%00. */
+		 *  encoded as \%00.  Also returns NULL if "inputlen" is so
+		 *  large that the result would not fit in a size_t. */
 		static	char	*urlEncode(const char *input,
 						uint64_t inputlen);
 
@@ -1499,7 +1527,10 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  than in a return value.  "output" is allocated inside
 		 *  the function and must be deleted by the calling
 		 *  program.  If "input" is NULL then "output" is set to
-		 *  NULL and "outputlen" to 0. */
+		 *  NULL and "outputlen" to 0.  Also sets "output" to NULL
+		 *  and "outputlen" to 0 if the result would be too large
+		 *  for a size_t, which can only happen where size_t is 32
+		 *  bits. */
 		static	void	urlEncode(const char *input,
 						char **output,
 						uint64_t *outputlen);
@@ -1507,7 +1538,10 @@ class RUDIMENTS_DLLSPEC charstring {
 		/** similar to urlEncode() above but only encodes the first
 		 *  "inputlen" characters of "input".  A NULL among them is
 		 *  encoded as \%00.  If "inputlen" is 0 then "output" is
-		 *  set to an empty string and "outputlen" to 0. */
+		 *  set to an empty string and "outputlen" to 0.  If
+		 *  "inputlen" is so large that the result would not fit
+		 *  in a size_t then "output" is set to NULL and
+		 *  "outputlen" to 0. */
 		static	void	urlEncode(const char *input,
 						uint64_t inputlen,
 						char **output,
@@ -1541,7 +1575,8 @@ class RUDIMENTS_DLLSPEC charstring {
 		/** similar to urlDecode() above but only decodes the first
 		 *  "inputlen" characters of "input".  A NULL among them is
 		 *  copied like any other character, and a \% sequence must
-		 *  end within "inputlen" to be decoded. */
+		 *  end within "inputlen" to be decoded.  Also returns NULL
+		 *  if "inputlen"+1 does not fit in a size_t. */
 		static	char	*urlDecode(const char *input,
 						uint64_t inputlen);
 
@@ -1561,7 +1596,9 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  copied like any other character, and a \% sequence must
 		 *  end within "inputlen" to be decoded.  If "inputlen" is
 		 *  0 then "output" is set to an empty string and
-		 *  "outputlen" to 0. */
+		 *  "outputlen" to 0.  If "inputlen"+1 does not fit in a
+		 *  size_t then "output" is set to NULL and "outputlen" to
+		 *  0. */
 		static	void	urlDecode(const char *input,
 						uint64_t inputlen,
 						char **output,
@@ -1589,12 +1626,16 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  buffer allocated inside the function.  This buffer
 		 *  must be deleted by the calling program.  Unlike
 		 *  urlEncode(), a NULL "input" returns an empty string
-		 *  rather than NULL. */
+		 *  rather than NULL.  Returns NULL if the result would be
+		 *  too large for a size_t, which can only happen where
+		 *  size_t is 32 bits. */
 		static	char	*htmlEncode(const char *input);
 
 		/** similar to htmlEncode() above but only encodes the
 		 *  first "inputlen" characters of "input".  A NULL among
-		 *  them is copied like any other character. */
+		 *  them is copied like any other character.  If "inputlen"
+		 *  is so large that the result would not fit in a size_t
+		 *  then NULL is returned, not an empty string. */
 		static	char	*htmlEncode(const char *input,
 						uint64_t inputlen);
 
@@ -1604,7 +1645,10 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  the function and must be deleted by the calling
 		 *  program.  Unlike urlEncode(), if "input" is NULL then
 		 *  "output" is set to an empty string rather than NULL,
-		 *  and "outputlen" to 0. */
+		 *  and "outputlen" to 0.  If the result would be too large
+		 *  for a size_t, which can only happen where size_t is 32
+		 *  bits, then "output" is set to NULL and "outputlen" to
+		 *  0. */
 		static	void	htmlEncode(const char *input,
 						char **output,
 						uint64_t *outputlen);
@@ -1613,7 +1657,9 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  first "inputlen" characters of "input".  A NULL among
 		 *  them is copied like any other character.  If "inputlen"
 		 *  is 0 then "output" is set to an empty string and
-		 *  "outputlen" to 0. */
+		 *  "outputlen" to 0.  If "inputlen" is so large that the
+		 *  result would not fit in a size_t then "output" is set
+		 *  to NULL, not an empty string, and "outputlen" to 0. */
 		static	void	htmlEncode(const char *input,
 						uint64_t inputlen,
 						char **output,
@@ -1649,7 +1695,9 @@ class RUDIMENTS_DLLSPEC charstring {
 		/** similar to htmlDecode() above but only decodes the
 		 *  first "inputlen" characters of "input".  A NULL among
 		 *  them is copied like any other character, and an entity
-		 *  must end within "inputlen" to be decoded. */
+		 *  must end within "inputlen" to be decoded.  If
+		 *  "inputlen"+1 does not fit in a size_t then NULL is
+		 *  returned, not an empty string. */
 		static	char	*htmlDecode(const char *input,
 						uint64_t inputlen);
 
@@ -1670,7 +1718,9 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  them is copied like any other character, and an entity
 		 *  must end within "inputlen" to be decoded.  If
 		 *  "inputlen" is 0 then "output" is set to an empty string
-		 *  and "outputlen" to 0. */
+		 *  and "outputlen" to 0.  If "inputlen"+1 does not fit in
+		 *  a size_t then "output" is set to NULL, not an empty
+		 *  string, and "outputlen" to 0. */
 		static	void	htmlDecode(const char *input,
 						uint64_t inputlen,
 						char **output,
@@ -1704,12 +1754,16 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  copied as-is.  An empty "input" returns two double
 		 *  quotes.  Unlike urlEncode(), a NULL "input" returns
 		 *  the 4 characters null, with no quotes, rather than
-		 *  NULL. */
+		 *  NULL.  Returns NULL if the result would be too large
+		 *  for a size_t, which can only happen where size_t is 32
+		 *  bits. */
 		static	char	*jsonEncode(const char *input);
 
 		/** similar to jsonEncode() above but only encodes the
 		 *  first "inputlen" characters of "input".  A NULL among
-		 *  them is encoded as \\u0000. */
+		 *  them is encoded as \\u0000.  If "inputlen" is so large
+		 *  that the result would not fit in a size_t then NULL is
+		 *  returned, not the 4 characters null. */
 		static	char	*jsonEncode(const char *input,
 						uint64_t inputlen);
 
@@ -1719,7 +1773,10 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  the function and must be deleted by the calling
 		 *  program.  Unlike urlEncode(), if "input" is NULL then
 		 *  "output" is set to the 4 characters null rather than
-		 *  NULL, and "outputlen" to 4. */
+		 *  NULL, and "outputlen" to 4.  If the result would be too
+		 *  large for a size_t, which can only happen where size_t
+		 *  is 32 bits, then "output" is set to NULL and
+		 *  "outputlen" to 0. */
 		static	void	jsonEncode(const char *input,
 						char **output,
 						uint64_t *outputlen);
@@ -1728,7 +1785,9 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  first "inputlen" characters of "input".  A NULL among
 		 *  them is encoded as \\u0000.  If "inputlen" is 0 then
 		 *  "output" is set to two double quotes and "outputlen"
-		 *  to 2. */
+		 *  to 2.  If "inputlen" is so large that the result would
+		 *  not fit in a size_t then "output" is set to NULL, not
+		 *  null, and "outputlen" to 0. */
 		static	void	jsonEncode(const char *input,
 						uint64_t inputlen,
 						char **output,
@@ -1780,7 +1839,8 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  them is copied like any other character, a closing
 		 *  double quote or an escape must end within "inputlen"
 		 *  to be recognized, and "input" is null only if
-		 *  "inputlen" is 4. */
+		 *  "inputlen" is 4.  Also returns NULL if "inputlen"+1
+		 *  does not fit in a size_t. */
 		static	char	*jsonDecode(const char *input,
 						uint64_t inputlen);
 
@@ -1803,7 +1863,9 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  double quote or an escape must end within "inputlen"
 		 *  to be recognized, and "input" is null only if
 		 *  "inputlen" is 4.  If "inputlen" is 0 then "output" is
-		 *  set to an empty string and "outputlen" to 0. */
+		 *  set to an empty string and "outputlen" to 0.  If
+		 *  "inputlen"+1 does not fit in a size_t then "output" is
+		 *  set to NULL and "outputlen" to 0. */
 		static	void	jsonDecode(const char *input,
 						uint64_t inputlen,
 						char **output,
@@ -1830,11 +1892,15 @@ class RUDIMENTS_DLLSPEC charstring {
 
 		/** base64-encodes "input" and returns it in a buffer
 		 *  allocated inside the function.  This buffer must be
-		 *  deleted by the calling program. */
+		 *  deleted by the calling program.  Returns NULL if the
+		 *  result would be too large for a size_t, which can only
+		 *  happen where size_t is 32 bits. */
 		static	char	*base64Encode(const byte_t *input);
 
 		/** similar to base64Encode above but only encodes
-		 *  the first "inputsize" bytes of "input" */
+		 *  the first "inputsize" bytes of "input".  Returns NULL
+		 *  if "inputsize" is so large that the result would not
+		 *  fit in a size_t. */
 		static	char	*base64Encode(const byte_t *input,
 							uint64_t inputsize);
 
@@ -1843,7 +1909,10 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  a return value.  "output" is allocated inside the
 		 *  function and must be deleted by the calling program.
 		 *  If "input" is NULL then "output" is set to NULL and
-		 *  "outputlen" to 0. */
+		 *  "outputlen" to 0.  Also sets "output" to NULL and
+		 *  "outputlen" to 0 if the result would be too large for
+		 *  a size_t, which can only happen where size_t is 32
+		 *  bits. */
 		static	void	base64Encode(const byte_t *input,
 						char **output,
 						uint64_t *outputlen);
@@ -1851,7 +1920,9 @@ class RUDIMENTS_DLLSPEC charstring {
 		/** similar to base64Encode() above but only encodes
 		 *  the first "inputsize" bytes of "input".  If "inputsize"
 		 *  is 0 then "output" is set to an empty string and
-		 *  "outputlen" to 0. */
+		 *  "outputlen" to 0.  If "inputsize" is so large that the
+		 *  result would not fit in a size_t then "output" is set
+		 *  to NULL and "outputlen" to 0. */
 		static	void	base64Encode(const byte_t *input,
 							uint64_t inputsize,
 							char **output,
@@ -1884,7 +1955,9 @@ class RUDIMENTS_DLLSPEC charstring {
 		static	byte_t	*base64Decode(const char *input);
 
 		/** similar to base64Decode above but only decodes
-		 *  the first "inputlen" characters of "input" */
+		 *  the first "inputlen" characters of "input".  Also
+		 *  returns NULL if "inputlen"+1 does not fit in a
+		 *  size_t. */
 		static	byte_t	*base64Decode(const char *input,
 							uint64_t inputlen);
 
@@ -1903,7 +1976,9 @@ class RUDIMENTS_DLLSPEC charstring {
 		/** similar to base64Decode() above but only decodes
 		 *  the first "inputlen" characters of "input".  If
 		 *  "inputlen" is 0 then "output" is set to an empty
-		 *  string and "outputsize" to 0. */
+		 *  string and "outputsize" to 0.  If "inputlen"+1 does
+		 *  not fit in a size_t then "output" is set to NULL and
+		 *  "outputsize" to 0. */
 		static	void	base64Decode(const char *input,
 						uint64_t inputlen,
 						byte_t **output,
@@ -1940,7 +2015,8 @@ class RUDIMENTS_DLLSPEC charstring {
 						const byte_t *input);
 
 		/** similar to quotedPrintableEncode above but only encodes
-		 *  the first "inputsize" bytes of "input" */
+		 *  the first "inputsize" bytes of "input".  Also returns
+		 *  NULL if "inputsize"+1 does not fit in a size_t. */
 		static	char	*quotedPrintableEncode(
 						const byte_t *input,
 						uint64_t inputsize);
@@ -1960,7 +2036,9 @@ class RUDIMENTS_DLLSPEC charstring {
 		/** similar to quotedPrintableEncode() above but only
 		 *  encodes the first "inputsize" bytes of "input".  If
 		 *  "inputsize" is 0 then "output" is set to an empty
-		 *  string and "outputlen" to 0. */
+		 *  string and "outputlen" to 0.  If "inputsize"+1 does
+		 *  not fit in a size_t then "output" is set to NULL and
+		 *  "outputlen" to 0. */
 		static	void	quotedPrintableEncode(
 						const byte_t *input,
 						uint64_t inputsize,
@@ -2000,7 +2078,8 @@ class RUDIMENTS_DLLSPEC charstring {
 
 		/** similar to quotedPrintableDecode above but only decodes
 		 *  the first "inputlen" characters of "input".  Decoding
-		 *  still stops at a NULL within them. */
+		 *  still stops at a NULL within them.  Also returns NULL
+		 *  if "inputlen"+1 does not fit in a size_t. */
 		static	byte_t	*quotedPrintableDecode(const char *input,
 							uint64_t inputlen);
 
@@ -2019,7 +2098,9 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  decodes the first "inputlen" characters of "input".
 		 *  Decoding still stops at a NULL within them.  If
 		 *  "inputlen" is 0 then "output" is set to an empty
-		 *  string and "outputlen" to 0. */
+		 *  string and "outputlen" to 0.  If "inputlen"+1 does not
+		 *  fit in a size_t then "output" is set to NULL and
+		 *  "outputlen" to 0. */
 		static	void	quotedPrintableDecode(const char *input,
 							uint64_t inputlen,
 							byte_t **output,
@@ -2045,11 +2126,15 @@ class RUDIMENTS_DLLSPEC charstring {
 
 		/** hex-encodes "input" and returns it in a buffer
 		 *  allocated inside the function.  This buffer must be
-		 *  deleted by the calling program. */
+		 *  deleted by the calling program.  Returns NULL if the
+		 *  result would be too large for a size_t, which can only
+		 *  happen where size_t is 32 bits. */
 		static	char	*hexEncode(const byte_t *input);
 
 		/** similar to hexEncode above but only encodes
-		 *  the first "inputsize" bytes of "input" */
+		 *  the first "inputsize" bytes of "input".  Returns NULL
+		 *  if "inputsize" is so large that the result would not
+		 *  fit in a size_t. */
 		static	char	*hexEncode(const byte_t *input,
 							uint64_t inputsize);
 
@@ -2057,7 +2142,10 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  and "outputlen" (in characters) rather than in a return
 		 *  value.  "output" is allocated inside the function and
 		 *  must be deleted by the calling program.  If "input" is
-		 *  NULL then "output" is set to NULL and "outputlen" to 0. */
+		 *  NULL then "output" is set to NULL and "outputlen" to 0.
+		 *  Also sets "output" to NULL and "outputlen" to 0 if the
+		 *  result would be too large for a size_t, which can only
+		 *  happen where size_t is 32 bits. */
 		static	void	hexEncode(const byte_t *input,
 						char **output,
 						uint64_t *outputlen);
@@ -2065,7 +2153,9 @@ class RUDIMENTS_DLLSPEC charstring {
 		/** similar to hexEncode() above but only encodes
 		 *  the first "inputsize" bytes of "input".  If "inputsize"
 		 *  is 0 then "output" is set to an empty string and
-		 *  "outputlen" to 0. */
+		 *  "outputlen" to 0.  If "inputsize" is so large that the
+		 *  result would not fit in a size_t then "output" is set
+		 *  to NULL and "outputlen" to 0. */
 		static	void	hexEncode(const byte_t *input,
 						uint64_t inputsize,
 						char **output,
@@ -2092,7 +2182,9 @@ class RUDIMENTS_DLLSPEC charstring {
 		static	byte_t	*hexDecode(const char *input);
 
 		/** similar to hexDecode above but only decodes
-		 *  the first "inputlen" characters of "input" */
+		 *  the first "inputlen" characters of "input".  Also
+		 *  returns NULL if "inputlen"+1 does not fit in a
+		 *  size_t. */
 		static	byte_t	*hexDecode(const char *input,
 							uint64_t inputlen);
 
@@ -2109,7 +2201,9 @@ class RUDIMENTS_DLLSPEC charstring {
 		/** similar to hexDecode() above but only decodes
 		 *  the first "inputlen" characters of "input".  If
 		 *  "inputlen" is 0 then "output" is set to an empty
-		 *  string and "outputsize" to 0. */
+		 *  string and "outputsize" to 0.  If "inputlen"+1 does
+		 *  not fit in a size_t then "output" is set to NULL and
+		 *  "outputsize" to 0. */
 		static	void	hexDecode(const char *input,
 						uint64_t inputlen,
 						byte_t **output,
@@ -2169,7 +2263,10 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  to -1 to left-pad, 0 to center-pad and 1 to right-pad.
 		 *  Note that this method allocates a buffer internally and
 		 *  returns it.  The calling program must deallocate this
-		 *  buffer. */
+		 *  buffer.
+		 *
+		 *  Returns NULL if "totallen" is 0 or "totallen"+1 does not
+		 *  fit in a size_t. */
 		static char	*pad(const char *string,
 						char padchar,
 						int16_t direction,
@@ -2244,7 +2341,9 @@ class RUDIMENTS_DLLSPEC charstring {
 		static char	*getSubString(const char *str, size_t start);
 
 		/** Creates a new string with "src" inserted into "dest" at
-                 *  "index". */
+		 *  "index".  Returns NULL if the new string would be too
+		 *  large for a size_t, which can only happen where size_t
+		 *  is 32 bits. */
 		static char	*insertString(const char *dest,
 						const char *src,
 						uint64_t index);

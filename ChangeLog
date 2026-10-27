@@ -221,6 +221,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - fixed charstring::urlDecode() handling of malformed % sequences
 - fixed charstring::quotedPrintableDecode() reading one byte past the
   given length
+- fixed charstring heap overflows when a buffer size wraps size_t
 
 ### Security
 - fixed buffer overflow when unix socket file name is too long

@@ -757,6 +757,202 @@ static void jsonReference(stringbuffer *sb,
 	sb->append('"');
 }
 
+// Calls the input-and-size overloads of a char-to-char encoder with a
+// zero-byte buffer and a length too large for the result to fit in a size_t.
+// Both must fail without reading the input (AddressSanitizer reports any read)
+// and without allocating: the allocating form returns NULL and the
+// out-pointer form sets "output" to NULL and "outputlen" to 0.  This relies on
+// the size check coming before any read of the input.
+static void oversizedCharsTest(const char *label,
+				charstochars1b_t f1b, charstochars2b_t f2b,
+				uint64_t inputlen) {
+	size_t		none=0;
+	char		*in=new char[none];
+	stringbuffer	name;
+	name.append(label);
+	name.append(" 1b");
+	char	*result=f1b(in,inputlen);
+	test(name.getString(),!result);
+	delete[] result;
+	name.clear();
+	name.append(label);
+	name.append(" 2b");
+	char		*output=in;
+	uint64_t	outputlen=1;
+	f2b(in,inputlen,&output,&outputlen);
+	test(name.getString(),!output && !outputlen);
+	delete[] output;
+	delete[] in;
+}
+
+// similar to oversizedCharsTest(), for a byte_t-to-char encoder
+static void oversizedBytesTest(const char *label,
+				bytestochars1b_t f1b, bytestochars2b_t f2b,
+				uint64_t inputlen) {
+	size_t		none=0;
+	byte_t		*in=new byte_t[none];
+	stringbuffer	name;
+	name.append(label);
+	name.append(" 1b");
+	char	*result=f1b(in,inputlen);
+	test(name.getString(),!result);
+	delete[] result;
+	name.clear();
+	name.append(label);
+	name.append(" 2b");
+	char		*output=(char *)in;
+	uint64_t	outputlen=1;
+	f2b(in,inputlen,&output,&outputlen);
+	test(name.getString(),!output && !outputlen);
+	delete[] output;
+	delete[] in;
+}
+
+// similar to oversizedCharsTest(), for escape(), which takes "characters"
+static void oversizedEscapeTest(const char *label, uint64_t inputlen,
+					const char *characters) {
+	size_t		none=0;
+	char		*in=new char[none];
+	stringbuffer	name;
+	name.append(label);
+	name.append(" 1b");
+	char	*result=charstring::escape(in,inputlen,characters);
+	test(name.getString(),!result);
+	delete[] result;
+	name.clear();
+	name.append(label);
+	name.append(" 2b");
+	char		*output=in;
+	uint64_t	outputlen=1;
+	charstring::escape(in,inputlen,&output,&outputlen,characters);
+	test(name.getString(),!output && !outputlen);
+	delete[] output;
+	delete[] in;
+}
+
+// checks pad(), where "expected" is NULL if pad() must return NULL
+static void padTest(const char *label, const char *str, char padchar,
+			int16_t direction, uint64_t totallen,
+			const char *expected) {
+	char	*result=charstring::pad(str,padchar,direction,totallen);
+	test(label,(expected)?
+			(result && !charstring::compare(result,expected)):
+			!result);
+	delete[] result;
+}
+
+// checks insertString()
+static void insertStringTest(const char *label, const char *dest,
+				const char *src, uint64_t index,
+				const char *expected) {
+	char	*result=charstring::insertString(dest,src,index);
+	test(label,result && !charstring::compare(result,expected));
+	delete[] result;
+}
+
+// checks the length-taking forms of duplicate() and duplicateUcs2() for
+// one length of a string that is at least that long
+static void duplicateLengthTest(const char *label, const char *str,
+				const wchar_t *wstr, const ucs2_t *ustr,
+				size_t len) {
+	char	*expected=charstring::duplicate(str,len);
+	stringbuffer	name;
+	name.append(label);
+	name.append(" char");
+	test(name.getString(),expected &&
+		charstring::getLength(expected)==len &&
+		!bytestring::compare(expected,str,len));
+	char	*result=charstring::duplicate(wstr,len);
+	name.clear();
+	name.append(label);
+	name.append(" wchar_t");
+	test(name.getString(),result &&
+		charstring::getLength(result)==len &&
+		!bytestring::compare(result,str,len));
+	delete[] result;
+	result=charstring::duplicate(wstr,len,'#');
+	name.clear();
+	name.append(label);
+	name.append(" wchar_t replacement");
+	test(name.getString(),result &&
+		charstring::getLength(result)==len &&
+		!bytestring::compare(result,str,len));
+	delete[] result;
+	result=charstring::duplicateUcs2(ustr,len);
+	name.clear();
+	name.append(label);
+	name.append(" ucs2");
+	test(name.getString(),result &&
+		charstring::getLength(result)==len &&
+		!bytestring::compare(result,str,len));
+	delete[] result;
+	delete[] expected;
+}
+
+// similar to oversizedCharsTest(), for a char-to-byte_t decoder
+static void oversizedDecodeTest(const char *label,
+				charstobytes1b_t f1b, charstobytes2b_t f2b,
+				uint64_t inputlen) {
+	size_t		none=0;
+	char		*in=new char[none];
+	stringbuffer	name;
+	name.append(label);
+	name.append(" 1b");
+	byte_t	*result=f1b(in,inputlen);
+	test(name.getString(),!result);
+	delete[] result;
+	name.clear();
+	name.append(label);
+	name.append(" 2b");
+	byte_t		*output=(byte_t *)in;
+	uint64_t	outputlen=1;
+	f2b(in,inputlen,&output,&outputlen);
+	test(name.getString(),!output && !outputlen);
+	delete[] output;
+	delete[] in;
+}
+
+// Calls the input-and-size overloads of a char-to-char decoder with a NULL
+// input and a huge length.  Both must give NULL and 0 without reading.
+static void nullCharsTest(const char *label,
+				charstochars1b_t f1b, charstochars2b_t f2b,
+				uint64_t inputlen) {
+	stringbuffer	name;
+	name.append(label);
+	name.append(" 1b");
+	char	*result=f1b(NULL,inputlen);
+	test(name.getString(),!result);
+	delete[] result;
+	name.clear();
+	name.append(label);
+	name.append(" 2b");
+	char		*output=new char[1];
+	uint64_t	outputlen=1;
+	f2b(NULL,inputlen,&output,&outputlen);
+	test(name.getString(),!output && !outputlen);
+	delete[] output;
+}
+
+// similar to nullCharsTest(), for a char-to-byte_t decoder
+static void nullDecodeTest(const char *label,
+				charstobytes1b_t f1b, charstobytes2b_t f2b,
+				uint64_t inputlen) {
+	stringbuffer	name;
+	name.append(label);
+	name.append(" 1b");
+	byte_t	*result=f1b(NULL,inputlen);
+	test(name.getString(),!result);
+	delete[] result;
+	name.clear();
+	name.append(label);
+	name.append(" 2b");
+	byte_t		*output=new byte_t[1];
+	uint64_t	outputlen=1;
+	f2b(NULL,inputlen,&output,&outputlen);
+	test(name.getString(),!output && !outputlen);
+	delete[] output;
+}
+
 int main(int argc, const char **argv) {
 
 	header("charstring");
@@ -3365,6 +3561,215 @@ int main(int argc, const char **argv) {
 	escsb.clear();
 	delete[] encodedbytes;
 	delete[] bigchars;
+	stdoutput.printf("\n");
+
+	// encoders given a length too large for the result to fit in a size_t
+	stdoutput.printf("encode oversized input...\n");
+	uint64_t	maxlen=(uint64_t)-1;
+	oversizedCharsTest("urlEncode -1",
+			charstring::urlEncode,charstring::urlEncode,maxlen);
+	oversizedCharsTest("urlEncode first failing",
+			charstring::urlEncode,charstring::urlEncode,
+			(uint64_t)6148914691236517205ULL);
+	oversizedBytesTest("hexEncode -1",
+			charstring::hexEncode,charstring::hexEncode,maxlen);
+	oversizedBytesTest("hexEncode first failing",
+			charstring::hexEncode,charstring::hexEncode,
+			(((uint64_t)1)<<63));
+	oversizedBytesTest("base64Encode -1",
+			charstring::base64Encode,charstring::base64Encode,
+			maxlen);
+	oversizedBytesTest("base64Encode first failing",
+			charstring::base64Encode,charstring::base64Encode,
+			(uint64_t)13835058055282163710ULL);
+
+	// htmlEncode, jsonEncode, and escape read the input to count the
+	// output, after a lower-bound check on the length.  These lengths, the
+	// only ones that fail that check, are the only ones that can be tested
+	// without reading memory.
+	oversizedCharsTest("htmlEncode -1",
+			charstring::htmlEncode,charstring::htmlEncode,maxlen);
+	oversizedCharsTest("jsonEncode -1",
+			charstring::jsonEncode,charstring::jsonEncode,maxlen);
+	oversizedCharsTest("jsonEncode -2",
+			charstring::jsonEncode,charstring::jsonEncode,
+			maxlen-1);
+	oversizedCharsTest("jsonEncode -3",
+			charstring::jsonEncode,charstring::jsonEncode,
+			maxlen-2);
+	oversizedEscapeTest("escape -1",maxlen,"\"'");
+
+	// a NULL input is handled before the length is checked
+	char		*nullhtml=charstring::htmlEncode(NULL,maxlen);
+	test("htmlEncode NULL, -1 1b",nullhtml && !nullhtml[0]);
+	delete[] nullhtml;
+	char		*nullout=NULL;
+	uint64_t	nulllen=1;
+	charstring::htmlEncode(NULL,maxlen,&nullout,&nulllen);
+	test("htmlEncode NULL, -1 2b",
+			nullout && !nullout[0] && !nulllen);
+	delete[] nullout;
+	char		*nulljson=charstring::jsonEncode(NULL,maxlen);
+	test("jsonEncode NULL, -1 1b",
+			nulljson && !charstring::compare(nulljson,"null"));
+	delete[] nulljson;
+	nullout=NULL;
+	nulllen=0;
+	charstring::jsonEncode(NULL,maxlen,&nullout,&nulllen);
+	test("jsonEncode NULL, -1 2b",nullout &&
+			!charstring::compare(nullout,"null") && nulllen==4);
+	delete[] nullout;
+	stdoutput.printf("\n");
+
+	// decoders given a length too large for the buffer size to fit in a
+	// size_t, which for all of them is the same as the length+1 not
+	// fitting: only (uint64_t)-1 fails and it is the only length that can
+	// be tested without reading memory
+	stdoutput.printf("decode oversized input...\n");
+	oversizedCharsTest("urlDecode -1",
+			charstring::urlDecode,charstring::urlDecode,maxlen);
+	oversizedCharsTest("htmlDecode -1",
+			charstring::htmlDecode,charstring::htmlDecode,maxlen);
+	oversizedCharsTest("jsonDecode -1",
+			charstring::jsonDecode,charstring::jsonDecode,maxlen);
+	oversizedCharsTest("unescape -1",
+			charstring::unescape,charstring::unescape,maxlen);
+
+	// the second size of base64Decode and hexDecode cannot fail: n/2+1
+	// is smaller than n+1, and groups*3+1 needs a length past 2^64
+	oversizedDecodeTest("hexDecode -1",
+			charstring::hexDecode,charstring::hexDecode,maxlen);
+	oversizedDecodeTest("base64Decode -1",
+			charstring::base64Decode,charstring::base64Decode,
+			maxlen);
+	oversizedDecodeTest("quotedPrintableDecode -1",
+			charstring::quotedPrintableDecode,
+			charstring::quotedPrintableDecode,maxlen);
+	oversizedBytesTest("quotedPrintableEncode -1",
+			charstring::quotedPrintableEncode,
+			charstring::quotedPrintableEncode,maxlen);
+
+	// a NULL input is handled before the length is checked
+	nullCharsTest("urlDecode NULL, -1",
+			charstring::urlDecode,charstring::urlDecode,maxlen);
+	nullCharsTest("jsonDecode NULL, -1",
+			charstring::jsonDecode,charstring::jsonDecode,maxlen);
+	nullCharsTest("unescape NULL, -1",
+			charstring::unescape,charstring::unescape,maxlen);
+	nullDecodeTest("base64Decode NULL, -1",
+			charstring::base64Decode,charstring::base64Decode,
+			maxlen);
+	nullDecodeTest("hexDecode NULL, -1",
+			charstring::hexDecode,charstring::hexDecode,maxlen);
+	nullDecodeTest("quotedPrintableDecode NULL, -1",
+			charstring::quotedPrintableDecode,
+			charstring::quotedPrintableDecode,maxlen);
+	char		*nullhtmldecode=charstring::htmlDecode(NULL,maxlen);
+	test("htmlDecode NULL, -1 1b",nullhtmldecode && !nullhtmldecode[0]);
+	delete[] nullhtmldecode;
+	nullout=NULL;
+	nulllen=1;
+	charstring::htmlDecode(NULL,maxlen,&nullout,&nulllen);
+	test("htmlDecode NULL, -1 2b",
+			nullout && !nullout[0] && !nulllen);
+	delete[] nullout;
+	stdoutput.printf("\n");
+
+
+	// pad, insertString, and the length forms of duplicate
+	stdoutput.printf("pad/insertString/duplicate length...\n");
+	padTest("pad left","abc",'*',-1,6,"***abc");
+	padTest("pad right","abc",'*',1,6,"abc***");
+	padTest("pad center even","abc",'*',0,7,"**abc**");
+	padTest("pad center odd","abc",'*',0,6,"*abc**");
+	padTest("pad exact length","abc",'*',-1,3,"abc");
+	padTest("pad truncate","abcdef",'*',-1,3,"abc");
+	padTest("pad empty left","",'.',-1,4,"....");
+	padTest("pad NULL left",NULL,'.',-1,4,"....");
+	padTest("pad NULL right",NULL,'.',1,4,"....");
+	padTest("pad zero length","abc",'*',1,0,NULL);
+	padTest("pad NULL zero length",NULL,'*',1,0,NULL);
+	insertStringTest("insertString start","hello","XY",0,"XYhello");
+	insertStringTest("insertString middle","hello","XY",2,"heXYllo");
+	insertStringTest("insertString end","hello","XY",5,"helloXY");
+	insertStringTest("insertString empty dest","","XY",0,"XY");
+	insertStringTest("insertString one","hello","-",3,"hel-lo");
+	const char	*dupstr="hello world";
+	const wchar_t	*dupwstr=L"hello world";
+	ucs2_t		dupustr[12];
+	for (uint16_t i=0; i<12; i++) {
+		dupustr[i]=(ucs2_t)dupstr[i];
+	}
+	size_t	duplens[]={0,1,2,5,11};
+	for (size_t i=0; i<sizeof(duplens)/sizeof(duplens[0]); i++) {
+		stringbuffer	label;
+		label.append("duplicate length ");
+		label.append((uint64_t)duplens[i]);
+		duplicateLengthTest(label.getString(),
+					dupstr,dupwstr,dupustr,duplens[i]);
+	}
+	stdoutput.printf("\n");
+
+	// pad and the duplicate forms given a length too large for the
+	// buffer size to fit in a size_t, with a zero-byte input buffer
+	// (AddressSanitizer reports any read).  This relies on the size check
+	// coming before any read or write.
+	stdoutput.printf("pad/duplicate oversized length...\n");
+	size_t		none=0;
+	char		*zin=new char[none];
+	wchar_t		*zwin=(wchar_t *)new char[none];
+	ucs2_t		*zuin=(ucs2_t *)new char[none];
+	size_t		maxsize=(size_t)-1;
+	char		*oversized=charstring::pad(zin,'*',-1,maxlen);
+	test("pad -1 left",!oversized);
+	delete[] oversized;
+	oversized=charstring::pad(zin,'*',0,maxlen);
+	test("pad -1 center",!oversized);
+	delete[] oversized;
+	oversized=charstring::pad(zin,'*',1,maxlen);
+	test("pad -1 right",!oversized);
+	delete[] oversized;
+	const char	*nullstr=NULL;
+	oversized=charstring::pad(nullstr,'*',1,maxlen);
+	test("pad NULL, -1",!oversized);
+	delete[] oversized;
+	oversized=charstring::duplicate(zin,maxsize);
+	test("duplicate -1 char",!oversized);
+	delete[] oversized;
+	oversized=charstring::duplicate(zwin,maxsize);
+	test("duplicate -1 wchar_t",!oversized);
+	delete[] oversized;
+	oversized=charstring::duplicate(zwin,maxsize,'#');
+	test("duplicate -1 wchar_t replacement",!oversized);
+	delete[] oversized;
+	oversized=charstring::duplicateUcs2(zuin,maxsize);
+	test("duplicateUcs2 -1",!oversized);
+	delete[] oversized;
+	oversized=charstring::duplicateUcs2(zuin,maxsize,true);
+	test("duplicateUcs2 -1 bigendian",!oversized);
+	delete[] oversized;
+	oversized=charstring::duplicateUcs2(zuin,maxsize,'#');
+	test("duplicateUcs2 -1 replacement",!oversized);
+	delete[] oversized;
+	oversized=charstring::duplicateUcs2(zuin,maxsize,'#',false);
+	test("duplicateUcs2 -1 replacement bigendian",!oversized);
+	delete[] oversized;
+
+	// a NULL input is handled before the length is checked
+	const wchar_t	*nullwstr=NULL;
+	const ucs2_t	*nullustr=NULL;
+	test("duplicate NULL, -1 char",!charstring::duplicate(nullstr,maxsize));
+	test("duplicate NULL, -1 wchar_t",
+			!charstring::duplicate(nullwstr,maxsize));
+	test("duplicateUcs2 NULL, -1",
+			!charstring::duplicateUcs2(nullustr,maxsize));
+	delete[] zin;
+	delete[] (char *)zwin;
+	delete[] (char *)zuin;
+
+	// insertString sizes its result from the lengths of real strings, so
+	// a size that does not fit in a size_t needs a string larger than the
+	// address space and cannot be tested here
 	stdoutput.printf("\n");
 
 	const char	*alphabet=

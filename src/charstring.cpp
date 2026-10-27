@@ -762,6 +762,22 @@ char *charstring::convertAmount(int64_t amount, uint16_t spaces) {
 	return buffer;
 }
 
+// computes count*multiplier+addend, false if it exceeds limit
+static bool bufferSizeWithin(uint64_t count, uint64_t multiplier,
+				uint64_t addend, size_t limit, size_t *size) {
+	if (addend>limit || (multiplier && count>(limit-addend)/multiplier)) {
+		return false;
+	}
+	*size=count*multiplier+addend;
+	return true;
+}
+
+// computes count*multiplier+addend, false if it does not fit in a size_t
+static bool bufferSize(uint64_t count, uint64_t multiplier,
+				uint64_t addend, size_t *size) {
+	return bufferSizeWithin(count,multiplier,addend,(size_t)-1,size);
+}
+
 // buffers output * writes in chunks, discarding all after the first failure
 struct chunkedwriter {
 	output	*out;
@@ -905,8 +921,14 @@ void charstring::urlEncode(const char *input, uint64_t inputlen,
 		return;
 	}
 
+	// size the output
+	size_t	size;
+	if (!bufferSize(inputlen,3,1,&size)) {
+		return;
+	}
+
 	// encode
-	(*output)=new char[inputlen*3+1];
+	(*output)=new char[size];
 	char		*oi=*output;
 	const char	*end=input+inputlen;
 	for (const char *c=input; c!=end; c++) {
@@ -963,8 +985,14 @@ void charstring::urlDecode(const char *input, uint64_t inputlen,
 		return;
 	}
 
+	// size the output
+	size_t	size;
+	if (!bufferSize(inputlen,1,1,&size)) {
+		return;
+	}
+
 	// decode
-	(*output)=new char[inputlen+1];
+	(*output)=new char[size];
 	char		*oi=*output;
 	const char	*end=input+inputlen;
 	for (const char *c=input; c!=end; oi++) {
@@ -1044,17 +1072,28 @@ void charstring::htmlEncode(const char *input, uint64_t inputlen,
 		inputlen=0;
 	}
 
+	// check the size before reading the input
+	size_t	size;
+	(*output)=NULL;
+	(*outputlen)=0;
+	if (!bufferSize(inputlen,1,1,&size)) {
+		return;
+	}
+
 	// size the output
 	const char	*end=input+inputlen;
 	size_t		replen;
-	(*outputlen)=0;
 	for (const char *c=input; c!=end; c++) {
 		htmlEncodeChar(*c,&replen);
 		(*outputlen)+=replen;
 	}
+	if (!bufferSize(*outputlen,1,1,&size)) {
+		(*outputlen)=0;
+		return;
+	}
 
 	// encode
-	(*output)=new char[(*outputlen)+1];
+	(*output)=new char[size];
 	char	*oi=*output;
 	for (const char *c=input; c!=end; c++) {
 		const char	*rep=htmlEncodeChar(*c,&replen);
@@ -1200,8 +1239,14 @@ void charstring::htmlDecode(const char *input, uint64_t inputlen,
 		inputlen=0;
 	}
 
-	// no entity decodes to more bytes than it occupies
-	(*output)=new char[inputlen+1];
+	// size the output, no entity decodes to more bytes than it occupies
+	size_t	size;
+	if (!bufferSize(inputlen,1,1,&size)) {
+		(*output)=NULL;
+		(*outputlen)=0;
+		return;
+	}
+	(*output)=new char[size];
 
 	// decode
 	char		*oi=*output;
@@ -1282,6 +1327,14 @@ void charstring::jsonEncode(const char *input, uint64_t inputlen,
 		return;
 	}
 
+	// check the size before reading the input
+	size_t	size;
+	(*output)=NULL;
+	(*outputlen)=0;
+	if (!bufferSize(inputlen,1,3,&size)) {
+		return;
+	}
+
 	// size the output, including the quotes
 	const char	*end=input+inputlen;
 	char		encoded[6];
@@ -1289,9 +1342,13 @@ void charstring::jsonEncode(const char *input, uint64_t inputlen,
 	for (const char *c=input; c!=end; c++) {
 		(*outputlen)+=jsonEncodeChar(*c,encoded);
 	}
+	if (!bufferSize(*outputlen,1,1,&size)) {
+		(*outputlen)=0;
+		return;
+	}
 
 	// encode
-	(*output)=new char[(*outputlen)+1];
+	(*output)=new char[size];
 	char	*oi=*output;
 	*oi++='"';
 	for (const char *c=input; c!=end; c++) {
@@ -1459,6 +1516,17 @@ void charstring::jsonDecode(const char *input, uint64_t inputlen,
 	// handle null input
 	(*output)=NULL;
 	(*outputlen)=0;
+	if (!input) {
+		return;
+	}
+
+	// check the size before reading the input
+	size_t	size;
+	if (!bufferSize(inputlen,1,1,&size)) {
+		return;
+	}
+
+	// find the string to decode
 	const char	*start;
 	const char	*end;
 	if (!jsonDecodeStart(input,inputlen,&start,&end)) {
@@ -1466,7 +1534,7 @@ void charstring::jsonDecode(const char *input, uint64_t inputlen,
 	}
 
 	// no escape decodes to more bytes than it occupies
-	(*output)=new char[inputlen+1];
+	(*output)=new char[size];
 
 	// decode
 	char	*oi=*output;
@@ -1547,6 +1615,12 @@ void charstring::escape(const char *input, uint64_t inputlength,
 		return;
 	}
 
+	// check the size before reading the input
+	size_t	size;
+	if (!bufferSize(inputlength,1,1,&size)) {
+		return;
+	}
+
 	// size the output
 	const char	*end=input+inputlength;
 	(*outputlength)=inputlength;
@@ -1555,9 +1629,13 @@ void charstring::escape(const char *input, uint64_t inputlength,
 			(*outputlength)++;
 		}
 	}
+	if (!bufferSize(*outputlength,1,1,&size)) {
+		(*outputlength)=0;
+		return;
+	}
 
 	// escape
-	(*output)=new char[(*outputlength)+1];
+	(*output)=new char[size];
 	char	*oi=*output;
 	for (const char *c=input; c!=end; c++) {
 		if (escapeNeedsBackslash(*c,characters)) {
@@ -1621,6 +1699,12 @@ void charstring::unescape(const char *input, uint64_t inputlength,
 		return;
 	}
 
+	// check the size before reading the input
+	size_t	size;
+	if (!bufferSize(inputlength,1,1,&size)) {
+		return;
+	}
+
 	// size the output
 	const char	*end=input+inputlength;
 	bool		escaped=false;
@@ -1629,9 +1713,14 @@ void charstring::unescape(const char *input, uint64_t inputlength,
 			(*outputlength)++;
 		}
 	}
+	// cannot fail, the count is at most the input length
+	if (!bufferSize(*outputlength,1,1,&size)) {
+		(*outputlength)=0;
+		return;
+	}
 
 	// unescape
-	(*output)=new char[(*outputlength)+1];
+	(*output)=new char[size];
 	char	*oi=*output;
 	escaped=false;
 	for (const char *c=input; c!=end; c++) {
@@ -2966,7 +3055,11 @@ char *charstring::duplicate(const char *str, size_t len) {
 	if (!str) {
 		return NULL;
 	}
-	char	*buffer=new char[len+1];
+	size_t	size;
+	if (!bufferSize(len,1,1,&size)) {
+		return NULL;
+	}
+	char	*buffer=new char[size];
 	copy(buffer,str,len);
 	buffer[len]='\0';
 	return buffer;
@@ -2989,7 +3082,11 @@ char *charstring::duplicate(const wchar_t *string, size_t len,
 	if (!string) {
 		return NULL;
 	}
-	char	*retval=new char[len+1];
+	size_t	size;
+	if (!bufferSize(len,1,1,&size)) {
+		return NULL;
+	}
+	char	*retval=new char[size];
 	for (size_t i=0; i<len; i++) {
 		retval[i]=character::duplicate(string[i],replacement);
 	}
@@ -3037,7 +3134,11 @@ char *charstring::duplicateUcs2(const ucs2_t *string, size_t len,
 	if (!string) {
 		return NULL;
 	}
-	char	*retval=new char[len+1];
+	size_t	size;
+	if (!bufferSize(len,1,1,&size)) {
+		return NULL;
+	}
+	char	*retval=new char[size];
 	for (size_t i=0; i<len; i++) {
 		retval[i]=character::duplicateUcs2(string[i],
 							replacement,
@@ -3431,82 +3532,16 @@ void charstring::base64Encode(const byte_t *input, uint64_t inputsize,
 		return;
 	}
 
-	// handle real input...
-
-	// figure out the output length:
-	//
-	// let x = inputsize
-	// let y = outputlen
-	//
-	// (I know this sequence is true by
-	//  observation of input vs output sizes)
-	// x   y
-	// -----
-	// 9   12 = (x*4/3)+0
-	// 8   12 = (x*4/3)+2
-	// 7   12 = (x*4/3)+3
-	// 6   8  = (x*4/3)+0
-	// 5   8  = (x*4/3)+2
-	// 4   8  = (x*4/3)+3
-	// 3   4  = (x*4/3)+0
-	// 2   4  = (x*4/3)+2
-	// 1   4  = (x*4/3)+3
-	//
-	// y=((x*4/3)+z)
-	//
-	// x   z
-	// -----
-	// 9   0 = 9-x+0
-	// 8   2 = 9-x+1
-	// 7   3 = 9-x+1
-	// 6   0 = 6-x+0
-	// 5   2 = 6-x+1
-	// 4   3 = 6-x+1
-	// 3   0 = 3-x+0
-	// 2   2 = 3-x+1
-	// 1   3 = 3-x+1
-	//
-	// z=(a-x+b)
-	//
-	// x   a
-	// -----
-	// 9   9 = ((x+2)/3)*3
-	// 8   9 = ((x+2)/3)*3
-	// 7   9 = ((x+2)/3)*3
-	// 6   6 = ((x+2)/3)*3
-	// 5   6 = ((x+2)/3)*3
-	// 4   6 = ((x+2)/3)*3
-	// 3   3 = ((x+2)/3)*3
-	// 2   3 = ((x+2)/3)*3
-	// 1   3 = ((x+2)/3)*3
-	//
-	// a=(((x+2)/3)*3)
-	//
-	// x   b
-	// -----
-	// 9   0 = 1-((x+2)%3/2)
-	// 8   1 = 1-((x+2)%3/2)
-	// 7   1 = 1-((x+2)%3/2)
-	// 6   0 = 1-((x+2)%3/2)
-	// 5   1 = 1-((x+2)%3/2)
-	// 4   1 = 1-((x+2)%3/2)
-	// 3   0 = 1-((x+2)%3/2)
-	// 2   1 = 1-((x+2)%3/2)
-	// 1   1 = 1-((x+2)%3/2)
-	//
-	// b=(1-((x+2)%3/2))
-	//
-	// z=(a-x+b)
-	// z=(a-x+(1-((x+2)%3/2)))
-	// a=(((x+2)/3)*3)
-	// z=((((x+2)/3)*3)-x+(1-((x+2)%3/2)))
-	// y=((x*4/3)+z)
-	// y=((x*4/3)+((((x+2)/3)*3)-x+(1-((x+2)%3/2))))
-	//
-	// yay!
-	*outputlen=((inputsize*4/3)+((((inputsize+2)/3)*3)-
-				inputsize+(1-((inputsize+2)%3/2))));
-	*output=new char [(*outputlen)+1];
+	// size the output, 4 characters per group of up to 3 bytes
+	uint64_t	groups=inputsize/3+((inputsize%3)?1:0);
+	size_t		size;
+	if (!bufferSize(groups,4,1,&size)) {
+		*output=NULL;
+		*outputlen=0;
+		return;
+	}
+	*outputlen=groups*4;
+	*output=new char[size];
 
 	char	*oi=*output;
 	for (uint64_t ii=0; ii<inputsize; ii+=3) {
@@ -3573,8 +3608,19 @@ void charstring::base64Decode(const char *input, uint64_t inputlen,
 		return;
 	}
 
-	// handle real input...
-	*output=new byte_t [((inputlen+3)/4)*3+1];
+	// check the size before reading the input
+	size_t	size;
+	if (!bufferSize(inputlen,1,1,&size)) {
+		*output=NULL;
+		*outputsize=0;
+		return;
+	}
+
+	// size the output, 3 bytes per group of up to 4 characters, which
+	// cannot fail once the length above fits
+	uint64_t	groups=inputlen/4+((inputlen%4)?1:0);
+	bufferSize(groups,3,1,&size);
+	*output=new byte_t[size];
 	uint64_t	outputindex=0;
 	uint64_t	inputindex=0;
 	while (inputindex<inputlen) {
@@ -3758,6 +3804,14 @@ void charstring::quotedPrintableEncode(const byte_t *input,
 		return;
 	}
 
+	// check the size before reading the input
+	size_t	size;
+	if (!bufferSize(inputsize,1,1,&size)) {
+		*output=NULL;
+		*outputlen=0;
+		return;
+	}
+
 	// handle real input...
 	stringbuffer	out;
 	uint16_t	column=0;
@@ -3830,6 +3884,14 @@ void charstring::quotedPrintableDecode(const char *input,
 	// handle 0-length input
 	if (!inputlen) {
 		*output=(byte_t *)duplicate("");
+		*outputsize=0;
+		return;
+	}
+
+	// check the size before reading the input
+	size_t	size;
+	if (!bufferSize(inputlen,1,1,&size)) {
+		*output=NULL;
 		*outputsize=0;
 		return;
 	}
@@ -3932,8 +3994,16 @@ void charstring::hexEncode(const byte_t *input, uint64_t inputsize,
 		return;
 	}
 
+	// size the output
+	size_t	size;
+	if (!bufferSize(inputsize,2,1,&size)) {
+		*output=NULL;
+		*outputlen=0;
+		return;
+	}
+
 	*outputlen=inputsize*2;
-	*output=new char[*outputlen+1];
+	*output=new char[size];
 	char	*oi=*output;
 	for (uint64_t ii=0; ii<inputsize; ii++) {
 		hexEncodeByte(input[ii],oi);
@@ -3997,13 +4067,23 @@ void charstring::hexDecode(const char *input, uint64_t inputlen,
 		return;
 	}
 
+	// check the size before reading the input
+	size_t	size;
+	if (!bufferSize(inputlen,1,1,&size)) {
+		*output=NULL;
+		*outputsize=0;
+		return;
+	}
+
 	// deal with invalid input lengths
 	if (inputlen%2) {
 		inputlen--;
 	}
 
-	// create output buffer and init output size
-	*output=new byte_t[inputlen/2+1];
+	// create output buffer and init output size, which cannot fail
+	// once the length above fits
+	bufferSize(inputlen/2,1,1,&size);
+	*output=new byte_t[size];
 	*outputsize=0;
 
 	// convert...
@@ -4050,7 +4130,11 @@ char *charstring::insertString(const char *dest,
 
 	uint64_t	srcsize=getLength(src);
 	uint64_t	size=getLength(dest)+srcsize+1;
-	char		*retval=new char[size];
+	size_t		bufsize;
+	if (!bufferSize(size,1,0,&bufsize)) {
+		return NULL;
+	}
+	char		*retval=new char[bufsize];
 	for (uint64_t i=0,j=0; i<size;) {
 		if (i==index) {
 			for (uint64_t k=0; k<srcsize; k++) {
@@ -4083,10 +4167,16 @@ char *charstring::pad(const char *str, char padchar,
 		return NULL;
 	}
 
+	// check the size before reading the input
+	size_t	size;
+	if (!bufferSize(totallength,1,1,&size)) {
+		return NULL;
+	}
+
 	uint64_t	strlen=((str==NULL)?0:getLength(str));
 	char		*newstring=NULL;
 
-	newstring=new char[totallength+1];
+	newstring=new char[size];
 	if (strlen>=totallength) {
 		copy(newstring,str,totallength);
 		newstring[totallength]=0;
