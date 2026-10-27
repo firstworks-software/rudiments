@@ -660,6 +660,103 @@ static void htmlDecodeSizeTest(const char *label,
 			input,inputsize);
 }
 
+static void jsonEncodeTest(const char *label,
+				const char *input, const char *expected) {
+	char	*output=charstring::jsonEncode(input);
+	test(label,!charstring::compare(output,expected));
+	delete[] output;
+	charsToCharsConsistencyTest(label,
+			charstring::jsonEncode,charstring::jsonEncode,
+			charstring::jsonEncode,charstring::jsonEncode,
+			charstring::jsonEncode,charstring::jsonEncode,
+			input,charstring::getLength(input));
+}
+
+static void jsonEncodeSizeTest(const char *label,
+				const char *input, uint64_t inputsize,
+				const char *expected, uint64_t expectedlen) {
+	char		*in=exactCopy(input,inputsize);
+	char		*result;
+	uint64_t	resultlen;
+	charstring::jsonEncode(in,inputsize,&result,&resultlen);
+	test(label,result && resultlen==expectedlen &&
+			!bytestring::compare(result,expected,expectedlen+1));
+	delete[] result;
+	delete[] in;
+	charsToCharsConsistencyTest(label,
+			charstring::jsonEncode,charstring::jsonEncode,
+			charstring::jsonEncode,charstring::jsonEncode,
+			charstring::jsonEncode,charstring::jsonEncode,
+			input,inputsize);
+}
+
+// "expected" NULL means the NULL result, which has an "expectedlen" of 0
+static void jsonDecodeSizeTest(const char *label,
+				const char *input, uint64_t inputsize,
+				const char *expected, uint64_t expectedlen) {
+	char		*in=exactCopy(input,inputsize);
+	char		*result;
+	uint64_t	resultlen;
+	charstring::jsonDecode(in,inputsize,&result,&resultlen);
+	test(label,(!result && !expected && !resultlen) ||
+			(result && expected &&
+			resultlen==expectedlen && resultlen<=inputsize &&
+			!bytestring::compare(result,expected,expectedlen) &&
+			!result[resultlen]));
+	delete[] result;
+	delete[] in;
+	charsToCharsConsistencyTest(label,
+			charstring::jsonDecode,charstring::jsonDecode,
+			charstring::jsonDecode,charstring::jsonDecode,
+			charstring::jsonDecode,charstring::jsonDecode,
+			input,inputsize);
+}
+
+// also checks the NULL-terminated overload as a C string, which ends at the
+// first decoded NULL
+static void jsonDecodeTest(const char *label,
+				const char *input,
+				const char *expected, uint64_t expectedlen) {
+	char	*output=charstring::jsonDecode(input);
+	test(label,(!output && !expected) ||
+			(output && expected &&
+			!charstring::compare(output,expected)));
+	delete[] output;
+	jsonDecodeSizeTest(label,input,charstring::getLength(input),
+						expected,expectedlen);
+}
+
+// encodes "input" to "encoded" and decodes "encoded" back to "input"
+static void jsonRoundTripTest(const char *label,
+				const char *input, uint64_t inputsize,
+				const char *encoded, uint64_t encodedlen) {
+	jsonEncodeSizeTest(label,input,inputsize,encoded,encodedlen);
+	jsonDecodeSizeTest(label,encoded,encodedlen,input,inputsize);
+}
+
+// appends the JSON encoding of "input" to "sb", written independently of
+// charstring::jsonEncode()
+static void jsonReference(stringbuffer *sb,
+				const char *input, uint64_t inputsize) {
+	const char	*digits="0123456789abcdef";
+	sb->append('"');
+	for (uint64_t i=0; i<inputsize; i++) {
+		byte_t	b=(byte_t)input[i];
+		if (b=='"') {
+			sb->append("\\\"");
+		} else if (b=='\\') {
+			sb->append("\\\\");
+		} else if (b<0x20) {
+			sb->append("\\u00");
+			sb->append(digits[b/16]);
+			sb->append(digits[b%16]);
+		} else {
+			sb->append((char)b);
+		}
+	}
+	sb->append('"');
+}
+
 int main(int argc, const char **argv) {
 
 	header("charstring");
@@ -2066,6 +2163,668 @@ int main(int argc, const char **argv) {
 	htmlsb.clear();
 	delete[] encodedbytes;
 	delete[] htmlbig;
+	stdoutput.printf("\n");
+
+
+	// json encode
+	stdoutput.printf("json-encode...\n");
+	jsonEncodeTest("NULL",NULL,"null");
+	jsonEncodeTest("empty","","\"\"");
+	jsonEncodeTest("hello world","hello world","\"hello world\"");
+	jsonEncodeTest("\"","\"","\"\\\"\"");
+	jsonEncodeTest("\\","\\","\"\\\\\"");
+	jsonEncodeTest("/","/","\"/\"");
+	jsonEncodeTest("a\"b\\c/d","a\"b\\c/d","\"a\\\"b\\\\c/d\"");
+	jsonEncodeTest("space"," ","\" \"");
+	jsonEncodeTest("DEL","\x7f","\"\x7f\"");
+	jsonEncodeTest("\\x80","\x80","\"\x80\"");
+	jsonEncodeTest("\\xff","\xff","\"\xff\"");
+	jsonEncodeTest("caf\\xc3\\xa9","caf\xc3\xa9","\"caf\xc3\xa9\"");
+	jsonEncodeTest("\\xf0\\x9f\\x98\\x80","\xf0\x9f\x98\x80",
+					"\"\xf0\x9f\x98\x80\"");
+	jsonEncodeTest("invalid UTF-8","\xc3","\"\xc3\"");
+	jsonEncodeTest("null","null","\"null\"");
+	jsonEncodeTest("\\u0041","\\u0041","\"\\\\u0041\"");
+	jsonEncodeTest("line1\\nline2\\ttab\\r",
+			"line1\x0a" "line2\x09" "tab\x0d",
+			"\"line1\\u000aline2\\u0009tab\\u000d\"");
+	jsonEncodeTest("\\b\\f","\x08\x0c","\"\\u0008\\u000c\"");
+	jsonEncodeTest("<b>&amp;</b>'","<b>&amp;</b>'","\"<b>&amp;</b>'\"");
+	jsonEncodeTest("two quotes","\"\"","\"\\\"\\\"\"");
+	jsonEncodeTest("two backslashes","\\\\","\"\\\\\\\\\"");
+	jsonEncodeTest("boundaries","\x1f \x7f\x80","\"\\u001f \x7f\x80\"");
+	stdoutput.printf("\n");
+
+
+	// json encode every control byte, and every other byte
+	stdoutput.printf("json-encode every byte...\n");
+	jsonEncodeTest("0x01","\x01","\"\\u0001\"");
+	jsonEncodeTest("0x0a","\x0a","\"\\u000a\"");
+	jsonEncodeTest("0x1f","\x1f","\"\\u001f\"");
+	for (uint64_t bi=0; bi<256; bi++) {
+		char		label[16];
+		char		in=(char)bi;
+		stringbuffer	expected;
+		charstring::printf(label,sizeof(label),"byte 0x%02x",
+								(uint32_t)bi);
+		jsonReference(&expected,&in,1);
+		jsonEncodeSizeTest(label,&in,1,
+				expected.getString(),expected.getSize());
+	}
+	stdoutput.printf("\n");
+
+
+	// json encode overloads
+	stdoutput.printf("json-encode overloads...\n");
+	jsonEncodeSizeTest("NULL",NULL,zero,"null",4);
+	jsonEncodeSizeTest("NULL, size 3",NULL,3,"null",4);
+	jsonEncodeSizeTest("empty","",zero,"\"\"",2);
+	jsonEncodeSizeTest("abc, size 0","abc",zero,"\"\"",2);
+	jsonEncodeSizeTest("hello world","hello world",11,
+					"\"hello world\"",13);
+	jsonEncodeSizeTest("a\"b, size 2","a\"b",2,"\"a\\\"\"",5);
+	jsonEncodeSizeTest("\\xc3\\xa9, size 1","\xc3\xa9",1,"\"\xc3\"",3);
+	jsonEncodeSizeTest("line1\\n, size 6","line1\x0a" "x",6,
+					"\"line1\\u000a\"",13);
+	stdoutput.printf("\n");
+
+
+	// json encode treats a NULL within the length as data
+	stdoutput.printf("json-encode embedded NULL...\n");
+	jsonEncodeSizeTest("\\0","\0",1,"\"\\u0000\"",8);
+	jsonEncodeSizeTest("a\\0b","a\0b",3,"\"a\\u0000b\"",10);
+	jsonEncodeSizeTest("\\0\\0","\0\0",2,"\"\\u0000\\u0000\"",14);
+	jsonEncodeSizeTest("a\\0\"","a\0\"",3,"\"a\\u0000\\\"\"",11);
+	stdoutput.printf("\n");
+
+
+	// json decode gives NULL for NULL and for exactly null
+	stdoutput.printf("json-decode NULL and null...\n");
+	jsonDecodeTest("NULL",NULL,NULL,0);
+	jsonDecodeSizeTest("NULL, size 3",NULL,3,NULL,0);
+	jsonDecodeTest("null","null",NULL,0);
+	jsonDecodeSizeTest("nullx, size 4","nullx",4,NULL,0);
+	jsonDecodeSizeTest("null, size 3","null",3,"nul",3);
+	jsonDecodeSizeTest("null\\0","null\0",5,"null\0",5);
+	jsonDecodeTest(" null"," null"," null",5);
+	jsonDecodeTest("null ","null ","null ",5);
+	jsonDecodeTest("NULL text","NULL","NULL",4);
+	jsonDecodeTest("nul","nul","nul",3);
+	jsonDecodeTest("\"null\"","\"null\"","null",4);
+	stdoutput.printf("\n");
+
+
+	// json decode quoted and unquoted input
+	stdoutput.printf("json-decode quotes...\n");
+	jsonDecodeTest("empty","","",0);
+	jsonDecodeSizeTest("abc, size 0","abc",zero,"",0);
+	jsonDecodeTest("lone quote","\"","",0);
+	jsonDecodeTest("two quotes","\"\"","",0);
+	jsonDecodeTest("\"abc\"","\"abc\"","abc",3);
+	jsonDecodeTest("abc","abc","abc",3);
+	jsonDecodeTest("\"abc","\"abc","abc",3);
+	jsonDecodeTest("\"abc\"def","\"abc\"def","abc",3);
+	jsonDecodeTest("\"abc\" ","\"abc\" ","abc",3);
+	jsonDecodeTest("\"a\"b\"c\"","\"a\"b\"c\"","a",1);
+	jsonDecodeTest(" \"abc\""," \"abc\""," \"abc\"",6);
+	jsonDecodeTest("abc\"","abc\"","abc\"",4);
+	jsonDecodeTest("a\"b\"c","a\"b\"c","a\"b\"c",5);
+	jsonDecodeTest("\"a\\\"b\"","\"a\\\"b\"","a\"b",3);
+	jsonDecodeTest("\"a\\\\\"b\"","\"a\\\\\"b\"","a\\",2);
+	jsonDecodeTest("\"a\\\\\"","\"a\\\\\"","a\\",2);
+	jsonDecodeTest("\"\\\"","\"\\\"","\"",1);
+	jsonDecodeTest("\"ab\\\"","\"ab\\\"","ab\"",3);
+	jsonDecodeTest("\"\\\\\"","\"\\\\\"","\\",1);
+	jsonDecodeTest("\"\\\\\\\"\"","\"\\\\\\\"\"","\\\"",2);
+	jsonDecodeTest("\" abc \"","\" abc \""," abc ",5);
+	stdoutput.printf("\n");
+
+
+	// json decode short escapes
+	stdoutput.printf("json-decode short escapes...\n");
+	jsonDecodeTest("\\\"","\\\"","\"",1);
+	jsonDecodeTest("\\\\","\\\\","\\",1);
+	jsonDecodeTest("\\/","\\/","/",1);
+	jsonDecodeTest("\\b","\\b","\x08",1);
+	jsonDecodeTest("\\f","\\f","\x0c",1);
+	jsonDecodeTest("\\n","\\n","\x0a",1);
+	jsonDecodeTest("\\r","\\r","\x0d",1);
+	jsonDecodeTest("\\t","\\t","\x09",1);
+	jsonDecodeTest("every short escape",
+			"\"\\b\\f\\n\\r\\t\\/\\\\\\\"\"",
+			"\x08\x0c\x0a\x0d\x09/\\\"",8);
+	jsonDecodeTest("/","/","/",1);
+	stdoutput.printf("\n");
+
+
+	// json decode \u escapes, written as UTF-8, and never rescanned
+	stdoutput.printf("json-decode \\u escapes...\n");
+	jsonDecodeTest("\\u0041","\\u0041","A",1);
+	jsonDecodeTest("\\u00e9","\\u00e9","\xc3\xa9",2);
+	jsonDecodeTest("\\u00E9","\\u00E9","\xc3\xa9",2);
+	jsonDecodeTest("\\u00Ff","\\u00Ff","\xc3\xbf",2);
+	jsonDecodeTest("\\u007f","\\u007f","\x7f",1);
+	jsonDecodeTest("\\u0080","\\u0080","\xc2\x80",2);
+	jsonDecodeTest("\\u07ff","\\u07ff","\xdf\xbf",2);
+	jsonDecodeTest("\\u0800","\\u0800","\xe0\xa0\x80",3);
+	jsonDecodeTest("\\u20ac","\\u20ac","\xe2\x82\xac",3);
+	jsonDecodeTest("\\u20AC","\\u20AC","\xe2\x82\xac",3);
+	jsonDecodeTest("\\ud7ff","\\ud7ff","\xed\x9f\xbf",3);
+	jsonDecodeTest("\\ue000","\\ue000","\xee\x80\x80",3);
+	jsonDecodeTest("\\uffff","\\uffff","\xef\xbf\xbf",3);
+	jsonDecodeTest("\\u000a","\\u000a","\x0a",1);
+	jsonDecodeTest("\\u001f","\\u001f","\x1f",1);
+	jsonDecodeTest("\\u0022","\\u0022","\"",1);
+	jsonDecodeTest("\\u005c","\\u005c","\\",1);
+	jsonDecodeTest("\\u005cn","\\u005cn","\\n",2);
+	jsonDecodeTest("\\u005c\\u005c","\\u005c\\u005c","\\\\",2);
+	jsonDecodeTest("\\u005cu0041","\\u005cu0041","\\u0041",6);
+	jsonDecodeTest("\\\\n","\\\\n","\\n",2);
+	jsonDecodeTest("\\\\u0041","\\\\u0041","\\u0041",6);
+	jsonDecodeTest("\\\\\\\\","\\\\\\\\","\\\\",2);
+	jsonDecodeTest("\"\\u00e9t\\u00e9\"","\"\\u00e9t\\u00e9\"",
+						"\xc3\xa9t\xc3\xa9",5);
+	for (uint32_t ui=0; ui<0x80; ui++) {
+		char	lower[7];
+		char	upper[7];
+		char	expected=(char)ui;
+		charstring::printf(lower,sizeof(lower),"\\u%04x",ui);
+		charstring::printf(upper,sizeof(upper),"\\u%04X",ui);
+		jsonDecodeSizeTest(lower,lower,6,&expected,1);
+		jsonDecodeSizeTest(upper,upper,6,&expected,1);
+	}
+	stdoutput.printf("\n");
+
+
+	// json decode \u0000 to a NULL, which ends the string that the
+	// NULL-terminated overload returns, but which the lengths count
+	stdoutput.printf("json-decode \\u0000...\n");
+	jsonDecodeTest("\\u0000","\\u0000","\0",1);
+	jsonDecodeTest("a\\u0000b","a\\u0000b","a\0b",3);
+	jsonDecodeTest("\"\\u0000\"","\"\\u0000\"","\0",1);
+	jsonDecodeTest("\"\\u0000\\u001f\\\"\\\\/\\x7f\"",
+			"\"\\u0000\\u001f\\\"\\\\/\x7f\"",
+			"\0\x1f\"\\/\x7f",6);
+	char		*jsondecoded=charstring::jsonDecode("a\\u0000b");
+	uint64_t	jsondecodedlen;
+	test("a\\u0000b 1a",jsondecoded &&
+			charstring::getLength(jsondecoded)==1 &&
+			!bytestring::compare(jsondecoded,"a\0b",4));
+	delete[] jsondecoded;
+	charstring::jsonDecode("a\\u0000b",&jsondecoded,&jsondecodedlen);
+	test("a\\u0000b 2a",jsondecodedlen==3 &&
+			!bytestring::compare(jsondecoded,"a\0b",4));
+	delete[] jsondecoded;
+	stdoutput.printf("\n");
+
+
+	// json decode surrogate pairs, only when a high surrogate is followed
+	// by a low surrogate within the string
+	stdoutput.printf("json-decode surrogate pairs...\n");
+	jsonDecodeTest("\\ud83d\\ude00","\\ud83d\\ude00","\xf0\x9f\x98\x80",4);
+	jsonDecodeTest("\\uD83D\\uDE00","\\uD83D\\uDE00","\xf0\x9f\x98\x80",4);
+	jsonDecodeTest("\\uD83d\\udE00","\\uD83d\\udE00","\xf0\x9f\x98\x80",4);
+	jsonDecodeTest("\\uD800\\uDC00","\\uD800\\uDC00","\xf0\x90\x80\x80",4);
+	jsonDecodeTest("\\uDBFF\\uDFFF","\\uDBFF\\uDFFF","\xf4\x8f\xbf\xbf",4);
+	jsonDecodeTest("\"\\ud83d\\ude00\"","\"\\ud83d\\ude00\"",
+						"\xf0\x9f\x98\x80",4);
+	jsonDecodeTest("x\\ud83d\\ude00y","x\\ud83d\\ude00y",
+						"x\xf0\x9f\x98\x80y",6);
+	jsonDecodeTest("\\ud83d","\\ud83d","\\ud83d",6);
+	jsonDecodeTest("\\ud83dx","\\ud83dx","\\ud83dx",7);
+	jsonDecodeTest("\\ude00","\\ude00","\\ude00",6);
+	jsonDecodeTest("\\udfff","\\udfff","\\udfff",6);
+	jsonDecodeTest("\\ud83d\\u0041","\\ud83d\\u0041","\\ud83dA",7);
+	jsonDecodeTest("\\ud83d\\n","\\ud83d\\n","\\ud83d\x0a",7);
+	jsonDecodeTest("\\ud83d\\ud83d\\ude00","\\ud83d\\ud83d\\ude00",
+					"\\ud83d\xf0\x9f\x98\x80",10);
+	jsonDecodeTest("\\ude00\\ud83d","\\ude00\\ud83d","\\ude00\\ud83d",12);
+	jsonDecodeTest("\\ud83d\\ude0g","\\ud83d\\ude0g","\\ud83d\\ude0g",12);
+	jsonDecodeTest("\\ud83d\\Ude00","\\ud83d\\Ude00","\\ud83d\\Ude00",12);
+	jsonDecodeTest("\"\\ud83d\"\\ude00","\"\\ud83d\"\\ude00","\\ud83d",6);
+	jsonDecodeTest("\"\\ud83d\\\"\\ude00\"","\"\\ud83d\\\"\\ude00\"",
+					"\\ud83d\"\\ude00",13);
+	for (uint64_t size=1; size<12; size++) {
+		char	label[32];
+		charstring::printf(label,sizeof(label),
+				"\\ud83d\\ude00, size %lld",(long long)size);
+		jsonDecodeSizeTest(label,"\\ud83d\\ude00",size,
+						"\\ud83d\\ude00",size);
+	}
+	stdoutput.printf("\n");
+
+
+	// json decode copies a malformed escape's backslash as-is, and carries
+	// on decoding after it
+	stdoutput.printf("json-decode malformed escapes...\n");
+	jsonDecodeTest("\\q","\\q","\\q",2);
+	jsonDecodeTest("\\x41","\\x41","\\x41",4);
+	jsonDecodeTest("\\U0041","\\U0041","\\U0041",6);
+	jsonDecodeTest("\\a\\0","\\a\\0","\\a\\0",4);
+	jsonDecodeTest("\\u","\\u","\\u",2);
+	jsonDecodeTest("\\u4","\\u4","\\u4",3);
+	jsonDecodeTest("\\u41","\\u41","\\u41",4);
+	jsonDecodeTest("\\u041","\\u041","\\u041",5);
+	jsonDecodeTest("\\u004g","\\u004g","\\u004g",6);
+	jsonDecodeTest("\\u 041","\\u 041","\\u 041",6);
+	jsonDecodeTest("\\u+041","\\u+041","\\u+041",6);
+	jsonDecodeSizeTest("\\u0041, size 5","\\u0041",5,"\\u004",5);
+	jsonDecodeTest("\\u\\u0041","\\u\\u0041","\\uA",3);
+	jsonDecodeTest("\\u004\\u0041","\\u004\\u0041","\\u004A",6);
+	jsonDecodeTest("\\q\\n","\\q\\n","\\q\x0a",3);
+	jsonDecodeTest("\\","\\","\\",1);
+	jsonDecodeTest("abc\\","abc\\","abc\\",4);
+	jsonDecodeTest("\"abc\\","\"abc\\","abc\\",4);
+	jsonDecodeTest("\\\\\\","\\\\\\","\\\\",2);
+	jsonDecodeSizeTest("\\n, size 1","\\n",1,"\\",1);
+	stdoutput.printf("\n");
+
+
+	// json decode copies other characters as-is
+	stdoutput.printf("json-decode other characters...\n");
+	jsonDecodeTest("\\x01\\x1f","\x01\x1f","\x01\x1f",2);
+	jsonDecodeTest("\"\\x0a\"","\"\x0a\"","\x0a",1);
+	jsonDecodeTest("\\xff\\xfe","\xff\xfe","\xff\xfe",2);
+	jsonDecodeTest("\\xc3","\xc3","\xc3",1);
+	jsonDecodeTest("\"caf\\xc3\\xa9\"","\"caf\xc3\xa9\"","caf\xc3\xa9",5);
+	stdoutput.printf("\n");
+
+
+	// json decode only recognizes a closing quote or an escape that ends
+	// within the length
+	stdoutput.printf("json-decode cut off by the length...\n");
+	jsonDecodeSizeTest("\"abc\", size 4","\"abc\"",4,"abc",3);
+	jsonDecodeSizeTest("\"abc\", size 1","\"abc\"",1,"",0);
+	jsonDecodeSizeTest("\"\\\"\", size 3","\"\\\"\"",3,"\"",1);
+	jsonDecodeSizeTest("\"\\\"\", size 2","\"\\\"\"",2,"\\",1);
+	jsonDecodeSizeTest("\\u0041x, size 6","\\u0041x",6,"A",1);
+	jsonDecodeSizeTest("\"\\n\", size 3","\"\\n\"",3,"\x0a",1);
+	stdoutput.printf("\n");
+
+
+	// json decode treats a NULL within the length as data
+	stdoutput.printf("json-decode embedded NULL...\n");
+	jsonDecodeSizeTest("\\\\0","\\\0",2,"\\\0",2);
+	jsonDecodeSizeTest("\\u00\\041","\\u00\0" "41",7,"\\u00\0" "41",7);
+	jsonDecodeSizeTest("a\\0b","a\0b",3,"a\0b",3);
+	jsonDecodeSizeTest("\"a\\0b\"","\"a\0b\"",5,"a\0b",3);
+	jsonDecodeSizeTest("\"\\0\"","\"\0\"",3,"\0",1);
+	jsonDecodeSizeTest("\\0\\u0041","\0\\u0041",7,"\0A",2);
+	stdoutput.printf("\n");
+
+
+	// json round trip
+	stdoutput.printf("json round trip...\n");
+	jsonRoundTripTest("NULL",NULL,zero,"null",4);
+	jsonRoundTripTest("empty","",zero,"\"\"",2);
+	jsonRoundTripTest("null","null",4,"\"null\"",6);
+	jsonRoundTripTest("\\0","\0",1,"\"\\u0000\"",8);
+	jsonRoundTripTest("a\"b\\c/d\\x7f\\x80","a\"b\\c/d\x7f\x80",9,
+					"\"a\\\"b\\\\c/d\x7f\x80\"",13);
+	jsonRoundTripTest("\\u0041\\ud83d","\\u0041\\ud83d",12,
+					"\"\\\\u0041\\\\ud83d\"",16);
+	jsonRoundTripTest("\\xf0\\x9f\\x98\\x80\\n","\xf0\x9f\x98\x80\x0a",5,
+					"\"\xf0\x9f\x98\x80\\u000a\"",12);
+	jsonRoundTripTest("two quotes","\"\"",2,"\"\\\"\\\"\"",6);
+	stdoutput.printf("\n");
+
+
+	// json round trip every byte, and every pair of bytes
+	stdoutput.printf("json round trip every byte...\n");
+	char	jsonbytes[256];
+	for (uint64_t bi=0; bi<256; bi++) {
+		jsonbytes[bi]=(char)bi;
+	}
+	for (uint64_t bi=0; bi<256; bi++) {
+		char		label[16];
+		stringbuffer	expected;
+		charstring::printf(label,sizeof(label),"byte 0x%02x",
+								(uint32_t)bi);
+		jsonReference(&expected,jsonbytes+bi,1);
+		jsonRoundTripTest(label,jsonbytes+bi,1,
+				expected.getString(),expected.getSize());
+	}
+	stringbuffer	jsonallbytes;
+	jsonReference(&jsonallbytes,jsonbytes,256);
+	jsonRoundTripTest("256 bytes",jsonbytes,256,
+			jsonallbytes.getString(),jsonallbytes.getSize());
+	char	*jsonnonnull=terminatedCopy(jsonbytes+1,255);
+	char	*jsonallencoded=charstring::jsonEncode(jsonnonnull);
+	jsondecoded=charstring::jsonDecode(jsonallencoded);
+	test("bytes 1 to 255 1a",
+			!charstring::compare(jsondecoded,jsonnonnull));
+	delete[] jsondecoded;
+	delete[] jsonallencoded;
+	delete[] jsonnonnull;
+	bool	jsonpairsok=true;
+	for (uint64_t bi=0; bi<65536 && jsonpairsok; bi++) {
+		char		pair[2]={(char)(bi>>8),(char)(bi&0xFF)};
+		char		*pairencoded;
+		uint64_t	pairencodedlen;
+		char		*pairdecoded;
+		uint64_t	pairdecodedlen;
+		charstring::jsonEncode(pair,2,&pairencoded,&pairencodedlen);
+		charstring::jsonDecode(pairencoded,pairencodedlen,
+						&pairdecoded,&pairdecodedlen);
+		jsonpairsok=(pairdecodedlen==2 &&
+				!bytestring::compare(pairdecoded,pair,2));
+		delete[] pairencoded;
+		delete[] pairdecoded;
+	}
+	test("every pair of bytes",jsonpairsok);
+	stdoutput.printf("\n");
+
+
+	// json encode overloads, called directly
+	stdoutput.printf("json overloads...\n");
+	const char	*jsonin="a\"b\\c\x0a/";
+	uint64_t	jsoninlen=charstring::getLength(jsonin);
+	const char	*jsonout="\"a\\\"b\\\\c\\u000a/\"";
+	uint64_t	jsonoutlen=charstring::getLength(jsonout);
+	const char	*jsonnull=NULL;
+	const char	*jsonnullout="null";
+	uint64_t	jsonnulllen=4;
+	char		*jsonresult;
+	uint64_t	jsonresultlen;
+	jsonresult=charstring::jsonEncode(jsonin);
+	test("encode 1a",!charstring::compare(jsonresult,jsonout));
+	delete[] jsonresult;
+	jsonresult=charstring::jsonEncode(jsonin,jsoninlen);
+	test("encode 1b",!charstring::compare(jsonresult,jsonout));
+	delete[] jsonresult;
+	charstring::jsonEncode(jsonin,&jsonresult,&jsonresultlen);
+	test("encode 2a",jsonresultlen==jsonoutlen &&
+			!charstring::compare(jsonresult,jsonout));
+	delete[] jsonresult;
+	charstring::jsonEncode(jsonin,jsoninlen,&jsonresult,&jsonresultlen);
+	test("encode 2b",jsonresultlen==jsonoutlen &&
+			!charstring::compare(jsonresult,jsonout));
+	delete[] jsonresult;
+	stringbuffer	jsonsb;
+	charstring::jsonEncode(jsonin,&jsonsb);
+	test("encode 3a",jsonsb.getSize()==jsonoutlen &&
+			!charstring::compare(jsonsb.getString(),jsonout));
+	jsonsb.clear();
+	charstring::jsonEncode(jsonin,jsoninlen,&jsonsb);
+	test("encode 3b",jsonsb.getSize()==jsonoutlen &&
+			!charstring::compare(jsonsb.getString(),jsonout));
+	jsonsb.clear();
+	jsonresult=charstring::jsonEncode(jsonnull);
+	test("encode 1a NULL",!charstring::compare(jsonresult,jsonnullout));
+	delete[] jsonresult;
+	jsonresult=charstring::jsonEncode(jsonnull,jsoninlen);
+	test("encode 1b NULL",!charstring::compare(jsonresult,jsonnullout));
+	delete[] jsonresult;
+	charstring::jsonEncode(jsonnull,&jsonresult,&jsonresultlen);
+	test("encode 2a NULL",jsonresultlen==jsonnulllen &&
+			!charstring::compare(jsonresult,jsonnullout));
+	delete[] jsonresult;
+	charstring::jsonEncode(jsonnull,jsoninlen,&jsonresult,&jsonresultlen);
+	test("encode 2b NULL",jsonresultlen==jsonnulllen &&
+			!charstring::compare(jsonresult,jsonnullout));
+	delete[] jsonresult;
+	charstring::jsonEncode(jsonnull,&jsonsb);
+	test("encode 3a NULL",jsonsb.getSize()==jsonnulllen &&
+			!bytestring::compare(jsonsb.getBuffer(),
+						jsonnullout,jsonnulllen));
+	jsonsb.clear();
+	charstring::jsonEncode(jsonnull,jsoninlen,&jsonsb);
+	test("encode 3b NULL",jsonsb.getSize()==jsonnulllen &&
+			!bytestring::compare(jsonsb.getBuffer(),
+						jsonnullout,jsonnulllen));
+	jsonsb.clear();
+	charstring::jsonEncode(jsonin,(output *)NULL);
+	charstring::jsonEncode(jsonin,jsoninlen,(output *)NULL);
+	charstring::jsonEncode(jsonnull,(output *)NULL);
+	charstring::jsonEncode(jsonnull,jsoninlen,(output *)NULL);
+	test("3a/3b NULL output",!jsonsb.getSize());
+	jsonresult=charstring::jsonDecode(jsonout);
+	test("decode 1a",!charstring::compare(jsonresult,jsonin));
+	delete[] jsonresult;
+	jsonresult=charstring::jsonDecode(jsonout,jsonoutlen);
+	test("decode 1b",!charstring::compare(jsonresult,jsonin));
+	delete[] jsonresult;
+	charstring::jsonDecode(jsonout,&jsonresult,&jsonresultlen);
+	test("decode 2a",jsonresultlen==jsoninlen &&
+			!charstring::compare(jsonresult,jsonin));
+	delete[] jsonresult;
+	charstring::jsonDecode(jsonout,jsonoutlen,&jsonresult,&jsonresultlen);
+	test("decode 2b",jsonresultlen==jsoninlen &&
+			!charstring::compare(jsonresult,jsonin));
+	delete[] jsonresult;
+	charstring::jsonDecode(jsonout,&jsonsb);
+	test("decode 3a",jsonsb.getSize()==jsoninlen &&
+			!charstring::compare(jsonsb.getString(),jsonin));
+	jsonsb.clear();
+	charstring::jsonDecode(jsonout,jsonoutlen,&jsonsb);
+	test("decode 3b",jsonsb.getSize()==jsoninlen &&
+			!charstring::compare(jsonsb.getString(),jsonin));
+	jsonsb.clear();
+	jsonresult=charstring::jsonDecode(jsonnull);
+	test("decode 1a NULL",!jsonresult);
+	jsonresult=charstring::jsonDecode(jsonnull,jsonoutlen);
+	test("decode 1b NULL",!jsonresult);
+	jsonresultlen=1;
+	charstring::jsonDecode(jsonnull,&jsonresult,&jsonresultlen);
+	test("decode 2a NULL",!jsonresult && !jsonresultlen);
+	jsonresultlen=1;
+	charstring::jsonDecode(jsonnull,jsonoutlen,&jsonresult,&jsonresultlen);
+	test("decode 2b NULL",!jsonresult && !jsonresultlen);
+	jsonresult=charstring::jsonDecode(jsonnullout);
+	test("decode 1a null",!jsonresult);
+	jsonresult=charstring::jsonDecode(jsonnullout,jsonnulllen);
+	test("decode 1b null",!jsonresult);
+	jsonresultlen=1;
+	charstring::jsonDecode(jsonnullout,&jsonresult,&jsonresultlen);
+	test("decode 2a null",!jsonresult && !jsonresultlen);
+	jsonresultlen=1;
+	charstring::jsonDecode(jsonnullout,jsonnulllen,
+					&jsonresult,&jsonresultlen);
+	test("decode 2b null",!jsonresult && !jsonresultlen);
+	charstring::jsonDecode(jsonnull,&jsonsb);
+	charstring::jsonDecode(jsonnull,jsonoutlen,&jsonsb);
+	charstring::jsonDecode(jsonnullout,&jsonsb);
+	charstring::jsonDecode(jsonnullout,jsonnulllen,&jsonsb);
+	test("decode 3a/3b NULL and null input",!jsonsb.getSize());
+	charstring::jsonDecode(jsonout,(output *)NULL);
+	charstring::jsonDecode(jsonout,jsonoutlen,(output *)NULL);
+	charstring::jsonDecode(jsonnull,(output *)NULL);
+	charstring::jsonDecode(jsonnull,jsonoutlen,(output *)NULL);
+	test("decode 3a/3b NULL output",!jsonsb.getSize());
+	stdoutput.printf("\n");
+
+
+	// json encode escapes that straddle a flush of the output *
+	// overloads, the opening quote shifts the output by 1
+	stdoutput.printf("json encode across flushes...\n");
+	const char	*jsonspecials[]={"\"","\\","\x01","\x1f","\x0a",NULL};
+	for (const char **sp=jsonspecials; *sp; sp++) {
+		for (uint64_t offset=248; offset<258; offset++) {
+			char		label[32];
+			stringbuffer	plain;
+			stringbuffer	expected;
+			appendRepeated(&plain,"a",offset);
+			plain.append(*sp);
+			plain.append("bc");
+			jsonReference(&expected,plain.getString(),
+							plain.getSize());
+			charstring::printf(label,sizeof(label),
+					"0x%02x at %lld",
+					(uint32_t)(byte_t)(*sp)[0],
+					(long long)offset);
+			jsonEncodeSizeTest(label,
+				plain.getString(),plain.getSize(),
+				expected.getString(),expected.getSize());
+		}
+	}
+	for (uint64_t plainlen=253; plainlen<258; plainlen++) {
+		char		label[32];
+		stringbuffer	plain;
+		stringbuffer	expected;
+		appendRepeated(&plain,"a",plainlen);
+		jsonReference(&expected,plain.getString(),plain.getSize());
+		charstring::printf(label,sizeof(label),"%lld plain",
+							(long long)plainlen);
+		jsonEncodeSizeTest(label,plain.getString(),plain.getSize(),
+				expected.getString(),expected.getSize());
+	}
+	stringbuffer	jsonplain;
+	stringbuffer	jsonencoded;
+	appendRepeated(&jsonplain,"x\"\\/\x01\x1f\x7f\xC3\xA9\xF0\x9F\x98\x80 ",
+									300);
+	jsonReference(&jsonencoded,jsonplain.getString(),jsonplain.getSize());
+	jsonEncodeSizeTest("mixed, 300 times",
+			jsonplain.getString(),jsonplain.getSize(),
+			jsonencoded.getString(),jsonencoded.getSize());
+	stdoutput.printf("\n");
+
+
+	// json decode escapes that straddle a flush of the output *
+	// overloads, quoted and unquoted
+	stdoutput.printf("json decode across flushes...\n");
+	const char	*jsonescapes[]={
+		"\\u00e9","\xc3\xa9",
+		"\\ud83d\\ude00","\xf0\x9f\x98\x80",
+		"\\\"","\"",
+		"\\\\","\\",
+		"\\n","\x0a",
+		"\\q","\\q",
+		NULL
+	};
+	for (const char **ep=jsonescapes; *ep; ep+=2) {
+		for (uint64_t offset=248; offset<258; offset++) {
+			for (uint64_t quoted=0; quoted<2; quoted++) {
+				char		label[48];
+				stringbuffer	encoded;
+				stringbuffer	expected;
+				if (quoted) {
+					encoded.append('"');
+				}
+				appendRepeated(&encoded,"a",offset);
+				encoded.append(*ep);
+				encoded.append("bc");
+				if (quoted) {
+					encoded.append('"');
+				}
+				appendRepeated(&expected,"a",offset);
+				expected.append(*(ep+1));
+				expected.append("bc");
+				charstring::printf(label,sizeof(label),
+						"%s%s at %lld",
+						(quoted)?"quoted ":"",*ep,
+						(long long)offset);
+				jsonDecodeSizeTest(label,
+					encoded.getString(),
+					encoded.getSize(),
+					expected.getString(),
+					expected.getSize());
+			}
+		}
+	}
+	jsonDecodeSizeTest("mixed, 300 times",
+			jsonencoded.getString(),jsonencoded.getSize(),
+			jsonplain.getString(),jsonplain.getSize());
+	jsonencoded.clear();
+	appendRepeated(&jsonencoded,
+			"x\\\"\\\\\\/\\u0001\\u001F\x7f"
+			"\\u00e9\\uD83D\\ude00 ",300);
+	jsonDecodeSizeTest("mixed escapes, 300 times",
+			jsonencoded.getString(),jsonencoded.getSize(),
+			jsonplain.getString(),jsonplain.getSize());
+	stdoutput.printf("\n");
+
+
+	// json encode and decode large input, through several chunks of the
+	// output * overloads
+	stdoutput.printf("json large input...\n");
+	char	*jsonbig=new char[bigsize];
+	for (uint64_t bi=0; bi<bigsize; bi++) {
+		jsonbig[bi]=(char)(bi%255+1);
+	}
+	jsonencoded.clear();
+	jsonReference(&jsonencoded,jsonbig,bigsize);
+	jsonEncodeSizeTest("encode",jsonbig,bigsize,
+			jsonencoded.getString(),jsonencoded.getSize());
+	charstring::jsonEncode(jsonbig,bigsize,&encodedbytes,&encodedlen);
+	jsonDecodeSizeTest("decode",encodedbytes,encodedlen,jsonbig,bigsize);
+	charstring::jsonDecode(encodedbytes,&jsonsb);
+	test("decode 3a round trip",
+		jsonsb.getSize()==bigsize &&
+		!bytestring::compare(jsonsb.getBuffer(),jsonbig,bigsize));
+	jsonsb.clear();
+	stdoutput.printf("\n");
+
+
+	// json encode output * overloads stop at the first failed or short
+	// write
+	stdoutput.printf("json failed writes...\n");
+	limitedbuffer	jsonshortenc(300,false);
+	charstring::jsonEncode(jsonbig,bigsize,&jsonshortenc);
+	test("encode short write",
+		jsonshortenc.charwrites==2 && !jsonshortenc.bytewrites &&
+		jsonshortenc.getSize()==300 &&
+		!bytestring::compare(jsonshortenc.getBuffer(),
+							encodedbytes,300));
+	limitedbuffer	jsonerrorenc(300,true);
+	charstring::jsonEncode(jsonbig,bigsize,&jsonerrorenc);
+	test("encode error",
+		jsonerrorenc.charwrites==2 && !jsonerrorenc.bytewrites &&
+		jsonerrorenc.getSize()==256 &&
+		!bytestring::compare(jsonerrorenc.getBuffer(),
+							encodedbytes,256));
+	limitedbuffer	jsonfirstenc(0,true);
+	charstring::jsonEncode(jsonbig,bigsize,&jsonfirstenc);
+	test("encode error on first write",
+		jsonfirstenc.charwrites==1 && !jsonfirstenc.bytewrites &&
+		!jsonfirstenc.getSize());
+	limitedbuffer	jsonshortnull(2,false);
+	charstring::jsonEncode(jsonnull,&jsonshortnull);
+	test("encode NULL short write",
+		jsonshortnull.charwrites==1 && !jsonshortnull.bytewrites &&
+		jsonshortnull.getSize()==2 &&
+		!bytestring::compare(jsonshortnull.getBuffer(),"nu",2));
+	limitedbuffer	jsonshortdec(300,false);
+	charstring::jsonDecode(encodedbytes,encodedlen,&jsonshortdec);
+	test("decode short write",
+		jsonshortdec.charwrites==2 && !jsonshortdec.bytewrites &&
+		jsonshortdec.getSize()==300 &&
+		!bytestring::compare(jsonshortdec.getBuffer(),jsonbig,300));
+	limitedbuffer	jsonerrordec(300,true);
+	charstring::jsonDecode(encodedbytes,encodedlen,&jsonerrordec);
+	test("decode error",
+		jsonerrordec.charwrites==2 && !jsonerrordec.bytewrites &&
+		jsonerrordec.getSize()==256 &&
+		!bytestring::compare(jsonerrordec.getBuffer(),jsonbig,256));
+	limitedbuffer	jsonfirstdec(0,true);
+	charstring::jsonDecode(encodedbytes,encodedlen,&jsonfirstdec);
+	test("decode error on first write",
+		jsonfirstdec.charwrites==1 && !jsonfirstdec.bytewrites &&
+		!jsonfirstdec.getSize());
+	delete[] encodedbytes;
+	stdoutput.printf("\n");
+
+
+	// json encode and decode large input with NULLs, through the
+	// input-and-size overloads
+	stdoutput.printf("json large input with NULLs...\n");
+	for (uint64_t bi=0; bi<bigsize; bi++) {
+		jsonbig[bi]=(char)(bi%256);
+	}
+	jsonencoded.clear();
+	jsonReference(&jsonencoded,jsonbig,bigsize);
+	jsonEncodeSizeTest("encode",jsonbig,bigsize,
+			jsonencoded.getString(),jsonencoded.getSize());
+	jsonDecodeSizeTest("decode",
+			jsonencoded.getString(),jsonencoded.getSize(),
+			jsonbig,bigsize);
+	jsonDecodeSizeTest("decode raw",jsonbig,bigsize,jsonbig,bigsize);
+	charstring::jsonDecode(jsonencoded.getString(),jsonencoded.getSize(),
+								&jsonsb);
+	test("decode 3b round trip",
+		jsonsb.getSize()==bigsize &&
+		!bytestring::compare(jsonsb.getBuffer(),jsonbig,bigsize));
+	jsonsb.clear();
+	delete[] jsonbig;
 	stdoutput.printf("\n");
 
 

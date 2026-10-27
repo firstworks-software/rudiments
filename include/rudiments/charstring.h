@@ -1692,6 +1692,142 @@ class RUDIMENTS_DLLSPEC charstring {
 						uint64_t inputlen,
 						output *out);
 
+		/** JSON-encodes "input" as a JSON string and returns
+		 *  it in a buffer allocated inside the function.  This
+		 *  buffer must be deleted by the calling program.
+		 *
+		 *  The result starts and ends with a double quote.  A
+		 *  double quote becomes \\\" and a backslash becomes \\\\.
+		 *  Every byte below 0x20 becomes \\u00 and 2 lowercase
+		 *  hex digits, so a newline becomes \\u000a.  Every other
+		 *  byte, including / and bytes at or above 0x7F, is
+		 *  copied as-is.  An empty "input" returns two double
+		 *  quotes.  Unlike urlEncode(), a NULL "input" returns
+		 *  the 4 characters null, with no quotes, rather than
+		 *  NULL. */
+		static	char	*jsonEncode(const char *input);
+
+		/** similar to jsonEncode() above but only encodes the
+		 *  first "inputlen" characters of "input".  A NULL among
+		 *  them is encoded as \\u0000. */
+		static	char	*jsonEncode(const char *input,
+						uint64_t inputlen);
+
+		/** JSON-encodes "input" as jsonEncode() above does, and
+		 *  returns the result in "output" and "outputlen" rather
+		 *  than in a return value.  "output" is allocated inside
+		 *  the function and must be deleted by the calling
+		 *  program.  Unlike urlEncode(), if "input" is NULL then
+		 *  "output" is set to the 4 characters null rather than
+		 *  NULL, and "outputlen" to 4. */
+		static	void	jsonEncode(const char *input,
+						char **output,
+						uint64_t *outputlen);
+
+		/** similar to jsonEncode() above but only encodes the
+		 *  first "inputlen" characters of "input".  A NULL among
+		 *  them is encoded as \\u0000.  If "inputlen" is 0 then
+		 *  "output" is set to two double quotes and "outputlen"
+		 *  to 2. */
+		static	void	jsonEncode(const char *input,
+						uint64_t inputlen,
+						char **output,
+						uint64_t *outputlen);
+
+		/** JSON-encodes "input" as jsonEncode() above does, and
+		 *  writes the result to "out".  Does nothing if "out" is
+		 *  NULL.  Unlike urlEncode(), writes the 4 characters
+		 *  null if "input" is NULL.  Never writes a NULL
+		 *  terminator.  Stops at the first failed or short write
+		 *  to "out". */
+		static	void	jsonEncode(const char *input, output *out);
+
+		/** similar to jsonEncode() above but only encodes the
+		 *  first "inputlen" characters of "input".  A NULL among
+		 *  them is encoded as \\u0000.  Writes two double quotes
+		 *  if "inputlen" is 0. */
+		static	void	jsonEncode(const char *input,
+						uint64_t inputlen,
+						output *out);
+
+		/** JSON-decodes "input" and returns it in a buffer
+		 *  allocated inside the function.  This buffer must be
+		 *  deleted by the calling program.
+		 *
+		 *  If "input" starts with a double quote then the string
+		 *  ends at the next double quote that is not escaped, or
+		 *  at the end of "input" if there is none, and anything
+		 *  after it is ignored.  Otherwise all of "input" is
+		 *  decoded, and a double quote in it is copied as-is.
+		 *  Whitespace is not trimmed.  \\\" \\\\ \\/ \\b \\f \\n \\r
+		 *  and \\t are decoded, and so is \\u and 4 hex digits, in
+		 *  either case, which is written as UTF-8.  A high
+		 *  surrogate escape followed by a low surrogate escape
+		 *  is decoded as one character.  \\u0000 decodes to a
+		 *  NULL, which ends the returned string.  Any other
+		 *  backslash, such as one that starts a malformed escape
+		 *  or a lone surrogate, or one at the end of "input", is
+		 *  copied as-is and decoding continues with the character
+		 *  after it.  Every other character, including control
+		 *  characters and invalid UTF-8, is copied as-is, and
+		 *  decoded text is not decoded again.  If "input" is NULL
+		 *  or is exactly the 4 characters null then NULL is
+		 *  returned. */
+		static	char	*jsonDecode(const char *input);
+
+		/** similar to jsonDecode() above but only decodes the
+		 *  first "inputlen" characters of "input".  A NULL among
+		 *  them is copied like any other character, a closing
+		 *  double quote or an escape must end within "inputlen"
+		 *  to be recognized, and "input" is null only if
+		 *  "inputlen" is 4. */
+		static	char	*jsonDecode(const char *input,
+						uint64_t inputlen);
+
+		/** JSON-decodes "input" as jsonDecode() above does, and
+		 *  returns the result in "output" and "outputlen" rather
+		 *  than in a return value.  "output" is allocated inside
+		 *  the function and must be deleted by the calling
+		 *  program.  "outputlen" counts any NULL that \\u0000
+		 *  decodes to, and is never more than the length of
+		 *  "input".  If "input" is NULL or is exactly the 4
+		 *  characters null then "output" is set to NULL and
+		 *  "outputlen" to 0. */
+		static	void	jsonDecode(const char *input,
+						char **output,
+						uint64_t *outputlen);
+
+		/** similar to jsonDecode() above but only decodes the
+		 *  first "inputlen" characters of "input".  A NULL among
+		 *  them is copied like any other character, a closing
+		 *  double quote or an escape must end within "inputlen"
+		 *  to be recognized, and "input" is null only if
+		 *  "inputlen" is 4.  If "inputlen" is 0 then "output" is
+		 *  set to an empty string and "outputlen" to 0. */
+		static	void	jsonDecode(const char *input,
+						uint64_t inputlen,
+						char **output,
+						uint64_t *outputlen);
+
+		/** JSON-decodes "input" as jsonDecode() above does, and
+		 *  writes the result to "out", including any NULL that
+		 *  \\u0000 decodes to.  Does nothing if "out" is NULL and
+		 *  writes nothing if "input" is NULL or is exactly the 4
+		 *  characters null.  Never writes a NULL terminator.
+		 *  Stops at the first failed or short write to "out". */
+		static	void	jsonDecode(const char *input, output *out);
+
+		/** similar to jsonDecode() above but only decodes the
+		 *  first "inputlen" characters of "input".  A NULL among
+		 *  them is copied like any other character, a closing
+		 *  double quote or an escape must end within "inputlen"
+		 *  to be recognized, and "input" is null only if
+		 *  "inputlen" is 4.  Writes nothing if
+		 *  "inputlen" is 0. */
+		static	void	jsonDecode(const char *input,
+						uint64_t inputlen,
+						output *out);
+
 		/** base64-encodes "input" and returns it in a buffer
 		 *  allocated inside the function.  This buffer must be
 		 *  deleted by the calling program. */

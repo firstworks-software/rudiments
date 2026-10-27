@@ -1237,6 +1237,271 @@ void charstring::htmlDecode(const char *input, uint64_t inputlen, output *out) {
 	chunkedWriterFlush(&cw);
 }
 
+// json-encodes "c" at "out", returns the characters written, 1, 2, or 6
+static size_t jsonEncodeChar(char c, char *out) {
+	if (c=='"' || c=='\\') {
+		out[0]='\\';
+		out[1]=c;
+		return 2;
+	}
+	if ((byte_t)c<0x20) {
+		out[0]='\\';
+		out[1]='u';
+		out[2]='0';
+		out[3]='0';
+		hexEncodeByte((byte_t)c,out+4);
+		return 6;
+	}
+	out[0]=c;
+	return 1;
+}
+
+char *charstring::jsonEncode(const char *input) {
+	return jsonEncode(input,getLength(input));
+}
+
+char *charstring::jsonEncode(const char *input, uint64_t inputlen) {
+	char		*output;
+	uint64_t	outputlen;
+	jsonEncode(input,inputlen,&output,&outputlen);
+	return output;
+}
+
+void charstring::jsonEncode(const char *input,
+				char **output, uint64_t *outputlen) {
+	jsonEncode(input,getLength(input),output,outputlen);
+}
+
+void charstring::jsonEncode(const char *input, uint64_t inputlen,
+				char **output, uint64_t *outputlen) {
+
+	// handle null input
+	if (!input) {
+		(*output)=duplicate("null",4);
+		(*outputlen)=4;
+		return;
+	}
+
+	// size the output, including the quotes
+	const char	*end=input+inputlen;
+	char		encoded[6];
+	(*outputlen)=2;
+	for (const char *c=input; c!=end; c++) {
+		(*outputlen)+=jsonEncodeChar(*c,encoded);
+	}
+
+	// encode
+	(*output)=new char[(*outputlen)+1];
+	char	*oi=*output;
+	*oi++='"';
+	for (const char *c=input; c!=end; c++) {
+		oi+=jsonEncodeChar(*c,oi);
+	}
+	*oi++='"';
+	*oi='\0';
+}
+
+void charstring::jsonEncode(const char *input, output *out) {
+	jsonEncode(input,getLength(input),out);
+}
+
+void charstring::jsonEncode(const char *input, uint64_t inputlen, output *out) {
+
+	// handle null output
+	if (!out) {
+		return;
+	}
+
+	chunkedwriter	cw;
+	chunkedWriterInit(&cw,out,false);
+
+	// handle null input
+	if (!input) {
+		chunkedWriterAppend(&cw,"null",4);
+		chunkedWriterFlush(&cw);
+		return;
+	}
+
+	// encode
+	const char	*end=input+inputlen;
+	char		encoded[6];
+	chunkedWriterAppend(&cw,"\"",1);
+	for (const char *c=input; c!=end && !cw.failed; c++) {
+		chunkedWriterAppend(&cw,encoded,jsonEncodeChar(*c,encoded));
+	}
+	chunkedWriterAppend(&cw,"\"",1);
+	chunkedWriterFlush(&cw);
+}
+
+// decodes the 4 hex digits at "in", false if one is not a hex digit or they
+// do not all come before "end"
+static bool jsonDecodeHex4(const char *in, const char *end, uint32_t *value) {
+	if (end-in<4) {
+		return false;
+	}
+	*value=0;
+	for (uint8_t i=0; i<4; i++) {
+		byte_t	digit;
+		if (!hexDigitValue(in[i],&digit)) {
+			return false;
+		}
+		*value=((*value)<<4)|digit;
+	}
+	return true;
+}
+
+// json-decodes one character or escape at "in" to "out", returns the
+// characters consumed, a malformed escape copies only its backslash
+static size_t jsonDecodeSequence(const char *in, const char *end,
+						char *out, size_t *outlen) {
+
+	*outlen=1;
+
+	// copy a character, or a lone backslash at the end, as-is
+	if (*in!='\\' || end-in<2) {
+		*out=*in;
+		return 1;
+	}
+
+	// short escapes
+	switch (in[1]) {
+		case '"':
+		case '\\':
+		case '/':
+			*out=in[1];
+			return 2;
+		case 'b':
+			*out='\b';
+			return 2;
+		case 'f':
+			*out='\f';
+			return 2;
+		case 'n':
+			*out='\n';
+			return 2;
+		case 'r':
+			*out='\r';
+			return 2;
+		case 't':
+			*out='\t';
+			return 2;
+	}
+
+	// \uXXXX, or a surrogate pair
+	uint32_t	cp;
+	if (in[1]=='u' && jsonDecodeHex4(in+2,end,&cp)) {
+		if (cp>=0xD800 && cp<=0xDBFF) {
+			uint32_t	low;
+			if (end-in>=12 && in[6]=='\\' && in[7]=='u' &&
+					jsonDecodeHex4(in+8,end,&low) &&
+					low>=0xDC00 && low<=0xDFFF) {
+				cp=0x10000+((cp-0xD800)<<10)+(low-0xDC00);
+				*outlen=writeUtf8(out,cp)-out;
+				return 12;
+			}
+		} else if (cp<0xDC00 || cp>0xDFFF) {
+			*outlen=writeUtf8(out,cp)-out;
+			return 6;
+		}
+	}
+
+	// leave a malformed escape or lone surrogate as typed
+	*out='\\';
+	return 1;
+}
+
+// finds the string to decode in "input", false if "input" is NULL or exactly
+// null
+static bool jsonDecodeStart(const char *input, uint64_t inputlen,
+				const char **start, const char **end) {
+
+	// handle null input
+	if (!input || (inputlen==4 && !bytestring::compare(input,"null",4))) {
+		return false;
+	}
+
+	// handle unquoted input
+	*start=input;
+	*end=input+inputlen;
+	if (!inputlen || *input!='"') {
+		return true;
+	}
+
+	// find the closing quote, stepping over escaped characters
+	(*start)++;
+	const char	*c=*start;
+	while (c!=*end && *c!='"') {
+		c+=(*c=='\\' && *end-c>=2)?2:1;
+	}
+	*end=c;
+	return true;
+}
+
+char *charstring::jsonDecode(const char *input) {
+	return jsonDecode(input,getLength(input));
+}
+
+char *charstring::jsonDecode(const char *input, uint64_t inputlen) {
+	char		*output;
+	uint64_t	outputlen;
+	jsonDecode(input,inputlen,&output,&outputlen);
+	return output;
+}
+
+void charstring::jsonDecode(const char *input,
+				char **output, uint64_t *outputlen) {
+	jsonDecode(input,getLength(input),output,outputlen);
+}
+
+void charstring::jsonDecode(const char *input, uint64_t inputlen,
+				char **output, uint64_t *outputlen) {
+
+	// handle null input
+	(*output)=NULL;
+	(*outputlen)=0;
+	const char	*start;
+	const char	*end;
+	if (!jsonDecodeStart(input,inputlen,&start,&end)) {
+		return;
+	}
+
+	// no escape decodes to more bytes than it occupies
+	(*output)=new char[inputlen+1];
+
+	// decode
+	char	*oi=*output;
+	size_t	decodedlen;
+	for (const char *c=start; c!=end; oi+=decodedlen) {
+		c+=jsonDecodeSequence(c,end,oi,&decodedlen);
+	}
+	*oi='\0';
+	(*outputlen)=oi-(*output);
+}
+
+void charstring::jsonDecode(const char *input, output *out) {
+	jsonDecode(input,getLength(input),out);
+}
+
+void charstring::jsonDecode(const char *input, uint64_t inputlen, output *out) {
+
+	// handle null input or output
+	const char	*start;
+	const char	*end;
+	if (!out || !jsonDecodeStart(input,inputlen,&start,&end)) {
+		return;
+	}
+
+	chunkedwriter	cw;
+	chunkedWriterInit(&cw,out,false);
+	char		decoded[4];
+	size_t		decodedlen;
+	for (const char *c=start; c!=end && !cw.failed; ) {
+		c+=jsonDecodeSequence(c,end,decoded,&decodedlen);
+		chunkedWriterAppend(&cw,decoded,decodedlen);
+	}
+	chunkedWriterFlush(&cw);
+}
+
 // true if escape() puts a backslash before "c" (contains() matches a NULL "c"
 // when "characters" is non-NULL, so that is escaped too)
 static bool escapeNeedsBackslash(char c, const char *characters) {
