@@ -15,6 +15,30 @@ class scalar : public scalarcollection<valuetype> {
 		scalar();
 
 		/** Creates an instance of the scalar class
+		 *  that stores "v".
+		 *
+		 *  The value is not copied, and is not deleted when this
+		 *  instance is deleted. */
+		scalar(valuetype v);
+
+		/** Creates an instance of the scalar class
+		 *  that stores "v".
+		 *
+		 *  The value is not copied.  If "managevalues" or
+		 *  "managearrayvalues" is true, then this instance takes
+		 *  ownership of the value, and deletes it when the value is
+		 *  cleared or this instance is deleted.
+		 *
+		 *  If both are true, then "managearrayvalues" overrides
+		 *  "managevalues".
+		 *
+		 *  A managed value must be allocated to match the flag: with
+		 *  new for "managevalues" and with new[] for
+		 *  "managearrayvalues".  A char * or const char * value is
+		 *  only deleted if "managearrayvalues" is true. */
+		scalar(valuetype v, bool managevalues, bool managearrayvalues);
+
+		/** Creates an instance of the scalar class
 		 *  that is a copy of "a". */
 		scalar(scalar<valuetype> &a);
 

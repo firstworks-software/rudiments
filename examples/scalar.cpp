@@ -1,4 +1,5 @@
 #include <rudiments/scalar.h>
+#include <rudiments/charstring.h>
 #include <rudiments/stdio.h>
 
 int main(int argc, const char **argv) {
@@ -23,6 +24,10 @@ int main(int argc, const char **argv) {
 
 	s.setValue("eagle");
 	stdoutput.printf("updated value: %s\n\n",s.getValue());
+
+	// store a string that the scalar owns
+	scalar<char *>	o(charstring::duplicate("dog"),false,true);
+	stdoutput.printf("managed value: %s\n\n",o.getValue());
 
 	// copy a scalar
 	scalar<int64_t>	a;

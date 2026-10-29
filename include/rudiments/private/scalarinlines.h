@@ -7,6 +7,27 @@
 template <class valuetype>
 inline
 scalar<valuetype>::scalar() : scalarcollection<valuetype>() {
+	v=0;
+}
+
+template <class valuetype>
+inline
+scalar<valuetype>::scalar(valuetype v) : scalarcollection<valuetype>() {
+	this->v=v;
+}
+
+template <class valuetype>
+inline
+scalar<valuetype>::scalar(valuetype v,
+				bool managevalues,
+				bool managearrayvalues) :
+				scalarcollection<valuetype>() {
+	if (managearrayvalues) {
+		this->setManageArrayValues(true);
+	} else if (managevalues) {
+		this->setManageValues(true);
+	}
+	this->v=v;
 }
 
 template <class valuetype>

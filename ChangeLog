@@ -89,6 +89,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   jsonDecode()
 - added size and output * overloads to the charstring encode and decode
   methods
+- added scalar constructors that take an initial value, and one that also
+  takes the manage flags
 
 ### Changed
 - encryption and hash isSupported() is a non-pure virtual now, defaulting
@@ -263,6 +265,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - documented the ucs2stringbuffer initial size as bytes
 - fixed sensitivevalue::parse() crashing on an unreadable file,
   using the file size instead of the bytes read, and leaking
+- fixed the scalar default constructor leaving its value uninitialized
 
 ### Security
 - fixed buffer overflow when unix socket file name is too long
