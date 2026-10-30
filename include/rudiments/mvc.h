@@ -272,7 +272,8 @@ class RUDIMENTS_DLLSPEC mvcdao : public mvctier {
  *  			(linkedlist<int32_t> *)mvcr->getData("mylist");
  *  		int32_t	first=gl->getFirst()->getValue();
  *
- *  		table<int32_t>	*gt=(table<int32_t> *)mvcr->getData("mytable");
+ *  		table<int32_t>	*gt=
+ *  			(table<int32_t> *)mvcr->getData("mytable");
  *  		int32_t	cell=gt->getValue(0,"col1");
  *
  *  		scalar<int32_t>	*gs=
