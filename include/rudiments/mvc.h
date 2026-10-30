@@ -313,14 +313,13 @@ class RUDIMENTS_DLLSPEC mvcdao : public mvctier {
  *  		wb->attach(s);
  *  		wb->attach(str);
  *
- *  		// set a scalar to a value that belongs to an instance of
- *  		// myclass, and attach the instance to the wastebasket too,
+ *  		// attach a scalar with a value that belongs to an instance
+ *  		// of myclass, and attach the instance to the wastebasket,
  *  		// so the value stays valid until the mvcresult is deleted
  *  		myclass	*mc=new myclass();
  *  		scalar<const char *>	*ms=new scalar<const char *>();
  *  		ms->setValue(mc->getSomeValue());
- *  		mvcr->setData("mymyscalar",ms);
- *  		wb->attach(ms);
+ *  		mvcr->attachData("mymyscalar",ms);
  *  		wb->attach(mc);
  */
 class RUDIMENTS_DLLSPEC mvcresult : virtual public object {
