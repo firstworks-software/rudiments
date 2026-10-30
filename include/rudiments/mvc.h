@@ -253,16 +253,16 @@ class RUDIMENTS_DLLSPEC mvcdao : public mvctier {
  *  		// attach a linked list, a table and a scalar
  *  		// (attachData() gives ownership to the mvcresult,
  *  		// which deletes them when it is deleted)
- *  		linkedlist<int32_t>	*l=new linkedlist<int32_t>;
+ *  		linkedlist<int32_t>	*l=new linkedlist<int32_t>();
  *  		l->append(1);
  *  		mvcr->attachData("mylist",l);
  *
- *  		table<int32_t>	*t=new table<int32_t>;
+ *  		table<int32_t>	*t=new table<int32_t>();
  *  		t->setColumnName(0,"col1");
  *  		t->setValue(0,0,1);
  *  		mvcr->attachData("mytable",t);
  *
- *  		scalar<int32_t>	*s=new scalar<int32_t>;
+ *  		scalar<int32_t>	*s=new scalar<int32_t>();
  *  		s->setValue(1);
  *  		mvcr->attachData("myscalar",s);
  *
