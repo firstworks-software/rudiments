@@ -284,9 +284,35 @@ class RUDIMENTS_DLLSPEC mvcdao : public mvctier {
  *  		char	*value=gs->getValue();
  *
  *  wastebasket - an instance of the wastebasket class to which objects can be
- *  		attached for disposal when the mvcresult itself is disposed,
- *  		including members of collections (for collections that don't
- *  		manage their values)
+ *  		attached for disposal when the mvcresult itself is disposed.
+ *  		Using the wastebasket is an alternative to attachData() and to
+ *  		setting a collection to manage its values.  For example:
+ *
+ *  		// set a linked list, a table and a scalar, and attach them
+ *  		// and the string to the wastebasket
+ *  		// (setData() leaves ownership with the caller, the
+ *  		// wastebasket deletes them when the mvcresult is deleted)
+ *  		wastebasket	*wb=mvcr->getWastebasket();
+ *
+ *  		linkedlist<int32_t>	*l=new linkedlist<int32_t>();
+ *  		l->append(1);
+ *  		mvcr->setData("mylist",l);
+ *  		wb->attach(l);
+ *
+ *  		table<int32_t>	*t=new table<int32_t>();
+ *  		t->setColumnName(0,"col1");
+ *  		t->setValue(0,0,1);
+ *  		mvcr->setData("mytable",t);
+ *  		wb->attach(t);
+ *
+ *  		char	*str=charstring::duplicate("hello");
+ *  		scalar<char *>	*s=new scalar<char *>();
+ *  		s->setValue(str);
+ *  		mvcr->setData("myscalar",s);
+ *  		wb->attach(s);
+ *  		wb->attach(str);
+ *
+ *  		// get them back the same way as above
  */
 class RUDIMENTS_DLLSPEC mvcresult : virtual public object {
 	public:
