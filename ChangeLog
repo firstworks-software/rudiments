@@ -121,7 +121,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - tls class sets BIO to use lowLevelRead/Write now, when using openssl
 - tls class uses SSL_CTX_set_min/max_proto_version to pin tls version when
   using openssl, if available
-- added scalar and setData()/getData() examples to the mvcresult class
+- added scalar and attachData()/getData() examples to the mvcresult class
   documentation and reworded its wastebasket description
 
 ### Removed

@@ -250,23 +250,24 @@ class RUDIMENTS_DLLSPEC mvcdao : public mvctier {
  *  		is a collection.  To attach a single value, use the scalar
  *  		collection (scalar<valuetype>).  For example:
  *
- *  		// set a linked list, a table and a scalar
- *  		// (setData() leaves ownership with the caller, so these must
- *  		// outlive their use, attachData() would delete them instead)
- *  		linkedlist<int32_t>	l;
- *  		l.append(1);
- *  		mvcr->setData("mylist",&l);
+ *  		// attach a linked list, a table and a scalar
+ *  		// (attachData() gives ownership to the mvcresult,
+ *  		// which deletes them when it is deleted)
+ *  		linkedlist<int32_t>	*l=new linkedlist<int32_t>;
+ *  		l->append(1);
+ *  		mvcr->attachData("mylist",l);
  *
- *  		table<int32_t>	t;
- *  		t.setColumnName(0,"col1");
- *  		t.setValue(0,0,1);
- *  		mvcr->setData("mytable",&t);
+ *  		table<int32_t>	*t=new table<int32_t>;
+ *  		t->setColumnName(0,"col1");
+ *  		t->setValue(0,0,1);
+ *  		mvcr->attachData("mytable",t);
  *
- *  		scalar<int32_t>	s;
- *  		s.setValue(1);
- *  		mvcr->setData("myscalar",&s);
+ *  		scalar<int32_t>	*s=new scalar<int32_t>;
+ *  		s->setValue(1);
+ *  		mvcr->attachData("myscalar",s);
  *
- *  		// get them back (cast to the type and valuetype that were set)
+ *  		// get them back (cast to the type and valuetype that were
+ *  		// attached)
  *  		linkedlist<int32_t>	*gl=
  *  			(linkedlist<int32_t> *)mvcr->getData("mylist");
  *  		int32_t	first=gl->getFirst()->getValue();
