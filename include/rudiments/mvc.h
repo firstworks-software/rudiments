@@ -262,8 +262,11 @@ class RUDIMENTS_DLLSPEC mvcdao : public mvctier {
  *  		t->setValue(0,0,1);
  *  		mvcr->attachData("mytable",t);
  *
- *  		scalar<int32_t>	*s=new scalar<int32_t>();
- *  		s->setValue(1);
+ *  		// (the scalar manages its array value, so it deletes
+ *  		// the duplicated string when it is deleted)
+ *  		scalar<char *>	*s=new scalar<char *>();
+ *  		s->setManageArrayValues(true);
+ *  		s->setValue(charstring::duplicate("hello"));
  *  		mvcr->attachData("myscalar",s);
  *
  *  		// get them back (cast to the type and valuetype that were
@@ -276,9 +279,9 @@ class RUDIMENTS_DLLSPEC mvcdao : public mvctier {
  *  			(table<int32_t> *)mvcr->getData("mytable");
  *  		int32_t	cell=gt->getValue(0,"col1");
  *
- *  		scalar<int32_t>	*gs=
- *  			(scalar<int32_t> *)mvcr->getData("myscalar");
- *  		int32_t	value=gs->getValue();
+ *  		scalar<char *>	*gs=
+ *  			(scalar<char *> *)mvcr->getData("myscalar");
+ *  		char	*value=gs->getValue();
  *
  *  wastebasket - an instance of the wastebasket class to which objects can be
  *  		attached for disposal when the mvcresult itself is disposed,
