@@ -247,10 +247,41 @@ class RUDIMENTS_DLLSPEC mvcdao : public mvctier {
  *  status code - a specific success or error code
  *  status message - a specific success or error message
  *  data - a dictionary where each key is a string and each value
- *  		is a collection
- *  wastebasket - an instance of the wastebasked class to which parent obejcts
- *  		of the collections, or of members of the collections can be
- *  		attached for future disposal
+ *  		is a collection.  To attach a single value, use the scalar
+ *  		collection (scalar<valuetype>).  For example:
+ *
+ *  		// set a linked list, a table and a scalar
+ *  		// (setData() leaves ownership with the caller, so these must
+ *  		// outlive their use, attachData() would delete them instead)
+ *  		linkedlist<int32_t>	l;
+ *  		l.append(1);
+ *  		mvcr->setData("mylist",&l);
+ *
+ *  		table<int32_t>	t;
+ *  		t.setColumnName(0,"col1");
+ *  		t.setValue(0,0,1);
+ *  		mvcr->setData("mytable",&t);
+ *
+ *  		scalar<int32_t>	s;
+ *  		s.setValue(1);
+ *  		mvcr->setData("myscalar",&s);
+ *
+ *  		// get them back (cast to the type and valuetype that were set)
+ *  		linkedlist<int32_t>	*gl=
+ *  			(linkedlist<int32_t> *)mvcr->getData("mylist");
+ *  		int32_t	first=gl->getFirst()->getValue();
+ *
+ *  		table<int32_t>	*gt=(table<int32_t> *)mvcr->getData("mytable");
+ *  		int32_t	cell=gt->getValue(0,"col1");
+ *
+ *  		scalar<int32_t>	*gs=
+ *  			(scalar<int32_t> *)mvcr->getData("myscalar");
+ *  		int32_t	value=gs->getValue();
+ *
+ *  wastebasket - an instance of the wastebasket class to which objects can be
+ *  		attached for disposal when the mvcresult itself is disposed,
+ *  		including members of collections (for collections that don't
+ *  		manage their values)
  */
 class RUDIMENTS_DLLSPEC mvcresult : virtual public object {
 	public:
