@@ -319,7 +319,7 @@ class RUDIMENTS_DLLSPEC mvcdao : public mvctier {
  *  		myclass	*mc=new myclass();
  *  		scalar<const char *>	*ms=new scalar<const char *>();
  *  		ms->setValue(mc->getSomeValue());
- *  		mvcr->attachData("mymyscalar",ms);
+ *  		mvcr->attachData("somevalue",ms);
  *  		wb->attach(mc);
  */
 class RUDIMENTS_DLLSPEC mvcresult : virtual public object {
