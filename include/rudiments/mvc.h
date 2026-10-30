@@ -285,6 +285,7 @@ class RUDIMENTS_DLLSPEC mvcdao : public mvctier {
  *
  *  wastebasket - an instance of the wastebasket class to which objects can be
  *  		attached for disposal when the mvcresult itself is disposed.
+ *
  *  		Using the wastebasket is an alternative to attachData() and to
  *  		setting a collection to manage its values.  For example:
  *
@@ -312,7 +313,15 @@ class RUDIMENTS_DLLSPEC mvcdao : public mvctier {
  *  		wb->attach(s);
  *  		wb->attach(str);
  *
- *  		// get them back the same way as above
+ *  		// set a scalar to a value that belongs to an instance of
+ *  		// myclass, and attach the instance to the wastebasket too,
+ *  		// so the value stays valid until the mvcresult is deleted
+ *  		myclass	*mc=new myclass();
+ *  		scalar<const char *>	*ms=new scalar<const char *>();
+ *  		ms->setValue(mc->getSomeValue());
+ *  		mvcr->setData("mymyscalar",ms);
+ *  		wb->attach(ms);
+ *  		wb->attach(mc);
  */
 class RUDIMENTS_DLLSPEC mvcresult : virtual public object {
 	public:
