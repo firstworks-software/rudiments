@@ -42,6 +42,21 @@ wastebasket::~wastebasket() {
 		((singlylinkedlist<type> *)c)->append(value); \
 	}
 
+#define DETACH(type,typestring,value) \
+	singlylinkedlist<type>	*l=(singlylinkedlist<type> *) \
+					pvt->_dict.getValue(typestring); \
+	if (!l) { \
+		return; \
+	} \
+	for (listnode<type> *node=l->getFirst(); \
+					node; node=l->getNext(node)) { \
+		if (node->getValue()==value) { \
+			l->detach(node); \
+			delete node; \
+			return; \
+		} \
+	}
+
 void wastebasket::attach(char *value) {
 	ATTACHARRAY(char *,"char *",value);
 }
@@ -96,6 +111,62 @@ void wastebasket::attach(object *o) {
 
 void wastebasket::attach(object **o) {
 	ATTACHARRAY(object **,"object **",o);
+}
+
+void wastebasket::detach(char *value) {
+	DETACH(char *,"char *",value);
+}
+
+void wastebasket::detach(wchar_t *value) {
+	DETACH(wchar_t *,"wchar_t *",value);
+}
+
+void wastebasket::detach(byte_t *value) {
+	DETACH(byte_t *,"byte_t *",value);
+}
+
+void wastebasket::detach(int16_t *value) {
+	DETACH(int16_t *,"int16_t *",value);
+}
+
+void wastebasket::detach(int32_t *value) {
+	DETACH(int32_t *,"int32_t *",value);
+}
+
+void wastebasket::detach(int64_t *value) {
+	DETACH(int64_t *,"int64_t *",value);
+}
+
+void wastebasket::detach(uint16_t *value) {
+	DETACH(uint16_t *,"uint16_t *",value);
+}
+
+void wastebasket::detach(uint32_t *value) {
+	DETACH(uint32_t *,"uint32_t *",value);
+}
+
+void wastebasket::detach(uint64_t *value) {
+	DETACH(uint64_t *,"uint64_t *",value);
+}
+
+void wastebasket::detach(float *value) {
+	DETACH(float *,"float *",value);
+}
+
+void wastebasket::detach(double *value) {
+	DETACH(double *,"double *",value);
+}
+
+void wastebasket::detach(long double *value) {
+	DETACH(long double *,"long double *",value);
+}
+
+void wastebasket::detach(object *o) {
+	DETACH(object *,"object *",o);
+}
+
+void wastebasket::detach(object **o) {
+	DETACH(object **,"object **",o);
 }
 
 void wastebasket::empty() {

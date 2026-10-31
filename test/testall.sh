@@ -47,6 +47,7 @@ for program in \
 	memorymap \
 	memorypool \
 	mvcproperties \
+	mvcresult \
 	parameterstring \
 	pbkdf2 \
 	permissions \
@@ -81,6 +82,7 @@ for program in \
 	url \
 	urlhttprequest \
 	userentry \
+	wastebasket \
 	wcharacter \
 	wcharstring \
 	wstringbuffer \

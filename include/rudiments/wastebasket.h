@@ -117,8 +117,135 @@ class RUDIMENTS_DLLSPEC wastebasket : virtual public object {
 		 *  empty() is called. */
 		void	attach(object **o);
 
+		/** Detaches "value", previously attached using attach(), such
+		 *  that it will not be array-deleted when empty() is called.
+		 *  The calling program must array-delete it instead.
+		 *
+		 *  Does nothing if "value" is not attached.  If "value" was
+		 *  attached more than once, then only one attachment is
+		 *  detached. */
+		void	detach(char *value);
+
+		/** Detaches "value", previously attached using attach(), such
+		 *  that it will not be array-deleted when empty() is called.
+		 *  The calling program must array-delete it instead.
+		 *
+		 *  Does nothing if "value" is not attached.  If "value" was
+		 *  attached more than once, then only one attachment is
+		 *  detached. */
+		void	detach(wchar_t *value);
+
+		/** Detaches "value", previously attached using attach(), such
+		 *  that it will not be array-deleted when empty() is called.
+		 *  The calling program must array-delete it instead.
+		 *
+		 *  Does nothing if "value" is not attached.  If "value" was
+		 *  attached more than once, then only one attachment is
+		 *  detached. */
+		void	detach(byte_t *value);
+
+		/** Detaches "value", previously attached using attach(), such
+		 *  that it will not be array-deleted when empty() is called.
+		 *  The calling program must array-delete it instead.
+		 *
+		 *  Does nothing if "value" is not attached.  If "value" was
+		 *  attached more than once, then only one attachment is
+		 *  detached. */
+		void	detach(int16_t *value);
+
+		/** Detaches "value", previously attached using attach(), such
+		 *  that it will not be array-deleted when empty() is called.
+		 *  The calling program must array-delete it instead.
+		 *
+		 *  Does nothing if "value" is not attached.  If "value" was
+		 *  attached more than once, then only one attachment is
+		 *  detached. */
+		void	detach(int32_t *value);
+
+		/** Detaches "value", previously attached using attach(), such
+		 *  that it will not be array-deleted when empty() is called.
+		 *  The calling program must array-delete it instead.
+		 *
+		 *  Does nothing if "value" is not attached.  If "value" was
+		 *  attached more than once, then only one attachment is
+		 *  detached. */
+		void	detach(int64_t *value);
+
+		/** Detaches "value", previously attached using attach(), such
+		 *  that it will not be array-deleted when empty() is called.
+		 *  The calling program must array-delete it instead.
+		 *
+		 *  Does nothing if "value" is not attached.  If "value" was
+		 *  attached more than once, then only one attachment is
+		 *  detached. */
+		void	detach(uint16_t *value);
+
+		/** Detaches "value", previously attached using attach(), such
+		 *  that it will not be array-deleted when empty() is called.
+		 *  The calling program must array-delete it instead.
+		 *
+		 *  Does nothing if "value" is not attached.  If "value" was
+		 *  attached more than once, then only one attachment is
+		 *  detached. */
+		void	detach(uint32_t *value);
+
+		/** Detaches "value", previously attached using attach(), such
+		 *  that it will not be array-deleted when empty() is called.
+		 *  The calling program must array-delete it instead.
+		 *
+		 *  Does nothing if "value" is not attached.  If "value" was
+		 *  attached more than once, then only one attachment is
+		 *  detached. */
+		void	detach(uint64_t *value);
+
+		/** Detaches "value", previously attached using attach(), such
+		 *  that it will not be array-deleted when empty() is called.
+		 *  The calling program must array-delete it instead.
+		 *
+		 *  Does nothing if "value" is not attached.  If "value" was
+		 *  attached more than once, then only one attachment is
+		 *  detached. */
+		void	detach(float *value);
+
+		/** Detaches "value", previously attached using attach(), such
+		 *  that it will not be array-deleted when empty() is called.
+		 *  The calling program must array-delete it instead.
+		 *
+		 *  Does nothing if "value" is not attached.  If "value" was
+		 *  attached more than once, then only one attachment is
+		 *  detached. */
+		void	detach(double *value);
+
+		/** Detaches "value", previously attached using attach(), such
+		 *  that it will not be array-deleted when empty() is called.
+		 *  The calling program must array-delete it instead.
+		 *
+		 *  Does nothing if "value" is not attached.  If "value" was
+		 *  attached more than once, then only one attachment is
+		 *  detached. */
+		void	detach(long double *value);
+
+		/** Detaches "o", previously attached using attach(), such
+		 *  that it will not be deleted when empty() is called.
+		 *  The calling program must delete it instead.
+		 *
+		 *  Does nothing if "o" is not attached.  If "o" was
+		 *  attached more than once, then only one attachment is
+		 *  detached. */
+		void	detach(object *o);
+
+		/** Detaches "o", previously attached using attach(), such
+		 *  that it will not be array-deleted when empty() is called.
+		 *  The calling program must array-delete it instead.
+		 *
+		 *  Does nothing if "o" is not attached.  If "o" was
+		 *  attached more than once, then only one attachment is
+		 *  detached. */
+		void	detach(object **o);
+
 		/** Deletes or array-deletes, as appropriate, all values
-		 *  previously attached using the attach() methods. */
+		 *  previously attached using the attach() methods, and not
+		 *  since detached using the detach() methods. */
 		void	empty();
 
 		/** Writes a representation of the wastebasket to standard

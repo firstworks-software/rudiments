@@ -406,8 +406,54 @@ class RUDIMENTS_DLLSPEC mvcresult : virtual public object {
 		void		attachData(const char *key,
 						collection *data);
 
+		/** Removes the association with string "key".  Afterwards,
+		 *  getData("key") returns NULL and getKeys() no longer
+		 *  lists "key".
+		 *
+		 *  The collection is not deleted.  If it was associated
+		 *  using attachData() then it remains in the wastebasket and
+		 *  will be deleted when this instance of mvcresult is deleted
+		 *  or the wastebasket is emptied, so a pointer to it remains
+		 *  valid until then.
+		 *
+		 *  Does nothing if "key" is not associated with a collection.
+		 *
+		 *  A list previously returned by getKeys() is invalid after
+		 *  this call.  Call getKeys() again to get a current list. */
+		void		removeData(const char *key);
+
+		/** Removes all associations, as removeData() does for each
+		 *  key.
+		 *
+		 *  No collections are deleted.  Those that were associated
+		 *  using attachData() remain in the wastebasket and will be
+		 *  deleted when this instance of mvcresult is deleted or the
+		 *  wastebasket is emptied.
+		 *
+		 *  A list previously returned by getKeys() is invalid after
+		 *  this call.  Call getKeys() again to get a current list. */
+		void		clearData();
+
+		/** Removes the association with string "key" and returns the
+		 *  collection that was associated with it, or NULL if "key"
+		 *  is not associated with a collection.
+		 *
+		 *  The collection is also detached from the wastebasket, so
+		 *  it will not be deleted when this instance of mvcresult is
+		 *  deleted.  If it was associated using attachData(), then
+		 *  the calling program must delete it.  If it was associated
+		 *  using setData() and also attached to the wastebasket
+		 *  directly, then that attachment is detached as well.
+		 *
+		 *  A list previously returned by getKeys() is invalid after
+		 *  this call.  Call getKeys() again to get a current list. */
+		collection	*detachData(const char *key);
+
 		/** Returns the list of keys previously associated with
-		 *  collections using setData() or attachData(). */
+		 *  collections using setData() or attachData().
+		 *
+		 *  The list is invalid after a call to removeData(),
+		 *  clearData(), detachData(), setData() or attachData(). */
 		linkedlist<char *>	*getKeys();
 
 		/** Returns the collection associated with "key". */

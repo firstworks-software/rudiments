@@ -39,6 +39,7 @@ tests=Array(_
 	"memorymap",_
 	"memorypool",_
 	"mvcproperties",_
+	"mvcresult",_
 	"parameterstring",_
 	"pbkdf2",_
 	"permissions",_
@@ -70,6 +71,7 @@ tests=Array(_
 	"ucs2stringbuffer",_
 	"url",_
 	"userentry",_
+	"wastebasket",_
 	"wcharacter",_
 	"wcharstring",_
 	"wstringbuffer",_

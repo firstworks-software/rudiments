@@ -94,13 +94,34 @@ const char *mvcresult::getMessage() {
 }
 
 void mvcresult::setData(const char *name, collection *data) {
-	pvt->_data.remove((char *)name);
-	pvt->_data.setValue(charstring::duplicate(name),data);
+	// Duplicate the name before removing it, in case it is one of the
+	// keys managed by _data, which removeData() would free.
+	char	*key=charstring::duplicate(name);
+	removeData(name);
+	pvt->_data.setValue(key,data);
 }
 
 void mvcresult::attachData(const char *name, collection *data) {
 	setData(name,data);
 	pvt->_wb.attach(data);
+}
+
+void mvcresult::removeData(const char *name) {
+	pvt->_data.remove((char *)name);
+}
+
+void mvcresult::clearData() {
+	pvt->_data.clear();
+}
+
+collection *mvcresult::detachData(const char *name) {
+	collection	*data=NULL;
+	if (!pvt->_data.getValue((char *)name,&data)) {
+		return NULL;
+	}
+	removeData(name);
+	pvt->_wb.detach(data);
+	return data;
 }
 
 linkedlist<char *> *mvcresult::getKeys() {

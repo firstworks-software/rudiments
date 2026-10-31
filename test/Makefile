@@ -84,6 +84,8 @@ PROGS3= handoff \
 	inidom \
 	propdom \
 	mvcproperties \
+	mvcresult \
+	wastebasket \
 	aes128 \
 	aes192 \
 	aes256 \
@@ -358,6 +360,12 @@ propdom: propdom.cpp propdom.$(OBJ)
 
 mvcproperties: mvcproperties.cpp mvcproperties.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) mvcproperties.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+mvcresult: mvcresult.cpp mvcresult.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) mvcresult.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
+
+wastebasket: wastebasket.cpp wastebasket.$(OBJ)
+	$(LTLINK) $(LINK) $(OUT)$@$(EXE) wastebasket.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 aes128: aes128.cpp aes128.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) aes128.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)

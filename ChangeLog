@@ -91,6 +91,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   methods
 - added scalar constructors that take an initial value, and one that also
   takes the manage flags
+- added removeData(), clearData(), and detachData() methods to mvcresult
+- added detach() methods to wastebasket
 
 ### Changed
 - encryption and hash isSupported() is a non-pure virtual now, defaulting
