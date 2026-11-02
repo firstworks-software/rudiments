@@ -421,14 +421,8 @@ template <class valuetype>
 inline
 valuetype &node_duplicate_value(valuetype *value,
 				bool managed, bool managedarray) {
-	if (managed) {
-		return *(new valuetype(*value));
-	} else if (managedarray) {
-		// no way to do this without a length
-		return *value;
-	} else {
-		return *value;
-	}
+	// callers copy the result, so no heap copy is needed
+	return *value;
 }
 
 #endif

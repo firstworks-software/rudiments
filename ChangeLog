@@ -273,6 +273,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - fixed copies of unmanaged const char * collections getting a bad pointer
 - fixed copies of collections of managed non-string arrays
   freeing the arrays twice
+- fixed copies of collections of managed non-pointer values leaking
 
 ### Security
 - fixed buffer overflow when unix socket file name is too long

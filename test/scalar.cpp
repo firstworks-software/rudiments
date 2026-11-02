@@ -6,6 +6,32 @@
 #include <rudiments/stdio.h>
 #include "test.cpp"
 
+class counted {
+	public:
+		counted() : value(0) {
+			ctors++;
+		}
+		counted(int32_t value) : value(value) {
+			ctors++;
+		}
+		counted(const counted &c) : value(c.value) {
+			copies++;
+		}
+		~counted() {
+			dtors++;
+		}
+
+		int32_t	value;
+
+		static int32_t	ctors;
+		static int32_t	copies;
+		static int32_t	dtors;
+};
+
+int32_t	counted::ctors=0;
+int32_t	counted::copies=0;
+int32_t	counted::dtors=0;
+
 int main(int argc, char **argv) {
 
 	header("scalar");
@@ -218,6 +244,20 @@ int main(int argc, char **argv) {
 	test("original intact after copy deleted",
 					iorig->getValue()==nums && nums[2]==3);
 	delete iorig;
+	stdoutput.printf("\n");
+
+	// copy of a managed non-pointer value
+	stdoutput.printf("copy of managed non-pointer value...\n");
+	{
+		scalar<counted>	corig(counted(9),true,false);
+		scalar<counted>	ccopy(corig);
+		test("copy getValue()",ccopy.getValue().value==9);
+		scalar<counted>	cassign;
+		cassign=corig;
+		test("assignment getValue()",cassign.getValue().value==9);
+	}
+	test("no leaked copies",
+		counted::ctors+counted::copies==counted::dtors);
 	stdoutput.printf("\n");
 
 	return 0;
