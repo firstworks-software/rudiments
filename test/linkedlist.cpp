@@ -745,5 +745,17 @@ int main(int argc, char **argv) {
 
 	stdoutput.printf("\n");
 
+	// copy of an unmanaged const char * list
+	stdoutput.printf("unmanaged const char * copy:\n");
+	const char			*ucstr="parrot";
+	linkedlist<const char *>	ucl1;
+	ucl1.append(ucstr);
+	linkedlist<const char *>	ucl2(ucl1);
+	test("copy: count",ucl2.getCount()==1);
+	test("copy: value",ucl2.getFirst()->getValue()==ucstr &&
+			!charstring::compare(ucl2.getFirst()->getValue(),
+								"parrot"));
+	stdoutput.printf("\n");
+
 	return 0;
 }

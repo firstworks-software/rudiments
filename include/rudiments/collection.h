@@ -139,6 +139,11 @@ class collection : virtual public object {
 		 *    will attempt to create a copy of the array stored as the
 		 *    value in each location of the instance that is being
 		 *    copied.
+		 *  * An array can't be copied without its length.  Only arrays of
+		 *    char, wchar_t, or byte_t can be copied, and a byte_t array
+		 *    is only copied up to its first zero byte.  For a
+		 *    collection of any other type of array pointer, the copy
+		 *    gets NULL as the value at each location.
 		 *
 		 *  If "manage" is set to false then:
 		 *  * When remove() is called, the array stored as the value at
@@ -266,6 +271,13 @@ class collection : virtual public object {
 		 *    will attempt to create a copy of the array stored as the
 		 *    key in each location of the instance that is being
 		 *    copied.
+		 *  * An array can't be copied without its length.  Only arrays of
+		 *    char, wchar_t, or byte_t can be copied, and a byte_t array
+		 *    is only copied up to its first zero byte.  For a
+		 *    collection of any other type of array pointer, the copy
+		 *    gets NULL as the key at each location.  For a dictionary,
+		 *    all the keys become NULL and merge, so the copy ends up
+		 *    with a single entry under a NULL key.
 		 *
 		 *  If "manage" is set to false then:
 		 *  * When remove() is called, the array stored as the key at

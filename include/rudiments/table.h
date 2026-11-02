@@ -103,6 +103,12 @@ class table : public tablecollection<valuetype> {
 		 *
 		 *  Defaults to "false".
 		 *
+		 *  When a table that manages array values is copied, an array
+		 *  of char, wchar_t, or byte_t is duplicated (a byte_t array
+		 *  only up to its first zero byte).  An array of any
+		 *  other type can't be duplicated without its length, so the
+		 *  copy gets NULL for it.
+		 *
 		 *  Note that setting this true implies
 		 *  setManageValues(false); */
 		void	setManageArrayValues(bool manage);

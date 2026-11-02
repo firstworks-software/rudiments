@@ -272,7 +272,7 @@ char *node_duplicate_value(const char **value,
 	if (managedarray) {
 		return charstring::duplicate(*value);
 	} else {
-		return (char *)value;
+		return (char *)*value;
 	}
 }
 
@@ -409,8 +409,9 @@ valuetype *node_duplicate_value(valuetype **value,
 	if (managed) {
 		return new valuetype(**value);
 	} else if (managedarray) {
-		// no way to do this without a length
-		return *value;
+		// An array can't be duplicated without its length.  Return
+		// NULL, rather than share it and have both owners delete it.
+		return NULL;
 	} else {
 		return *value;
 	}

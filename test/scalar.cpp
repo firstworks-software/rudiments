@@ -190,5 +190,35 @@ int main(int argc, char **argv) {
 	test("getManageArrayValues()",!nval.getManageArrayValues());
 	stdoutput.printf("\n");
 
+	// copy of an unmanaged const char *
+	stdoutput.printf("copy of unmanaged const char *...\n");
+	const char		*pstr="parrot";
+	scalar<const char *>	uorig(pstr);
+	scalar<const char *>	ucopy(uorig);
+	test("copy getValue()",ucopy.getValue()==pstr &&
+			!charstring::compare(ucopy.getValue(),"parrot"));
+	scalar<const char *>	uassign;
+	uassign=uorig;
+	test("assignment getValue()",uassign.getValue()==pstr &&
+			!charstring::compare(uassign.getValue(),"parrot"));
+	stdoutput.printf("\n");
+
+	// copy of a managed array of a non-char type
+	stdoutput.printf("copy of managed int32_t array...\n");
+	int32_t		*nums=new int32_t[3];
+	nums[0]=1;
+	nums[1]=2;
+	nums[2]=3;
+	scalar<int32_t *>	*iorig=new scalar<int32_t *>(nums,false,true);
+	scalar<int32_t *>	*icopy=new scalar<int32_t *>(*iorig);
+	test("copy getValue() is NULL",!icopy->getValue());
+	test("original intact",iorig->getValue()==nums &&
+					nums[0]==1 && nums[1]==2 && nums[2]==3);
+	delete icopy;
+	test("original intact after copy deleted",
+					iorig->getValue()==nums && nums[2]==3);
+	delete iorig;
+	stdoutput.printf("\n");
+
 	return 0;
 }

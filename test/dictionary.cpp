@@ -507,5 +507,15 @@ int main(int argc, const char **argv) {
 	}
 	stdoutput.printf("\n");
 
+	// copy of an unmanaged const char * dictionary
+	stdoutput.printf("unmanaged const char * copy:\n");
+	const char	*ucv="parrot";
+	dictionary< const char *, const char * >	ucd1;
+	ucd1.setValue("bird",ucv);
+	dictionary< const char *, const char * >	ucd2(ucd1);
+	test("copy: value",ucd2.getValue("bird")==ucv &&
+			!charstring::compare(ucd2.getValue("bird"),"parrot"));
+	stdoutput.printf("\n");
+
 	return 0;
 }

@@ -39,20 +39,40 @@ class scalar : public scalarcollection<valuetype> {
 		scalar(valuetype v, bool managevalues, bool managearrayvalues);
 
 		/** Creates an instance of the scalar class
-		 *  that is a copy of "a". */
+		 *  that is a copy of "a".
+		 *
+		 *  If "a" manages array values, a char, wchar_t, or byte_t
+		 *  array is duplicated, up to the first zero byte for a
+		 *  byte_t array.  An array of any other type can't be
+		 *  duplicated without its length, so the copy gets NULL. */
 		scalar(scalar<valuetype> &a);
 
 		/** Creates an instance of the scalar class
-		 *  that is a copy of "a". */
+		 *  that is a copy of "a".
+		 *
+		 *  If "a" manages array values, a char, wchar_t, or byte_t
+		 *  array is duplicated, up to the first zero byte for a
+		 *  byte_t array.  An array of any other type can't be
+		 *  duplicated without its length, so the copy gets NULL. */
 		scalar(scalarcollection<valuetype> &a);
 
 		/** Makes this instance of the scalar class
-		 *  identical to "a". */
+		 *  identical to "a".
+		 *
+		 *  If "a" manages array values, a char, wchar_t, or byte_t
+		 *  array is duplicated, up to the first zero byte for a
+		 *  byte_t array.  An array of any other type can't be
+		 *  duplicated without its length, so the copy gets NULL. */
 		scalar<valuetype>	&operator=(
 					scalar<valuetype> &a);
 
 		/** Makes this instance of the scalar class
-		 *  identical to "a". */
+		 *  identical to "a".
+		 *
+		 *  If "a" manages array values, a char, wchar_t, or byte_t
+		 *  array is duplicated, up to the first zero byte for a
+		 *  byte_t array.  An array of any other type can't be
+		 *  duplicated without its length, so the copy gets NULL. */
 		scalar<valuetype>	&operator=(
 					scalarcollection<valuetype> &a);
 
