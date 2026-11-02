@@ -22,7 +22,15 @@ class table : public tablecollection<valuetype> {
 		 *  that is a copy of "a".
 		 *
 		 *  Values are read from "a" using getValue(), in row
-		 *  order. */
+		 *  order.
+		 *
+		 *  The copy takes the manage-values, manage-array-values,
+		 *  and copy-column-names flags from "a".  If no manage flag
+		 *  is set on "a", a copy of pointer values gets the same
+		 *  pointers as "a", valid only while the data they point to
+		 *  exists.  Unless "a" copies column names, the copy also
+		 *  shares its column name pointers.  See the collection class
+		 *  description. */
 		table(table<valuetype> &a);
 
 		/** Creates an instance of the table class
@@ -32,14 +40,34 @@ class table : public tablecollection<valuetype> {
 		 *  order.  If not all of "a"'s rows are available
 		 *  (getAllRowsAvailable() returns false), then rows are read
 		 *  until getAllRowsAvailable() returns true or reading past
-		 *  the current block doesn't make the row exist. */
+		 *  the current block doesn't make the row exist.
+		 *
+		 *  The copy takes the manage-values, manage-array-values,
+		 *  and copy-column-names flags from "a".  If "a" is
+		 *  block-based, then a copy of pointer values gets pointers
+		 *  into the blocks of "a".  These can be invalid immediately,
+		 *  because the copy loads later blocks.  Call
+		 *  setManageArrayValues(true) and setCopyColumnNames(true)
+		 *  on "a" first to duplicate the strings and column names.
+		 *  On a table, these flags also make "a" delete its own
+		 *  values or column names.  See the tablecollection class
+		 *  description for how to set them safely. */
 		table(tablecollection<valuetype> &a);
 
 		/** Makes this instance of the table class
 		 *  identical to "a".
 		 *
 		 *  Values are read from "a" using getValue(), in row
-		 *  order. */
+		 *  order.
+		 *
+		 *  This table takes the manage-values, manage-array-values,
+		 *  and copy-column-names flags from "a", and flags that were
+		 *  set on this table have no effect.  If no manage flag is
+		 *  set on "a", a copy of pointer values gets the same
+		 *  pointers as "a", valid only while the data they point to
+		 *  exists.  Unless "a" copies column names, the copy also
+		 *  shares its column name pointers.  See the collection class
+		 *  description. */
 		table<valuetype>	&operator=(table<valuetype> &a);
 
 		/** Makes this instance of the table class
@@ -49,7 +77,19 @@ class table : public tablecollection<valuetype> {
 		 *  order.  If not all of "a"'s rows are available
 		 *  (getAllRowsAvailable() returns false), then rows are read
 		 *  until getAllRowsAvailable() returns true or reading past
-		 *  the current block doesn't make the row exist. */
+		 *  the current block doesn't make the row exist.
+		 *
+		 *  This table takes the manage-values, manage-array-values,
+		 *  and copy-column-names flags from "a", and flags that were
+		 *  set on this table have no effect.  If "a" is block-based,
+		 *  then pointer values get pointers into the blocks of "a".
+		 *  These can be invalid immediately, because this table loads
+		 *  later blocks.  Call setManageArrayValues(true) and
+		 *  setCopyColumnNames(true) on "a" first to duplicate the
+		 *  strings and column names.  On a table, these flags also
+		 *  make "a" delete its own values or column names.  See the
+		 *  tablecollection class description for how to set them
+		 *  safely. */
 		table<valuetype>	&operator=(
 					tablecollection<valuetype> &a);
 

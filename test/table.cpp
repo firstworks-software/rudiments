@@ -145,6 +145,187 @@ void testBlockCopy(const char *name, uint64_t rows, uint64_t cols,
 	}
 }
 
+// block-based string source, reuses one buffer for each block,
+// like a database result set
+class strblocktable : public tablecollection<const char *> {
+	public:
+		strblocktable(uint64_t rows) :
+				tablecollection<const char *>() {
+			this->rows=rows;
+			start=0;
+			loaded=0;
+			allrows=false;
+			dummy=NULL;
+			for (uint64_t col=0; col<3; col++) {
+				names[col][0]='A'+col;
+				names[col][1]='\0';
+			}
+			loadBlock();
+		}
+		void	setColumnName(uint64_t col, const char *name) {
+		}
+		const char	*getColumnName(uint64_t col) {
+			return (col<3)?names[col]:NULL;
+		}
+		uint64_t	getColumnCount() {
+			return 3;
+		}
+		void	setValue(uint64_t row, uint64_t col,
+						const char *value) {
+		}
+		const char	*getValue(uint64_t row, uint64_t col) {
+			if (row>=loaded && !allrows) {
+				loadBlock();
+			}
+			return (row>=start && row<loaded && col<3)?
+						buf[row-start][col]:NULL;
+		}
+		const char	*&getReference(uint64_t row, uint64_t col) {
+			return dummy;
+		}
+		const char	*getValue(uint64_t row, const char *colname) {
+			return NULL;
+		}
+		uint64_t	getRowCount() {
+			return loaded;
+		}
+		bool	getAllRowsAvailable() {
+			return allrows;
+		}
+		bool	isBlockBased() {
+			return true;
+		}
+		bool	clear() {
+			return true;
+		}
+		const char	*getBuffer(uint64_t row, uint64_t col) {
+			return buf[row%3][col];
+		}
+		static bool	isValue(const char *value,
+						uint64_t row, uint64_t col) {
+			return (value && value[0]==(char)('a'+row) &&
+					value[1]==(char)('0'+col) && !value[2]);
+		}
+	private:
+		void	loadBlock() {
+			uint64_t	count=rows-loaded;
+			if (count>3) {
+				count=3;
+			}
+			start=loaded;
+			for (uint64_t i=0; i<count; i++) {
+				for (uint64_t col=0; col<3; col++) {
+					buf[i][col][0]='a'+loaded+i;
+					buf[i][col][1]='0'+col;
+					buf[i][col][2]='\0';
+				}
+			}
+			loaded+=count;
+			if (count<3) {
+				allrows=true;
+			}
+		}
+
+		uint64_t	rows;
+		uint64_t	start;
+		uint64_t	loaded;
+		bool		allrows;
+		char		buf[3][3][3];
+		char		names[3][2];
+		const char	*dummy;
+};
+
+void testStringBlockCopy(bool flags) {
+
+	stringbuffer	title;
+	for (uint16_t i=0; i<2; i++) {
+
+		// copy, assignment
+		strblocktable	src(7);
+		if (flags) {
+			src.setManageArrayValues(true);
+			src.setCopyColumnNames(true);
+		}
+		table<const char *>	*t=NULL;
+		table<const char *>	dst;
+		if (!i) {
+			t=new table<const char *>(src);
+		} else {
+			dst=src;
+			t=&dst;
+		}
+
+		const char	*name=(flags)?"flags":"no flags";
+		const char	*how=(!i)?"copy":"assignment";
+
+		title.clear();
+		title.append(name)->append(": ")->append(how);
+		title.append(": row count");
+		test(title.getString(),t->getRowCount()==7);
+
+		// without flags, the values point into the source buffer,
+		// with them, they are copies that outlive the block
+		bool	inbuffer=true;
+		bool	notinbuffer=true;
+		bool	values=true;
+		for (uint64_t row=0; row<7; row++) {
+			for (uint64_t col=0; col<3; col++) {
+				const char	*v=t->getValue(row,col);
+				if (v==src.getBuffer(row,col)) {
+					notinbuffer=false;
+				} else {
+					inbuffer=false;
+				}
+				if (!strblocktable::isValue(v,row,col)) {
+					values=false;
+				}
+			}
+		}
+		title.clear();
+		title.append(name)->append(": ")->append(how);
+		if (!flags) {
+			title.append(": values point into source buffer");
+			test(title.getString(),inbuffer);
+			title.clear();
+			title.append(name)->append(": ")->append(how);
+			title.append(": first block overwritten");
+			test(title.getString(),
+				!strblocktable::isValue(
+					t->getValue(0,(uint64_t)0),0,0));
+		} else {
+			title.append(": values duplicated");
+			test(title.getString(),notinbuffer);
+			title.clear();
+			title.append(name)->append(": ")->append(how);
+			title.append(": values survive later blocks");
+			test(title.getString(),values);
+		}
+
+		// column names
+		bool	samenames=true;
+		bool	namesmatch=true;
+		for (uint64_t col=0; col<3; col++) {
+			if (t->getColumnName(col)!=src.getColumnName(col)) {
+				samenames=false;
+			}
+			if (charstring::compare(t->getColumnName(col),
+						src.getColumnName(col))) {
+				namesmatch=false;
+			}
+		}
+		title.clear();
+		title.append(name)->append(": ")->append(how);
+		title.append((flags)?": column names duplicated":
+					": column names point into source");
+		test(title.getString(),
+			namesmatch && ((flags)?!samenames:samenames));
+
+		if (!i) {
+			delete t;
+		}
+	}
+}
+
 void testBlockWrite(const char *name, uint64_t rows, uint64_t cols,
 				uint64_t blocksize, bool nevertrue,
 				const char *expectedjson,
@@ -641,6 +822,14 @@ int main(int argc, char **argv) {
 	testBlockCopy("zero rows, never all rows",0,3,3,true);
 	testBlockCopy("zero columns",7,0,3,false);
 	testBlockCopy("zero columns, never all rows",7,0,3,true);
+	signalmanager::alarm(0);
+	stdoutput.printf("\n");
+
+	// copy and assignment, block-based string source
+	stdoutput.printf("copy/assignment (block-based string source)...\n");
+	signalmanager::alarm(5);
+	testStringBlockCopy(false);
+	testStringBlockCopy(true);
 	signalmanager::alarm(0);
 	stdoutput.printf("\n");
 

@@ -57,20 +57,44 @@ class singlylinkedlist : public listcollection<valuetype> {
 		singlylinkedlist();
 
 		/** Creates an instance of the singlylinkedlist class
-		 *  that is a copy of "a". */
+		 *  that is a copy of "a".
+		 *
+		 *  The copy takes the manage flags from "a".  If no manage
+		 *  flag is set on "a", then the copy gets the same pointers
+		 *  as "a", and they are valid only while the data that they
+		 *  point to exists.  See the collection class description. */
 		singlylinkedlist(singlylinkedlist<valuetype> &a);
 
 		/** Creates an instance of the singlylinkedlist class
-		 *  that is a copy of "a". */
+		 *  that is a copy of "a".
+		 *
+		 *  The copy takes the manage flags from "a".  If no manage
+		 *  flag is set on "a", then the copy gets the same pointers
+		 *  as "a", and they are valid only while the data that they
+		 *  point to exists.  See the collection class description. */
 		singlylinkedlist(listcollection<valuetype> &a);
 
 		/** Makes this instance of the singlylinkedlist class
-		 *  identical to "a". */
+		 *  identical to "a".
+		 *
+		 *  This instance takes the manage flags from "a", and flags
+		 *  that were set on this instance have no effect on the copy.
+		 *  If no manage flag is set on "a", then this instance gets
+		 *  the same pointers as "a", and they are valid only while
+		 *  the data that they point to exists.  See the collection
+		 *  class description. */
 		singlylinkedlist<valuetype>	&operator=(
 					singlylinkedlist<valuetype> &a);
 
 		/** Makes this instance of the singlylinkedlist class
-		 *  identical to "a". */
+		 *  identical to "a".
+		 *
+		 *  This instance takes the manage flags from "a", and flags
+		 *  that were set on this instance have no effect on the copy.
+		 *  If no manage flag is set on "a", then this instance gets
+		 *  the same pointers as "a", and they are valid only while
+		 *  the data that they point to exists.  See the collection
+		 *  class description. */
 		singlylinkedlist<valuetype>	&operator=(
 					nodecollection<valuetype> &a);
 

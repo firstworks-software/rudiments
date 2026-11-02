@@ -27,20 +27,48 @@ class dictionary : public dictionarycollection<keytype,valuetype> {
 		dictionary(bool trackinsertionorder);
 
 		/** Creates an instance of the dictionary class
-		 *  that is a copy of "a". */
+		 *  that is a copy of "a".
+		 *
+		 *  The copy takes the manage flags for keys and values from
+		 *  "a".  If no manage-keys flag is set on "a", then the copy
+		 *  gets the same key pointers as "a", and they are valid only
+		 *  while the data that they point to exists.  The same is true
+		 *  for values.  See the collection class description. */
 		dictionary(dictionary<keytype,valuetype> &a);
 
 		/** Creates an instance of the dictionary class
-		 *  that is a copy of "a". */
+		 *  that is a copy of "a".
+		 *
+		 *  The copy takes the manage flags for keys and values from
+		 *  "a".  If no manage-keys flag is set on "a", then the copy
+		 *  gets the same key pointers as "a", and they are valid only
+		 *  while the data that they point to exists.  The same is true
+		 *  for values.  See the collection class description. */
 		dictionary(dictionarycollection<keytype,valuetype> &a);
 
 		/** Makes this instance of the dictionary class
-		 *  identical to "a". */
+		 *  identical to "a".
+		 *
+		 *  This instance takes the manage flags for keys and values
+		 *  from "a", and flags that were set on this instance have no
+		 *  effect on the copy.  If no manage-keys flag is set on "a",
+		 *  then this instance gets the same key pointers as "a", and
+		 *  they are valid only while the data that they point to
+		 *  exists.  The same is true for values.  See the collection
+		 *  class description. */
 		dictionary<keytype,valuetype>	&operator=(
 					dictionary<keytype,valuetype> &a);
 
 		/** Makes this instance of the dictionary class
-		 *  identical to "a". */
+		 *  identical to "a".
+		 *
+		 *  This instance takes the manage flags for keys and values
+		 *  from "a", and flags that were set on this instance have no
+		 *  effect on the copy.  If no manage-keys flag is set on "a",
+		 *  then this instance gets the same key pointers as "a", and
+		 *  they are valid only while the data that they point to
+		 *  exists.  The same is true for values.  See the collection
+		 *  class description. */
 		dictionary<keytype,valuetype>	&operator=(
 				dictionarycollection<keytype,valuetype> &a);
 

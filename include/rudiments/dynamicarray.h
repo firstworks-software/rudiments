@@ -61,20 +61,44 @@ class dynamicarray : public arraycollection<valuetype> {
 		dynamicarray(uint64_t initiallength, uint64_t incrementlength);
 
 		/** Creates an instance of the dynamicarray class
-		 *  that is a copy of "v". */
+		 *  that is a copy of "v".
+		 *
+		 *  The copy takes the manage flags from "v".  If no manage
+		 *  flag is set on "v", then the copy gets the same pointers
+		 *  as "v", and they are valid only while the data that they
+		 *  point to exists.  See the collection class description. */
 		dynamicarray(dynamicarray<valuetype> &v);
 
 		/** Creates an instance of the dynamicarray class
-		 *  that is a copy of "v". */
+		 *  that is a copy of "v".
+		 *
+		 *  The copy takes the manage flags from "v".  If no manage
+		 *  flag is set on "v", then the copy gets the same pointers
+		 *  as "v", and they are valid only while the data that they
+		 *  point to exists.  See the collection class description. */
 		dynamicarray(arraycollection<valuetype> &v);
 
 		/** Makes this instance of the dynamicarray class
-		 *  identical to "v". */
+		 *  identical to "v".
+		 *
+		 *  This instance takes the manage flags from "v", and flags
+		 *  that were set on this instance have no effect on the copy.
+		 *  If no manage flag is set on "v", then this instance gets
+		 *  the same pointers as "v", and they are valid only while
+		 *  the data that they point to exists.  See the collection
+		 *  class description. */
 		dynamicarray<valuetype>	&operator=(
 					dynamicarray<valuetype> &v);
 
 		/** Makes this instance of the dynamicarray class
-		 *  identical to "v". */
+		 *  identical to "v".
+		 *
+		 *  This instance takes the manage flags from "v", and flags
+		 *  that were set on this instance have no effect on the copy.
+		 *  If no manage flag is set on "v", then this instance gets
+		 *  the same pointers as "v", and they are valid only while
+		 *  the data that they point to exists.  See the collection
+		 *  class description. */
 		dynamicarray<valuetype>	&operator=(
 					arraycollection<valuetype> &v);
 

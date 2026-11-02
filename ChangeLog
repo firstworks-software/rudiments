@@ -282,6 +282,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   block of a block-based source
 - fixed tablecollection write() and writeJson() writing after a
   write error
+- documented the dangling pointers in copies of collections and tables
 
 ### Security
 - fixed buffer overflow when unix socket file name is too long

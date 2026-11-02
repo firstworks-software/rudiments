@@ -63,7 +63,13 @@ class treecollection : public nodecollection<valuetype> {
 		treecollection();
 
 		/** Creates an instance of the treecollection class
-		 *  that is a copy of "a". */
+		 *  that is a copy of "n".
+		 *
+		 *  Copies only the manage flags of "n", not the values.  If no
+		 *  manage flag is set on "n", then a child class copy gets the
+		 *  same pointers as "n", and they are valid only while the
+		 *  data that they point to exists.  See the collection class
+		 *  description. */
 		treecollection(nodecollection<valuetype> &n);
 
 		/** Returns "tree". */

@@ -30,7 +30,30 @@
  *  In a sequential implementation, values may only be accessed from rows within
  *  the current block or subsequent blocks.  Eg. If the table has a block size
  *  of 10, then getting a value in row 6, followed by a value in row 22 would
- *  succeed, but a subsequent attempt to get a value from row 7 would fail. */
+ *  succeed, but a subsequent attempt to get a value from row 7 would fail.
+ *
+ *  In a block-based implementation, a pointer value, such as a const char *,
+ *  can point into the buffers of the current block.  Then the pointer is
+ *  valid only while that block is loaded.
+ *
+ *  A table that is created from, or assigned from, a block-based
+ *  implementation gets the same pointers, not copies of the data.  The table
+ *  loads later blocks as it reads the rows.  So pointers from earlier blocks
+ *  can be invalid immediately.  To prevent this, set flags on the source
+ *  before the table reads it:
+ *  - setManageArrayValues(true) makes the table duplicate the strings.
+ *    setManageValues(true) does not duplicate strings.
+ *  - setCopyColumnNames(true) makes the table duplicate the column names.
+ *
+ *  On a table source, these flags also make the source delete its own values
+ *  or column names on clear() and destruction.  If the source does not own
+ *  its values, then set the manage flag just before the copy, and set it back
+ *  to false just after the copy.  But setCopyColumnNames() is unsafe on a
+ *  table after its column names are set.  So set it before the names are
+ *  set, and do not change it after.
+ *
+ *  The table takes these flags from the source.  Flags that are set on the
+ *  table before an assignment have no effect. */
 template <class valuetype>
 class tablecollection : public collection {
 	public:
@@ -39,11 +62,25 @@ class tablecollection : public collection {
 		tablecollection();
 
 		/** Creates an instance of the tablecollection class that
-		 *  is a copy of "c". */
+		 *  is a copy of "c".
+		 *
+		 *  Copies only the flags of "c", such as the manage-values
+		 *  and copy-column-names flags, not the rows or columns.  A
+		 *  table copy of a block-based "c" gets pointers into the
+		 *  blocks of "c" unless flags are set on "c" first.  These
+		 *  pointers are valid only while that block is loaded.  See
+		 *  the class description. */
 		tablecollection(tablecollection &c);
 
 		/** Makes this instance of the tablecollection class
-		 *  identical to "c". */
+		 *  identical to "c".
+		 *
+		 *  Copies only the flags of "c", such as the manage-values
+		 *  and copy-column-names flags, not the rows or columns.  A
+		 *  table assignment from a block-based "c" gets pointers into
+		 *  the blocks of "c" unless flags are set on "c" first.  These
+		 *  pointers are valid only while that block is loaded.  See
+		 *  the class description. */
 		tablecollection &operator=(tablecollection &c);
 
 		/** Deletes this instance of the tablecollection class. */
@@ -129,7 +166,10 @@ class tablecollection : public collection {
 		 *
 		 *  A block-based implementation should load the next block
 		 *  when getValue() is called for row getRowCount(), so that
-		 *  getRowCount() increases if there are more rows. */
+		 *  getRowCount() increases if there are more rows.
+		 *
+		 *  See the class description for the limits of a table copy
+		 *  of a block-based implementation. */
 		virtual	bool		getAllRowsAvailable()=0;
 
 		/** Writes a representation of the tablecollection to standard

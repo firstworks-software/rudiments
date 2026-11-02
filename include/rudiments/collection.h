@@ -7,7 +7,33 @@
 #include <rudiments/object.h>
 #include <rudiments/comparator.h>
 
-/** The collection class is the parent class for all rudiments collections. */
+/** The collection class is the parent class for all rudiments collections.
+ *
+ *  A copy of a collection, made by a copy constructor or by the = operator,
+ *  takes the manage-values and manage-array-values flags from the source.
+ *  A dictionary also takes the manage-keys and manage-array-keys flags, and
+ *  copies its keys by the same rules as its values.  Flags that are set on
+ *  the destination before an assignment have no effect on the copy.
+ *
+ *  The flags of the source decide how the copy gets each pointer value:
+ *  - If no manage flag is set, then the copy gets the same pointer as the
+ *    source.  The pointer is valid only while the data that it points to
+ *    exists.  Eg. it is invalid after the caller deletes that data, or
+ *    after a block-based source loads another block.
+ *  - If the source manages values, then the copy gets a new object, made
+ *    with new and the copy constructor of the object.  But a char, wchar_t,
+ *    or byte_t pointer is not duplicated, and the copy gets the same pointer.
+ *  - If the source manages array values, then the copy gets a duplicate of
+ *    each char or wchar_t string.  A byte_t array is duplicated up to the
+ *    first zero byte.  An array of any other type can't be duplicated
+ *    without its length, so the copy gets NULL.
+ *
+ *  So, to give the copy its own copies of the values, set the correct flag
+ *  on the source before the copy.  The flag also makes the source delete its
+ *  own values on remove(), clear(), and destruction.  If the source does not
+ *  own its values, then set the flag just before the copy, and set it back
+ *  to false just after the copy.  Values that are not pointers are always
+ *  copied. */
 class collection : virtual public object {
 	public:
 
@@ -15,11 +41,23 @@ class collection : virtual public object {
 		collection();
 
 		/** Creates an instance of the collection class that is a copy
-		 *  of "c". */
+		 *  of "c".
+		 *
+		 *  Copies only the manage flags of "c", not the values.  If no
+		 *  manage flag is set on "c", then a child class copy gets the
+		 *  same pointers as "c", and they are valid only while the
+		 *  data that they point to exists.  See the class
+		 *  description. */
 		collection(collection &c);
 
 		/** Makes this instance of the collection class
-		 *  identical to "c". */
+		 *  identical to "c".
+		 *
+		 *  Copies only the manage flags of "c", not the values.  If no
+		 *  manage flag is set on "c", then a child class assignment
+		 *  gets the same pointers as "c", and they are valid only
+		 *  while the data that they point to exists.  See the class
+		 *  description. */
 		collection &operator=(collection &c);
 
 		/** Deletes this instance of the collection class. */
@@ -72,6 +110,9 @@ class collection : virtual public object {
 		 *  the collections are pointers to objects.
 		 *
 		 *  Defaults to "false".
+		 *
+		 *  The flag must be set on the instance that is copied (the
+		 *  source), not on the copy.
 		 *
 		 *  If "manage" is set to true then:
 		 *  * When remove() is called, the object stored as the value
@@ -126,6 +167,9 @@ class collection : virtual public object {
 		 *  the collections are pointers to arrays of primitive types.
 		 *
 		 *  Defaults to "false".
+		 *
+		 *  The flag must be set on the instance that is copied (the
+		 *  source), not on the copy.
 		 *
 		 *  If "manage" is set to true then:
 		 *  * When remove() is called, the array stored as the value at
@@ -205,6 +249,9 @@ class collection : virtual public object {
 		 *
 		 *  Defaults to "false".
 		 *
+		 *  The flag must be set on the instance that is copied (the
+		 *  source), not on the copy.
+		 *
 		 *  If "manage" is set to true then:
 		 *  * When remove() is called, the object stored as the key
 		 *    at that location in the collection will be deleted.
@@ -258,6 +305,9 @@ class collection : virtual public object {
 		 *  the collections are pointers to arrays of primitive types.
 		 *
 		 *  Defaults to "false".
+		 *
+		 *  The flag must be set on the instance that is copied (the
+		 *  source), not on the copy.
 		 *
 		 *  If "manage" is set to true then:
 		 *  * When remove() is called, the array stored as the key at

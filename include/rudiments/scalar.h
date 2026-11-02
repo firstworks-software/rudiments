@@ -41,6 +41,11 @@ class scalar : public scalarcollection<valuetype> {
 		/** Creates an instance of the scalar class
 		 *  that is a copy of "a".
 		 *
+		 *  The copy takes the manage flags from "a".  If no manage
+		 *  flag is set on "a", then the copy gets the same pointer as
+		 *  "a", and it is valid only while the data that it points to
+		 *  exists.  See the collection class description.
+		 *
 		 *  If "a" manages array values, a char, wchar_t, or byte_t
 		 *  array is duplicated, up to the first zero byte for a
 		 *  byte_t array.  An array of any other type can't be
@@ -49,6 +54,11 @@ class scalar : public scalarcollection<valuetype> {
 
 		/** Creates an instance of the scalar class
 		 *  that is a copy of "a".
+		 *
+		 *  The copy takes the manage flags from "a".  If no manage
+		 *  flag is set on "a", then the copy gets the same pointer as
+		 *  "a", and it is valid only while the data that it points to
+		 *  exists.  See the collection class description.
 		 *
 		 *  If "a" manages array values, a char, wchar_t, or byte_t
 		 *  array is duplicated, up to the first zero byte for a
@@ -59,6 +69,13 @@ class scalar : public scalarcollection<valuetype> {
 		/** Makes this instance of the scalar class
 		 *  identical to "a".
 		 *
+		 *  This instance takes the manage flags from "a", and flags
+		 *  that were set on this instance have no effect on the copy.
+		 *  If no manage flag is set on "a", then this instance gets
+		 *  the same pointer as "a", and it is valid only while the
+		 *  data that it points to exists.  See the collection class
+		 *  description.
+		 *
 		 *  If "a" manages array values, a char, wchar_t, or byte_t
 		 *  array is duplicated, up to the first zero byte for a
 		 *  byte_t array.  An array of any other type can't be
@@ -68,6 +85,13 @@ class scalar : public scalarcollection<valuetype> {
 
 		/** Makes this instance of the scalar class
 		 *  identical to "a".
+		 *
+		 *  This instance takes the manage flags from "a", and flags
+		 *  that were set on this instance have no effect on the copy.
+		 *  If no manage flag is set on "a", then this instance gets
+		 *  the same pointer as "a", and it is valid only while the
+		 *  data that it points to exists.  See the collection class
+		 *  description.
 		 *
 		 *  If "a" manages array values, a char, wchar_t, or byte_t
 		 *  array is duplicated, up to the first zero byte for a

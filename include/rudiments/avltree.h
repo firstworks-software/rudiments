@@ -70,29 +70,65 @@ class avltree : public treecollection<valuetype> {
 		avltree();
 
 		/** Creates an instance of the avltree class
-		 *  that is a copy of "a". */
+		 *  that is a copy of "a".
+		 *
+		 *  The copy takes the manage flags from "a".  If no manage
+		 *  flag is set on "a", then the copy gets the same pointers
+		 *  as "a", and they are valid only while the data that they
+		 *  point to exists.  See the collection class description. */
 		avltree(avltree<valuetype> &a);
 
 		/** Creates an instance of the avltree class
-		 *  that is a copy of "a". */
+		 *  that is a copy of "a".
+		 *
+		 *  The copy takes the manage flags from "a".  If no manage
+		 *  flag is set on "a", then the copy gets the same pointers
+		 *  as "a", and they are valid only while the data that they
+		 *  point to exists.  See the collection class description. */
 		avltree(treecollection<valuetype> &a);
 
 		/** Creates an instance of the avltree class
-		 *  that is a copy of "a". */
+		 *  that is a copy of "a".
+		 *
+		 *  The copy takes the manage flags from "a".  If no manage
+		 *  flag is set on "a", then the copy gets the same pointers
+		 *  as "a", and they are valid only while the data that they
+		 *  point to exists.  See the collection class description. */
 		avltree(nodecollection<valuetype> &a);
 
 		/** Makes this instance of the avltree class
-		 *  identical to "a". */
+		 *  identical to "a".
+		 *
+		 *  This instance takes the manage flags from "a", and flags
+		 *  that were set on this instance have no effect on the copy.
+		 *  If no manage flag is set on "a", then this instance gets
+		 *  the same pointers as "a", and they are valid only while
+		 *  the data that they point to exists.  See the collection
+		 *  class description. */
 		avltree<valuetype>	&operator=(
 					avltree<valuetype> &a);
 
 		/** Makes this instance of the avltree class
-		 *  identical to "a". */
+		 *  identical to "a".
+		 *
+		 *  This instance takes the manage flags from "a", and flags
+		 *  that were set on this instance have no effect on the copy.
+		 *  If no manage flag is set on "a", then this instance gets
+		 *  the same pointers as "a", and they are valid only while
+		 *  the data that they point to exists.  See the collection
+		 *  class description. */
 		avltree<valuetype>	&operator=(
 					treecollection<valuetype> &a);
 
 		/** Makes this instance of the avltree class
-		 *  identical to "a". */
+		 *  identical to "a".
+		 *
+		 *  This instance takes the manage flags from "a", and flags
+		 *  that were set on this instance have no effect on the copy.
+		 *  If no manage flag is set on "a", then this instance gets
+		 *  the same pointers as "a", and they are valid only while
+		 *  the data that they point to exists.  See the collection
+		 *  class description. */
 		avltree<valuetype>	&operator=(
 					nodecollection<valuetype> &a);
 
