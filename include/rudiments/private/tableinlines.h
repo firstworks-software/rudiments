@@ -67,13 +67,30 @@ void table<valuetype>::clone(tablecollection<valuetype> *t) {
 	}
 	bool	managevalues=this->getManageValues();
 	bool	managearrayvalues=this->getManageArrayValues();
-	for (uint64_t row=0;
-		!(t->getAllRowsAvailable() && row==t->getRowCount());
-		row++) {
+	for (uint64_t row=0; ; row++) {
+
+		// past the end of the current block...
+		if (row>=t->getRowCount()) {
+
+			// bail if there are no more blocks
+			if (t->getAllRowsAvailable() || !t->getColumnCount()) {
+				break;
+			}
+
+			// Reading a row past the current block makes a
+			// block-based source load the next block.  Bail if
+			// the row still doesn't exist.
+			t->getValue(row,(uint64_t)0);
+			if (t->getRowCount()<=row) {
+				break;
+			}
+		}
+
+		// copy the row
 		for (uint64_t col=0; col<t->getColumnCount(); col++) {
+			valuetype	value=t->getValue(row,col);
 			setValue(row,col,
-				node_duplicate_value(
-					&(t->getReference(row,col)),
+				node_duplicate_value(&value,
 					managevalues,managearrayvalues));
 		}
 	}

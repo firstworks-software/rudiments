@@ -4,6 +4,7 @@
 #include <rudiments/table.h>
 #include <rudiments/stringbuffer.h>
 #include <rudiments/charstring.h>
+#include <rudiments/signalclasses.h>
 #include "test.cpp"
 
 char	cn[2];
@@ -11,6 +12,137 @@ const char	*colname(uint64_t col) {
 	cn[0]='A'+(col%26);
 	cn[1]='\0';
 	return cn;
+}
+
+// block-based source, loads a block of rows when a row
+// past the current block is read with getValue()
+const char	*blocknames[]={"A","B","C"};
+class blocktable : public tablecollection<int32_t> {
+	public:
+		blocktable(uint64_t rows, uint64_t cols,
+				uint64_t blocksize, bool nevertrue) :
+				tablecollection<int32_t>() {
+			this->rows=rows;
+			this->cols=cols;
+			this->blocksize=blocksize;
+			this->nevertrue=nevertrue;
+			loaded=0;
+			allrows=false;
+			dummy=0;
+			loadBlock();
+		}
+		void	setColumnName(uint64_t col, const char *name) {
+		}
+		const char	*getColumnName(uint64_t col) {
+			return (col<cols)?blocknames[col]:NULL;
+		}
+		uint64_t	getColumnCount() {
+			return cols;
+		}
+		void	setValue(uint64_t row, uint64_t col, int32_t value) {
+		}
+		int32_t	getValue(uint64_t row, uint64_t col) {
+			if (row>=loaded && !allrows) {
+				loadBlock();
+			}
+			return (row<loaded && col<cols)?value(row,col):0;
+		}
+		int32_t	&getReference(uint64_t row, uint64_t col) {
+			return dummy;
+		}
+		int32_t	getValue(uint64_t row, const char *colname) {
+			return 0;
+		}
+		uint64_t	getRowCount() {
+			return loaded;
+		}
+		bool	getAllRowsAvailable() {
+			return (nevertrue)?false:allrows;
+		}
+		bool	isBlockBased() {
+			return true;
+		}
+		bool	clear() {
+			return true;
+		}
+		static int32_t	value(uint64_t row, uint64_t col) {
+			return (int32_t)(row*10+col+1);
+		}
+	private:
+		void	loadBlock() {
+			uint64_t	count=rows-loaded;
+			if (count>blocksize) {
+				count=blocksize;
+			}
+			loaded+=count;
+			if (count<blocksize) {
+				allrows=true;
+			}
+		}
+
+		uint64_t	rows;
+		uint64_t	cols;
+		uint64_t	blocksize;
+		bool		nevertrue;
+		uint64_t	loaded;
+		bool		allrows;
+		int32_t		dummy;
+};
+
+void testBlockCopy(const char *name, uint64_t rows, uint64_t cols,
+					uint64_t blocksize, bool nevertrue) {
+
+	stringbuffer	title;
+	for (uint16_t i=0; i<3; i++) {
+
+		// copy, assignment from a tablecollection,
+		// assignment from a table
+		blocktable	src(rows,cols,blocksize,nevertrue);
+		table<int32_t>	dst;
+		dst.setValue(rows+2,0,-1);
+		table<int32_t>	*t=NULL;
+		if (!i) {
+			t=new table<int32_t>(src);
+		} else if (i==1) {
+			dst=src;
+			t=&dst;
+		} else {
+			table<int32_t>	tmp(src);
+			dst=tmp;
+			t=&dst;
+		}
+
+		uint64_t	expectedrows=(cols)?rows:0;
+		const char	*how=(!i)?"copy":
+				(i==1)?"assignment":"table assignment";
+		title.clear();
+		title.append(name)->append(": ")->append(how);
+		title.append(": row count");
+		test(title.getString(),t->getRowCount()==expectedrows);
+
+		title.clear();
+		title.append(name)->append(": ")->append(how);
+		title.append(": col count");
+		test(title.getString(),t->getColumnCount()==cols);
+
+		bool	success=true;
+		for (uint64_t row=0; row<expectedrows; row++) {
+			for (uint64_t col=0; col<cols; col++) {
+				if (t->getValue(row,col)!=
+						blocktable::value(row,col)) {
+					success=false;
+				}
+			}
+		}
+		title.clear();
+		title.append(name)->append(": ")->append(how);
+		title.append(": values");
+		test(title.getString(),success);
+
+		if (!i) {
+			delete t;
+		}
+	}
 }
 
 int main(int argc, char **argv) {
@@ -350,6 +482,21 @@ int main(int argc, char **argv) {
 		test(title2,*(t.getValue(1,2))==43);
 		test(title3,!t.getValue(1,1));
 	}
+	stdoutput.printf("\n");
+
+
+	// copy and assignment, block-based source
+	// (an alarm turns a hang into a failure)
+	stdoutput.printf("copy/assignment (block-based source)...\n");
+	signalmanager::alarm(5);
+	testBlockCopy("never all rows",7,3,3,true);
+	testBlockCopy("exact blocks",6,3,3,false);
+	testBlockCopy("partial block",7,3,3,false);
+	testBlockCopy("zero rows",0,3,3,false);
+	testBlockCopy("zero rows, never all rows",0,3,3,true);
+	testBlockCopy("zero columns",7,0,3,false);
+	testBlockCopy("zero columns, never all rows",7,0,3,true);
+	signalmanager::alarm(0);
 	stdoutput.printf("\n");
 
 	return 0;

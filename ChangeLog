@@ -277,6 +277,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - fixed table leaking column names and managed values
 - fixed table returning garbage for unset column names and values
 - fixed copies of collections of managed pointers crashing on NULL values
+- fixed table copies of block-based tablecollections never ending
 
 ### Security
 - fixed buffer overflow when unix socket file name is too long

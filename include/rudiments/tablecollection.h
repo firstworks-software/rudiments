@@ -122,7 +122,11 @@ class tablecollection : public collection {
 
 		/** Always returns true for monolithic implementations.  Only
 		 *  returns true in a block-based implementation if the current
-		 *  block contains the last row in the table. */
+		 *  block contains the last row in the table.
+		 *
+		 *  A block-based implementation should load the next block
+		 *  when getValue() is called for row getRowCount(), so that
+		 *  getRowCount() increases if there are more rows. */
 		virtual	bool		getAllRowsAvailable()=0;
 
 		/** Writes a representation of the tablecollection to standard

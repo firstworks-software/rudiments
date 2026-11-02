@@ -19,19 +19,37 @@ class table : public tablecollection<valuetype> {
 		table();
 
 		/** Creates an instance of the table class
-		 *  that is a copy of "a". */
+		 *  that is a copy of "a".
+		 *
+		 *  Values are read from "a" using getValue(), in row
+		 *  order. */
 		table(table<valuetype> &a);
 
 		/** Creates an instance of the table class
-		 *  that is a copy of "a". */
+		 *  that is a copy of "a".
+		 *
+		 *  Values are read from "a" using getValue(), in row
+		 *  order.  If not all of "a"'s rows are available
+		 *  (getAllRowsAvailable() returns false), then rows are read
+		 *  until getAllRowsAvailable() returns true or reading past
+		 *  the current block doesn't make the row exist. */
 		table(tablecollection<valuetype> &a);
 
 		/** Makes this instance of the table class
-		 *  identical to "a". */
+		 *  identical to "a".
+		 *
+		 *  Values are read from "a" using getValue(), in row
+		 *  order. */
 		table<valuetype>	&operator=(table<valuetype> &a);
 
 		/** Makes this instance of the table class
-		 *  identical to "a". */
+		 *  identical to "a".
+		 *
+		 *  Values are read from "a" using getValue(), in row
+		 *  order.  If not all of "a"'s rows are available
+		 *  (getAllRowsAvailable() returns false), then rows are read
+		 *  until getAllRowsAvailable() returns true or reading past
+		 *  the current block doesn't make the row exist. */
 		table<valuetype>	&operator=(
 					tablecollection<valuetype> &a);
 
