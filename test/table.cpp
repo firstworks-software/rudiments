@@ -211,6 +211,83 @@ void testBlockWrite(const char *name, uint64_t rows, uint64_t cols,
 	}
 }
 
+// Counts writes and fails call number "failat" and every call after it
+// with RESULT_ERROR.  Counts the calls made after the first failure.
+class failbuffer : public stringbuffer {
+	public:
+				failbuffer(size_t failat);
+		ssize_t	write(const byte_t *string, size_t size);
+		ssize_t	write(const char *string, size_t length);
+		size_t	writes;
+		size_t	writesafterfail;
+	private:
+		ssize_t	failWrite(const byte_t *data, size_t size);
+		size_t	failat;
+};
+
+failbuffer::failbuffer(size_t failat) : stringbuffer() {
+	writes=0;
+	writesafterfail=0;
+	this->failat=failat;
+}
+
+ssize_t failbuffer::write(const byte_t *string, size_t size) {
+	return failWrite(string,size);
+}
+
+ssize_t failbuffer::write(const char *string, size_t length) {
+	return failWrite((const byte_t *)string,length);
+}
+
+ssize_t failbuffer::failWrite(const byte_t *data, size_t size) {
+	writes++;
+	if (failat && writes>failat) {
+		writesafterfail++;
+	}
+	if (failat && writes>=failat) {
+		return RESULT_ERROR;
+	}
+	return stringbuffer::write(data,size);
+}
+
+// how: 0 is writeJson(), 1 is writeJson() with indent, 2 is write()
+static ssize_t writeHow(table<int32_t> *t, output *out, uint16_t how) {
+	return (how==2)?t->write(out):t->writeJson(out,how==1);
+}
+
+void testFailWrite(uint16_t how) {
+
+	const char	*names[]={"writeJson","writeJson indent","write"};
+
+	// build a table
+	table<int32_t>	t;
+	for (uint64_t col=0; col<3; col++) {
+		t.setColumnName(col,"col");
+		for (uint64_t row=0; row<3; row++) {
+			t.setValue(row,col,(int32_t)(row*3+col));
+		}
+	}
+
+	// count the writes of a clean run
+	failbuffer	clean(0);
+	writeHow(&t,&clean,how);
+	size_t	total=clean.writes;
+
+	// fail each of the closing writes
+	size_t	closing=(how)?5:2;
+	stringbuffer	title;
+	for (size_t failat=total-closing+1; failat<=total; failat++) {
+		failbuffer	fb(failat);
+		ssize_t	result=writeHow(&t,&fb,how);
+		title.clear();
+		title.append(names[how])->append(": fail write ");
+		title.append((uint64_t)failat)->append(" of ");
+		title.append((uint64_t)total);
+		test(title.getString(),
+			result==-1 && fb.writesafterfail==0);
+	}
+}
+
 int main(int argc, char **argv) {
 
 	header("table");
@@ -592,6 +669,15 @@ int main(int argc, char **argv) {
 				zerocolsjson,zerocolsindentjson);
 	testBlockWrite("zero columns, never all rows",7,0,3,true,
 				zerocolsjson,zerocolsindentjson);
+	signalmanager::alarm(0);
+	stdoutput.printf("\n");
+
+	// write errors
+	stdoutput.printf("write errors...\n");
+	signalmanager::alarm(5);
+	for (uint16_t how=0; how<3; how++) {
+		testFailWrite(how);
+	}
 	signalmanager::alarm(0);
 	stdoutput.printf("\n");
 

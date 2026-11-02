@@ -150,7 +150,7 @@ ssize_t tablecollection<valuetype>::writeJson(output *out, bool indent) {
 
 	((indent)?incOrErr(&retval,out->write("\n	",2),2):true) &&
 	incOrErr(&retval,out->write("]"),1) &&
-	((indent)?incOrErr(&retval,out->write('\n'),1):true);
+	((indent)?incOrErr(&retval,out->write('\n'),1):true) &&
 	incOrErr(&retval,out->write('}'),1) &&
 	((indent)?incOrErr(&retval,out->write('\n'),1):true);
 
