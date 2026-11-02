@@ -407,7 +407,7 @@ inline
 valuetype *node_duplicate_value(valuetype **value,
 				bool managed, bool managedarray) {
 	if (managed) {
-		return new valuetype(**value);
+		return (*value)?new valuetype(**value):NULL;
 	} else if (managedarray) {
 		// An array can't be duplicated without its length.  Return
 		// NULL, rather than share it and have both owners delete it.

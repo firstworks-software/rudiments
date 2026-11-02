@@ -209,5 +209,148 @@ int main(int argc, char **argv) {
 	}
 	stdoutput.printf("\n");
 
+
+	// column names
+	stdoutput.printf("column names...\n");
+	table<int32_t>	cnt;
+	cnt.setCopyColumnNames(true);
+
+	// set out of order
+	cnt.setColumnName(3,"D");
+	test("out of order: col count",cnt.getColumnCount()==4);
+	test("out of order: colname(0)",!cnt.getColumnName(0));
+	test("out of order: colname(1)",!cnt.getColumnName(1));
+	test("out of order: colname(2)",!cnt.getColumnName(2));
+	test("out of order: colname(3)",
+			!charstring::compare(cnt.getColumnName(3),"D"));
+	cnt.setColumnName(1,"B");
+	test("out of order: colname(0) after set",!cnt.getColumnName(0));
+	test("out of order: colname(1) after set",
+			!charstring::compare(cnt.getColumnName(1),"B"));
+	test("out of order: colname(2) after set",!cnt.getColumnName(2));
+	test("out of order: colname(3) after set",
+			!charstring::compare(cnt.getColumnName(3),"D"));
+	cnt.setValue(0,3,10);
+	test("out of order: value by name",cnt.getValue(0,"D")==10);
+
+	// set to itself
+	cnt.setColumnName(3,cnt.getColumnName(3));
+	test("set to itself",!charstring::compare(cnt.getColumnName(3),"D"));
+
+	// set again
+	cnt.setColumnName(3,"E");
+	test("set again",!charstring::compare(cnt.getColumnName(3),"E"));
+
+	// set by setValue only
+	cnt.setValue(0,5,20);
+	test("set by value: col count",cnt.getColumnCount()==6);
+	test("set by value: colname(4)",!cnt.getColumnName(4));
+	test("set by value: colname(5)",!cnt.getColumnName(5));
+	stdoutput.printf("\n");
+
+
+	// sparse, managed
+	stdoutput.printf("sparse, managed...\n");
+	table<char *>	smt;
+	smt.setCopyColumnNames(true);
+	smt.setManageArrayValues(true);
+	smt.setValue(0,0,charstring::duplicate("a"));
+	smt.setValue(2,3,charstring::duplicate("b"));
+	test("row count",smt.getRowCount()==3);
+	test("col count",smt.getColumnCount()==4);
+	test("value(0,0)",
+		!charstring::compare(smt.getValue(0,(uint64_t)0),"a"));
+	test("value(2,3)",!charstring::compare(smt.getValue(2,3),"b"));
+	bool	success=true;
+	for (uint64_t row=0; row<3; row++) {
+		for (uint64_t col=0; col<4; col++) {
+			if ((row==0 && col==0) || (row==2 && col==3)) {
+				continue;
+			}
+			if (smt.getValue(row,col)) {
+				success=false;
+			}
+		}
+	}
+	test("gaps",success);
+
+	// copy
+	table<char *>	smt2(smt);
+	test("copy: value(0,0)",
+		!charstring::compare(smt2.getValue(0,(uint64_t)0),"a"));
+	test("copy: value(2,3)",!charstring::compare(smt2.getValue(2,3),"b"));
+	test("copy: value(1,1)",!smt2.getValue(1,1));
+
+	// assignment over a populated table
+	smt2.setValue(3,0,charstring::duplicate("c"));
+	smt2=smt;
+	test("assignment: row count",smt2.getRowCount()==3);
+	test("assignment: value(2,3)",
+			!charstring::compare(smt2.getValue(2,3),"b"));
+	test("assignment: value(3,0)",!smt2.getValue(3,(uint64_t)0));
+
+	// clear
+	smt.clear();
+	test("clear: row count",!smt.getRowCount());
+	test("clear: col count",!smt.getColumnCount());
+	test("clear: value(0,0)",!smt.getValue(0,(uint64_t)0));
+	test("clear: value(2,3)",!smt.getValue(2,3));
+	stdoutput.printf("\n");
+
+
+	// sparse, types without node_zero_value()
+	stdoutput.printf("sparse, other types...\n");
+	table<bool>	bt;
+	bt.setValue(3,3,true);
+	test("bool: value(0,0)",!bt.getValue(0,(uint64_t)0));
+	test("bool: value(3,2)",!bt.getValue(3,2));
+	test("bool: value(3,3)",bt.getValue(3,3));
+	table<long long>	llt;
+	llt.setValue(3,3,5);
+	test("long long: value(0,0)",!llt.getValue(0,(uint64_t)0));
+	test("long long: value(3,2)",!llt.getValue(3,2));
+	test("long long: value(3,3)",llt.getValue(3,3)==5);
+	stdoutput.printf("\n");
+
+
+	// copy and assignment, managed values
+	stdoutput.printf("copy/assignment (managed values)...\n");
+	table<int32_t *>	*mvt=new table<int32_t *>();
+	mvt->setManageValues(true);
+	mvt->setValue(0,0,new int32_t(42));
+	mvt->setValue(1,2,new int32_t(43));
+	table<int32_t *>	mvt2(*mvt);
+	table<int32_t *>	mvt3;
+	mvt3.setValue(0,1,NULL);
+	mvt3=*mvt;
+	for (uint16_t i=0; i<2; i++) {
+		table<int32_t *>	&t=(!i)?mvt2:mvt3;
+		const char	*title1=(!i)?"copy: manage values":
+					"assignment: manage values";
+		const char	*title2=(!i)?"copy: manage array values":
+					"assignment: manage array values";
+		const char	*title3=(!i)?"copy: values duplicated":
+					"assignment: values duplicated";
+		test(title1,t.getManageValues());
+		test(title2,!t.getManageArrayValues());
+		test(title3,
+			t.getValue(0,(uint64_t)0)!=mvt->getValue(0,(uint64_t)0)
+			&& t.getValue(1,2)!=mvt->getValue(1,2));
+	}
+	delete mvt;
+	for (uint16_t i=0; i<2; i++) {
+		table<int32_t *>	&t=(!i)?mvt2:mvt3;
+		const char	*title1=(!i)?"copy: value(0,0)":
+					"assignment: value(0,0)";
+		const char	*title2=(!i)?"copy: value(1,2)":
+					"assignment: value(1,2)";
+		const char	*title3=(!i)?"copy: value(1,1)":
+					"assignment: value(1,1)";
+		test(title1,*(t.getValue(0,(uint64_t)0))==42);
+		test(title2,*(t.getValue(1,2))==43);
+		test(title3,!t.getValue(1,1));
+	}
+	stdoutput.printf("\n");
+
 	return 0;
 }

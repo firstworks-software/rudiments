@@ -274,6 +274,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - fixed copies of collections of managed non-string arrays
   freeing the arrays twice
 - fixed copies of collections of managed non-pointer values leaking
+- fixed table leaking column names and managed values
+- fixed table returning garbage for unset column names and values
+- fixed copies of collections of managed pointers crashing on NULL values
 
 ### Security
 - fixed buffer overflow when unix socket file name is too long

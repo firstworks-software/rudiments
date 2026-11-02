@@ -35,14 +35,27 @@ class table : public tablecollection<valuetype> {
 		table<valuetype>	&operator=(
 					tablecollection<valuetype> &a);
 
-		/** Deletes this instance of the table class. */
+		/** Deletes this instance of the table class.
+		 *
+		 *  Also deletes the values that are stored in the table if
+		 *  setManageValues(true) or setManageArrayValues(true) was
+		 *  called, and the copies of the column names if
+		 *  setCopyColumnNames(true) was called. */
 		~table();
 
 		/** Indicates whether or not this instance of the
 		 *  tablecollection class should make copies the values that
 		 *  are passed in to setColumnName().
 		 *
-		 *  Defaults to "false". */
+		 *  The copies are deleted when the column name is set again,
+		 *  when clear() is called, and when the instance is deleted.
+		 *
+		 *  Defaults to "false".
+		 *
+		 *  Call this before any column names are set.  Changing it
+		 *  after column names are set is unsafe, as the instance would
+		 *  then delete names that it didn't copy, or leak names that it
+		 *  did copy. */
 		void	setCopyColumnNames(bool copy);
 
 		/** Returns whether or not this instance of the tablecollection
@@ -55,7 +68,8 @@ class table : public tablecollection<valuetype> {
 		/** Sets the name of column "col" to "name" */
 		void		setColumnName(uint64_t col, const char *name);
 
-		/** Returns the name of column "col". */
+		/** Returns the name of column "col", or NULL if column "col"
+		 *  has no name. */
 		const char	*getColumnName(uint64_t col);
 
 		/** Returns the current number of columns in the table.
@@ -70,11 +84,12 @@ class table : public tablecollection<valuetype> {
 		 *
 		 *  Setting "manage" to true causes the instance to delete the
 		 *  values that are stored at each location in the table
-		 *  when clear() is called.
+		 *  when clear() is called and when the instance is deleted.
 		 *
 		 *  Setting "manage" to false causes the instance not to delete
 		 *  the values that are stored at each location in the
-		 *  table when clear() is called.
+		 *  table when clear() is called or when the instance is
+		 *  deleted.
 		 *
 		 *  Defaults to "false".
 		 *
@@ -84,7 +99,8 @@ class table : public tablecollection<valuetype> {
 
 		/** Returns whether or not this instance of the table class
 		 *  is configured to delete the values that are stored at each
-		 *  location in the table when clear() is called.
+		 *  location in the table when clear() is called and when the
+		 *  instance is deleted.
 		 *
 		 *  Returns true if it is and false if it is not. */
 		bool	getManageValues();
@@ -95,11 +111,13 @@ class table : public tablecollection<valuetype> {
 		 *
 		 *  Setting "manage" to true causes the instance to
 		 *  array-delete the values that are stored at each location in
-		 *  the table when clear() is called.
+		 *  the table when clear() is called and when the instance is
+		 *  deleted.
 		 *
 		 *  Setting "manage" to false causes the instance not to
 		 *  array-delete the values that are stored at each location in
-		 *  the table when clear() is called.
+		 *  the table when clear() is called or when the instance is
+		 *  deleted.
 		 *
 		 *  Defaults to "false".
 		 *
@@ -115,12 +133,18 @@ class table : public tablecollection<valuetype> {
 
 		/** Returns whether or not this instance of the table class
 		 *  is configured to array-delete the values that are stored at
-		 *  each location in the table when clear() is called.
+		 *  each location in the table when clear() is called and when
+		 *  the instance is deleted.
 		 *
 		 *  Returns true if it is and false if it is not. */
 		bool	getManageArrayValues();
 
-		/** Sets the value at "row", "col" to "value". */
+		/** Sets the value at "row", "col" to "value".
+		 *
+		 *  Note that this doesn't delete the value that was previously
+		 *  stored at "row", "col", even if setManageValues(true) or
+		 *  setManageArrayValues(true) was called.  The caller must
+		 *  delete it, if necessary. */
 		void		setValue(uint64_t row, uint64_t col,
 							valuetype value);
 
@@ -147,8 +171,11 @@ class table : public tablecollection<valuetype> {
 		/** Returns true. */
 		bool		getAllRowsAvailable();
 
-		/** Removes all values currently stored in the table, such that
-		 *  getValue() will return NULL or 0.  Always returns true. */
+		/** Removes all values and column names currently stored in the
+		 *  table, such that getValue() and getColumnName() will return
+		 *  NULL or 0.  Deletes the values and column names as
+		 *  configured by setManageValues(), setManageArrayValues(),
+		 *  and setCopyColumnNames().  Always returns true. */
 		bool	clear();
 
 	#include <rudiments/private/table.h>
