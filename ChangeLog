@@ -280,8 +280,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - fixed table copies of block-based tablecollections never ending
 - fixed tablecollection write() and writeJson() stopping after the first
   block of a block-based source
-- fixed tablecollection write() and writeJson() writing the closing
-  brace after a write error
+- fixed tablecollection write() and writeJson() writing after a
+  write error
 
 ### Security
 - fixed buffer overflow when unix socket file name is too long

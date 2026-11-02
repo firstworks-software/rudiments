@@ -270,13 +270,15 @@ void testFailWrite(uint16_t how) {
 
 	// count the writes of a clean run
 	failbuffer	clean(0);
-	writeHow(&t,&clean,how);
+	ssize_t	cleanresult=writeHow(&t,&clean,how);
 	size_t	total=clean.writes;
+	stringbuffer	cleantitle;
+	cleantitle.append(names[how])->append(": clean run");
+	test(cleantitle.getString(),cleanresult>=0 && total>0);
 
-	// fail each of the closing writes
-	size_t	closing=(how)?5:2;
+	// fail each write
 	stringbuffer	title;
-	for (size_t failat=total-closing+1; failat<=total; failat++) {
+	for (size_t failat=1; failat<=total; failat++) {
 		failbuffer	fb(failat);
 		ssize_t	result=writeHow(&t,&fb,how);
 		title.clear();

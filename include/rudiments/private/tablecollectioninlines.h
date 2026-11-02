@@ -104,6 +104,7 @@ ssize_t tablecollection<valuetype>::writeJson(output *out, bool indent) {
 		incOrErr(&retval,this->writeJsonValue(out,getColumnName(i)));
 	}
 
+	retval>-1 &&
 	((indent)?incOrErr(&retval,out->write("\n	",2),2):true) &&
 	incOrErr(&retval,out->write("],",2),2) &&
 	((indent)?incOrErr(&retval,out->write("\n	",2),2):true) &&
@@ -143,11 +144,13 @@ ssize_t tablecollection<valuetype>::writeJson(output *out, bool indent) {
 				this->writeJsonValue(out,getValue(i,j)));
 		}
 
+		retval>-1 &&
 		((indent)?incOrErr(&retval,
 				out->write("\n		",3),3):true) &&
 		incOrErr(&retval,out->write("]"),1);
 	}
 
+	retval>-1 &&
 	((indent)?incOrErr(&retval,out->write("\n	",2),2):true) &&
 	incOrErr(&retval,out->write("]"),1) &&
 	((indent)?incOrErr(&retval,out->write('\n'),1):true) &&
