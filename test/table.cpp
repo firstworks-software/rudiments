@@ -145,6 +145,72 @@ void testBlockCopy(const char *name, uint64_t rows, uint64_t cols,
 	}
 }
 
+void testBlockWrite(const char *name, uint64_t rows, uint64_t cols,
+				uint64_t blocksize, bool nevertrue,
+				const char *expectedjson,
+				const char *expectedindentjson) {
+
+	// build an equivalent table
+	table<int32_t>	equiv;
+	for (uint64_t col=0; col<cols; col++) {
+		equiv.setColumnName(col,blocknames[col]);
+	}
+	for (uint64_t row=0; row<rows; row++) {
+		for (uint64_t col=0; col<cols; col++) {
+			equiv.setValue(row,col,blocktable::value(row,col));
+		}
+	}
+
+	stringbuffer	title;
+	stringbuffer	expected;
+	stringbuffer	sb;
+	for (uint16_t i=0; i<3; i++) {
+
+		// writeJson(), writeJson() with indent, write()
+		const char	*how=(!i)?"writeJson":
+				(i==1)?"writeJson indent":"write";
+		blocktable	src(rows,cols,blocksize,nevertrue);
+		expected.clear();
+		sb.clear();
+		ssize_t	result;
+		if (!i) {
+			if (expectedjson) {
+				expected.append(expectedjson);
+			} else {
+				equiv.writeJson(&expected,false);
+			}
+			result=src.writeJson(&sb,false);
+		} else if (i==1) {
+			if (expectedindentjson) {
+				expected.append(expectedindentjson);
+			} else {
+				equiv.writeJson(&expected,true);
+			}
+			result=src.writeJson(&sb,true);
+		} else {
+			if (expectedindentjson) {
+				expected.append(expectedindentjson);
+			} else {
+				equiv.write(&expected);
+			}
+			result=src.write(&sb);
+		}
+
+		title.clear();
+		title.append(name)->append(": ")->append(how);
+		title.append(": output");
+		test(title.getString(),
+			!charstring::compare(sb.getString(),
+						expected.getString()));
+
+		title.clear();
+		title.append(name)->append(": ")->append(how);
+		title.append(": return value");
+		test(title.getString(),
+			result==(ssize_t)sb.getStringLength());
+	}
+}
+
 int main(int argc, char **argv) {
 
 	header("table");
@@ -496,6 +562,36 @@ int main(int argc, char **argv) {
 	testBlockCopy("zero rows, never all rows",0,3,3,true);
 	testBlockCopy("zero columns",7,0,3,false);
 	testBlockCopy("zero columns, never all rows",7,0,3,true);
+	signalmanager::alarm(0);
+	stdoutput.printf("\n");
+
+	// write, block-based source
+	// (zero columns writes the first block only, as empty rows)
+	stdoutput.printf("write (block-based source)...\n");
+	signalmanager::alarm(5);
+	const char	*zerocolsjson="{\"c\":[],\"r\":[[],[],[]]}";
+	const char	*zerocolsindentjson=
+				"{\n"
+				"\t\"c\": [\n"
+				"\t],\n"
+				"\t\"r\": [\n"
+				"\t\t[\n"
+				"\t\t],\n"
+				"\t\t[\n"
+				"\t\t],\n"
+				"\t\t[\n"
+				"\t\t]\n"
+				"\t]\n"
+				"}\n";
+	testBlockWrite("never all rows",7,3,3,true,NULL,NULL);
+	testBlockWrite("exact blocks",6,3,3,false,NULL,NULL);
+	testBlockWrite("partial block",7,3,3,false,NULL,NULL);
+	testBlockWrite("zero rows",0,3,3,false,NULL,NULL);
+	testBlockWrite("zero rows, never all rows",0,3,3,true,NULL,NULL);
+	testBlockWrite("zero columns",7,0,3,false,
+				zerocolsjson,zerocolsindentjson);
+	testBlockWrite("zero columns, never all rows",7,0,3,true,
+				zerocolsjson,zerocolsindentjson);
 	signalmanager::alarm(0);
 	stdoutput.printf("\n");
 

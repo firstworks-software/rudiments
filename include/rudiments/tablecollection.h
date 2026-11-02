@@ -52,7 +52,10 @@ class tablecollection : public collection {
 		/** Returns "table". */
 		virtual const char	*getType();
 
-		/** Returns the number of elements in the table. */
+		/** Returns the number of elements in the table.
+		 *
+		 *  In a block-based implementation, counts only the elements
+		 *  in the rows through the end of the current block. */
 		virtual uint64_t	getCount();
 
 		/** In a read-write implementation, sets the name of column
@@ -130,14 +133,38 @@ class tablecollection : public collection {
 		virtual	bool		getAllRowsAvailable()=0;
 
 		/** Writes a representation of the tablecollection to standard
-		 *  output. */
+		 *  output.
+		 *
+		 *  Rows are read in order.  If getAllRowsAvailable() returns
+		 *  false, then later blocks are loaded by calls to getValue().
+		 *  In a sequential implementation, the rows that were written
+		 *  can not be read again after this call.
+		 *
+		 *  If the table has zero columns, only the rows of the first
+		 *  block are written, as empty arrays. */
 		virtual	ssize_t	write();
 
-		/** Writes a representation of the tablecollection to "out". */
+		/** Writes a representation of the tablecollection to "out".
+		 *
+		 *  Rows are read in order.  If getAllRowsAvailable() returns
+		 *  false, then later blocks are loaded by calls to getValue().
+		 *  In a sequential implementation, the rows that were written
+		 *  can not be read again after this call.
+		 *
+		 *  If the table has zero columns, only the rows of the first
+		 *  block are written, as empty arrays. */
 		virtual	ssize_t	write(output *out);
 
 		/** Writes a JSON representation of the tablecollection to
-		 *  standard output. */
+		 *  standard output.
+		 *
+		 *  Rows are read in order.  If getAllRowsAvailable() returns
+		 *  false, then later blocks are loaded by calls to getValue().
+		 *  In a sequential implementation, the rows that were written
+		 *  can not be read again after this call.
+		 *
+		 *  If the table has zero columns, only the rows of the first
+		 *  block are written, as empty arrays. */
 		virtual	ssize_t	writeJson();
 
 		/** Writes a JSON representation of the tablecollection to
@@ -145,11 +172,27 @@ class tablecollection : public collection {
 		 *  
 		 *  If "indent" is true, then the output is automatically
 		 *  indented.  If "indent" is false, then the tree is written
-		 *  without indentation. */
+		 *  without indentation.
+		 *
+		 *  Rows are read in order.  If getAllRowsAvailable() returns
+		 *  false, then later blocks are loaded by calls to getValue().
+		 *  In a sequential implementation, the rows that were written
+		 *  can not be read again after this call.
+		 *
+		 *  If the table has zero columns, only the rows of the first
+		 *  block are written, as empty arrays. */
 		virtual	ssize_t	writeJson(bool indent);
 
 		/** Writes a JSON representation of the tablecollection to
-		 *  "out". */
+		 *  "out".
+		 *
+		 *  Rows are read in order.  If getAllRowsAvailable() returns
+		 *  false, then later blocks are loaded by calls to getValue().
+		 *  In a sequential implementation, the rows that were written
+		 *  can not be read again after this call.
+		 *
+		 *  If the table has zero columns, only the rows of the first
+		 *  block are written, as empty arrays. */
 		virtual	ssize_t	writeJson(output *out);
 
 		/** Writes a JSON representation of the tablecollection to
@@ -157,7 +200,15 @@ class tablecollection : public collection {
 		 *  
 		 *  If "indent" is true, then the output is automatically
 		 *  indented.  If "indent" is false, then the tree is written
-		 *  without indentation. */
+		 *  without indentation.
+		 *
+		 *  Rows are read in order.  If getAllRowsAvailable() returns
+		 *  false, then later blocks are loaded by calls to getValue().
+		 *  In a sequential implementation, the rows that were written
+		 *  can not be read again after this call.
+		 *
+		 *  If the table has zero columns, only the rows of the first
+		 *  block are written, as empty arrays. */
 		virtual	ssize_t	writeJson(output *out, bool indent);
 
 	#include <rudiments/private/tablecollection.h>

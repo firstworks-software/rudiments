@@ -111,7 +111,24 @@ ssize_t tablecollection<valuetype>::writeJson(output *out, bool indent) {
 	((indent)?incOrErr(&retval,out->write(' '),1):true) &&
 	incOrErr(&retval,out->write('['),1);
 
-	for (uint64_t i=0; i<getRowCount() && retval>-1; i++) {
+	for (uint64_t i=0; retval>-1; i++) {
+
+		// past the end of the current block...
+		if (i>=getRowCount()) {
+
+			// bail if there are no more blocks
+			if (getAllRowsAvailable() || !getColumnCount()) {
+				break;
+			}
+
+			// Reading a row past the current block makes a
+			// block-based source load the next block.  Bail if
+			// the row still doesn't exist.
+			getValue(i,(uint64_t)0);
+			if (getRowCount()<=i) {
+				break;
+			}
+		}
 
 		((i)?incOrErr(&retval,out->write(','),1):true) &&
 		((indent)?incOrErr(&retval,
