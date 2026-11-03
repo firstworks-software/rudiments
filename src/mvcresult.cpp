@@ -161,70 +161,105 @@ ssize_t mvcresult::writeJson(output *out, bool indent) {
 	size_t	clen=charstring::getLength(code);
 
 	// begin object
-	incOrErr(&retval,out->write('{'),1) &&
-	((indent)?incOrErr(&retval,out->write("\n")):true) &&
+	if (!(incOrErr(&retval,out->write('{'),1) &&
+		((indent)?incOrErr(&retval,out->write('\n'),1):true)) &&
+		retval>-1) {
+		retval=RESULT_ERROR;
+	}
 
 	// success: true/false
-	incOrErr(&retval,out->write("\"s\":",4),4) &&
-	((indent)?incOrErr(&retval,out->write(' '),1):true) &&
-	((pvt->_success)?incOrErr(&retval,out->write("true",4),4):
-			incOrErr(&retval,out->write("false",5),5)) &&
-	incOrErr(&retval,out->write(','),1) &&
-	((indent)?incOrErr(&retval,out->write('\n'),1):true) &&
+	if (!(retval>-1 &&
+		incOrErr(&retval,out->write("\"s\":",4),4) &&
+		((indent)?incOrErr(&retval,out->write(' '),1):true) &&
+		((pvt->_success)?incOrErr(&retval,out->write("true",4),4):
+				incOrErr(&retval,out->write("false",5),5)) &&
+		incOrErr(&retval,out->write(','),1) &&
+		((indent)?incOrErr(&retval,out->write('\n'),1):true)) &&
+		retval>-1) {
+		retval=RESULT_ERROR;
+	}
 
 	// status code
-	incOrErr(&retval,out->write("\"c\":",4),4) &&
-	((indent)?incOrErr(&retval,out->write(' '),1):true) &&
-	incOrErr(&retval,out->write(code,clen),clen) &&
-	incOrErr(&retval,out->write(','),1) &&
-	((indent)?incOrErr(&retval,out->write('\n'),1):true) &&
+	if (!(retval>-1 &&
+		incOrErr(&retval,out->write("\"c\":",4),4) &&
+		((indent)?incOrErr(&retval,out->write(' '),1):true) &&
+		incOrErr(&retval,out->write(code,clen),clen) &&
+		incOrErr(&retval,out->write(','),1) &&
+		((indent)?incOrErr(&retval,out->write('\n'),1):true)) &&
+		retval>-1) {
+		retval=RESULT_ERROR;
+	}
 
 	// status message
-	incOrErr(&retval,out->write("\"m\":",4),4) &&
-	((indent)?incOrErr(&retval,out->write(' '),1):true) &&
-	incOrErr(&retval,out->write('"'),1) &&
-	incOrErr(&retval,out->write(pvt->_message,mlen),mlen) &&
-	incOrErr(&retval,out->write('"'),1) &&
-	((pvt->_success && pvt->_data.getKeys()->getFirst())?
-			incOrErr(&retval,out->write(','),1):true) &&
-	((indent)?incOrErr(&retval,out->write('\n'),1):true);
+	if (!(retval>-1 &&
+		incOrErr(&retval,out->write("\"m\":",4),4) &&
+		((indent)?incOrErr(&retval,out->write(' '),1):true) &&
+		incOrErr(&retval,out->write('"'),1) &&
+		incOrErr(&retval,out->write(pvt->_message,mlen),mlen) &&
+		incOrErr(&retval,out->write('"'),1) &&
+		((pvt->_success && pvt->_data.getKeys()->getFirst())?
+				incOrErr(&retval,out->write(','),1):true) &&
+		((indent)?incOrErr(&retval,out->write('\n'),1):true)) &&
+		retval>-1) {
+		retval=RESULT_ERROR;
+	}
 
-	if (pvt->_success) {
+	if (pvt->_success && retval>-1) {
 
 		// collections
 		bool	first=true;
 		for (listnode<char *> *key=
 				pvt->_data.getKeys()->getFirst();
-				key; key=key->getNext()) {
+				key && retval>-1; key=key->getNext()) {
 
 			ssize_t	klen=charstring::getLength(key->getValue());
 			
 			if (first) {
 				first=false;
-			} else {
-				incOrErr(&retval,out->write(','),1) &&
-				((indent)?incOrErr(&retval,
-						out->write('\n'),1):true);
+			} else if (!(incOrErr(&retval,out->write(','),1) &&
+					((indent)?incOrErr(&retval,
+						out->write('\n'),1):true)) &&
+					retval>-1) {
+				retval=RESULT_ERROR;
 			}
-			incOrErr(&retval,out->write('"'),1) &&
-			incOrErr(&retval,out->write(
-					key->getValue(),klen),klen) &&
-			incOrErr(&retval,out->write("\":",2),2) &&
-			((indent)?incOrErr(&retval,out->write(' '),1):true);
+			if (!(retval>-1 &&
+				incOrErr(&retval,out->write('"'),1) &&
+				incOrErr(&retval,out->write(
+						key->getValue(),klen),klen) &&
+				incOrErr(&retval,out->write("\":",2),2) &&
+				((indent)?incOrErr(&retval,
+						out->write(' '),1):true)) &&
+				retval>-1) {
+				retval=RESULT_ERROR;
+			}
+			if (retval<0) {
+				break;
+			}
 			collection	*c=
 				pvt->_data.getValue(key->getValue());
 			if (c) {
-				incOrErr(&retval,c->writeJson(out,indent));
-			} else {
-				incOrErr(&retval,out->write("null",4),4);
+				ssize_t	r=c->writeJson(out,indent);
+				if (r<0) {
+					retval=r;
+				} else {
+					retval+=r;
+				}
+			} else if (!incOrErr(&retval,
+						out->write("null",4),4) &&
+					retval>-1) {
+				retval=RESULT_ERROR;
 			}
 		}
-		
+
 	}
 
 	// end object
-	incOrErr(&retval,out->write('}'),1) &&
-	((indent)?incOrErr(&retval,out->write('\n'),1):true);
+	if (!(retval>-1 &&
+		incOrErr(&retval,out->write('}'),1) &&
+		((indent)?incOrErr(&retval,out->write('\n'),1):true)) &&
+		retval>-1) {
+		retval=RESULT_ERROR;
+	}
 
 	// clean up
 	delete[] code;

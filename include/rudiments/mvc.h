@@ -462,22 +462,28 @@ class RUDIMENTS_DLLSPEC mvcresult : virtual public object {
 		/** Writes a representation (currently JSON) of the contents of
 		 *  the instance to standard output.
 		 *
-		 *  Returns the number of bytes that were successfully written
-		 *  or RESULT_ERROR if an error occurred. */
+		 *  Returns the number of bytes written, or -1 if an error
+		 *  occurred.  A short write returns -1.  Any other error from
+		 *  the output, such as a timeout or abort, is returned
+		 *  unchanged.  Nothing more is written after an error. */
 		ssize_t	write();
 
 		/** Writes a representation (currently JSON) of the contents of
 		 *  the instance to "out".
 		 *
-		 *  Returns the number of bytes that were successfully written
-		 *  or RESULT_ERROR if an error occurred. */
+		 *  Returns the number of bytes written, or -1 if an error
+		 *  occurred.  A short write returns -1.  Any other error from
+		 *  the output, such as a timeout or abort, is returned
+		 *  unchanged.  Nothing more is written after an error. */
 		ssize_t	write(output *out);
 
 		/** Writes an indented JSON representation of the contents of
 		 *  the instance to standard output.
 		 *
-		 *  Returns the number of bytes that were successfully written
-		 *  or RESULT_ERROR if an error occurred. */
+		 *  Returns the number of bytes written, or -1 if an error
+		 *  occurred.  A short write returns -1.  Any other error from
+		 *  the output, such as a timeout or abort, is returned
+		 *  unchanged.  Nothing more is written after an error. */
 		ssize_t	writeJson();
 
 		/** Writes a JSON representation of the contents of the
@@ -486,15 +492,19 @@ class RUDIMENTS_DLLSPEC mvcresult : virtual public object {
 		 *  The representation is indented if "indent" is true and not
 		 *  indented if "indent" is false.
 		 *
-		 *  Returns the number of bytes that were successfully written
-		 *  or RESULT_ERROR if an error occurred. */
+		 *  Returns the number of bytes written, or -1 if an error
+		 *  occurred.  A short write returns -1.  Any other error from
+		 *  the output, such as a timeout or abort, is returned
+		 *  unchanged.  Nothing more is written after an error. */
 		ssize_t	writeJson(bool indent);
 
 		/** Writes an indented JSON representation of the contents of
 		 *  the instance to "out".
 		 *
-		 *  Returns the number of bytes that were successfully written
-		 *  or RESULT_ERROR if an error occurred. */
+		 *  Returns the number of bytes written, or -1 if an error
+		 *  occurred.  A short write returns -1.  Any other error from
+		 *  the output, such as a timeout or abort, is returned
+		 *  unchanged.  Nothing more is written after an error. */
 		ssize_t	writeJson(output *out);
 
 		/** Writes a JSON representation of the contents of the
@@ -503,8 +513,10 @@ class RUDIMENTS_DLLSPEC mvcresult : virtual public object {
 		 *  The representation is indented if "indent" is true and not
 		 *  indented if "indent" is false.
 		 *
-		 *  Returns the number of bytes that were successfully written
-		 *  or RESULT_ERROR if an error occurred. */
+		 *  Returns the number of bytes written, or -1 if an error
+		 *  occurred.  A short write returns -1.  Any other error from
+		 *  the output, such as a timeout or abort, is returned
+		 *  unchanged.  Nothing more is written after an error. */
 		ssize_t	writeJson(output *out, bool indent);
 
 		/** Returns the wastebasket. */
