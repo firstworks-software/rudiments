@@ -376,8 +376,19 @@ class RUDIMENTS_DLLSPEC output : virtual public object {
 		/** Writes "..." using "format" which should comply with
 		 *  standard printf formatting rules.
 		 *
-		 *  Returns the number of bytes written or -1 if an error
-		 *  occurred.
+		 *  Returns the number of bytes written on success.
+		 *
+		 *  Returns RESULT_ERROR if the data could not be formatted,
+		 *  in which case nothing is written, or if fewer bytes were
+		 *  written than were formatted (a short write).  If the
+		 *  underlying write returns RESULT_ERROR, RESULT_TIMEOUT,
+		 *  RESULT_ABORT, or another negative result, then that result
+		 *  is returned.  After a short write or an error, part of the
+		 *  data may already have been written.
+		 *
+		 *  If the output is buffered, then data that fits in the
+		 *  buffer counts as written.  An error that occurs when the
+		 *  buffer is flushed later is not reported by this method.
 		 *
 		 *  NOTE: The various implemententations of this method
 		 *  use whatever underlying v(d/s/f)printf() functions are
@@ -395,7 +406,19 @@ class RUDIMENTS_DLLSPEC output : virtual public object {
 		 *  Note that argp is a pointer to a va_list, not just a
 		 *  va_list.
 		 *
-		 *  Returns the number of bytes written.
+		 *  Returns the number of bytes written on success.
+		 *
+		 *  Returns RESULT_ERROR if the data could not be formatted,
+		 *  in which case nothing is written, or if fewer bytes were
+		 *  written than were formatted (a short write).  If the
+		 *  underlying write returns RESULT_ERROR, RESULT_TIMEOUT,
+		 *  RESULT_ABORT, or another negative result, then that result
+		 *  is returned.  After a short write or an error, part of the
+		 *  data may already have been written.
+		 *
+		 *  If the output is buffered, then data that fits in the
+		 *  buffer counts as written.  An error that occurs when the
+		 *  buffer is flushed later is not reported by this method.
 		 *
 		 *  NOTE: The various implemententations of this method
 		 *  use whatever underlying v(d/s/f)printf() functions are
@@ -410,8 +433,23 @@ class RUDIMENTS_DLLSPEC output : virtual public object {
 		/** Writes "..." using "format" which should comply with
 		 *  standard wprintf formatting rules.
 		 *
-		 *  Returns the number of bytes written or -1 if an error
-		 *  occurred.
+		 *  Returns the number of characters written on success.
+		 *  However, a filedescriptor that has a write buffer, or that
+		 *  cannot write wide characters directly (as on Windows),
+		 *  converts the data to the character set of the current
+		 *  locale and returns the number of bytes written.
+		 *
+		 *  Returns RESULT_ERROR if the data could not be formatted,
+		 *  in which case nothing is written, or if less data was
+		 *  written than was formatted (a short write).  If the
+		 *  underlying write returns RESULT_ERROR, RESULT_TIMEOUT,
+		 *  RESULT_ABORT, or another negative result, then that result
+		 *  is returned.  After a short write or an error, part of the
+		 *  data may already have been written.
+		 *
+		 *  If the output is buffered, then data that fits in the
+		 *  buffer counts as written.  An error that occurs when the
+		 *  buffer is flushed later is not reported by this method.
 		 *
 		 *  NOTE: The various implemententations of this method
 		 *  use whatever underlying v(d/s/f)printf() functions are
@@ -429,7 +467,23 @@ class RUDIMENTS_DLLSPEC output : virtual public object {
 		 *  Note that argp is a pointer to a va_list, not just a
 		 *  va_list.
 		 *
-		 *  Returns the number of bytes written.
+		 *  Returns the number of characters written on success.
+		 *  However, a filedescriptor that has a write buffer, or that
+		 *  cannot write wide characters directly (as on Windows),
+		 *  converts the data to the character set of the current
+		 *  locale and returns the number of bytes written.
+		 *
+		 *  Returns RESULT_ERROR if the data could not be formatted,
+		 *  in which case nothing is written, or if less data was
+		 *  written than was formatted (a short write).  If the
+		 *  underlying write returns RESULT_ERROR, RESULT_TIMEOUT,
+		 *  RESULT_ABORT, or another negative result, then that result
+		 *  is returned.  After a short write or an error, part of the
+		 *  data may already have been written.
+		 *
+		 *  If the output is buffered, then data that fits in the
+		 *  buffer counts as written.  An error that occurs when the
+		 *  buffer is flushed later is not reported by this method.
 		 *
 		 *  NOTE: The various implemententations of this method
 		 *  use whatever underlying v(d/s/f)printf() functions are
@@ -444,8 +498,26 @@ class RUDIMENTS_DLLSPEC output : virtual public object {
 		/** Writes "..." using "format" which should comply with
 		 *  standard wprintf formatting rules.
 		 *
-		 *  Returns the number of bytes written or -1 if an error
-		 *  occurred.
+		 *  Returns the number of characters written on success.
+		 *  However, a filedescriptor always converts the data to the
+		 *  character set of the current locale and returns the number
+		 *  of bytes written.
+		 *
+		 *  Returns RESULT_ERROR if the data could not be formatted,
+		 *  in which case nothing is written, or if less data was
+		 *  written than was formatted (a short write).  If the
+		 *  underlying write returns RESULT_ERROR, RESULT_TIMEOUT,
+		 *  RESULT_ABORT, or another negative result, then that result
+		 *  is returned.  After a short write or an error, part of the
+		 *  data may already have been written.
+		 *
+		 *  If the output is buffered, then data that fits in the
+		 *  buffer counts as written.  An error that occurs when the
+		 *  buffer is flushed later is not reported by this method.
+		 *
+		 *  Note that formatting of UCS-2 data is currently only
+		 *  supported on Windows.  On other platforms, nothing is
+		 *  written.
 		 *
 		 *  NOTE: The various implemententations of this method
 		 *  use whatever underlying v(d/s/f)printf() functions are
@@ -463,7 +535,26 @@ class RUDIMENTS_DLLSPEC output : virtual public object {
 		 *  Note that argp is a pointer to a va_list, not just a
 		 *  va_list.
 		 *
-		 *  Returns the number of bytes written.
+		 *  Returns the number of characters written on success.
+		 *  However, a filedescriptor always converts the data to the
+		 *  character set of the current locale and returns the number
+		 *  of bytes written.
+		 *
+		 *  Returns RESULT_ERROR if the data could not be formatted,
+		 *  in which case nothing is written, or if less data was
+		 *  written than was formatted (a short write).  If the
+		 *  underlying write returns RESULT_ERROR, RESULT_TIMEOUT,
+		 *  RESULT_ABORT, or another negative result, then that result
+		 *  is returned.  After a short write or an error, part of the
+		 *  data may already have been written.
+		 *
+		 *  If the output is buffered, then data that fits in the
+		 *  buffer counts as written.  An error that occurs when the
+		 *  buffer is flushed later is not reported by this method.
+		 *
+		 *  Note that formatting of UCS-2 data is currently only
+		 *  supported on Windows.  On other platforms, nothing is
+		 *  written.
 		 *
 		 *  NOTE: The various implemententations of this method
 		 *  use whatever underlying v(d/s/f)printf() functions are

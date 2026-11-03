@@ -134,12 +134,12 @@ ssize_t collection::writeValue(output *out, char *value) {
 
 inline
 ssize_t collection::writeValue(output *out, const wchar_t *value) {
-	return out->printf(L"%s",value);
+	return out->printf(L"%ls",value);
 }
 
 inline
 ssize_t collection::writeValue(output *out, wchar_t *value) {
-	return out->printf(L"%s",value);
+	return out->printf(L"%ls",value);
 }
 
 inline
@@ -149,7 +149,7 @@ ssize_t collection::writeValue(output *out, char value) {
 
 inline
 ssize_t collection::writeValue(output *out, wchar_t value) {
-	return out->printf(L"%c",value);
+	return out->printf(L"%lc",value);
 }
 
 inline
@@ -282,9 +282,9 @@ ssize_t collection::writeJsonValue(output *out, const wchar_t *value) {
 	if (!value) {
 		return out->write("null");
 	} else if (wcharstring::isNumber(value)) {
-		return out->printf(L"%s",value);
+		return out->printf(L"%ls",value);
 	}
-	return out->printf(L"\"%s\"",value);
+	return out->printf(L"\"%ls\"",value);
 }
 
 inline
@@ -292,9 +292,9 @@ ssize_t collection::writeJsonValue(output *out, wchar_t *value) {
 	if (!value) {
 		return out->write("null");
 	} else if (wcharstring::isNumber(value)) {
-		return out->printf(L"%s",value);
+		return out->printf(L"%ls",value);
 	}
-	return out->printf(L"\"%s\"",value);
+	return out->printf(L"\"%ls\"",value);
 }
 
 inline
@@ -308,9 +308,9 @@ ssize_t collection::writeJsonValue(output *out, char value) {
 inline
 ssize_t collection::writeJsonValue(output *out, wchar_t value) {
 	if (character::isDigit(value)) {
-		return out->printf(L"%c",value);
+		return out->printf(L"%lc",value);
 	}
-	return out->printf(L"\"%c\"",value);
+	return out->printf(L"\"%lc\"",value);
 }
 
 inline
@@ -447,21 +447,62 @@ inline
 bool collection::writeJsonValue(ssize_t *retval, output *out,
 						stringbuffer *buf,
 						const wchar_t *value) {
-	return incOrErr(retval,writeJsonValue(out,value));
+
+	// format the value into the buffer to get its size in bytes
+	buf->clear();
+	if (writeJsonValue(buf,value)<0) {
+		return incOrErr(retval,RESULT_ERROR);
+	}
+
+	// null is narrow, so write the buffer
+	if (!value) {
+		return incOrErr(retval,
+				out->write(buf->getBuffer(),buf->getSize()),
+				buf->getSize());
+	}
+
+	// write the value
+	ssize_t	result=writeJsonValue(out,value);
+	return incOrErr(retval,(result<0)?result:(ssize_t)buf->getSize());
 }
 
 inline
 bool collection::writeJsonValue(ssize_t *retval, output *out,
 						stringbuffer *buf,
 						wchar_t *value) {
-	return incOrErr(retval,writeJsonValue(out,value));
+
+	// format the value into the buffer to get its size in bytes
+	buf->clear();
+	if (writeJsonValue(buf,value)<0) {
+		return incOrErr(retval,RESULT_ERROR);
+	}
+
+	// null is narrow, so write the buffer
+	if (!value) {
+		return incOrErr(retval,
+				out->write(buf->getBuffer(),buf->getSize()),
+				buf->getSize());
+	}
+
+	// write the value
+	ssize_t	result=writeJsonValue(out,value);
+	return incOrErr(retval,(result<0)?result:(ssize_t)buf->getSize());
 }
 
 inline
 bool collection::writeJsonValue(ssize_t *retval, output *out,
 						stringbuffer *buf,
 						wchar_t value) {
-	return incOrErr(retval,writeJsonValue(out,value));
+
+	// format the value into the buffer to get its size in bytes
+	buf->clear();
+	if (writeJsonValue(buf,value)<0) {
+		return incOrErr(retval,RESULT_ERROR);
+	}
+
+	// write the value
+	ssize_t	result=writeJsonValue(out,value);
+	return incOrErr(retval,(result<0)?result:(ssize_t)buf->getSize());
 }
 
 template <class valuetype>
@@ -470,9 +511,7 @@ bool collection::writeJsonValue(ssize_t *retval, output *out,
 						stringbuffer *buf,
 						const valuetype &value) {
 
-	// The size that printf() returns includes the bytes of a short
-	// write that were not written, so format the value into the buffer
-	// and write the buffer.
+	// format the value into the buffer and write the buffer
 	buf->clear();
 	if (writeJsonValue(buf,value)<0) {
 		return incOrErr(retval,RESULT_ERROR);
@@ -485,21 +524,48 @@ inline
 bool collection::writeValue(ssize_t *retval, output *out,
 						stringbuffer *buf,
 						const wchar_t *value) {
-	return incOrErr(retval,writeValue(out,value));
+
+	// format the value into the buffer to get its size in bytes
+	buf->clear();
+	if (writeValue(buf,value)<0) {
+		return incOrErr(retval,RESULT_ERROR);
+	}
+
+	// write the value
+	ssize_t	result=writeValue(out,value);
+	return incOrErr(retval,(result<0)?result:(ssize_t)buf->getSize());
 }
 
 inline
 bool collection::writeValue(ssize_t *retval, output *out,
 						stringbuffer *buf,
 						wchar_t *value) {
-	return incOrErr(retval,writeValue(out,value));
+
+	// format the value into the buffer to get its size in bytes
+	buf->clear();
+	if (writeValue(buf,value)<0) {
+		return incOrErr(retval,RESULT_ERROR);
+	}
+
+	// write the value
+	ssize_t	result=writeValue(out,value);
+	return incOrErr(retval,(result<0)?result:(ssize_t)buf->getSize());
 }
 
 inline
 bool collection::writeValue(ssize_t *retval, output *out,
 						stringbuffer *buf,
 						wchar_t value) {
-	return incOrErr(retval,writeValue(out,value));
+
+	// format the value into the buffer to get its size in bytes
+	buf->clear();
+	if (writeValue(buf,value)<0) {
+		return incOrErr(retval,RESULT_ERROR);
+	}
+
+	// write the value
+	ssize_t	result=writeValue(out,value);
+	return incOrErr(retval,(result<0)?result:(ssize_t)buf->getSize());
 }
 
 template <class valuetype>
@@ -508,9 +574,7 @@ bool collection::writeValue(ssize_t *retval, output *out,
 						stringbuffer *buf,
 						const valuetype &value) {
 
-	// The size that printf() returns includes the bytes of a short
-	// write that were not written, so format the value into the buffer
-	// and write the buffer.
+	// format the value into the buffer and write the buffer
 	buf->clear();
 	if (writeValue(buf,value)<0) {
 		return incOrErr(retval,RESULT_ERROR);

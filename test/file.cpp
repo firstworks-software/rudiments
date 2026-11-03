@@ -17,6 +17,7 @@
 #include <rudiments/signalclasses.h>
 #include <rudiments/charstring.h>
 #include <rudiments/bytestring.h>
+#include <rudiments/wcharstring.h>
 #include "test.cpp"
 
 #ifndef WIN32
@@ -215,6 +216,100 @@ static void contentsTests() {
 	}
 
 	file::remove(contentsfile);
+
+	signalmanager::alarm(0);
+}
+
+// a file descriptor whose lowLevelWrite() can shorten or fail
+class failfd : public filedescriptor {
+	public:
+			failfd(ssize_t mode);
+	protected:
+		ssize_t	lowLevelWrite(const void *buf, size_t count);
+	private:
+		// 0 is normal, 1 is a short write, anything else is returned
+		ssize_t	mode;
+};
+
+failfd::failfd(ssize_t mode) : filedescriptor() {
+	this->mode=mode;
+}
+
+ssize_t failfd::lowLevelWrite(const void *buf, size_t count) {
+	if (!mode) {
+		return filedescriptor::lowLevelWrite(buf,count);
+	}
+	if (mode==1) {
+		return filedescriptor::lowLevelWrite(buf,count/2);
+	}
+	return mode;
+}
+
+// printf() on file descriptors that shorten or fail their writes
+static void printfErrorTests() {
+
+	signalmanager::alarm(60);
+
+	// mode 0 is a clean run, 1 is a short write, -1 is a failed write
+	ssize_t		modes[]={0,1,-1};
+	const char	*names[]={"clean","short write","failed write"};
+	ssize_t		expected[]={20,-1,-1};
+	stringbuffer	title;
+
+	// buffered, the formatted data is larger than the buffer
+	for (uint16_t i=0; i<sizeof(modes)/sizeof(modes[0]); i++) {
+		filedescriptor	readfd;
+		failfd		writefd(modes[i]);
+		test("buffered, create pipe",
+				filedescriptor::createPipe(&readfd,&writefd));
+		test("buffered, set buffer size",writefd.setWriteBufferSize(4));
+		ssize_t	result=writefd.printf("%s","01234567890123456789");
+		title.clear();
+		title.append("buffered printf(), ")->append(names[i]);
+		test(title.getString(),result==expected[i]);
+	}
+	if (wcharstring::supportsPrintf()) {
+		for (uint16_t i=0; i<sizeof(modes)/sizeof(modes[0]); i++) {
+			filedescriptor	readfd;
+			failfd		writefd(modes[i]);
+			test("buffered, create pipe",
+				filedescriptor::createPipe(&readfd,&writefd));
+			test("buffered, set buffer size",
+					writefd.setWriteBufferSize(4));
+			ssize_t	result=writefd.printf(L"%ls",
+						L"01234567890123456789");
+			title.clear();
+			title.append("buffered wide printf(), ");
+			title.append(names[i]);
+			test(title.getString(),result==expected[i]);
+		}
+	}
+
+	// unbuffered, the read side of the pipe is closed
+	#ifndef WIN32
+	signalset	sigpipe;
+	sigpipe.addSignal(SIGPIPE);
+	signalmanager::ignoreSignals(&sigpipe);
+	{
+		filedescriptor	readfd;
+		filedescriptor	writefd;
+		test("unbuffered, create pipe",
+			filedescriptor::createPipe(&readfd,&writefd));
+		test("unbuffered, close read side",readfd.close());
+		ssize_t	result=writefd.printf("%s","01234567890123456789");
+		test("unbuffered printf(), closed pipe",result==-1);
+	}
+	if (wcharstring::supportsPrintf()) {
+		filedescriptor	readfd;
+		filedescriptor	writefd;
+		test("unbuffered, create pipe",
+			filedescriptor::createPipe(&readfd,&writefd));
+		test("unbuffered, close read side",readfd.close());
+		ssize_t	result=writefd.printf(L"%ls",L"01234567890123456789");
+		test("unbuffered wide printf(), closed pipe",result==-1);
+	}
+	#endif
+	stdoutput.printf("\n");
 
 	signalmanager::alarm(0);
 }
@@ -569,6 +664,9 @@ int main(int argc, const char **argv) {
 
 		stdoutput.printf("\ngetContents\n");
 		contentsTests();
+
+		stdoutput.printf("\nprintf errors\n");
+		printfErrorTests();
 
 	} else {
 

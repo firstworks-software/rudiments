@@ -718,20 +718,40 @@ ssize_t	apachehttpserverapi::write(double number) {
 ssize_t apachehttpserverapi::printfDelegate(const char *format,
 							va_list *argp) {
 	bytebuffer	b;
-	b.printf(format,argp);
-	return write(b.getBuffer(),b.getSize());
+	if (b.printf(format,argp)<0) {
+		return RESULT_ERROR;
+	}
+	if (!((apacheapistruct *)pvt->_apistruct)->requestrec) {
+		return 0;
+	}
+	ssize_t	result=write(b.getBuffer(),b.getSize());
+	return (result<0 || (size_t)result==b.getSize())?result:RESULT_ERROR;
 }
 
 ssize_t apachehttpserverapi::printfDelegate(const wchar_t *format,
 							va_list *argp) {
 	wstringbuffer	b;
-	b.printf(format,argp);
-	return write(b.getString(),b.getStringLength());
+	if (b.printf(format,argp)<0) {
+		return RESULT_ERROR;
+	}
+	if (!((apacheapistruct *)pvt->_apistruct)->requestrec) {
+		return 0;
+	}
+	ssize_t	result=write(b.getString(),b.getStringLength());
+	return (result<0 || (size_t)result==b.getStringLength())?
+							result:RESULT_ERROR;
 }
 
 ssize_t apachehttpserverapi::printfUcs2Delegate(const ucs2_t *format,
 							va_list *argp) {
 	ucs2stringbuffer	b;
-	b.printfUcs2(format,argp);
-	return writeUcs2(b.getString(),b.getStringLength());
+	if (b.printfUcs2(format,argp)<0) {
+		return RESULT_ERROR;
+	}
+	if (!((apacheapistruct *)pvt->_apistruct)->requestrec) {
+		return 0;
+	}
+	ssize_t	result=writeUcs2(b.getString(),b.getStringLength());
+	return (result<0 || (size_t)result==b.getStringLength())?
+							result:RESULT_ERROR;
 }

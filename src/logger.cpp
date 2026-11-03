@@ -484,18 +484,24 @@ ssize_t	logger::write(double number) {
 
 ssize_t	logger::printfDelegate(const char *format, va_list *argp) {
 	stringbuffer	b;
-	b.printf(format,argp);
+	if (b.printf(format,argp)<0) {
+		return RESULT_ERROR;
+	}
 	return write(b.getString());
 }
 
 ssize_t	logger::printfDelegate(const wchar_t *format, va_list *argp) {
 	wstringbuffer	b;
-	b.printf(format,argp);
+	if (b.printf(format,argp)<0) {
+		return RESULT_ERROR;
+	}
 	return write(b.getString());
 }
 
 ssize_t	logger::printfUcs2Delegate(const ucs2_t *format, va_list *argp) {
 	ucs2stringbuffer	b;
-	b.printfUcs2(format,argp);
+	if (b.printfUcs2(format,argp)<0) {
+		return RESULT_ERROR;
+	}
 	return writeUcs2(b.getString());
 }

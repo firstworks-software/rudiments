@@ -10,6 +10,8 @@
 #include <rudiments/dynamicarray.h>
 #include <rudiments/staticarray.h>
 #include <rudiments/stringbuffer.h>
+#include <rudiments/bytestring.h>
+#include <rudiments/wcharstring.h>
 #include "test.cpp"
 
 const char *numbers[]={
@@ -195,6 +197,74 @@ void testTreeFailWrite(const char *name, avltree<valuetype> *t,
 			}
 		}
 	}
+}
+
+// "expected" is the output of the tree method (write or writeJson) as raw
+// bytes, or NULL to skip checking it.  A wide value is written as raw
+// wchar_t bytes and counted in bytes.
+template <class valuetype>
+void testWideWrite(const char *name, avltree<valuetype> *t, uint16_t method,
+							bytebuffer *expected) {
+
+	// hard error codes, 0 for a short write
+	const ssize_t	codes[]={RESULT_ERROR,RESULT_TIMEOUT,RESULT_ABORT,0};
+
+	stringbuffer	prefix;
+	prefix.append(name)->append(": ")->append(treemethods[method]);
+
+	// count the writes of a clean run
+	failbuffer	clean(0,false);
+	ssize_t	cleanresult=writeTree(t,method,&clean);
+	size_t	total=clean.writes;
+	stringbuffer	title;
+	title.append(prefix.getString())->append(": bytes");
+	test(title.getString(),
+		!expected || (clean.getSize()==expected->getSize() &&
+		!bytestring::compare(clean.getBuffer(),expected->getBuffer(),
+							expected->getSize())));
+	title.clear();
+	title.append(prefix.getString())->append(": count");
+	test(title.getString(),cleanresult==(ssize_t)clean.getSize());
+
+	// fail or shorten each write
+	for (uint16_t c=0; c<4; c++) {
+		bool	shortwrite=!codes[c];
+		for (size_t failat=1; failat<=total; failat++) {
+			failbuffer	fb(failat,shortwrite,
+					(shortwrite)?RESULT_ERROR:codes[c]);
+			ssize_t	result=writeTree(t,method,&fb);
+			title.clear();
+			title.append(prefix.getString());
+			if (shortwrite) {
+				title.append(": short write ");
+			} else {
+				title.append(": fail write (");
+				title.append((int64_t)codes[c]);
+				title.append(") ");
+			}
+			title.append((uint64_t)failat)->append(" of ");
+			title.append((uint64_t)total);
+			test(title.getString(),
+				result==((shortwrite)?RESULT_ERROR:codes[c]) &&
+				fb.writesafterfail==0);
+		}
+	}
+}
+
+// the expected bytes of write() and writeJson() of a tree that has one value:
+// "value" as write() writes it and "jsonvalue" as writeJson() writes it
+void testWideValue(const char *name, avltree<const wchar_t *> *t,
+				const wchar_t *value, const wchar_t *jsonvalue) {
+	bytebuffer	w;
+	w.append("<t v=\"");
+	w.append(value);
+	w.append("\" lh=\"0\" rh=\"0\" bf=\"0\"/>\n");
+	testWideWrite(name,t,0,&w);
+	bytebuffer	j;
+	j.append("[");
+	j.append(jsonvalue);
+	j.append("]");
+	testWideWrite(name,t,1,&j);
 }
 
 int main(int argc, const char **argv) {
@@ -445,6 +515,78 @@ int main(int argc, const char **argv) {
 		"<t/>\n","[]","[\n]\n","<t/>\n","<t/>\n"
 	};
 	testTreeFailWrite("avltree (empty)",&eati32,eexpected);
+
+	stdoutput.printf("\n");
+
+	if (wcharstring::supportsPrintf()) {
+		// wide values
+		stdoutput.printf("wide values...\n");
+
+		avltree<const wchar_t *>	atw;
+		atw.insert(L"hello");
+		testWideValue("avltree (const wchar_t *)",&atw,L"hello",
+							L"\"hello\"");
+
+		avltree<const wchar_t *>	atwn;
+		atwn.insert(L"42");
+		testWideValue("avltree (const wchar_t * number)",&atwn,L"42",
+								L"42");
+
+		wchar_t	wstr[]={L'h',L'i',0};
+		avltree<wchar_t *>	atwm;
+		atwm.insert(wstr);
+		bytebuffer	wm;
+		wm.append("<t v=\"");
+		wm.append(L"hi");
+		wm.append("\" lh=\"0\" rh=\"0\" bf=\"0\"/>\n");
+		testWideWrite("avltree (wchar_t *)",&atwm,0,&wm);
+		bytebuffer	wmj;
+		wmj.append("[");
+		wmj.append(L"\"hi\"");
+		wmj.append("]");
+		testWideWrite("avltree (wchar_t *)",&atwm,1,&wmj);
+
+		avltree<wchar_t>	atwc;
+		atwc.insert((wchar_t)0x263A);
+		wchar_t	smile[]={(wchar_t)0x263A,0};
+		wchar_t	jsmile[]={L'"',(wchar_t)0x263A,L'"',0};
+		bytebuffer	wc;
+		wc.append("<t v=\"");
+		wc.append(smile);
+		wc.append("\" lh=\"0\" rh=\"0\" bf=\"0\"/>\n");
+		testWideWrite("avltree (wchar_t)",&atwc,0,&wc);
+		bytebuffer	wcj;
+		wcj.append("[");
+		wcj.append(jsmile);
+		wcj.append("]");
+		testWideWrite("avltree (wchar_t)",&atwc,1,&wcj);
+
+		avltree<wchar_t>	atwd;
+		atwd.insert(L'7');
+		bytebuffer	wd;
+		wd.append("<t v=\"");
+		wd.append(L"7");
+		wd.append("\" lh=\"0\" rh=\"0\" bf=\"0\"/>\n");
+		testWideWrite("avltree (wchar_t digit)",&atwd,0,&wd);
+		bytebuffer	wdj;
+		wdj.append("[");
+		wdj.append(L"7");
+		wdj.append("]");
+		testWideWrite("avltree (wchar_t digit)",&atwd,1,&wdj);
+
+		// null values
+		avltree<const wchar_t *>	atwnull;
+		atwnull.insert((const wchar_t *)NULL);
+		testWideWrite("avltree (const wchar_t * null)",&atwnull,0,NULL);
+		bytebuffer	nj;
+		nj.append("[null]");
+		testWideWrite("avltree (const wchar_t * null)",&atwnull,1,&nj);
+
+		avltree<wchar_t *>	atwmnull;
+		atwmnull.insert((wchar_t *)NULL);
+		testWideWrite("avltree (wchar_t * null)",&atwmnull,0,NULL);
+		testWideWrite("avltree (wchar_t * null)",&atwmnull,1,&nj);
+	}
 
 	stdoutput.printf("\n");
 

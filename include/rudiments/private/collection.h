@@ -55,8 +55,8 @@
 
 	protected:
 		// Each output converts wide characters in its own printf(), so
-		// the wide overloads write with printf() and a short write of a
-		// wide value is not detected.
+		// the wide overloads write with printf() and count the bytes of
+		// the raw wide characters.
 		bool	writeJsonValue(ssize_t *retval, output *out,
 					stringbuffer *buf,
 					const wchar_t *value);

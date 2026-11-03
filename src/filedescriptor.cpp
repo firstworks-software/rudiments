@@ -3466,7 +3466,9 @@ ssize_t filedescriptor::printfDelegate(const char *format, va_list *argp) {
 			if (f) {
 				// print and flush the stream
 				size=vfprintf(f,format,*argp);
-				fflush(f);
+				if (fflush(f)!=0 && size>=0) {
+					size=RESULT_ERROR;
+				}
 
 				// We need to free f but we don't want fclose()
 				// to close(pvt->_fd).
@@ -3532,12 +3534,24 @@ ssize_t filedescriptor::printfDelegate(const char *format, va_list *argp) {
 	char	*buffer=NULL;
 	#ifdef RUDIMENTS_HAVE_VASPRINTF
 		size=vasprintf(&buffer,format,*argp);
+		if (size<0) {
+			buffer=NULL;
+		}
 	#else
 		size=charstring::printf(&buffer,format,argp);
 	#endif
 
 	// write the buffer to the file descriptor
-	write(buffer,size);
+	if (size<0) {
+		size=RESULT_ERROR;
+	} else {
+		ssize_t	result=write(buffer,size);
+		if (result<0) {
+			size=result;
+		} else if (result!=size) {
+			size=RESULT_ERROR;
+		}
+	}
 
 	// clean up
 	#ifdef RUDIMENTS_HAVE_VASPRINTF
@@ -3611,7 +3625,9 @@ ssize_t filedescriptor::printfDelegate(const wchar_t *format, va_list *argp) {
 		if (f) {
 			// print and flush the stream
 			size=vfwprintf(f,format,*argp);
-			fflush(f);
+			if (fflush(f)!=0 && size>=0) {
+				size=RESULT_ERROR;
+			}
 
 			// We need to free f but we don't want fclose() to
 			// close(pvt->_fd).
@@ -3673,6 +3689,10 @@ ssize_t filedescriptor::printfDelegate(const wchar_t *format, va_list *argp) {
 	// write the formatted data to a buffer
 	wchar_t	*buffer=NULL;
 	size=wcharstring::printf(&buffer,format,argp);
+	if (size<0) {
+		delete[] buffer;
+		return RESULT_ERROR;
+	}
 
 	// To emulate what vfwprintf() does, the buffer needs to be converted
 	// to the character set specified by the current locale, before being
@@ -3712,6 +3732,10 @@ ssize_t filedescriptor::printfUcs2Delegate(const ucs2_t *format,
 	// write the formatted data to a buffer
 	ucs2_t	*buffer=NULL;
 	ssize_t		size=ucs2charstring::printf(&buffer,format,argp);
+	if (size<=0) {
+		delete[] buffer;
+		return (size<0)?RESULT_ERROR:0;
+	}
 
 	// My charstring::duplicate() method currently only converts to ascii,
 	// rather than to proper multibyte sequences, so I can't really use it

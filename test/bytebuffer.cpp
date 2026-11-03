@@ -9,6 +9,7 @@
 #include <rudiments/signalclasses.h>
 #include <rudiments/resultcodes.h>
 #include <rudiments/stdio.h>
+#include <rudiments/stringbuffer.h>
 #include "test.cpp"
 
 // seconds before a hang kills the test
@@ -538,6 +539,83 @@ static void testPrintfPaths() {
 	stdoutput.printf("\n");
 }
 
+// a bytebuffer whose write(byte_t *,size_t) can shorten or fail
+class failbytebuffer : public bytebuffer {
+	public:
+			failbytebuffer(ssize_t mode);
+		ssize_t	write(const byte_t *data, size_t size);
+		size_t	writes;
+	private:
+		// 0 is normal, 1 is a short write, anything else is returned
+		ssize_t	mode;
+};
+
+failbytebuffer::failbytebuffer(ssize_t mode) : bytebuffer() {
+	writes=0;
+	this->mode=mode;
+}
+
+ssize_t failbytebuffer::write(const byte_t *data, size_t size) {
+	writes++;
+	if (!mode) {
+		return bytebuffer::write(data,size);
+	}
+	if (mode==1) {
+		return bytebuffer::write(data,size/2);
+	}
+	return mode;
+}
+
+// printf() on a buffer that shortens or fails its writes
+static void testPrintfErrors() {
+
+	stdoutput.printf("printf errors...\n");
+
+	// mode 0 is a clean run, 1 is a short write, the rest are errors
+	ssize_t		modes[]={0,1,RESULT_ERROR,RESULT_TIMEOUT,RESULT_ABORT};
+	const char	*names[]={"clean","short write","RESULT_ERROR",
+					"RESULT_TIMEOUT","RESULT_ABORT"};
+	ssize_t		expected[]={20,-1,RESULT_ERROR,
+					RESULT_TIMEOUT,RESULT_ABORT};
+	stringbuffer	title;
+
+	// char
+	for (uint16_t i=0; i<sizeof(modes)/sizeof(modes[0]); i++) {
+		failbytebuffer	fb(modes[i]);
+		ssize_t		result=fb.printf("%s","01234567890123456789");
+		title.clear();
+		title.append("printf(), ")->append(names[i]);
+		test(title.getString(),result==expected[i] && fb.writes==1);
+	}
+
+	// wchar
+	if (wcharstring::supportsPrintf()) {
+		for (uint16_t i=0; i<sizeof(modes)/sizeof(modes[0]); i++) {
+			failbytebuffer	fb(modes[i]);
+			ssize_t		result=fb.printf(L"%ls",
+						L"01234567890123456789");
+			title.clear();
+			title.append("wide printf(), ")->append(names[i]);
+			test(title.getString(),
+				result==expected[i] && fb.writes==1);
+		}
+	}
+
+	// ucs2
+	if (ucs2charstring::supportsPrintf()) {
+		ucs2literal(format,"01234567890123456789");
+		for (uint16_t i=0; i<sizeof(modes)/sizeof(modes[0]); i++) {
+			failbytebuffer	fb(modes[i]);
+			ssize_t		result=fb.printfUcs2(format);
+			title.clear();
+			title.append("printfUcs2(), ")->append(names[i]);
+			test(title.getString(),
+				result==expected[i] && fb.writes==1);
+		}
+	}
+	stdoutput.printf("\n");
+}
+
 // copies, assignment, clear(size), truncate, and attached contents
 static void testStateFixes() {
 	stdoutput.printf("state fixes...\n");
@@ -982,6 +1060,7 @@ int main(int argc, const char **argv) {
 	testOversized();
 	testWritePaths();
 	testPrintfPaths();
+	testPrintfErrors();
 
 	signalmanager::alarm(0);
 	return 0;

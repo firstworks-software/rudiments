@@ -284,6 +284,15 @@ ssize_t bytebuffer::write(double number) {
 	return write((const byte_t *)&number,sizeof(double));
 }
 
+// returns size if result equals expected, result if it is negative,
+// or RESULT_ERROR if it is a short write
+static ssize_t printfResult(ssize_t result, size_t expected, ssize_t size) {
+	if (result<0) {
+		return result;
+	}
+	return ((size_t)result==expected)?size:RESULT_ERROR;
+}
+
 ssize_t bytebuffer::printfDelegate(const char *format, va_list *argp) {
 
 	// write the formatted data to a buffer
@@ -291,15 +300,18 @@ ssize_t bytebuffer::printfDelegate(const char *format, va_list *argp) {
 	ssize_t	size=0;
 	#ifdef RUDIMENTS_HAVE_VASPRINTF
 		size=vasprintf(&buffer,format,*argp);
+		if (size<0) {
+			buffer=NULL;
+		}
 	#else
 		size=charstring::printf(&buffer,format,argp);
 	#endif
-	if (size!=-1) {
 
-		// write the buffer
-		if (write(buffer,size)==RESULT_ERROR) {
-			size=RESULT_ERROR;
-		}
+	// write the buffer
+	if (size<0) {
+		size=RESULT_ERROR;
+	} else {
+		size=printfResult(write(buffer,size),size,size);
 	}
 
 	// clean up
@@ -317,12 +329,13 @@ ssize_t bytebuffer::printfDelegate(const wchar_t *format, va_list *argp) {
 	// write the formatted data to a buffer
 	wchar_t	*buffer=NULL;
 	ssize_t	size=wcharstring::printf(&buffer,format,argp);
-	if (size!=-1) {
 
-		// write the buffer
-		if (write(buffer,size)==RESULT_ERROR) {
-			size=RESULT_ERROR;
-		}
+	// write the buffer
+	size_t	expected;
+	if (size<0 || !bufferSize(size,sizeof(wchar_t),0,&expected)) {
+		size=RESULT_ERROR;
+	} else {
+		size=printfResult(write(buffer,size),expected,size);
 	}
 
 	// clean up
@@ -336,12 +349,13 @@ ssize_t bytebuffer::printfUcs2Delegate(const ucs2_t *format, va_list *argp) {
 	// write the formatted data to a buffer
 	ucs2_t	*buffer=NULL;
 	ssize_t	size=ucs2charstring::printf(&buffer,format,argp);
-	if (size!=-1) {
 
-		// write the buffer
-		if (writeUcs2(buffer,size)==RESULT_ERROR) {
-			size=RESULT_ERROR;
-		}
+	// write the buffer
+	size_t	expected;
+	if (size<0 || !bufferSize(size,sizeof(ucs2_t),0,&expected)) {
+		size=RESULT_ERROR;
+	} else {
+		size=printfResult(writeUcs2(buffer,size),expected,size);
 	}
 
 	// clean up
