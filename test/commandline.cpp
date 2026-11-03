@@ -80,6 +80,8 @@ int main(int argc, const char **argv) {
 	// toDictionary
 	stdoutput.printf("convertToDictionary...\n");
 	dictionary<char *,char *>	d;
+	d.setManageArrayKeys(true);
+	d.setManageArrayValues(true);
 	cmdline.convertToDictionary(&d);
 	test("getValue(), -one",
 		!charstring::compare(d.getValue((char *)"one"),"1"));
@@ -97,6 +99,9 @@ int main(int argc, const char **argv) {
 		!charstring::compare(d.getValue((char *)"six"),""));
 	test("getValue(), -s",
 		!charstring::compare(d.getValue((char *)"s"),""));
+
+	// free keys and values, exit skips destructors
+	d.clear();
 	stdoutput.printf("\n");
 
 	process::exit(0);
