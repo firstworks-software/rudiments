@@ -422,19 +422,47 @@ size_t bytebuffer::getInitialSize() {
 	return pvt->_initialsize;
 }
 
+// the largest position, the smaller of the largest size_t and off64_t
+static uint64_t positionLimit() {
+	uint64_t	limit=(((uint64_t)1<<(sizeof(off64_t)*8-2))-1)*2+1;
+	if (sizeof(size_t)<sizeof(off64_t)) {
+		limit=(((uint64_t)1<<(sizeof(size_t)*8-1))-1)*2+1;
+	}
+	return limit;
+}
+
+// set the position to base+offset, or refuse and return -1
+static off64_t setPosition(size_t *pos, size_t base, off64_t offset) {
+
+	const uint64_t	limit=positionLimit();
+
+	// check the range before the add
+	if (offset<0) {
+		const uint64_t	magnitude=(uint64_t)0-(uint64_t)offset;
+		if (magnitude>(uint64_t)base) {
+			return -1;
+		}
+		*pos=base-(size_t)magnitude;
+	} else {
+		if ((uint64_t)base>limit ||
+			(uint64_t)offset>limit-(uint64_t)base) {
+			return -1;
+		}
+		*pos=base+(size_t)offset;
+	}
+	return (off64_t)*pos;
+}
+
 off64_t bytebuffer::setPositionRelativeToBeginning(off64_t offset) {
-	pvt->_pos=offset;
-	return pvt->_pos;
+	return setPosition(&pvt->_pos,0,offset);
 }
 
 off64_t bytebuffer::setPositionRelativeToCurrent(off64_t offset) {
-	pvt->_pos+=offset;
-	return pvt->_pos;
+	return setPosition(&pvt->_pos,pvt->_pos,offset);
 }
 
 off64_t bytebuffer::setPositionRelativeToEnd(off64_t offset) {
-	pvt->_pos=pvt->_size+offset;
-	return pvt->_pos;
+	return setPosition(&pvt->_pos,pvt->_size,offset);
 }
 
 bytebuffer *bytebuffer::append(const byte_t *data, size_t size) {

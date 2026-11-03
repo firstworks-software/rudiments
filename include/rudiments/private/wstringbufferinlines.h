@@ -46,10 +46,15 @@ off64_t wstringbuffer::setPositionRelativeToBeginning(off64_t offset) {
 		return -1;
 	}
 
+	// pass a refusal through
+	off64_t	pos=bytebuffer::setPositionRelativeToBeginning(
+			offset*(off64_t)sizeof(wchar_t));
+	if (pos==-1) {
+		return -1;
+	}
+
 	// the byte position divided down to characters
-	return bytebuffer::setPositionRelativeToBeginning(
-			offset*(off64_t)sizeof(wchar_t))/
-			(off64_t)sizeof(wchar_t);
+	return pos/(off64_t)sizeof(wchar_t);
 }
 
 inline
@@ -68,10 +73,15 @@ off64_t wstringbuffer::setPositionRelativeToCurrent(off64_t offset) {
 		return -1;
 	}
 
+	// pass a refusal through
+	off64_t	pos=bytebuffer::setPositionRelativeToCurrent(
+			offset*(off64_t)sizeof(wchar_t));
+	if (pos==-1) {
+		return -1;
+	}
+
 	// the byte position divided down to characters
-	return bytebuffer::setPositionRelativeToCurrent(
-			offset*(off64_t)sizeof(wchar_t))/
-			(off64_t)sizeof(wchar_t);
+	return pos/(off64_t)sizeof(wchar_t);
 }
 
 inline
@@ -90,10 +100,15 @@ off64_t wstringbuffer::setPositionRelativeToEnd(off64_t offset) {
 		return -1;
 	}
 
+	// pass a refusal through
+	off64_t	pos=bytebuffer::setPositionRelativeToEnd(
+			offset*(off64_t)sizeof(wchar_t));
+	if (pos==-1) {
+		return -1;
+	}
+
 	// the byte position divided down to characters
-	return bytebuffer::setPositionRelativeToEnd(
-			offset*(off64_t)sizeof(wchar_t))/
-			(off64_t)sizeof(wchar_t);
+	return pos/(off64_t)sizeof(wchar_t);
 }
 
 inline

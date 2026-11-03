@@ -231,8 +231,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   when a buffer size wraps size_t
 - fixed wcharstring and ucs2charstring pad(), convertAmount(), and
   convertToFloatC() counting bytes instead of characters
-- fixed bytebuffer hangs, heap overflows, and state after a failed
-  allocation
+- fixed bytebuffer hangs, heap overflows, setPosition*() range checks,
+  and state after a failed allocation
 - fixed charstring, wcharstring, and ucs2charstring insertString()
   hangs, over-reads, and over-writes
 - fixed charstring, wcharstring, and ucs2charstring replace(),

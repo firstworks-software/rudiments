@@ -323,45 +323,46 @@ static void testOversized() {
 	test("appendUcs2(SIZE_MAX/size+1), unchanged",
 			unchanged(&one,1,pos,1,'A'));
 
-	// a position before the start wraps to a huge value
-	one.setPositionRelativeToEnd(-2);
+	// a position at the largest value
+	test("setPositionRelativeToBeginning(limit)",
+			one.setPositionRelativeToBeginning(limit)==(off64_t)limit);
 	pos=one.getPosition();
-	test("write(1) at wrapped position",one.write(data,1)==RESULT_ERROR);
-	test("write(1) at wrapped position, unchanged",
+	test("write(1) at huge position",one.write(data,1)==RESULT_ERROR);
+	test("write(1) at huge position, unchanged",
 			unchanged(&one,1,pos,1,'A'));
-	test("write(2) at wrapped position",one.write(data,2)==RESULT_ERROR);
-	test("write(2) at wrapped position, unchanged",
+	test("write(2) at huge position",one.write(data,2)==RESULT_ERROR);
+	test("write(2) at huge position, unchanged",
 			unchanged(&one,1,pos,1,'A'));
-	test("write(character) at wrapped position",
+	test("write(character) at huge position",
 			one.write('x')==RESULT_ERROR);
-	test("write(character) at wrapped position, unchanged",
+	test("write(character) at huge position, unchanged",
 			unchanged(&one,1,pos,1,'A'));
-	test("write(wchar_t *,1) at wrapped position",
+	test("write(wchar_t *,1) at huge position",
 			one.write(wide,1)==RESULT_ERROR);
-	test("write(wchar_t *,1) at wrapped position, unchanged",
+	test("write(wchar_t *,1) at huge position, unchanged",
 			unchanged(&one,1,pos,1,'A'));
-	test("printf() at wrapped position",
+	test("printf() at huge position",
 			one.printf("%d",5)==RESULT_ERROR);
-	test("printf() at wrapped position, unchanged",
+	test("printf() at huge position, unchanged",
 			unchanged(&one,1,pos,1,'A'));
 	if (wcharstring::supportsPrintf()) {
-		test("wide printf() at wrapped position",
+		test("wide printf() at huge position",
 				one.printf(L"%d",5)==RESULT_ERROR);
-		test("wide printf() at wrapped position, unchanged",
+		test("wide printf() at huge position, unchanged",
 				unchanged(&one,1,pos,1,'A'));
 	}
 	if (ucs2charstring::supportsPrintf()) {
 		ucs2literal(format,"%hd");
-		test("printfUcs2() at wrapped position",
+		test("printfUcs2() at huge position",
 				one.printfUcs2(format,(uint16_t)5)==
 							RESULT_ERROR);
-		test("printfUcs2() at wrapped position, unchanged",
+		test("printfUcs2() at huge position, unchanged",
 				unchanged(&one,1,pos,1,'A'));
 	}
 
 	// an append ignores the position
 	one.append((byte_t)'C');
-	test("append at wrapped position",
+	test("append at huge position",
 			one.getSize()==2 && one.getPosition()==2 &&
 			one.getBuffer()[0]=='A' && one.getBuffer()[1]=='C');
 
@@ -389,6 +390,59 @@ static void testOversized() {
 	test("zero, write(0), unchanged",unchanged(&zero,0,pos,0,0));
 	test("zero, write(1)",zero.write(data,1)==1);
 	test("zero, write(1), data",holds(&zero,data,1));
+	stdoutput.printf("\n");
+}
+
+// positions out of range are refused and change nothing
+static void testSetPosition() {
+
+	stdoutput.printf("setPosition...\n");
+
+	const off64_t	offmax=(off64_t)((((uint64_t)1<<62)-1)*2+1);
+	byte_t		data[1]={'B'};
+	bytebuffer	bb(4);
+	bb.write(data,1);
+	bb.write(data,1);
+	bb.write(data,1);
+	off64_t		pos=bb.getPosition();
+	test("setup",bb.getSize()==3 && pos==3);
+
+	// from the beginning
+	test("beginning, -1",bb.setPositionRelativeToBeginning(-1)==-1);
+	test("beginning, -1, unchanged",bb.getPosition()==pos);
+	test("beginning, off64_t min",
+		bb.setPositionRelativeToBeginning(-offmax-1)==-1);
+	test("beginning, off64_t min, unchanged",bb.getPosition()==pos);
+
+	// from the current position
+	test("current, below 0",bb.setPositionRelativeToCurrent(-4)==-1);
+	test("current, below 0, unchanged",bb.getPosition()==pos);
+	test("current, off64_t min",
+		bb.setPositionRelativeToCurrent(-offmax-1)==-1);
+	test("current, off64_t min, unchanged",bb.getPosition()==pos);
+	test("current, off64_t max",
+		bb.setPositionRelativeToCurrent(offmax)==-1);
+	test("current, off64_t max, unchanged",bb.getPosition()==pos);
+
+	// from the end
+	test("end, below 0",bb.setPositionRelativeToEnd(-4)==-1);
+	test("end, below 0, unchanged",bb.getPosition()==pos);
+	test("end, off64_t min",
+		bb.setPositionRelativeToEnd(-offmax-1)==-1);
+	test("end, off64_t min, unchanged",bb.getPosition()==pos);
+	test("end, off64_t max",bb.setPositionRelativeToEnd(offmax)==-1);
+	test("end, off64_t max, unchanged",bb.getPosition()==pos);
+
+	// in range, including past the end
+	test("beginning, 0",bb.setPositionRelativeToBeginning(0)==0);
+	test("current, 2",bb.setPositionRelativeToCurrent(2)==2);
+	test("current, -2",bb.setPositionRelativeToCurrent(-2)==0);
+	test("end, -3",bb.setPositionRelativeToEnd(-3)==0);
+	test("beginning, past the end",
+		bb.setPositionRelativeToBeginning(10)==10);
+	test("current, past the end",bb.setPositionRelativeToCurrent(5)==15);
+	test("end, past the end",bb.setPositionRelativeToEnd(7)==10);
+	test("past the end, size unchanged",bb.getSize()==3);
 	stdoutput.printf("\n");
 }
 
@@ -1058,6 +1112,7 @@ int main(int argc, const char **argv) {
 	testGrowthSizes();
 	testTinyBuffers();
 	testOversized();
+	testSetPosition();
 	testWritePaths();
 	testPrintfPaths();
 	testPrintfErrors();

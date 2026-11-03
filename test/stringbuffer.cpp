@@ -117,11 +117,45 @@ static void numberOutput() {
 	stdoutput.printf("\n");
 }
 
+// positions out of range are refused and change nothing
+static void positionRange() {
+
+	stdoutput.printf("position range...\n");
+
+	const off64_t	offmax=(off64_t)((((uint64_t)1<<62)-1)*2+1);
+	stringbuffer	sb;
+	sb.append("abc");
+	off64_t		pos=sb.getPosition();
+	test("setup",pos==3);
+
+	// out of range
+	test("beginning, -1",sb.setPositionRelativeToBeginning(-1)==-1);
+	test("beginning, -1, unchanged",sb.getPosition()==pos);
+	test("current, below 0",sb.setPositionRelativeToCurrent(-4)==-1);
+	test("current, below 0, unchanged",sb.getPosition()==pos);
+	test("current, off64_t max",
+		sb.setPositionRelativeToCurrent(offmax)==-1);
+	test("current, off64_t max, unchanged",sb.getPosition()==pos);
+	test("end, below 0",sb.setPositionRelativeToEnd(-4)==-1);
+	test("end, below 0, unchanged",sb.getPosition()==pos);
+	test("end, off64_t max",sb.setPositionRelativeToEnd(offmax)==-1);
+	test("end, off64_t max, unchanged",sb.getPosition()==pos);
+
+	// in range, including past the end
+	test("beginning, 1",sb.setPositionRelativeToBeginning(1)==1);
+	test("beginning, past the end",
+		sb.setPositionRelativeToBeginning(10)==10);
+	test("current, past the end",sb.setPositionRelativeToCurrent(5)==15);
+	test("end, past the end",sb.setPositionRelativeToEnd(7)==10);
+	stdoutput.printf("\n");
+}
+
 int main(int argc, const char **argv) {
 
 	header("stringbuffer");
 
 	numberOutput();
+	positionRange();
 
 	const char	alphabet[]="abcdefghijklmnopqrstuvwxyz";
 	const uint32_t	iterations=5;

@@ -41,24 +41,33 @@ class RUDIMENTS_DLLSPEC stringbuffer : public bytebuffer {
 
 		/** Sets the position (relative to the beginning of the buffer)
 		 *  at which the next read or write will occur to "offset".
-		 *  If the position is set beyond the end of the buffer, the
-		 *  buffer will grow but the data between the current end of
-		 *  the buffer and the new position will be undefined. */
+		 *  Returns the new position, or -1 and leaves the position
+		 *  unchanged if the new position would be below 0 or beyond
+		 *  the largest supported size.  Setting the position beyond
+		 *  the end of the buffer does not grow the buffer.  The next
+		 *  write grows it, and the bytes between the old end and the
+		 *  write are undefined. */
 		off64_t	setPositionRelativeToBeginning(off64_t pos);
 
 		/** Advances the position at which the next read or write will
-		 *  occur by "offset" bytes.  If the position is set beyond the
-		 *  end of the buffer, the buffer will grow but the data between
-		 *  the current end of the buffer and the new position will be
-		 *  undefined. */
+		 *  occur by "offset" bytes.
+		 *  Returns the new position, or -1 and leaves the position
+		 *  unchanged if the new position would be below 0 or beyond
+		 *  the largest supported size.  Setting the position beyond
+		 *  the end of the buffer does not grow the buffer.  The next
+		 *  write grows it, and the bytes between the old end and the
+		 *  write are undefined. */
 		off64_t	setPositionRelativeToCurrent(off64_t pos);
 
 		/** Sets the position at which the next read or write will
 		 *  occur to the end of the buffer plus "offset" bytes.
-		 *  Generally, offset will be negative.  If it is positive
-		 *  then the buffer will grow, but the data between the current
-		 *  buffer will grow but the data between the current end of
-		 *  the buffer and the new position will be undefined. */
+		 *  Generally, offset will be negative.
+		 *  Returns the new position, or -1 and leaves the position
+		 *  unchanged if the new position would be below 0 or beyond
+		 *  the largest supported size.  Setting the position beyond
+		 *  the end of the buffer does not grow the buffer.  The next
+		 *  write grows it, and the bytes between the old end and the
+		 *  write are undefined. */
 		off64_t	setPositionRelativeToEnd(off64_t pos);
 
 		/** Returns the position in the internal buffer at which

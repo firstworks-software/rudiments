@@ -45,9 +45,15 @@ off64_t ucs2stringbuffer::setPositionRelativeToBeginning(off64_t offset) {
 		return -1;
 	}
 
+	// pass a refusal through
+	off64_t	pos=bytebuffer::setPositionRelativeToBeginning(
+			offset*(off64_t)sizeof(ucs2_t));
+	if (pos==-1) {
+		return -1;
+	}
+
 	// the byte position divided down to characters
-	return bytebuffer::setPositionRelativeToBeginning(
-			offset*(off64_t)sizeof(ucs2_t))/(off64_t)sizeof(ucs2_t);
+	return pos/(off64_t)sizeof(ucs2_t);
 }
 
 inline
@@ -66,9 +72,15 @@ off64_t ucs2stringbuffer::setPositionRelativeToCurrent(off64_t offset) {
 		return -1;
 	}
 
+	// pass a refusal through
+	off64_t	pos=bytebuffer::setPositionRelativeToCurrent(
+			offset*(off64_t)sizeof(ucs2_t));
+	if (pos==-1) {
+		return -1;
+	}
+
 	// the byte position divided down to characters
-	return bytebuffer::setPositionRelativeToCurrent(
-			offset*(off64_t)sizeof(ucs2_t))/(off64_t)sizeof(ucs2_t);
+	return pos/(off64_t)sizeof(ucs2_t);
 }
 
 inline
@@ -87,9 +99,15 @@ off64_t ucs2stringbuffer::setPositionRelativeToEnd(off64_t offset) {
 		return -1;
 	}
 
+	// pass a refusal through
+	off64_t	pos=bytebuffer::setPositionRelativeToEnd(
+			offset*(off64_t)sizeof(ucs2_t));
+	if (pos==-1) {
+		return -1;
+	}
+
 	// the byte position divided down to characters
-	return bytebuffer::setPositionRelativeToEnd(
-			offset*(off64_t)sizeof(ucs2_t))/(off64_t)sizeof(ucs2_t);
+	return pos/(off64_t)sizeof(ucs2_t);
 }
 
 inline
