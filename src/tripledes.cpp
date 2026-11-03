@@ -360,11 +360,7 @@ const byte_t *tripledes::getData(bool encrypt) {
 
 		} else if (getUsePadding()) {
 
-			// Truncate padding...
-			//
-			// Grab the last byte, which is guaranteed to be a
-			// pad-byte (see above).  Then move back that many
-			// bytes from the end and truncate the buffer there.
+			// get the pad count from the last byte
 			getOut()->setPositionRelativeToEnd(-1);
 			if (getOut()->read(&padbytes,sizeof(padbytes))!=
 						sizeof(padbytes) ||
@@ -374,6 +370,21 @@ const byte_t *tripledes::getData(bool encrypt) {
 				getOut()->clear();
 				return NULL;
 			}
+
+			// verify that each pad byte holds the pad count
+			getOut()->setPositionRelativeToEnd(-padbytes);
+			for (byte_t i=0; i<padbytes; i++) {
+				byte_t	b=0;
+				if (getOut()->read(&b,sizeof(b))!=sizeof(b) ||
+								b!=padbytes) {
+					encryption::setError(
+						ENCRYPTION_ERROR_INVALID_PADDING);
+					getOut()->clear();
+					return NULL;
+				}
+			}
+
+			// truncate padding
 			getOut()->setPositionRelativeToEnd(-padbytes);
 			getOut()->truncate();
 		}

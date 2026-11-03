@@ -291,8 +291,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - fixed the dictionary::clear() and collection documentation
 - fixed charstring, wcharstring and ucs2charstring parseNumber() truncating
   float, double and long double text
-- fixed aes128 decrypt accepting a zero pad byte or empty input, non-openssl
-  builds
+- fixed aes128, aes192, aes256, tripledes and singledes decrypt accepting a
+  zero pad byte, empty input or inconsistent pad bytes
 
 ### Security
 - fixed buffer overflow when unix socket file name is too long

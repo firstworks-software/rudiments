@@ -249,6 +249,56 @@ int main(int argc, const char **argv) {
 		zeropaddec.getError()==ENCRYPTION_ERROR_INVALID_PADDING);
 	stdoutput.printf("\n");
 
+	// a block with padding off that ends in a 2 byte after a 0xAA byte
+	// has a bad pad byte, which padding on must reject
+	singledes	badpadenc;
+	badpadenc.setKey(fipskey,sizeof(fipskey));
+	badpadenc.setIv(fipsiv,sizeof(fipsiv));
+	badpadenc.setUsePadding(false);
+	byte_t	badpadblock[8];
+	bytestring::set(badpadblock,0xAA,sizeof(badpadblock));
+	badpadblock[sizeof(badpadblock)-1]=2;
+	test("bad pad byte: encrypt append",
+		badpadenc.append(badpadblock,sizeof(badpadblock)));
+	const byte_t	*badpadct=badpadenc.getEncryptedData();
+	uint64_t	badpadctsize=badpadenc.getEncryptedDataSize();
+	test("bad pad byte: encrypted data",badpadct!=NULL);
+	singledes	badpaddec;
+	badpaddec.setKey(fipskey,sizeof(fipskey));
+	badpaddec.setIv(fipsiv,sizeof(fipsiv));
+	badpaddec.append(badpadct,badpadctsize);
+	test("bad pad byte: decrypt rejected",
+		badpaddec.getUsePadding() &&
+		badpaddec.getDecryptedData()==NULL &&
+		badpaddec.getError()==ENCRYPTION_ERROR_INVALID_PADDING);
+	stdoutput.printf("\n");
+
+	// a block with padding off that ends in three 3 bytes holds valid
+	// padding, which padding on must remove
+	singledes	multipadenc;
+	multipadenc.setKey(fipskey,sizeof(fipskey));
+	multipadenc.setIv(fipsiv,sizeof(fipsiv));
+	multipadenc.setUsePadding(false);
+	byte_t	multipadblock[8];
+	bytestring::set(multipadblock,0xAA,sizeof(multipadblock));
+	bytestring::set(multipadblock+sizeof(multipadblock)-3,3,3);
+	test("multi-byte pad: encrypt append",
+		multipadenc.append(multipadblock,sizeof(multipadblock)));
+	const byte_t	*multipadct=multipadenc.getEncryptedData();
+	uint64_t	multipadctsize=multipadenc.getEncryptedDataSize();
+	test("multi-byte pad: encrypted data",multipadct!=NULL);
+	singledes	multipaddec;
+	multipaddec.setKey(fipskey,sizeof(fipskey));
+	multipaddec.setIv(fipsiv,sizeof(fipsiv));
+	multipaddec.append(multipadct,multipadctsize);
+	const byte_t	*multipadpt=multipaddec.getDecryptedData();
+	test("multi-byte pad: decrypt removes padding",
+		multipadpt!=NULL &&
+		multipaddec.getDecryptedDataSize()==sizeof(multipadblock)-3 &&
+		!bytestring::compare(multipadpt,multipadblock,
+					sizeof(multipadblock)-3));
+	stdoutput.printf("\n");
+
 	// clear() keeps the key and iv, so decrypting with no input must
 	// fail instead of decrypting stale data
 	singledes	emptyenc;
