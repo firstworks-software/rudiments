@@ -778,6 +778,32 @@ static void parseNumberTest(const char *label, int64_t number,
 	}
 }
 
+// checks that "r" starts with "prefix", is at least "minlen" long and,
+// if "exact" is set, equals it
+static void floatNumberTest(const char *label, const wchar_t *r, const char *prefix,
+					size_t minlen, const char *exact) {
+	bool	ok=(r!=NULL);
+	size_t	len=0;
+	if (ok) {
+		while (r[len]) {
+			len++;
+		}
+		size_t	plen=charstring::getLength(prefix);
+		ok=(len>=minlen && len>=plen);
+		for (size_t i=0; ok && i<plen; i++) {
+			ok=((unsigned long)r[i]==(unsigned char)prefix[i]);
+		}
+		if (ok && exact) {
+			ok=(len==charstring::getLength(exact));
+			for (size_t i=0; ok && i<len; i++) {
+				ok=((unsigned long)r[i]==(unsigned char)exact[i]);
+			}
+		}
+	}
+	test(label,ok);
+	delete[] r;
+}
+
 // checks that appending "number" to a string buffer gives "expected"
 static void appendNumberTest(const char *label, int64_t number,
 				uint16_t zeropadding, const char *expected) {
@@ -2575,6 +2601,36 @@ int main(int argc, const char **argv) {
 	appendNumberTest("INT64_MIN",numberMin,25,"-000009223372036854775808");
 	appendNumberTest("INT64_MIN+1",numberMin+1,1,"-9223372036854775807");
 	appendNumberTest("-5",-5,3,"-05");
+	floatNumberTest("parseNumber long double 1e30 precision 4",
+		wcharstring::parseNumber(1e30L,(uint16_t)4),
+		"10000000000000000",36,NULL);
+	floatNumberTest("parseNumber long double 123456.789 scale 20",
+		wcharstring::parseNumber(123456.789L,(uint16_t)20),
+		"123456.78900000",27,NULL);
+	floatNumberTest("parseNumber long double 1234.5 precision 3 scale 2",
+		wcharstring::parseNumber(1234.5L,(uint16_t)3,(uint16_t)2),
+		"1234.50",7,"1234.50");
+	floatNumberTest("parseNumber long double 1e30 plain",
+		wcharstring::parseNumber(1e30L),
+		"10000000000000000",22,NULL);
+	floatNumberTest("parseNumber double 1e30 plain",
+		wcharstring::parseNumber(1e30),
+		"1000000000000000019884624838656.",22,NULL);
+	floatNumberTest("parseNumber double 1e30 scale 4",
+		wcharstring::parseNumber(1e30,(uint16_t)4),
+		"1000000000000000019884624838656.0000",36,NULL);
+	floatNumberTest("parseNumber double 1234.5 precision 3 scale 2",
+		wcharstring::parseNumber(1234.5,(uint16_t)3,(uint16_t)2),
+		"1234.50",7,"1234.50");
+	floatNumberTest("parseNumber float 1e30 plain",
+		wcharstring::parseNumber(1e30f),
+		"1000000015047466219876688855040.",22,NULL);
+	floatNumberTest("parseNumber float 1e30 scale 4",
+		wcharstring::parseNumber(1e30f,(uint16_t)4),
+		"1000000015047466219876688855040.0000",36,NULL);
+	floatNumberTest("parseNumber float 1234.5 precision 3 scale 2",
+		wcharstring::parseNumber(1234.5f,(uint16_t)3,(uint16_t)2),
+		"1234.50",7,"1234.50");
 	signalmanager::alarm(0);
 	stdoutput.printf("\n");
 

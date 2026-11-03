@@ -1029,28 +1029,14 @@ ucs2_t *ucs2charstring::parseNumber(double number,
 }
 
 ucs2_t *ucs2charstring::parseNumber(long double number) {
-	char		*str=new char[22];
-	charstring::printf(str,22,
-			#ifdef _HPUX
-			"%lf",
-			#else
-			"%Lf",
-			#endif
-			number);
+	char	*str=charstring::parseNumber(number);
 	ucs2_t	*retval=duplicate(str);
 	delete[] str;
 	return retval;
 }
 
 ucs2_t *ucs2charstring::parseNumber(long double number, uint16_t scale) {
-	char		*str=new char[22];
-	charstring::printf(str,22,
-			#ifdef _HPUX
-			"%.*lf",
-			#else
-			"%.*Lf",
-			#endif
-			scale,number);
+	char	*str=charstring::parseNumber(number,scale);
 	ucs2_t	*retval=duplicate(str);
 	delete[] str;
 	return retval;
@@ -1058,15 +1044,7 @@ ucs2_t *ucs2charstring::parseNumber(long double number, uint16_t scale) {
 
 ucs2_t *ucs2charstring::parseNumber(long double number,
 				uint16_t precision, uint16_t scale) {
-	size_t		strlen=precision+3;
-	char		*str=new char[strlen];
-	charstring::printf(str,strlen,
-			#ifdef _HPUX
-			"%*.*lf",
-			#else
-			"%*.*Lf",
-			#endif
-			precision,scale,number);
+	char	*str=charstring::parseNumber(number,precision,scale);
 	ucs2_t	*retval=duplicate(str);
 	delete[] str;
 	return retval;

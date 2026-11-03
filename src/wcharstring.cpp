@@ -9,9 +9,9 @@
 #include <rudiments/wstringbuffer.h>
 #include <rudiments/error.h>
 #include <rudiments/sys.h>
+#include <rudiments/charstring.h>
 
 #ifndef RUDIMENTS_HAVE_VSWPRINTF
-	#include <rudiments/charstring.h>
 	#include <rudiments/character.h>
 #endif
 
@@ -963,65 +963,25 @@ wchar_t *wcharstring::parseNumber(double number,
 }
 
 wchar_t *wcharstring::parseNumber(long double number) {
-	wchar_t	*str=new wchar_t[22];
-	#ifdef RUDIMENTS_HAVE_SWPRINTF
-		swprintf(str,22,
-			#ifdef _HPUX
-			L"%lf",
-			#else
-			L"%Lf",
-			#endif
-			number);
-	#else
-		char	*temp=charstring::parseNumber(number);
-		wchar_t	*wtemp=duplicate(temp);
-		delete[] temp;
-		copy(str,wtemp,22);
-		delete[] wtemp;
-	#endif
-	return str;
+	char	*str=charstring::parseNumber(number);
+	wchar_t	*retval=duplicate(str);
+	delete[] str;
+	return retval;
 }
 
 wchar_t *wcharstring::parseNumber(long double number, uint16_t scale) {
-	wchar_t	*str=new wchar_t[22];
-	#ifdef RUDIMENTS_HAVE_SWPRINTF
-		swprintf(str,22,
-			#ifdef _HPUX
-			L"%.*lf",
-			#else
-			L"%.*Lf",
-			#endif
-			scale,number);
-	#else
-		char	*temp=charstring::parseNumber(number,scale);
-		wchar_t	*wtemp=duplicate(temp);
-		delete[] temp;
-		copy(str,wtemp,22);
-		delete[] wtemp;
-	#endif
-	return str;
+	char	*str=charstring::parseNumber(number,scale);
+	wchar_t	*retval=duplicate(str);
+	delete[] str;
+	return retval;
 }
 
 wchar_t *wcharstring::parseNumber(long double number,
 				uint16_t precision, uint16_t scale) {
-	size_t	strlength=precision+3;
-	wchar_t	*str=new wchar_t[strlength];
-	#ifdef RUDIMENTS_HAVE_SWPRINTF
-		swprintf(str,strlength,
-			#ifdef _HPUX
-			L"%*.*lf",
-			#else
-			L"%*.*Lf",
-			#endif
-			precision,scale,number);
-	#else
-		char	*temp=charstring::parseNumber(number,precision,scale);
-		wchar_t	*wtemp=duplicate(temp);
-		delete[] temp;
-		copy(str,wtemp,strlength);
-		delete[] wtemp;
-	#endif
-	return str;
+	char	*str=charstring::parseNumber(number,precision,scale);
+	wchar_t	*retval=duplicate(str);
+	delete[] str;
+	return retval;
 }
 
 void wcharstring::bothTrim(wchar_t *string, wchar_t character) {

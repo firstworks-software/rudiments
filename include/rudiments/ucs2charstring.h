@@ -1234,54 +1234,63 @@ class RUDIMENTS_DLLSPEC ucs2charstring {
 
 		/** Returns a string representing "number".  The string
 		 *  is allocated inside the function and must be deleted
-		 *  by the calling program. */
+		 *  by the calling program.  The string is never cut.
+		 *  Returns NULL on failure. */
 		static	ucs2_t	*parseNumber(float number);
 
 		/** Returns a string representing "number".  The string
 		 *  is allocated inside the function and must be deleted
-		 *  by the calling program. */
+		 *  by the calling program.  The string is never cut.
+		 *  Returns NULL on failure. */
 		static	ucs2_t	*parseNumber(float number,
 						uint16_t scale);
 
 		/** Returns a string representing "number".  The string
 		 *  is allocated inside the function and must be deleted
-		 *  by the calling program. */
+		 *  by the calling program.  The string is never cut.
+		 *  Returns NULL on failure. */
 		static	ucs2_t	*parseNumber(float number,
 						uint16_t precision,
 						uint16_t scale);
 
 		/** Returns a string representing "number".  The string
 		 *  is allocated inside the function and must be deleted
-		 *  by the calling program. */
+		 *  by the calling program.  The string is never cut.
+		 *  Returns NULL on failure. */
 		static	ucs2_t	*parseNumber(double number);
 
 		/** Returns a string representing "number".  The string
 		 *  is allocated inside the function and must be deleted
-		 *  by the calling program. */
+		 *  by the calling program.  The string is never cut.
+		 *  Returns NULL on failure. */
 		static	ucs2_t	*parseNumber(double number,
 						uint16_t scale);
 
 		/** Returns a string representing "number".  The string
 		 *  is allocated inside the function and must be deleted
-		 *  by the calling program. */
+		 *  by the calling program.  The string is never cut.
+		 *  Returns NULL on failure. */
 		static	ucs2_t	*parseNumber(double number,
 						uint16_t precision,
 						uint16_t scale);
 
 		/** Returns a string representing "number".  The string
 		 *  is allocated inside the function and must be deleted
-		 *  by the calling program. */
+		 *  by the calling program.  The string is never cut.
+		 *  Returns NULL on failure. */
 		static	ucs2_t	*parseNumber(long double number);
 
 		/** Returns a string representing "number".  The string
 		 *  is allocated inside the function and must be deleted
-		 *  by the calling program. */
+		 *  by the calling program.  The string is never cut.
+		 *  Returns NULL on failure. */
 		static	ucs2_t	*parseNumber(long double number,
 						uint16_t scale);
 
 		/** Returns a string representing "number".  The string
 		 *  is allocated inside the function and must be deleted
-		 *  by the calling program. */
+		 *  by the calling program.  The string is never cut.
+		 *  Returns NULL on failure. */
 		static	ucs2_t	*parseNumber(long double number,
 						uint16_t precision,
 						uint16_t scale);

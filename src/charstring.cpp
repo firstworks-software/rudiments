@@ -2022,40 +2022,48 @@ char *charstring::parseNumber(double number,
 }
 
 char *charstring::parseNumber(long double number) {
-	char	*str=new char[22];
-	printf(str,22,
+	char	*str=NULL;
+	if (printf(&str,
 		#ifdef _HPUX
 		"%lf",
 		#else
 		"%Lf",
 		#endif
-		number);
+		number)<0) {
+		delete[] str;
+		return NULL;
+	}
 	return str;
 }
 
 char *charstring::parseNumber(long double number, uint16_t scale) {
-	char	*str=new char[22];
-	printf(str,22,
+	char	*str=NULL;
+	if (printf(&str,
 		#ifdef _HPUX
 		"%.*lf",
 		#else
 		"%.*Lf",
 		#endif
-		scale,number);
+		scale,number)<0) {
+		delete[] str;
+		return NULL;
+	}
 	return str;
 }
 
 char *charstring::parseNumber(long double number,
 				uint16_t precision, uint16_t scale) {
-	size_t	strlen=precision+3;
-	char	*str=new char[strlen];
-	printf(str,strlen,
+	char	*str=NULL;
+	if (printf(&str,
 		#ifdef _HPUX
 		"%*.*lf",
 		#else
 		"%*.*Lf",
 		#endif
-		precision,scale,number);
+		precision,scale,number)<0) {
+		delete[] str;
+		return NULL;
+	}
 	return str;
 }
 

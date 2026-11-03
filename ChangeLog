@@ -289,6 +289,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   short write or write error, and collection write() and writeJson()
   printing only the first character of a wide string
 - fixed the dictionary::clear() and collection documentation
+- fixed charstring, wcharstring and ucs2charstring parseNumber() truncating
+  float, double and long double text
 
 ### Security
 - fixed buffer overflow when unix socket file name is too long
