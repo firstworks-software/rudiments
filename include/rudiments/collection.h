@@ -279,11 +279,11 @@ class collection : virtual public object {
 		 *  * When the = operator is called, the lvalue instance will
 		 *    not attempt to create a copy of the object stored as the
 		 *    key in each location of the rvalue instance, rather it
-		 *    will just copy the value or pointer.
+		 *    will just copy the key or pointer.
 		 *  * When the copy constructor is called, the new instance
 		 *    will not attempt to create a copy of the object stored as
 		 *    the key in each location of the instance that is being
-		 *    copied, rather it will just copy the value or pointer.
+		 *    copied, rather it will just copy the key or pointer.
 		 *
 		 *  Note that setting this true implies
 		 *  setManageArrayKeys(false); */
@@ -338,11 +338,11 @@ class collection : virtual public object {
 		 *  * When the = operator is called, the lvalue instance will
 		 *    not attempt to create a copy of the array stored as the
 		 *    key in each location of the rvalue instance, rather it
-		 *    will just copy the value or pointer.
+		 *    will just copy the key or pointer.
 		 *  * When the copy constructor is called, the new instance
 		 *    will not attempt to create a copy of the array stored as
 		 *    the key in each location of the instance that is being
-		 *    copied, rather it will just copy the value or pointer.
+		 *    copied, rather it will just copy the key or pointer.
 		 *
 		 *  To store managed arrays of non-primitive types as keys,
 		 *  consider using a managed collection of managed staticarrays.
@@ -416,8 +416,8 @@ class collection : virtual public object {
 		 *  output.
 		 *  
 		 *  If "indent" is true, then the output is automatically
-		 *  indented.  If "indent" is false, then the tree is written
-		 *  without indentation.
+		 *  indented.  If "indent" is false, then the collection
+		 *  is written without indentation.
 		 *
 		 *  Returns the number of bytes written, or -1 if an error
 		 *  occurred.  A short write returns -1.  Any other error from
@@ -436,8 +436,8 @@ class collection : virtual public object {
 		/** Writes a JSON representation of the collection to "out".
 		 *  
 		 *  If "indent" is true, then the output is automatically
-		 *  indented.  If "indent" is false, then the tree is written
-		 *  without indentation.
+		 *  indented.  If "indent" is false, then the collection
+		 *  is written without indentation.
 		 *
 		 *  Returns the number of bytes written, or -1 if an error
 		 *  occurred.  A short write returns -1.  Any other error from

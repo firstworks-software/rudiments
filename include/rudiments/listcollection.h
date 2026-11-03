@@ -242,8 +242,8 @@ class listcollection : public nodecollection<valuetype> {
 		 *  standard output.
 		 *  
 		 *  If "indent" is true, then the output is automatically
-		 *  indented.  If "indent" is false, then the tree is written
-		 *  without indentation.
+		 *  indented.  If "indent" is false, then the collection
+		 *  is written without indentation.
 		 *
 		 *  Returns the number of bytes written, or -1 if an error
 		 *  occurred.  A short write returns -1.  Any other error from
@@ -264,8 +264,8 @@ class listcollection : public nodecollection<valuetype> {
 		 *  "out".
 		 *  
 		 *  If "indent" is true, then the output is automatically
-		 *  indented.  If "indent" is false, then the tree is written
-		 *  without indentation.
+		 *  indented.  If "indent" is false, then the collection
+		 *  is written without indentation.
 		 *
 		 *  Returns the number of bytes written, or -1 if an error
 		 *  occurred.  A short write returns -1.  Any other error from

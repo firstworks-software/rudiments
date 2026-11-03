@@ -226,8 +226,8 @@ class tablecollection : public collection {
 		 *  standard output.
 		 *  
 		 *  If "indent" is true, then the output is automatically
-		 *  indented.  If "indent" is false, then the tree is written
-		 *  without indentation.
+		 *  indented.  If "indent" is false, then the collection
+		 *  is written without indentation.
 		 *
 		 *  Rows are read in order.  If getAllRowsAvailable() returns
 		 *  false, then later blocks are loaded by calls to getValue().
@@ -264,8 +264,8 @@ class tablecollection : public collection {
 		 *  "out".
 		 *  
 		 *  If "indent" is true, then the output is automatically
-		 *  indented.  If "indent" is false, then the tree is written
-		 *  without indentation.
+		 *  indented.  If "indent" is false, then the collection
+		 *  is written without indentation.
 		 *
 		 *  Rows are read in order.  If getAllRowsAvailable() returns
 		 *  false, then later blocks are loaded by calls to getValue().
