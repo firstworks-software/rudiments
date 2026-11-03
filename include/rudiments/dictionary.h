@@ -201,10 +201,6 @@ class dictionary : public dictionarycollection<keytype,valuetype> {
 		/** Deletes all key-value pairs currently in the dictionary.
 		 *
 		 *  The key stored in each pair is only deleted if
-		 *  setManageValues(true) or setManageArrayValues(true) has
-		 *  been called.
-		 *
-		 *  The key stored in each pair is only deleted if
 		 *  setManageKeys(true) or setManageArrayKeys(true) has
 		 *  been called.
 		 *
