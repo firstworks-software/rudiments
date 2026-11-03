@@ -213,14 +213,29 @@ class listcollection : public nodecollection<valuetype> {
 		virtual void	sortQuickly()=0;
 
 		/** Writes a representation of the listcollection to standard
-		 *  output. */
+		 *  output.
+		 *
+		 *  Returns the number of bytes written, or -1 if an error
+		 *  occurred.  A short write returns -1.  Any other error from
+		 *  the output, such as a timeout or abort, is returned
+		 *  unchanged.  Nothing more is written after an error. */
 		virtual	ssize_t	write();
 
-		/** Writes a representation of the listcollection to "out". */
+		/** Writes a representation of the listcollection to "out".
+		 *
+		 *  Returns the number of bytes written, or -1 if an error
+		 *  occurred.  A short write returns -1.  Any other error from
+		 *  the output, such as a timeout or abort, is returned
+		 *  unchanged.  Nothing more is written after an error. */
 		virtual	ssize_t	write(output *out);
 
 		/** Writes a JSON representation of the listcollection to
-		 *  standard output. */
+		 *  standard output.
+		 *
+		 *  Returns the number of bytes written, or -1 if an error
+		 *  occurred.  A short write returns -1.  Any other error from
+		 *  the output, such as a timeout or abort, is returned
+		 *  unchanged.  Nothing more is written after an error. */
 		virtual	ssize_t	writeJson();
 
 		/** Writes a JSON representation of the listcollection to
@@ -228,11 +243,21 @@ class listcollection : public nodecollection<valuetype> {
 		 *  
 		 *  If "indent" is true, then the output is automatically
 		 *  indented.  If "indent" is false, then the tree is written
-		 *  without indentation. */
+		 *  without indentation.
+		 *
+		 *  Returns the number of bytes written, or -1 if an error
+		 *  occurred.  A short write returns -1.  Any other error from
+		 *  the output, such as a timeout or abort, is returned
+		 *  unchanged.  Nothing more is written after an error. */
 		virtual	ssize_t	writeJson(bool indent);
 
 		/** Writes a JSON representation of the listcollection to
-		 *  "out". */
+		 *  "out".
+		 *
+		 *  Returns the number of bytes written, or -1 if an error
+		 *  occurred.  A short write returns -1.  Any other error from
+		 *  the output, such as a timeout or abort, is returned
+		 *  unchanged.  Nothing more is written after an error. */
 		virtual	ssize_t	writeJson(output *out);
 
 		/** Writes a JSON representation of the listcollection to
@@ -240,7 +265,12 @@ class listcollection : public nodecollection<valuetype> {
 		 *  
 		 *  If "indent" is true, then the output is automatically
 		 *  indented.  If "indent" is false, then the tree is written
-		 *  without indentation. */
+		 *  without indentation.
+		 *
+		 *  Returns the number of bytes written, or -1 if an error
+		 *  occurred.  A short write returns -1.  Any other error from
+		 *  the output, such as a timeout or abort, is returned
+		 *  unchanged.  Nothing more is written after an error. */
 		virtual	ssize_t	writeJson(output *out, bool indent);
 };
 

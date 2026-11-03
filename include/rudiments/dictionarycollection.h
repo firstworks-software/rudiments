@@ -96,15 +96,30 @@ class dictionarycollection : public collection {
 		virtual	bool		remove(keytype key)=0;
 
 		/** Writes a representation of the dictionarycollection to
-		 *  standard output. */
+		 *  standard output.
+		 *
+		 *  Returns the number of bytes written, or -1 if an error
+		 *  occurred.  A short write returns -1.  Any other error from
+		 *  the output, such as a timeout or abort, is returned
+		 *  unchanged.  Nothing more is written after an error. */
 		virtual	ssize_t	write();
 
 		/** Writes a representation of the dictionarycollection to
-		 *  "out". */
+		 *  "out".
+		 *
+		 *  Returns the number of bytes written, or -1 if an error
+		 *  occurred.  A short write returns -1.  Any other error from
+		 *  the output, such as a timeout or abort, is returned
+		 *  unchanged.  Nothing more is written after an error. */
 		virtual	ssize_t	write(output *out);
 
 		/** Writes a JSON representation of the dictionarycollection to
-		 *  standard output. */
+		 *  standard output.
+		 *
+		 *  Returns the number of bytes written, or -1 if an error
+		 *  occurred.  A short write returns -1.  Any other error from
+		 *  the output, such as a timeout or abort, is returned
+		 *  unchanged.  Nothing more is written after an error. */
 		virtual	ssize_t	writeJson();
 
 		/** Writes a JSON representation of the dictionarycollection to
@@ -112,11 +127,21 @@ class dictionarycollection : public collection {
 		 *  
 		 *  If "indent" is true, then the output is automatically
 		 *  indented.  If "indent" is false, then the tree is written
-		 *  without indentation. */
+		 *  without indentation.
+		 *
+		 *  Returns the number of bytes written, or -1 if an error
+		 *  occurred.  A short write returns -1.  Any other error from
+		 *  the output, such as a timeout or abort, is returned
+		 *  unchanged.  Nothing more is written after an error. */
 		virtual	ssize_t	writeJson(bool indent);
 
 		/** Writes a JSON representation of the dictionarycollection to
-		 *  "out". */
+		 *  "out".
+		 *
+		 *  Returns the number of bytes written, or -1 if an error
+		 *  occurred.  A short write returns -1.  Any other error from
+		 *  the output, such as a timeout or abort, is returned
+		 *  unchanged.  Nothing more is written after an error. */
 		virtual	ssize_t	writeJson(output *out);
 
 		/** Writes a JSON representation of the dictionarycollection to
@@ -124,7 +149,12 @@ class dictionarycollection : public collection {
 		 *  
 		 *  If "indent" is true, then the output is automatically
 		 *  indented.  If "indent" is false, then the tree is written
-		 *  without indentation. */
+		 *  without indentation.
+		 *
+		 *  Returns the number of bytes written, or -1 if an error
+		 *  occurred.  A short write returns -1.  Any other error from
+		 *  the output, such as a timeout or abort, is returned
+		 *  unchanged.  Nothing more is written after an error. */
 		virtual	ssize_t	writeJson(output *out, bool indent);
 };
 

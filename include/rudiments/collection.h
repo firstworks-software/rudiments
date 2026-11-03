@@ -6,6 +6,7 @@
 
 #include <rudiments/object.h>
 #include <rudiments/comparator.h>
+#include <rudiments/stringbuffer.h>
 
 /** The collection class is the parent class for all rudiments collections.
  *
@@ -386,14 +387,29 @@ class collection : virtual public object {
 		virtual	bool	clear()=0;
 
 		/** Writes a representation of the collection to standard
-		 *  output. */
+		 *  output.
+		 *
+		 *  Returns the number of bytes written, or -1 if an error
+		 *  occurred.  A short write returns -1.  Any other error from
+		 *  the output, such as a timeout or abort, is returned
+		 *  unchanged.  Nothing more is written after an error. */
 		virtual	ssize_t	write()=0;
 
-		/** Writes a representation of the collection to "out". */
+		/** Writes a representation of the collection to "out".
+		 *
+		 *  Returns the number of bytes written, or -1 if an error
+		 *  occurred.  A short write returns -1.  Any other error from
+		 *  the output, such as a timeout or abort, is returned
+		 *  unchanged.  Nothing more is written after an error. */
 		virtual	ssize_t	write(output *out)=0;
 
 		/** Writes a JSON representation of the collection to standard
-		 *  output. */
+		 *  output.
+		 *
+		 *  Returns the number of bytes written, or -1 if an error
+		 *  occurred.  A short write returns -1.  Any other error from
+		 *  the output, such as a timeout or abort, is returned
+		 *  unchanged.  Nothing more is written after an error. */
 		virtual	ssize_t	writeJson()=0;
 
 		/** Writes a JSON representation of the collection to standard
@@ -401,17 +417,32 @@ class collection : virtual public object {
 		 *  
 		 *  If "indent" is true, then the output is automatically
 		 *  indented.  If "indent" is false, then the tree is written
-		 *  without indentation. */
+		 *  without indentation.
+		 *
+		 *  Returns the number of bytes written, or -1 if an error
+		 *  occurred.  A short write returns -1.  Any other error from
+		 *  the output, such as a timeout or abort, is returned
+		 *  unchanged.  Nothing more is written after an error. */
 		virtual	ssize_t	writeJson(bool indent)=0;
 
-		/** Writes a JSON representation of the collection to "out". */
+		/** Writes a JSON representation of the collection to "out".
+		 *
+		 *  Returns the number of bytes written, or -1 if an error
+		 *  occurred.  A short write returns -1.  Any other error from
+		 *  the output, such as a timeout or abort, is returned
+		 *  unchanged.  Nothing more is written after an error. */
 		virtual	ssize_t	writeJson(output *out)=0;
 
 		/** Writes a JSON representation of the collection to "out".
 		 *  
 		 *  If "indent" is true, then the output is automatically
 		 *  indented.  If "indent" is false, then the tree is written
-		 *  without indentation. */
+		 *  without indentation.
+		 *
+		 *  Returns the number of bytes written, or -1 if an error
+		 *  occurred.  A short write returns -1.  Any other error from
+		 *  the output, such as a timeout or abort, is returned
+		 *  unchanged.  Nothing more is written after an error. */
 		virtual	ssize_t	writeJson(output *out, bool indent)=0;
 
 	#include <rudiments/private/collection.h>

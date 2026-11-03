@@ -280,8 +280,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - fixed table copies of block-based tablecollections never ending
 - fixed tablecollection write() and writeJson() stopping after the first
   block of a block-based source
-- fixed tablecollection write() and writeJson() writing after a
-  write error
+- fixed write() and writeJson() of tables and of array, list, dictionary
+  and scalar collections writing after a write error and treating a
+  short write as success
 - documented the dangling pointers in copies of collections and tables
 
 ### Security

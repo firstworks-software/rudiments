@@ -54,6 +54,23 @@
 		ssize_t	writeJsonValue(output *out, const valuetype &value);
 
 	protected:
+		// Each output converts wide characters in its own printf(), so
+		// the wide overloads write with printf() and a short write of a
+		// wide value is not detected.
+		bool	writeJsonValue(ssize_t *retval, output *out,
+					stringbuffer *buf,
+					const wchar_t *value);
+		bool	writeJsonValue(ssize_t *retval, output *out,
+					stringbuffer *buf,
+					wchar_t *value);
+		bool	writeJsonValue(ssize_t *retval, output *out,
+					stringbuffer *buf,
+					wchar_t value);
+		template <class valuetype>
+		bool	writeJsonValue(ssize_t *retval, output *out,
+					stringbuffer *buf,
+					const valuetype &value);
+
 		bool	managevalues;
 		bool	managearrayvalues;
 		bool	managekeys;

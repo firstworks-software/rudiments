@@ -89,28 +89,37 @@ template< class valuetype >
 inline
 ssize_t tablecollection<valuetype>::writeJson(output *out, bool indent) {
 
-	ssize_t	retval=0;
+	ssize_t		retval=0;
+	stringbuffer	buf;
 
-	incOrErr(&retval,out->write('{'),1) &&
-	((indent)?incOrErr(&retval,out->write("\n	",2),2):true) &&
-	incOrErr(&retval,out->write("\"c\":",4),4) &&
-	((indent)?incOrErr(&retval,out->write(' '),1):true) &&
-	incOrErr(&retval,out->write('['),1);
-
-	for (uint64_t i=0; i<getColumnCount() && retval>-1; i++) {
-		((i)?incOrErr(&retval,out->write(','),1):true) &&
-		((indent)?incOrErr(&retval,
-				out->write("\n		",3),3):true) &&
-		incOrErr(&retval,this->writeJsonValue(out,getColumnName(i)));
+	if (!(incOrErr(&retval,out->write('{'),1) &&
+		((indent)?incOrErr(&retval,out->write("\n	",2),2):true) &&
+		incOrErr(&retval,out->write("\"c\":",4),4) &&
+		((indent)?incOrErr(&retval,out->write(' '),1):true) &&
+		incOrErr(&retval,out->write('['),1)) && retval>-1) {
+		retval=RESULT_ERROR;
 	}
 
-	retval>-1 &&
-	((indent)?incOrErr(&retval,out->write("\n	",2),2):true) &&
-	incOrErr(&retval,out->write("],",2),2) &&
-	((indent)?incOrErr(&retval,out->write("\n	",2),2):true) &&
-	incOrErr(&retval,out->write("\"r\":",4),4) &&
-	((indent)?incOrErr(&retval,out->write(' '),1):true) &&
-	incOrErr(&retval,out->write('['),1);
+	for (uint64_t i=0; i<getColumnCount() && retval>-1; i++) {
+		if (!(((i)?incOrErr(&retval,out->write(','),1):true) &&
+			((indent)?incOrErr(&retval,
+					out->write("\n		",3),3):true) &&
+			this->writeJsonValue(&retval,out,&buf,
+						getColumnName(i))) &&
+			retval>-1) {
+			retval=RESULT_ERROR;
+		}
+	}
+
+	if (!(retval>-1 &&
+		((indent)?incOrErr(&retval,out->write("\n	",2),2):true) &&
+		incOrErr(&retval,out->write("],",2),2) &&
+		((indent)?incOrErr(&retval,out->write("\n	",2),2):true) &&
+		incOrErr(&retval,out->write("\"r\":",4),4) &&
+		((indent)?incOrErr(&retval,out->write(' '),1):true) &&
+		incOrErr(&retval,out->write('['),1)) && retval>-1) {
+		retval=RESULT_ERROR;
+	}
 
 	for (uint64_t i=0; retval>-1; i++) {
 
@@ -131,31 +140,42 @@ ssize_t tablecollection<valuetype>::writeJson(output *out, bool indent) {
 			}
 		}
 
-		((i)?incOrErr(&retval,out->write(','),1):true) &&
-		((indent)?incOrErr(&retval,
-				out->write("\n		",3),3):true) &&
-		incOrErr(&retval,out->write('['),1);
-
-		for (uint64_t j=0; j<getColumnCount() && retval>-1; j++) {
-			((j)?incOrErr(&retval,out->write(','),1):true) &&
+		if (!(((i)?incOrErr(&retval,out->write(','),1):true) &&
 			((indent)?incOrErr(&retval,
-				out->write("\n			",4),4):true) &&
-			incOrErr(&retval,
-				this->writeJsonValue(out,getValue(i,j)));
+					out->write("\n		",3),3):true) &&
+			incOrErr(&retval,out->write('['),1)) && retval>-1) {
+			retval=RESULT_ERROR;
 		}
 
-		retval>-1 &&
-		((indent)?incOrErr(&retval,
-				out->write("\n		",3),3):true) &&
-		incOrErr(&retval,out->write("]"),1);
+		for (uint64_t j=0; j<getColumnCount() && retval>-1; j++) {
+			if (!(((j)?incOrErr(&retval,
+					out->write(','),1):true) &&
+				((indent)?incOrErr(&retval,
+					out->write("\n			",4),4):true) &&
+				this->writeJsonValue(&retval,out,&buf,
+							getValue(i,j))) &&
+				retval>-1) {
+				retval=RESULT_ERROR;
+			}
+		}
+
+		if (!(retval>-1 &&
+			((indent)?incOrErr(&retval,
+					out->write("\n		",3),3):true) &&
+			incOrErr(&retval,out->write("]"),1)) && retval>-1) {
+			retval=RESULT_ERROR;
+		}
 	}
 
-	retval>-1 &&
-	((indent)?incOrErr(&retval,out->write("\n	",2),2):true) &&
-	incOrErr(&retval,out->write("]"),1) &&
-	((indent)?incOrErr(&retval,out->write('\n'),1):true) &&
-	incOrErr(&retval,out->write('}'),1) &&
-	((indent)?incOrErr(&retval,out->write('\n'),1):true);
+	if (!(retval>-1 &&
+		((indent)?incOrErr(&retval,out->write("\n	",2),2):true) &&
+		incOrErr(&retval,out->write("]"),1) &&
+		((indent)?incOrErr(&retval,out->write('\n'),1):true) &&
+		incOrErr(&retval,out->write('}'),1) &&
+		((indent)?incOrErr(&retval,out->write('\n'),1):true)) &&
+		retval>-1) {
+		retval=RESULT_ERROR;
+	}
 
 	return retval;
 }

@@ -9,6 +9,7 @@
 #include <rudiments/table.h>
 #include <rudiments/dynamicarray.h>
 #include <rudiments/staticarray.h>
+#include <rudiments/stringbuffer.h>
 #include "test.cpp"
 
 const char *numbers[]={
@@ -19,6 +20,90 @@ const char *numbers[]={
 struct test {
 	const char	*blah;
 };
+
+// Counts writes and fails call number "failat" and every call after it
+// with RESULT_ERROR.  If "shortwrite" is set, call number "failat" writes
+// half of its data instead (none of a single byte) and returns that count,
+// and the calls after it succeed.  Counts the calls made after the failure.
+class failbuffer : public stringbuffer {
+	public:
+				failbuffer(size_t failat, bool shortwrite);
+		ssize_t	write(const byte_t *string, size_t size);
+		ssize_t	write(const char *string, size_t length);
+		size_t	writes;
+		size_t	writesafterfail;
+	private:
+		ssize_t	failWrite(const byte_t *data, size_t size);
+		size_t	failat;
+		bool	shortwrite;
+};
+
+failbuffer::failbuffer(size_t failat, bool shortwrite) : stringbuffer() {
+	writes=0;
+	writesafterfail=0;
+	this->failat=failat;
+	this->shortwrite=shortwrite;
+}
+
+ssize_t failbuffer::write(const byte_t *string, size_t size) {
+	return failWrite(string,size);
+}
+
+ssize_t failbuffer::write(const char *string, size_t length) {
+	return failWrite((const byte_t *)string,length);
+}
+
+ssize_t failbuffer::failWrite(const byte_t *data, size_t size) {
+	writes++;
+	if (failat && writes>failat) {
+		writesafterfail++;
+	}
+	if (failat && writes==failat && shortwrite) {
+		return stringbuffer::write(data,size/2);
+	}
+	if (failat && writes>=failat && !shortwrite) {
+		return RESULT_ERROR;
+	}
+	return stringbuffer::write(data,size);
+}
+
+template <class collectiontype>
+void testFailWrite(const char *name, collectiontype *c) {
+
+	for (uint16_t i=0; i<4; i++) {
+
+		bool	indent=(i%2);
+		bool	shortwrite=(i/2);
+
+		stringbuffer	prefix;
+		prefix.append(name);
+		prefix.append((indent)?": writeJson indent":": writeJson");
+
+		// count the writes of a clean run
+		failbuffer	clean(0,shortwrite);
+		ssize_t	cleanresult=c->writeJson(&clean,indent);
+		size_t	total=clean.writes;
+		stringbuffer	title;
+		title.append(prefix.getString())->append(": clean run");
+		test(title.getString(),
+			cleanresult==(ssize_t)clean.getStringLength() &&
+			total>0);
+
+		// fail or shorten each write
+		for (size_t failat=1; failat<=total; failat++) {
+			failbuffer	fb(failat,shortwrite);
+			ssize_t	result=c->writeJson(&fb,indent);
+			title.clear();
+			title.append(prefix.getString());
+			title.append((shortwrite)?
+					": short write ":": fail write ");
+			title.append((uint64_t)failat)->append(" of ");
+			title.append((uint64_t)total);
+			test(title.getString(),
+				result==-1 && fb.writesafterfail==0);
+		}
+	}
+}
 
 int main(int argc, const char **argv) {
 
@@ -213,6 +298,42 @@ int main(int argc, const char **argv) {
 		}
 	}
 	nsai32.write();
+	stdoutput.printf("\n");
+
+
+
+	// write errors and short writes
+	stdoutput.printf("write errors...\n");
+
+	testFailWrite("scalar (int32_t)",&si32);
+	testFailWrite("scalar (const char *)",&sc);
+	sn.setValue(NULL);
+	testFailWrite("scalar (null)",&sn);
+
+	testFailWrite("dynamicarray (int32_t)",&dai32);
+	testFailWrite("dynamicarray (const char *)",&dac);
+	dynamicarray<int32_t>	edai32;
+	testFailWrite("dynamicarray (empty)",&edai32);
+
+	staticarray<int32_t,3>	sai32s;
+	for (int32_t i=0; i<3; i++) {
+		sai32s[i]=i;
+	}
+	testFailWrite("staticarray (int32_t)",&sai32s);
+
+	testFailWrite("linkedlist (int32_t)",&lli32);
+	testFailWrite("linkedlist (const char *)",&llc);
+	linkedlist<int32_t>	elli32;
+	testFailWrite("linkedlist (empty)",&elli32);
+
+	testFailWrite("singlylinkedlist (int32_t)",&slli32);
+	singlylinkedlist<int32_t>	eslli32;
+	testFailWrite("singlylinkedlist (empty)",&eslli32);
+
+	testFailWrite("dictionary (int32_t, const char *)",&d);
+	dictionary<int32_t,const char *>	ed;
+	testFailWrite("dictionary (empty)",&ed);
+
 	stdoutput.printf("\n");
 
 	return 0;

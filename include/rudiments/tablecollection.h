@@ -181,7 +181,12 @@ class tablecollection : public collection {
 		 *  can not be read again after this call.
 		 *
 		 *  If the table has zero columns, only the rows of the first
-		 *  block are written, as empty arrays. */
+		 *  block are written, as empty arrays.
+		 *
+		 *  Returns the number of bytes written, or -1 if an error
+		 *  occurred.  A short write returns -1.  Any other error from
+		 *  the output, such as a timeout or abort, is returned
+		 *  unchanged.  Nothing more is written after an error. */
 		virtual	ssize_t	write();
 
 		/** Writes a representation of the tablecollection to "out".
@@ -192,7 +197,12 @@ class tablecollection : public collection {
 		 *  can not be read again after this call.
 		 *
 		 *  If the table has zero columns, only the rows of the first
-		 *  block are written, as empty arrays. */
+		 *  block are written, as empty arrays.
+		 *
+		 *  Returns the number of bytes written, or -1 if an error
+		 *  occurred.  A short write returns -1.  Any other error from
+		 *  the output, such as a timeout or abort, is returned
+		 *  unchanged.  Nothing more is written after an error. */
 		virtual	ssize_t	write(output *out);
 
 		/** Writes a JSON representation of the tablecollection to
@@ -204,7 +214,12 @@ class tablecollection : public collection {
 		 *  can not be read again after this call.
 		 *
 		 *  If the table has zero columns, only the rows of the first
-		 *  block are written, as empty arrays. */
+		 *  block are written, as empty arrays.
+		 *
+		 *  Returns the number of bytes written, or -1 if an error
+		 *  occurred.  A short write returns -1.  Any other error from
+		 *  the output, such as a timeout or abort, is returned
+		 *  unchanged.  Nothing more is written after an error. */
 		virtual	ssize_t	writeJson();
 
 		/** Writes a JSON representation of the tablecollection to
@@ -220,7 +235,12 @@ class tablecollection : public collection {
 		 *  can not be read again after this call.
 		 *
 		 *  If the table has zero columns, only the rows of the first
-		 *  block are written, as empty arrays. */
+		 *  block are written, as empty arrays.
+		 *
+		 *  Returns the number of bytes written, or -1 if an error
+		 *  occurred.  A short write returns -1.  Any other error from
+		 *  the output, such as a timeout or abort, is returned
+		 *  unchanged.  Nothing more is written after an error. */
 		virtual	ssize_t	writeJson(bool indent);
 
 		/** Writes a JSON representation of the tablecollection to
@@ -232,7 +252,12 @@ class tablecollection : public collection {
 		 *  can not be read again after this call.
 		 *
 		 *  If the table has zero columns, only the rows of the first
-		 *  block are written, as empty arrays. */
+		 *  block are written, as empty arrays.
+		 *
+		 *  Returns the number of bytes written, or -1 if an error
+		 *  occurred.  A short write returns -1.  Any other error from
+		 *  the output, such as a timeout or abort, is returned
+		 *  unchanged.  Nothing more is written after an error. */
 		virtual	ssize_t	writeJson(output *out);
 
 		/** Writes a JSON representation of the tablecollection to
@@ -248,7 +273,12 @@ class tablecollection : public collection {
 		 *  can not be read again after this call.
 		 *
 		 *  If the table has zero columns, only the rows of the first
-		 *  block are written, as empty arrays. */
+		 *  block are written, as empty arrays.
+		 *
+		 *  Returns the number of bytes written, or -1 if an error
+		 *  occurred.  A short write returns -1.  Any other error from
+		 *  the output, such as a timeout or abort, is returned
+		 *  unchanged.  Nothing more is written after an error. */
 		virtual	ssize_t	writeJson(output *out, bool indent);
 
 	#include <rudiments/private/tablecollection.h>

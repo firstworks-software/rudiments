@@ -45,14 +45,18 @@ ssize_t scalarcollection<valuetype>::writeJson(output *out) {
 template< class valuetype >
 inline
 ssize_t scalarcollection<valuetype>::writeJson(output *out, bool indent) {
-	ssize_t	retval=0;
-	incOrErr(&retval,out->write('{'),1) &&
-	((indent)?incOrErr(&retval,out->write("\n	",2),2):true) &&
-	incOrErr(&retval,out->write("\"v\":",4),4) &&
-	((indent)?incOrErr(&retval,out->write(' '),1):true) &&
-	incOrErr(&retval,this->writeJsonValue(out,getValue())) &&
-	((indent)?incOrErr(&retval,out->write('\n'),1):true) &&
-	incOrErr(&retval,out->write('}'),1) &&
-	((indent)?incOrErr(&retval,out->write('\n'),1):true);
+	ssize_t		retval=0;
+	stringbuffer	buf;
+	if (!(incOrErr(&retval,out->write('{'),1) &&
+		((indent)?incOrErr(&retval,out->write("\n	",2),2):true) &&
+		incOrErr(&retval,out->write("\"v\":",4),4) &&
+		((indent)?incOrErr(&retval,out->write(' '),1):true) &&
+		this->writeJsonValue(&retval,out,&buf,getValue()) &&
+		((indent)?incOrErr(&retval,out->write('\n'),1):true) &&
+		incOrErr(&retval,out->write('}'),1) &&
+		((indent)?incOrErr(&retval,out->write('\n'),1):true)) &&
+		retval>-1) {
+		retval=RESULT_ERROR;
+	}
 	return retval;
 }

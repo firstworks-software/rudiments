@@ -442,3 +442,41 @@ ssize_t collection::writeJsonValue(output *out, const valuetype &value) {
 	// segfaults without it, and it doesn't hurt other compilers.
 	return out->printf("\"%p\"",(const void *)&value);
 }
+
+inline
+bool collection::writeJsonValue(ssize_t *retval, output *out,
+						stringbuffer *buf,
+						const wchar_t *value) {
+	return incOrErr(retval,writeJsonValue(out,value));
+}
+
+inline
+bool collection::writeJsonValue(ssize_t *retval, output *out,
+						stringbuffer *buf,
+						wchar_t *value) {
+	return incOrErr(retval,writeJsonValue(out,value));
+}
+
+inline
+bool collection::writeJsonValue(ssize_t *retval, output *out,
+						stringbuffer *buf,
+						wchar_t value) {
+	return incOrErr(retval,writeJsonValue(out,value));
+}
+
+template <class valuetype>
+inline
+bool collection::writeJsonValue(ssize_t *retval, output *out,
+						stringbuffer *buf,
+						const valuetype &value) {
+
+	// The size that printf() returns includes the bytes of a short
+	// write that were not written, so format the value into the buffer
+	// and write the buffer.
+	buf->clear();
+	if (writeJsonValue(buf,value)<0) {
+		return incOrErr(retval,RESULT_ERROR);
+	}
+	return incOrErr(retval,out->write(buf->getBuffer(),buf->getSize()),
+							buf->getSize());
+}

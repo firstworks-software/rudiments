@@ -393,10 +393,12 @@ void testBlockWrite(const char *name, uint64_t rows, uint64_t cols,
 }
 
 // Counts writes and fails call number "failat" and every call after it
-// with RESULT_ERROR.  Counts the calls made after the first failure.
+// with RESULT_ERROR.  If "shortwrite" is set, call number "failat" writes
+// half of its data instead (none of a single byte) and returns that count,
+// and the calls after it succeed.  Counts the calls made after the failure.
 class failbuffer : public stringbuffer {
 	public:
-				failbuffer(size_t failat);
+				failbuffer(size_t failat, bool shortwrite);
 		ssize_t	write(const byte_t *string, size_t size);
 		ssize_t	write(const char *string, size_t length);
 		size_t	writes;
@@ -404,12 +406,14 @@ class failbuffer : public stringbuffer {
 	private:
 		ssize_t	failWrite(const byte_t *data, size_t size);
 		size_t	failat;
+		bool	shortwrite;
 };
 
-failbuffer::failbuffer(size_t failat) : stringbuffer() {
+failbuffer::failbuffer(size_t failat, bool shortwrite) : stringbuffer() {
 	writes=0;
 	writesafterfail=0;
 	this->failat=failat;
+	this->shortwrite=shortwrite;
 }
 
 ssize_t failbuffer::write(const byte_t *string, size_t size) {
@@ -425,45 +429,82 @@ ssize_t failbuffer::failWrite(const byte_t *data, size_t size) {
 	if (failat && writes>failat) {
 		writesafterfail++;
 	}
-	if (failat && writes>=failat) {
+	if (failat && writes==failat && shortwrite) {
+		return stringbuffer::write(data,size/2);
+	}
+	if (failat && writes>=failat && !shortwrite) {
 		return RESULT_ERROR;
 	}
 	return stringbuffer::write(data,size);
 }
 
 // how: 0 is writeJson(), 1 is writeJson() with indent, 2 is write()
-static ssize_t writeHow(table<int32_t> *t, output *out, uint16_t how) {
+static ssize_t writeHow(tablecollection<int32_t> *t,
+					output *out, uint16_t how) {
 	return (how==2)?t->write(out):t->writeJson(out,how==1);
 }
 
-void testFailWrite(uint16_t how) {
+const char	*shapenames[]={
+	"3x3",
+	"empty",
+	"columns, no rows",
+	"block, partial block",
+	"block, never all rows",
+	"block, zero columns",
+	"block, zero columns, never all rows"
+};
+
+// block-based sources are consumed by a write, so build a new one each run
+static tablecollection<int32_t> *newShape(uint16_t shape) {
+	if (shape==3) {
+		return new blocktable(7,3,3,false);
+	} else if (shape==4) {
+		return new blocktable(7,3,3,true);
+	} else if (shape==5) {
+		return new blocktable(7,0,3,false);
+	} else if (shape==6) {
+		return new blocktable(7,0,3,true);
+	}
+	table<int32_t>	*t=new table<int32_t>();
+	if (shape==1) {
+		return t;
+	}
+	for (uint64_t col=0; col<3; col++) {
+		t->setColumnName(col,"col");
+		for (uint64_t row=0; row<3 && !shape; row++) {
+			t->setValue(row,col,(int32_t)(row*3+col));
+		}
+	}
+	return t;
+}
+
+void testFailWrite(uint16_t shape, uint16_t how, bool shortwrite) {
 
 	const char	*names[]={"writeJson","writeJson indent","write"};
 
-	// build a table
-	table<int32_t>	t;
-	for (uint64_t col=0; col<3; col++) {
-		t.setColumnName(col,"col");
-		for (uint64_t row=0; row<3; row++) {
-			t.setValue(row,col,(int32_t)(row*3+col));
-		}
-	}
+	stringbuffer	prefix;
+	prefix.append(shapenames[shape])->append(": ")->append(names[how]);
 
 	// count the writes of a clean run
-	failbuffer	clean(0);
-	ssize_t	cleanresult=writeHow(&t,&clean,how);
+	tablecollection<int32_t>	*t=newShape(shape);
+	failbuffer	clean(0,shortwrite);
+	ssize_t	cleanresult=writeHow(t,&clean,how);
 	size_t	total=clean.writes;
-	stringbuffer	cleantitle;
-	cleantitle.append(names[how])->append(": clean run");
-	test(cleantitle.getString(),cleanresult>=0 && total>0);
-
-	// fail each write
+	delete t;
 	stringbuffer	title;
+	title.append(prefix.getString())->append(": clean run");
+	test(title.getString(),
+		cleanresult==(ssize_t)clean.getStringLength() && total>0);
+
+	// fail or shorten each write
 	for (size_t failat=1; failat<=total; failat++) {
-		failbuffer	fb(failat);
-		ssize_t	result=writeHow(&t,&fb,how);
+		t=newShape(shape);
+		failbuffer	fb(failat,shortwrite);
+		ssize_t	result=writeHow(t,&fb,how);
+		delete t;
 		title.clear();
-		title.append(names[how])->append(": fail write ");
+		title.append(prefix.getString());
+		title.append((shortwrite)?": short write ":": fail write ");
 		title.append((uint64_t)failat)->append(" of ");
 		title.append((uint64_t)total);
 		test(title.getString(),
@@ -863,11 +904,15 @@ int main(int argc, char **argv) {
 	signalmanager::alarm(0);
 	stdoutput.printf("\n");
 
-	// write errors
+	// write errors and short writes
 	stdoutput.printf("write errors...\n");
 	signalmanager::alarm(5);
-	for (uint16_t how=0; how<3; how++) {
-		testFailWrite(how);
+	for (uint16_t i=0; i<2; i++) {
+		for (uint16_t shape=0; shape<7; shape++) {
+			for (uint16_t how=0; how<3; how++) {
+				testFailWrite(shape,how,i);
+			}
+		}
 	}
 	signalmanager::alarm(0);
 	stdoutput.printf("\n");

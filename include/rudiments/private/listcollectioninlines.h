@@ -88,17 +88,28 @@ ssize_t listcollection<valuetype>::writeJson(output *out, bool indent) {
 	ssize_t			retval=0;
 	uint64_t		i=0;
 	listnode<valuetype>	*node=getFirst();
-	this->incOrErr(&retval,out->write('['),1);
+	stringbuffer		buf;
+	if (!this->incOrErr(&retval,out->write('['),1) && retval>-1) {
+		retval=RESULT_ERROR;
+	}
 	while (node && retval>-1) {
-		((i)?this->incOrErr(&retval,out->write(','),1):true) &&
-		((indent)?this->incOrErr(&retval,out->write("\n	",2),2):true) &&
-		this->incOrErr(&retval,
-			this->writeJsonValue(out,node->getValue()));
+		if (!(((i)?this->incOrErr(&retval,out->write(','),1):true) &&
+			((indent)?this->incOrErr(&retval,
+					out->write("\n	",2),2):true) &&
+			this->writeJsonValue(&retval,out,&buf,
+						node->getValue())) &&
+			retval>-1) {
+			retval=RESULT_ERROR;
+		}
 		node=node->getNext();
 		i++;
 	}
-	((indent)?this->incOrErr(&retval,out->write('\n'),1):true) &&
-	this->incOrErr(&retval,out->write(']'),1) &&
-	((indent)?this->incOrErr(&retval,out->write('\n'),1):true);
+	if (!(retval>-1 &&
+		((indent)?this->incOrErr(&retval,out->write('\n'),1):true) &&
+		this->incOrErr(&retval,out->write(']'),1) &&
+		((indent)?this->incOrErr(&retval,out->write('\n'),1):true)) &&
+		retval>-1) {
+		retval=RESULT_ERROR;
+	}
 	return retval;
 }
