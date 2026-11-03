@@ -961,7 +961,7 @@ int main(int argc, const char **argv) {
 	// initial contents
 	stdoutput.printf("initial contents\n");
 	byte_t	*initialcontents=new byte_t[100];
-	for (uint16_t k=0; k<10; k=k+10) {
+	for (uint16_t k=0; k<100; k=k+10) {
 		bytestring::copy(initialcontents+k,"1234567890",10);
 	}
 	byte_t	*iccopy=(byte_t *)bytestring::duplicate(initialcontents,100);
