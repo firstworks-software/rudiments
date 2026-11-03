@@ -35,6 +35,14 @@ ssize_t treecollection<valuetype>::write() {
 template <class valuetype>
 inline
 ssize_t treecollection<valuetype>::write(output *out) {
+	if (!getTop()) {
+		ssize_t	retval=0;
+		if (!this->incOrErr(&retval,out->write("<t/>\n",5),5) &&
+			retval>-1) {
+			retval=RESULT_ERROR;
+		}
+		return retval;
+	}
 	uint16_t	indentlevel=0;
 	return writeNodeXml(out,getTop(),"t",&indentlevel,true,true);
 }
@@ -60,6 +68,19 @@ ssize_t treecollection<valuetype>::writeJson(output *out) {
 template< class valuetype >
 inline
 ssize_t treecollection<valuetype>::writeJson(output *out, bool indent) {
+	if (!getTop()) {
+		ssize_t	retval=0;
+		if (!(this->incOrErr(&retval,out->write('['),1) &&
+			((indent)?this->incOrErr(&retval,
+					out->write('\n'),1):true) &&
+			this->incOrErr(&retval,out->write(']'),1) &&
+			((indent)?this->incOrErr(&retval,
+					out->write('\n'),1):true)) &&
+			retval>-1) {
+			retval=RESULT_ERROR;
+		}
+		return retval;
+	}
 	uint16_t	indentlevel=0;
 	return writeNodeJson(out,getTop(),&indentlevel,indent);
 }
@@ -85,6 +106,14 @@ ssize_t treecollection<valuetype>::writeXml(output *out) {
 template< class valuetype >
 inline
 ssize_t treecollection<valuetype>::writeXml(output *out, bool indent) {
+	if (!getTop()) {
+		ssize_t	retval=0;
+		if (!this->incOrErr(&retval,out->write("<t/>\n",5),5) &&
+			retval>-1) {
+			retval=RESULT_ERROR;
+		}
+		return retval;
+	}
 	uint16_t	indentlevel=0;
 	return writeNodeXml(out,getTop(),"t",&indentlevel,false,indent);
 }

@@ -163,14 +163,29 @@ class treecollection : public nodecollection<valuetype> {
 						valuetype value)=0;
 
 		/** Writes a representation of the treecollection to
-		 *  standard output. */
+		 *  standard output.
+		 *
+		 *  Returns the number of bytes written, or -1 if an error
+		 *  occurred.  A short write returns -1.  Any other error from
+		 *  the output, such as a timeout or abort, is returned
+		 *  unchanged.  Nothing more is written after an error. */
 		virtual	ssize_t	write();
 
-		/** Writes a representation of the treecollection to "out". */
+		/** Writes a representation of the treecollection to "out".
+		 *
+		 *  Returns the number of bytes written, or -1 if an error
+		 *  occurred.  A short write returns -1.  Any other error from
+		 *  the output, such as a timeout or abort, is returned
+		 *  unchanged.  Nothing more is written after an error. */
 		virtual	ssize_t	write(output *out);
 
 		/** Writes a JSON representation of the treecollection to
-		 *  standard output. */
+		 *  standard output.
+		 *
+		 *  Returns the number of bytes written, or -1 if an error
+		 *  occurred.  A short write returns -1.  Any other error from
+		 *  the output, such as a timeout or abort, is returned
+		 *  unchanged.  Nothing more is written after an error. */
 		virtual	ssize_t	writeJson();
 
 		/** Writes a JSON representation of the treecollection to
@@ -178,11 +193,21 @@ class treecollection : public nodecollection<valuetype> {
 		 *  
 		 *  If "indent" is true, then the output is automatically
 		 *  indented.  If "indent" is false, then the tree is written
-		 *  without indentation. */
+		 *  without indentation.
+		 *
+		 *  Returns the number of bytes written, or -1 if an error
+		 *  occurred.  A short write returns -1.  Any other error from
+		 *  the output, such as a timeout or abort, is returned
+		 *  unchanged.  Nothing more is written after an error. */
 		virtual	ssize_t	writeJson(bool indent);
 
 		/** Writes a JSON representation of the treecollection to
-		 *  "out". */
+		 *  "out".
+		 *
+		 *  Returns the number of bytes written, or -1 if an error
+		 *  occurred.  A short write returns -1.  Any other error from
+		 *  the output, such as a timeout or abort, is returned
+		 *  unchanged.  Nothing more is written after an error. */
 		virtual	ssize_t	writeJson(output *out);
 
 		/** Writes a JSON representation of the treecollection to
@@ -190,11 +215,21 @@ class treecollection : public nodecollection<valuetype> {
 		 *  
 		 *  If "indent" is true, then the output is automatically
 		 *  indented.  If "indent" is false, then the tree is written
-		 *  without indentation. */
+		 *  without indentation.
+		 *
+		 *  Returns the number of bytes written, or -1 if an error
+		 *  occurred.  A short write returns -1.  Any other error from
+		 *  the output, such as a timeout or abort, is returned
+		 *  unchanged.  Nothing more is written after an error. */
 		virtual	ssize_t	writeJson(output *out, bool indent);
 
 		/** Writes an XML representation of the treecollection to
-		 *  standard output. */
+		 *  standard output.
+		 *
+		 *  Returns the number of bytes written, or -1 if an error
+		 *  occurred.  A short write returns -1.  Any other error from
+		 *  the output, such as a timeout or abort, is returned
+		 *  unchanged.  Nothing more is written after an error. */
 		virtual	ssize_t	writeXml();
 
 		/** Writes an XML representation of the treecollection to
@@ -202,11 +237,21 @@ class treecollection : public nodecollection<valuetype> {
 		 *  
 		 *  If "indent" is true, then the output is automatically
 		 *  indented.  If "indent" is false, then the tree is written
-		 *  without indentation. */
+		 *  without indentation.
+		 *
+		 *  Returns the number of bytes written, or -1 if an error
+		 *  occurred.  A short write returns -1.  Any other error from
+		 *  the output, such as a timeout or abort, is returned
+		 *  unchanged.  Nothing more is written after an error. */
 		virtual	ssize_t	writeXml(bool indent);
 
 		/** Writes an XML representation of the treecollection to
-		 *  "out". */
+		 *  "out".
+		 *
+		 *  Returns the number of bytes written, or -1 if an error
+		 *  occurred.  A short write returns -1.  Any other error from
+		 *  the output, such as a timeout or abort, is returned
+		 *  unchanged.  Nothing more is written after an error. */
 		virtual	ssize_t	writeXml(output *out);
 
 		/** Writes an XML representation of the treecollection to
@@ -214,7 +259,12 @@ class treecollection : public nodecollection<valuetype> {
 		 *  
 		 *  If "indent" is true, then the output is automatically
 		 *  indented.  If "indent" is false, then the tree is written
-		 *  without indentation. */
+		 *  without indentation.
+		 *
+		 *  Returns the number of bytes written, or -1 if an error
+		 *  occurred.  A short write returns -1.  Any other error from
+		 *  the output, such as a timeout or abort, is returned
+		 *  unchanged.  Nothing more is written after an error. */
 		virtual	ssize_t	writeXml(output *out, bool indent);
 
 	#include <rudiments/private/treecollection.h>

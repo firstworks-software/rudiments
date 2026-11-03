@@ -22,27 +22,34 @@ struct test {
 };
 
 // Counts writes and fails call number "failat" and every call after it
-// with RESULT_ERROR.  If "shortwrite" is set, call number "failat" writes
+// with "failcode".  If "shortwrite" is set, call number "failat" writes
 // half of its data instead (none of a single byte) and returns that count,
-// and the calls after it succeed.  Counts the calls made after the failure.
+// and the calls after it succeed.  Counts the calls made after the failure
+// and records the size of call number "failat".
 class failbuffer : public stringbuffer {
 	public:
-				failbuffer(size_t failat, bool shortwrite);
+				failbuffer(size_t failat, bool shortwrite,
+						ssize_t failcode=RESULT_ERROR);
 		ssize_t	write(const byte_t *string, size_t size);
 		ssize_t	write(const char *string, size_t length);
 		size_t	writes;
 		size_t	writesafterfail;
+		size_t	failsize;
 	private:
 		ssize_t	failWrite(const byte_t *data, size_t size);
 		size_t	failat;
 		bool	shortwrite;
+		ssize_t	failcode;
 };
 
-failbuffer::failbuffer(size_t failat, bool shortwrite) : stringbuffer() {
+failbuffer::failbuffer(size_t failat, bool shortwrite, ssize_t failcode) :
+								stringbuffer() {
 	writes=0;
 	writesafterfail=0;
+	failsize=0;
 	this->failat=failat;
 	this->shortwrite=shortwrite;
+	this->failcode=failcode;
 }
 
 ssize_t failbuffer::write(const byte_t *string, size_t size) {
@@ -58,11 +65,14 @@ ssize_t failbuffer::failWrite(const byte_t *data, size_t size) {
 	if (failat && writes>failat) {
 		writesafterfail++;
 	}
+	if (failat && writes==failat) {
+		failsize=size;
+	}
 	if (failat && writes==failat && shortwrite) {
 		return stringbuffer::write(data,size/2);
 	}
 	if (failat && writes>=failat && !shortwrite) {
-		return RESULT_ERROR;
+		return failcode;
 	}
 	return stringbuffer::write(data,size);
 }
@@ -101,6 +111,88 @@ void testFailWrite(const char *name, collectiontype *c) {
 			title.append((uint64_t)total);
 			test(title.getString(),
 				result==-1 && fb.writesafterfail==0);
+		}
+	}
+}
+
+const char *treemethods[]={
+	"write","writeJson","writeJson indent","writeXml","writeXml indent"
+};
+
+template <class valuetype>
+ssize_t writeTree(avltree<valuetype> *t, uint16_t method, output *out) {
+	switch (method) {
+		case 0:
+			return t->write(out);
+		case 1:
+			return t->writeJson(out,false);
+		case 2:
+			return t->writeJson(out,true);
+		case 3:
+			return t->writeXml(out,false);
+		default:
+			return t->writeXml(out,true);
+	}
+}
+
+// "expected" is the output of each of treemethods, or NULL to skip checking it
+template <class valuetype>
+void testTreeFailWrite(const char *name, avltree<valuetype> *t,
+					const char * const *expected) {
+
+	// hard error codes, 0 for a short write
+	const ssize_t	codes[]={RESULT_ERROR,RESULT_TIMEOUT,RESULT_ABORT,0};
+
+	for (uint16_t m=0; m<5; m++) {
+
+		stringbuffer	prefix;
+		prefix.append(name)->append(": ")->append(treemethods[m]);
+
+		// count the writes of a clean run
+		failbuffer	clean(0,false);
+		ssize_t	cleanresult=writeTree(t,m,&clean);
+		size_t	total=clean.writes;
+		stringbuffer	title;
+		title.append(prefix.getString())->append(": clean run");
+		test(title.getString(),
+			cleanresult==(ssize_t)clean.getStringLength() &&
+			total>0 &&
+			(!expected ||
+			!charstring::compare(clean.getString(),expected[m])));
+
+		// fail or shorten each write
+		for (uint16_t c=0; c<4; c++) {
+			bool	shortwrite=!codes[c];
+			for (size_t failat=1; failat<=total; failat++) {
+				failbuffer	fb(failat,shortwrite,
+						(shortwrite)?RESULT_ERROR:codes[c]);
+				ssize_t	result=writeTree(t,m,&fb);
+				title.clear();
+				title.append(prefix.getString());
+				if (shortwrite) {
+					title.append(": short write ");
+				} else {
+					title.append(": fail write (");
+					title.append((int64_t)codes[c]);
+					title.append(") ");
+				}
+				title.append((uint64_t)failat)->append(" of ");
+				title.append((uint64_t)total);
+
+				// A zero-byte write, such as an empty string
+				// value, can't be made short, so the run must
+				// complete.
+				bool	success;
+				if (shortwrite && !fb.failsize) {
+					title.append(" (zero-byte)");
+					success=(result==cleanresult);
+				} else {
+					success=(result==((shortwrite)?
+							RESULT_ERROR:codes[c]) &&
+						fb.writesafterfail==0);
+				}
+				test(title.getString(),success);
+			}
 		}
 	}
 }
@@ -196,7 +288,7 @@ int main(int argc, const char **argv) {
 	}
 	atc.write();
 	atc.writeXml();
-	ati32.writeJson();
+	atc.writeJson();
 	stdoutput.printf("\n");
 
 
@@ -333,6 +425,26 @@ int main(int argc, const char **argv) {
 	testFailWrite("dictionary (int32_t, const char *)",&d);
 	dictionary<int32_t,const char *>	ed;
 	testFailWrite("dictionary (empty)",&ed);
+
+	testTreeFailWrite("avltree (int32_t)",&ati32,NULL);
+	testTreeFailWrite("avltree (const char *)",&atc,NULL);
+	avltree<const char *>	atce;
+	atce.insert("b");
+	atce.insert("");
+	atce.insert("c");
+	testTreeFailWrite("avltree (empty string)",&atce,NULL);
+	avltree<int32_t>	ati32s;
+	ati32s.insert(7);
+	const char * const	sexpected[]={
+		"<t v=\"7\" lh=\"0\" rh=\"0\" bf=\"0\"/>\n",
+		"[7]","[\n  7\n]\n","<t v=\"7\"/>\n","<t v=\"7\"/>\n"
+	};
+	testTreeFailWrite("avltree (single)",&ati32s,sexpected);
+	avltree<int32_t>	eati32;
+	const char * const	eexpected[]={
+		"<t/>\n","[]","[\n]\n","<t/>\n","<t/>\n"
+	};
+	testTreeFailWrite("avltree (empty)",&eati32,eexpected);
 
 	stdoutput.printf("\n");
 

@@ -70,6 +70,19 @@
 		bool	writeJsonValue(ssize_t *retval, output *out,
 					stringbuffer *buf,
 					const valuetype &value);
+		bool	writeValue(ssize_t *retval, output *out,
+					stringbuffer *buf,
+					const wchar_t *value);
+		bool	writeValue(ssize_t *retval, output *out,
+					stringbuffer *buf,
+					wchar_t *value);
+		bool	writeValue(ssize_t *retval, output *out,
+					stringbuffer *buf,
+					wchar_t value);
+		template <class valuetype>
+		bool	writeValue(ssize_t *retval, output *out,
+					stringbuffer *buf,
+					const valuetype &value);
 
 		bool	managevalues;
 		bool	managearrayvalues;

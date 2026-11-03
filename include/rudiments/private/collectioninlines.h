@@ -480,3 +480,41 @@ bool collection::writeJsonValue(ssize_t *retval, output *out,
 	return incOrErr(retval,out->write(buf->getBuffer(),buf->getSize()),
 							buf->getSize());
 }
+
+inline
+bool collection::writeValue(ssize_t *retval, output *out,
+						stringbuffer *buf,
+						const wchar_t *value) {
+	return incOrErr(retval,writeValue(out,value));
+}
+
+inline
+bool collection::writeValue(ssize_t *retval, output *out,
+						stringbuffer *buf,
+						wchar_t *value) {
+	return incOrErr(retval,writeValue(out,value));
+}
+
+inline
+bool collection::writeValue(ssize_t *retval, output *out,
+						stringbuffer *buf,
+						wchar_t value) {
+	return incOrErr(retval,writeValue(out,value));
+}
+
+template <class valuetype>
+inline
+bool collection::writeValue(ssize_t *retval, output *out,
+						stringbuffer *buf,
+						const valuetype &value) {
+
+	// The size that printf() returns includes the bytes of a short
+	// write that were not written, so format the value into the buffer
+	// and write the buffer.
+	buf->clear();
+	if (writeValue(buf,value)<0) {
+		return incOrErr(retval,RESULT_ERROR);
+	}
+	return incOrErr(retval,out->write(buf->getBuffer(),buf->getSize()),
+							buf->getSize());
+}

@@ -452,21 +452,43 @@ ssize_t avltree<valuetype>::writeNodeXml(output *out,
 	uint8_t		leftheight=n->getLeftHeight();
 	uint8_t		rightheight=n->getRightHeight();
 
-	ssize_t	retval=0;
+	ssize_t		retval=0;
+	stringbuffer	buf;
 
 	// print an xml-style representation of the node and its descendents
 	for (uint16_t i=0; i<*indentlevel && retval>-1; i++) {
-		this->incOrErr(&retval,out->write(' '),1);
+		if (!this->incOrErr(&retval,out->write(' '),1) && retval>-1) {
+			retval=RESULT_ERROR;
+		}
 	}
-	this->incOrErr(&retval,out->printf("<%s v=\"",name)) &&
-	this->incOrErr(&retval,this->writeValue(out,n->getValue())) &&
-	this->incOrErr(&retval,out->write('"'),1) &&
-	((details)?this->incOrErr(&retval,out->printf(
-					" lh=\"%d\" rh=\"%d\" bf=\"%d\"",
-					leftheight,rightheight,
-					leftheight-rightheight)):true);
+	if (retval>-1) {
+		buf.printf("<%s v=\"",name);
+		if (!(this->incOrErr(&retval,
+				out->write(buf.getBuffer(),buf.getSize()),
+				buf.getSize()) &&
+			this->writeValue(&retval,out,&buf,n->getValue()) &&
+			this->incOrErr(&retval,out->write('"'),1)) &&
+			retval>-1) {
+			retval=RESULT_ERROR;
+		}
+	}
+	if (details && retval>-1) {
+		buf.clear();
+		buf.printf(" lh=\"%d\" rh=\"%d\" bf=\"%d\"",
+				leftheight,rightheight,leftheight-rightheight);
+		if (!this->incOrErr(&retval,
+				out->write(buf.getBuffer(),buf.getSize()),
+				buf.getSize()) &&
+			retval>-1) {
+			retval=RESULT_ERROR;
+		}
+	}
 	if (left || right) {
-		this->incOrErr(&retval,out->write(">\n",2),2);
+		if (!(retval>-1 &&
+			this->incOrErr(&retval,out->write(">\n",2),2)) &&
+			retval>-1) {
+			retval=RESULT_ERROR;
+		}
 		(*indentlevel)++;
 		if (retval>-1 && left) {
 			this->incOrErr(&retval,
@@ -480,11 +502,28 @@ ssize_t avltree<valuetype>::writeNodeXml(output *out,
 		}
 		(*indentlevel)--;
 		for (uint16_t i=0; i<*indentlevel && retval>-1; i++) {
-			this->incOrErr(&retval,out->write(' '));
+			if (!this->incOrErr(&retval,out->write(' '),1) &&
+				retval>-1) {
+				retval=RESULT_ERROR;
+			}
 		}
-		this->incOrErr(&retval,out->printf("</%s>\n",name));
+		if (retval>-1) {
+			buf.clear();
+			buf.printf("</%s>\n",name);
+			if (!this->incOrErr(&retval,
+					out->write(buf.getBuffer(),
+							buf.getSize()),
+					buf.getSize()) &&
+				retval>-1) {
+				retval=RESULT_ERROR;
+			}
+		}
 	} else {
-		this->incOrErr(&retval,out->write("/>\n",3),3);
+		if (!(retval>-1 &&
+			this->incOrErr(&retval,out->write("/>\n",3),3)) &&
+			retval>-1) {
+			retval=RESULT_ERROR;
+		}
 	}
 	return retval;
 }
@@ -502,25 +541,44 @@ ssize_t avltree<valuetype>::writeNodeJson(output *out,
 	avltreenode<valuetype>	*right=
 			(avltreenode<valuetype> *)n->getRightChild();
 
-	ssize_t	retval=0;
+	ssize_t		retval=0;
+	stringbuffer	buf;
 
 	if (*indentlevel) {
-		this->incOrErr(&retval,out->write(','),1) &&
-		((indent)?this->incOrErr(&retval,out->write('\n'),1):true);
+		if (!(this->incOrErr(&retval,out->write(','),1) &&
+			((indent)?this->incOrErr(&retval,
+					out->write('\n'),1):true)) &&
+			retval>-1) {
+			retval=RESULT_ERROR;
+		}
 	}
 	if (indent) {
 		for (uint16_t i=0; i<*indentlevel && retval>-1; i++) {
-			this->incOrErr(&retval,out->write("  ",2),2);
+			if (!this->incOrErr(&retval,out->write("  ",2),2) &&
+				retval>-1) {
+				retval=RESULT_ERROR;
+			}
 		}
 	}
-	this->incOrErr(&retval,out->write('['),1) &&
-	((indent)?this->incOrErr(&retval,out->write('\n'),1):true);
+	if (!(retval>-1 &&
+		this->incOrErr(&retval,out->write('['),1) &&
+		((indent)?this->incOrErr(&retval,out->write('\n'),1):true)) &&
+		retval>-1) {
+		retval=RESULT_ERROR;
+	}
 	if (indent) {
 		for (uint16_t i=0; i<*indentlevel+1 && retval>-1; i++) {
-			this->incOrErr(&retval,out->write("  ",2),2);
+			if (!this->incOrErr(&retval,out->write("  ",2),2) &&
+				retval>-1) {
+				retval=RESULT_ERROR;
+			}
 		}
 	}
-	this->incOrErr(&retval,this->writeJsonValue(out,n->getValue()));
+	if (!(retval>-1 &&
+		this->writeJsonValue(&retval,out,&buf,n->getValue())) &&
+		retval>-1) {
+		retval=RESULT_ERROR;
+	}
 
 	if (left || right) {
 		(*indentlevel)++;
@@ -536,16 +594,24 @@ ssize_t avltree<valuetype>::writeNodeJson(output *out,
 	}
 
 	if (indent) {
-		this->incOrErr(&retval,out->write('\n'),1);
+		if (!(retval>-1 &&
+			this->incOrErr(&retval,out->write('\n'),1)) &&
+			retval>-1) {
+			retval=RESULT_ERROR;
+		}
 		for (uint16_t i=0; i<*indentlevel && retval>-1; i++) {
-			this->incOrErr(&retval,out->write("  ",2),2);
+			if (!this->incOrErr(&retval,out->write("  ",2),2) &&
+				retval>-1) {
+				retval=RESULT_ERROR;
+			}
 		}
 	}
-	this->incOrErr(&retval,out->write(']'),1);
-	if (indent) {
-		if (!*indentlevel) {
-			this->incOrErr(&retval,out->write('\n'),1);
-		}
+	if (!(retval>-1 &&
+		this->incOrErr(&retval,out->write(']'),1) &&
+		((indent && !*indentlevel)?
+			this->incOrErr(&retval,out->write('\n'),1):true)) &&
+		retval>-1) {
+		retval=RESULT_ERROR;
 	}
 	return retval;
 }
