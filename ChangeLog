@@ -288,7 +288,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - fixed printf() returning the formatted size instead of an error on a
   short write or write error, and collection write() and writeJson()
   printing only the first character of a wide string
-- fixed the dictionary::clear() documentation of which flags delete keys
+- fixed the dictionary::clear() and collection documentation
 
 ### Security
 - fixed buffer overflow when unix socket file name is too long

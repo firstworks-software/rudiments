@@ -68,7 +68,7 @@ class collection : virtual public object {
 		 *  collection, eg. list, dictionary, tree, etc. */
 		virtual const char	*getType()=0;
 
-		/** Returns the number of elementes in the collection. */
+		/** Returns the number of elements in the collection. */
 		virtual uint64_t	getCount()=0;
 
 		/** Returns the comparator used internally by the class.
@@ -136,7 +136,7 @@ class collection : virtual public object {
 		 *  If "manage" is set to false then:
 		 *  * When remove() is called, the object stored as the value
 		 *    at that location in the collection will not be deleted.
-		 *  * When clear() is called, the object stored as the value a
+		 *  * When clear() is called, the object stored as the value at
 		 *    each location in the collection will not be deleted.
 		 *  * When the = operator is called, the lvalue instance will
 		 *    not attempt to create a copy of the object stored as the
@@ -208,23 +208,23 @@ class collection : virtual public object {
 		 *  consider using a managed collection of managed staticarrays.
 		 *  For example:
 		 *
-		 *  	linkedlist< staticarray< myobject * > *>	l;
+		 *  	linkedlist< staticarray< myobject *, 3 > *>	l;
 		 *  	l.setManageValues(true);
 		 *
-		 *  	staticarray< myobject * >	*s1=
-		 *  			new staticarray< myobject * >();
-		 *  	s1.setManageValues(true);
-		 *  	s1[0]=new myobject(...);
-		 *  	s1[1]=new myobject(...);
-		 *  	s1[2]=new myobject(...);
+		 *  	staticarray< myobject *, 3 >	*s1=
+		 *  			new staticarray< myobject *, 3 >();
+		 *  	s1->setManageValues(true);
+		 *  	(*s1)[0]=new myobject(...);
+		 *  	(*s1)[1]=new myobject(...);
+		 *  	(*s1)[2]=new myobject(...);
 		 *  	l.append(s1);
 		 *
-		 *  	staticarray< myobject * >	*s2=
-		 *  			new staticarray< myobject * >();
-		 *  	s2.setManageValues(true);
-		 *  	s2[0]=new myobject(...);
-		 *  	s2[1]=new myobject(...);
-		 *  	s2[2]=new myobject(...);
+		 *  	staticarray< myobject *, 3 >	*s2=
+		 *  			new staticarray< myobject *, 3 >();
+		 *  	s2->setManageValues(true);
+		 *  	(*s2)[0]=new myobject(...);
+		 *  	(*s2)[1]=new myobject(...);
+		 *  	(*s2)[2]=new myobject(...);
 		 *  	l.append(s2);
 		 *
 		 *  	...
@@ -274,7 +274,7 @@ class collection : virtual public object {
 		 *  If "manage" is set to false then:
 		 *  * When remove() is called, the object stored as the key
 		 *    at that location in the collection will not be deleted.
-		 *  * When clear() is called, the object stored as the key a
+		 *  * When clear() is called, the object stored as the key at
 		 *    each location in the collection will not be deleted.
 		 *  * When the = operator is called, the lvalue instance will
 		 *    not attempt to create a copy of the object stored as the
@@ -348,24 +348,24 @@ class collection : virtual public object {
 		 *  consider using a managed collection of managed staticarrays.
 		 *  For example:
 		 *
-		 *  	dictionary<staticarray< myobject * > *,
+		 *  	dictionary<staticarray< myobject *, 3 > *,
 		 *  					uint32_t >	d;
 		 *  	d.setManageKeys(true);
 		 *
-		 *  	staticarray< myobject * >	*s1=
-		 *  			new staticarray< myobject * >();
-		 *  	s1.setManageKeys(true);
-		 *  	s1[0]=new myobject(...);
-		 *  	s1[1]=new myobject(...);
-		 *  	s1[2]=new myobject(...);
+		 *  	staticarray< myobject *, 3 >	*s1=
+		 *  			new staticarray< myobject *, 3 >();
+		 *  	s1->setManageValues(true);
+		 *  	(*s1)[0]=new myobject(...);
+		 *  	(*s1)[1]=new myobject(...);
+		 *  	(*s1)[2]=new myobject(...);
 		 *  	d.setValue(s1,1);
 		 *
-		 *  	staticarray< myobject * >	*s2=
-		 *  			new staticarray< myobject * >();
-		 *  	s2.setManageKeys(true);
-		 *  	s2[0]=new myobject(...);
-		 *  	s2[1]=new myobject(...);
-		 *  	s2[2]=new myobject(...);
+		 *  	staticarray< myobject *, 3 >	*s2=
+		 *  			new staticarray< myobject *, 3 >();
+		 *  	s2->setManageValues(true);
+		 *  	(*s2)[0]=new myobject(...);
+		 *  	(*s2)[1]=new myobject(...);
+		 *  	(*s2)[2]=new myobject(...);
 		 *  	d.setValue(s2,2);
 		 *
 		 *  	...
@@ -378,7 +378,7 @@ class collection : virtual public object {
 		 *  is configured to manage the arrays that are stored as the
 		 *  keys at each location in the collection.
 		 *
-		 *  See setManageArrayValues().
+		 *  See setManageArrayKeys().
 		 *
 		 *  Returns true if it is and false if it is not. */
 		virtual	bool	getManageArrayKeys();
