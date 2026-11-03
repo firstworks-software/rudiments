@@ -187,7 +187,7 @@ const byte_t *tripledes::getData(bool encrypt) {
 	const byte_t	*in=getIn()->getBuffer();
 	uint32_t	inremaining=getIn()->getSize();
 	#if !defined(RUDIMENTS_HAS_SSL)
-	byte_t		padbytes;
+	byte_t		padbytes=0;
 	#endif
 	for (;;) {
 
@@ -202,9 +202,9 @@ const byte_t *tripledes::getData(bool encrypt) {
 			break;
 		}
 		#else
-		// without padding there's no pad block, so 0 bytes
-		// of input produce 0 bytes of output
-		if (!getUsePadding() && !inremaining) {
+		// decrypt never pads and unpadded encrypt adds no
+		// pad block, so empty input gives empty output
+		if ((!encrypt || !getUsePadding()) && !inremaining) {
 			break;
 		}
 		#endif
@@ -366,8 +366,9 @@ const byte_t *tripledes::getData(bool encrypt) {
 			// pad-byte (see above).  Then move back that many
 			// bytes from the end and truncate the buffer there.
 			getOut()->setPositionRelativeToEnd(-1);
-			getOut()->read(&padbytes,sizeof(padbytes));
-			if (padbytes>DES_BLOCK_SIZE) {
+			if (getOut()->read(&padbytes,sizeof(padbytes))!=
+						sizeof(padbytes) ||
+					!padbytes || padbytes>DES_BLOCK_SIZE) {
 				encryption::setError(
 					ENCRYPTION_ERROR_INVALID_PADDING);
 				getOut()->clear();

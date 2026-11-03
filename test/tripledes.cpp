@@ -312,6 +312,58 @@ int main(int argc, const char **argv) {
 							truncrejected);
 	stdoutput.printf("\n");
 
+	// a zero block with padding off ends in a 0 byte, which padding on
+	// must reject as a pad count
+	tripledes	zeropadenc;
+	zeropadenc.setKey(nistkey,24);
+	zeropadenc.setIv(padiv,8);
+	zeropadenc.setUsePadding(false);
+	byte_t	zeroblock[8];
+	bytestring::zero(zeroblock,sizeof(zeroblock));
+	test("zero pad byte: encrypt append",
+		zeropadenc.append(zeroblock,sizeof(zeroblock)));
+	const byte_t	*zeropadct=zeropadenc.getEncryptedData();
+	uint64_t	zeropadctsize=zeropadenc.getEncryptedDataSize();
+	test("zero pad byte: encrypted data",zeropadct!=NULL);
+	tripledes	zeropaddec;
+	zeropaddec.setKey(nistkey,24);
+	zeropaddec.setIv(padiv,8);
+	zeropaddec.append(zeropadct,zeropadctsize);
+	test("zero pad byte: decrypt rejected",
+		zeropaddec.getUsePadding() &&
+		zeropaddec.getDecryptedData()==NULL &&
+		zeropaddec.getError()!=ENCRYPTION_ERROR_SUCCESS);
+	stdoutput.printf("\n");
+
+	// clear() keeps the key and iv, so decrypting with no input must
+	// fail instead of decrypting stale data
+	tripledes	emptyenc;
+	emptyenc.setKey(nistkey,24);
+	emptyenc.setIv(padiv,8);
+	emptyenc.append(zeroblock,0);
+	const byte_t	*emptyct=emptyenc.getEncryptedData();
+	uint64_t	emptyctsize=emptyenc.getEncryptedDataSize();
+	test("empty input: pad block encrypted",
+		emptyct!=NULL && emptyctsize==8);
+	tripledes	emptydec;
+	emptydec.setKey(nistkey,24);
+	emptydec.setIv(padiv,8);
+	emptydec.append(emptyct,emptyctsize);
+	test("empty input: valid ciphertext decrypts",
+		emptydec.getDecryptedData()!=NULL &&
+		emptydec.getDecryptedDataSize()==0);
+	emptydec.clear();
+	test("empty input: decrypt after clear rejected",
+		emptydec.getDecryptedData()==NULL &&
+		emptydec.getError()!=ENCRYPTION_ERROR_SUCCESS);
+	tripledes	emptyfresh;
+	emptyfresh.setKey(nistkey,24);
+	emptyfresh.setIv(padiv,8);
+	test("empty input: fresh object rejected",
+		emptyfresh.getDecryptedData()==NULL &&
+		emptyfresh.getError()!=ENCRYPTION_ERROR_SUCCESS);
+	stdoutput.printf("\n");
+
 	// setKey() must reject anything but the correct key size
 	tripledes	badkey;
 	byte_t		wrongsizekey[16];

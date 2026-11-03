@@ -119,12 +119,12 @@ const byte_t *singledes::getData(bool encrypt) {
 	// encrypt/decrypt the data in DES_BLOCK_SIZE-sized blocks
 	const byte_t	*in=getIn()->getBuffer();
 	uint32_t	inremaining=getIn()->getSize();
-	byte_t		padbytes;
+	byte_t		padbytes=0;
 	for (;;) {
 
-		// without padding there's no pad block, so 0 bytes
-		// of input produce 0 bytes of output
-		if (!getUsePadding() && !inremaining) {
+		// decrypt never pads and unpadded encrypt adds no
+		// pad block, so empty input gives empty output
+		if ((!encrypt || !getUsePadding()) && !inremaining) {
 			break;
 		}
 
@@ -266,8 +266,9 @@ const byte_t *singledes::getData(bool encrypt) {
 		// (see above).  Then move back that many bytes from the end
 		// and truncate the buffer there.
 		getOut()->setPositionRelativeToEnd(-1);
-		getOut()->read(&padbytes,sizeof(padbytes));
-		if (padbytes>DES_BLOCK_SIZE) {
+		if (getOut()->read(&padbytes,sizeof(padbytes))!=
+					sizeof(padbytes) ||
+				!padbytes || padbytes>DES_BLOCK_SIZE) {
 			encryption::setError(ENCRYPTION_ERROR_INVALID_PADDING);
 			getOut()->clear();
 			return NULL;

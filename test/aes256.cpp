@@ -102,6 +102,58 @@ int main(int argc, const char **argv) {
 		padoffbad.getError()==ENCRYPTION_ERROR_INVALID_PADDING);
 	stdoutput.printf("\n");
 
+	// a zero block with padding off ends in a 0 byte, which padding on
+	// must reject as a pad count
+	aes256	zeropadenc;
+	zeropadenc.setKey(padoff.getKey(),padoff.getKeySize());
+	zeropadenc.setIv(zeroiv,sizeof(zeroiv));
+	zeropadenc.setUsePadding(false);
+	byte_t	zeroblock[16];
+	bytestring::zero(zeroblock,sizeof(zeroblock));
+	test("zero pad byte: encrypt append",
+		zeropadenc.append(zeroblock,sizeof(zeroblock)));
+	const byte_t	*zeropadct=zeropadenc.getEncryptedData();
+	uint64_t	zeropadctsize=zeropadenc.getEncryptedDataSize();
+	test("zero pad byte: encrypted data",zeropadct!=NULL);
+	aes256	zeropaddec;
+	zeropaddec.setKey(padoff.getKey(),padoff.getKeySize());
+	zeropaddec.setIv(zeroiv,sizeof(zeroiv));
+	zeropaddec.append(zeropadct,zeropadctsize);
+	test("zero pad byte: decrypt rejected",
+		zeropaddec.getUsePadding() &&
+		zeropaddec.getDecryptedData()==NULL &&
+		zeropaddec.getError()!=ENCRYPTION_ERROR_SUCCESS);
+	stdoutput.printf("\n");
+
+	// clear() keeps the key and iv, so decrypting with no input must
+	// fail instead of decrypting stale data
+	aes256	emptyenc;
+	emptyenc.setKey(padoff.getKey(),padoff.getKeySize());
+	emptyenc.setIv(zeroiv,sizeof(zeroiv));
+	emptyenc.append(zeroblock,0);
+	const byte_t	*emptyct=emptyenc.getEncryptedData();
+	uint64_t	emptyctsize=emptyenc.getEncryptedDataSize();
+	test("empty input: pad block encrypted",
+		emptyct!=NULL && emptyctsize==16);
+	aes256	emptydec;
+	emptydec.setKey(padoff.getKey(),padoff.getKeySize());
+	emptydec.setIv(zeroiv,sizeof(zeroiv));
+	emptydec.append(emptyct,emptyctsize);
+	test("empty input: valid ciphertext decrypts",
+		emptydec.getDecryptedData()!=NULL &&
+		emptydec.getDecryptedDataSize()==0);
+	emptydec.clear();
+	test("empty input: decrypt after clear rejected",
+		emptydec.getDecryptedData()==NULL &&
+		emptydec.getError()!=ENCRYPTION_ERROR_SUCCESS);
+	aes256	emptyfresh;
+	emptyfresh.setKey(padoff.getKey(),padoff.getKeySize());
+	emptyfresh.setIv(zeroiv,sizeof(zeroiv));
+	test("empty input: fresh object rejected",
+		emptyfresh.getDecryptedData()==NULL &&
+		emptyfresh.getError()!=ENCRYPTION_ERROR_SUCCESS);
+	stdoutput.printf("\n");
+
 	prng	rn;
 	int32_t		seed=prng::getSeed();
 	rn.setSeed(seed);

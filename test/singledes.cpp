@@ -226,6 +226,58 @@ int main(int argc, const char **argv) {
 		truncenc.getEncryptedDataSize()==24);
 	stdoutput.printf("\n");
 
+	// a zero block with padding off ends in a 0 byte, which padding on
+	// must reject as a pad count
+	singledes	zeropadenc;
+	zeropadenc.setKey(fipskey,sizeof(fipskey));
+	zeropadenc.setIv(fipsiv,sizeof(fipsiv));
+	zeropadenc.setUsePadding(false);
+	byte_t	zeroblock[8];
+	bytestring::zero(zeroblock,sizeof(zeroblock));
+	test("zero pad byte: encrypt append",
+		zeropadenc.append(zeroblock,sizeof(zeroblock)));
+	const byte_t	*zeropadct=zeropadenc.getEncryptedData();
+	uint64_t	zeropadctsize=zeropadenc.getEncryptedDataSize();
+	test("zero pad byte: encrypted data",zeropadct!=NULL);
+	singledes	zeropaddec;
+	zeropaddec.setKey(fipskey,sizeof(fipskey));
+	zeropaddec.setIv(fipsiv,sizeof(fipsiv));
+	zeropaddec.append(zeropadct,zeropadctsize);
+	test("zero pad byte: decrypt rejected",
+		zeropaddec.getUsePadding() &&
+		zeropaddec.getDecryptedData()==NULL &&
+		zeropaddec.getError()==ENCRYPTION_ERROR_INVALID_PADDING);
+	stdoutput.printf("\n");
+
+	// clear() keeps the key and iv, so decrypting with no input must
+	// fail instead of decrypting stale data
+	singledes	emptyenc;
+	emptyenc.setKey(fipskey,sizeof(fipskey));
+	emptyenc.setIv(fipsiv,sizeof(fipsiv));
+	emptyenc.append(zeroblock,0);
+	const byte_t	*emptyct=emptyenc.getEncryptedData();
+	uint64_t	emptyctsize=emptyenc.getEncryptedDataSize();
+	test("empty input: pad block encrypted",
+		emptyct!=NULL && emptyctsize==8);
+	singledes	emptydec;
+	emptydec.setKey(fipskey,sizeof(fipskey));
+	emptydec.setIv(fipsiv,sizeof(fipsiv));
+	emptydec.append(emptyct,emptyctsize);
+	test("empty input: valid ciphertext decrypts",
+		emptydec.getDecryptedData()!=NULL &&
+		emptydec.getDecryptedDataSize()==0);
+	emptydec.clear();
+	test("empty input: decrypt after clear rejected",
+		emptydec.getDecryptedData()==NULL &&
+		emptydec.getError()==ENCRYPTION_ERROR_INVALID_PADDING);
+	singledes	emptyfresh;
+	emptyfresh.setKey(fipskey,sizeof(fipskey));
+	emptyfresh.setIv(fipsiv,sizeof(fipsiv));
+	test("empty input: fresh object rejected",
+		emptyfresh.getDecryptedData()==NULL &&
+		emptyfresh.getError()==ENCRYPTION_ERROR_INVALID_PADDING);
+	stdoutput.printf("\n");
+
 	// the Oracle O3LOGON password hash, checked against two public
 	// golden vectors
 	byte_t	systemhash[8];
