@@ -9,7 +9,7 @@
 
 int main(int argc, const char **argv) {
 
-	if (argc<3) {
+	if (argc<4) {
 		stdoutput.printf("usage: inetsocketclient [buffer size] [bytesperiteration] [iterations]\n");
 		process::exit(0);
 	}
@@ -41,6 +41,7 @@ int main(int argc, const char **argv) {
 		char	*err=error::getErrorString();
 		stdoutput.printf("connect failed: %s\n",err);
 		delete[] err;
+		delete[] bytes;
 		process::exit(1);
 	}
 
@@ -56,4 +57,5 @@ int main(int argc, const char **argv) {
 
 	// close the connection to the server
 	clnt.close();
+	delete[] bytes;
 }
