@@ -90,9 +90,11 @@ int main(int argc, const char **argv) {
 		}
 		if (!fd) {
 			if (error::getErrorNumber()) {
+				char	*err=error::getErrorString();
 				stdoutput.printf(
 					"accept failed (1): %s\n",
-					error::getErrorString());
+					err);
+				delete[] err;
 			}
 			continue;
 		}
@@ -118,9 +120,11 @@ int main(int argc, const char **argv) {
 							"(0): eof\n");
 					}
 				} else if (error::getErrorNumber()) {
+					char	*err=error::getErrorString();
 					stdoutput.printf(
 						"  read() size failed (1): "
-						"%s\n",error::getErrorString());
+						"%s\n",err);
+					delete[] err;
 				} else {
 					stdoutput.printf(
 						"  read() size failed (2): "
@@ -143,9 +147,11 @@ int main(int argc, const char **argv) {
 							"(0): eof\n");
 					}
 				} else if (error::getErrorNumber()) {
+					char	*err=error::getErrorString();
 					stdoutput.printf(
 						"  read() size failed (1): "
-						"%s\n",error::getErrorString());
+						"%s\n",err);
+					delete[] err;
 				} else {
 					stdoutput.printf(
 						"  read() size failed (2): "
@@ -181,9 +187,11 @@ int main(int argc, const char **argv) {
 							"(0): eof\n");
 					}
 				} else if (error::getErrorNumber()) {
+					char	*err=error::getErrorString();
 					stdoutput.printf(
 						"  write() size failed (1): "
-						"%s\n",error::getErrorString());
+						"%s\n",err);
+					delete[] err;
 				} else {
 					stdoutput.printf(
 						"  write() size failed (2): "
@@ -206,9 +214,11 @@ int main(int argc, const char **argv) {
 							"(0): eof\n");
 					}
 				} else if (error::getErrorNumber()) {
+					char	*err=error::getErrorString();
 					stdoutput.printf(
 						"  write() size failed (1): "
-						"%s\n",error::getErrorString());
+						"%s\n",err);
+					delete[] err;
 				} else {
 					stdoutput.printf(
 						"  write() size failed (2): "
