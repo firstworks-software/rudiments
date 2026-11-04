@@ -36,7 +36,7 @@ int main(int argc, const char **argv) {
 			#endif
 			args,false);
 	
-		process::exit(0);
+		return 0;
 	}
 
 	header("commandline");
@@ -100,9 +100,7 @@ int main(int argc, const char **argv) {
 	test("getValue(), -s",
 		!charstring::compare(d.getValue((char *)"s"),""));
 
-	// free keys and values, exit skips destructors
-	d.clear();
 	stdoutput.printf("\n");
 
-	process::exit(0);
+	return 0;
 }

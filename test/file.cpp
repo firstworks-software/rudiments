@@ -691,5 +691,5 @@ int main(int argc, const char **argv) {
 
 	delete[] osname;
 
-	process::exit(0);
+	return 0;
 }

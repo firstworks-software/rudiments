@@ -45,13 +45,13 @@ int main(int argc, const char **argv) {
 	if (!iss.listen(NULL,port,0)) {
 		stdoutput.printf("error listening on port %d\n%s\n",
 					port,error::getErrorString());
-		process::exit(0);
+		return 0;
 	}
 	unixsocketserver	uss;
 	if (!uss.listen(sock,0000,15)) {
 		stdoutput.printf("error listening on socket %s\n%s\n",
 					sock,error::getErrorString());
-		process::exit(0);
+		return 0;
 	}
 
 	// create a listener and add the 2 sockets to it
@@ -69,7 +69,7 @@ int main(int argc, const char **argv) {
 		if (pool.listen(-1,-1)!=RESULT_SUCCESS) {
 			stdoutput.printf("error listening on pool\n%s\n",
 						error::getErrorString());
-			process::exit(0);
+			return 0;
 		}
 
 		// get ready file descrptor

@@ -26,7 +26,7 @@ int main(int argc, const char **argv) {
 
 	if (notsupported) {
 		stdoutput.printf("	not supported\n\n");
-		process::exit(0);
+		return 0;
 	}
 
 	char	*f=NULL;
@@ -115,5 +115,5 @@ int main(int argc, const char **argv) {
 
 	stdoutput.printf("\n");
 
-	process::exit(0);
+	return 0;
 }
