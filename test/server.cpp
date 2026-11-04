@@ -43,14 +43,18 @@ int main(int argc, const char **argv) {
 	// create socket servers
 	inetsocketserver	iss;
 	if (!iss.listen(NULL,port,0)) {
+		char	*err=error::getErrorString();
 		stdoutput.printf("error listening on port %d\n%s\n",
-					port,error::getErrorString());
+							port,err);
+		delete[] err;
 		return 0;
 	}
 	unixsocketserver	uss;
 	if (!uss.listen(sock,0000,15)) {
+		char	*err=error::getErrorString();
 		stdoutput.printf("error listening on socket %s\n%s\n",
-					sock,error::getErrorString());
+							sock,err);
+		delete[] err;
 		return 0;
 	}
 
@@ -67,8 +71,9 @@ int main(int argc, const char **argv) {
 
 		// listen
 		if (pool.listen(-1,-1)!=RESULT_SUCCESS) {
-			stdoutput.printf("error listening on pool\n%s\n",
-						error::getErrorString());
+			char	*err=error::getErrorString();
+			stdoutput.printf("error listening on pool\n%s\n",err);
+			delete[] err;
 			return 0;
 		}
 
