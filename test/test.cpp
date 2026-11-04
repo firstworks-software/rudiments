@@ -14,9 +14,11 @@ void test(const char *printstring, bool result) {
 	stdoutput.write((result)?": success":": failed");
 	stdoutput.write("\n");
 	if (!result) {
+		char	*err=error::getErrorString();
 		stdoutput.printf("%d: %s\n",
 			error::getErrorNumber(),
-			error::getErrorString());
+			err);
+		delete[] err;
 		process::exit(1);
 	}
 }
@@ -27,9 +29,11 @@ void test(const wchar_t *printstring, bool result) {
 	stdoutput.write((result)?": success":": failed");
 	stdoutput.write("\n");
 	if (!result) {
+		char	*err=error::getErrorString();
 		stdoutput.printf("%d: %s\n",
 			error::getErrorNumber(),
-			error::getErrorString());
+			err);
+		delete[] err;
 		process::exit(1);
 	}
 }

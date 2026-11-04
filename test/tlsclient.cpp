@@ -122,8 +122,10 @@ int main(int argc, const char **argv) {
 		// connect 
 		if (fd.connect()!=RESULT_SUCCESS) {
 			if (error::getErrorNumber()) {
+				char	*err=error::getErrorString();
 				stdoutput.printf("connect failed (1): %s\n",
-							error::getErrorString());
+							err);
+				delete[] err;
 			} else {
 				stdoutput.printf("connect failed (2): %s\n",
 							ctx.getErrorString());
@@ -208,10 +210,12 @@ int main(int argc, const char **argv) {
 						"eof\n");
 					break;
 				} else if (error::getErrorNumber()) {
+					char	*err=error::getErrorString();
 					stdoutput.printf(
 						"  write() size failed (1): "
 						"%s\n",
-						error::getErrorString());
+						err);
+					delete[] err;
 					break;
 				} else {
 					stdoutput.printf(
@@ -237,10 +241,12 @@ int main(int argc, const char **argv) {
 						"eof\n");
 					break;
 				} else if (error::getErrorNumber()) {
+					char	*err=error::getErrorString();
 					stdoutput.printf(
 						"  write() msg failed (1): "
 						"%s\n",
-						error::getErrorString());
+						err);
+					delete[] err;
 					break;
 				} else {
 					stdoutput.printf(
@@ -282,10 +288,12 @@ int main(int argc, const char **argv) {
 						"eof\n");
 					break;
 				} else if (error::getErrorNumber()) {
+					char	*err=error::getErrorString();
 					stdoutput.printf(
 						"  read() size failed (1): "
 						"%s\n",
-						error::getErrorString());
+						err);
+					delete[] err;
 					break;
 				} else {
 					stdoutput.printf(
@@ -312,10 +320,12 @@ int main(int argc, const char **argv) {
 					delete[] msg;
 					break;
 				} else if (error::getErrorNumber()) {
+					char	*err=error::getErrorString();
 					stdoutput.printf(
 						"  read() msg failed (1): "
 						"%s\n",
-						error::getErrorString());
+						err);
+					delete[] err;
 					delete[] msg;
 					break;
 				} else {

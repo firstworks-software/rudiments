@@ -76,9 +76,11 @@ int main(int argc, const char **argv) {
 			filedescriptor	*fd=iss.accept();
 			if (!fd) {
 				if (error::getErrorNumber()) {
+					char	*err=error::getErrorString();
 					stdoutput.printf(
 						"accept failed (1): %s\n",
-						error::getErrorString());
+						err);
+					delete[] err;
 				} else {
 					stdoutput.printf(
 						"accept failed (2): %s\n",
@@ -174,9 +176,11 @@ int main(int argc, const char **argv) {
 						"  read() size failed (0): "
 						"eof\n");
 					} else if (error::getErrorNumber()) {
+						char	*err=error::getErrorString();
 						stdoutput.printf(
 						"  read() size failed (1): "
-						"%s\n",error::getErrorString());
+						"%s\n",err);
+						delete[] err;
 					} else {
 						stdoutput.printf(
 						"  read() size failed (2): "
@@ -198,9 +202,11 @@ int main(int argc, const char **argv) {
 						"  read() size failed (0): "
 						"eof\n");
 					} else if (error::getErrorNumber()) {
+						char	*err=error::getErrorString();
 						stdoutput.printf(
 						"  read() size failed (1): "
-						"%s\n",error::getErrorString());
+						"%s\n",err);
+						delete[] err;
 					} else {
 						stdoutput.printf(
 						"  read() size failed (2): "
@@ -233,9 +239,11 @@ int main(int argc, const char **argv) {
 						"  write() size failed (0): "
 						"eof\n");
 					} else if (error::getErrorNumber()) {
+						char	*err=error::getErrorString();
 						stdoutput.printf(
 						"  write() size failed (1): "
-						"%s\n",error::getErrorString());
+						"%s\n",err);
+						delete[] err;
 					} else {
 						stdoutput.printf(
 						"  write() size failed (2): "
@@ -258,9 +266,11 @@ int main(int argc, const char **argv) {
 						"  write() size failed (0): "
 						"eof\n");
 					} else if (error::getErrorNumber()) {
+						char	*err=error::getErrorString();
 						stdoutput.printf(
 						"  write() size failed (1): "
-						"%s\n",error::getErrorString());
+						"%s\n",err);
+						delete[] err;
 					} else {
 						stdoutput.printf(
 						"  write() size failed (2): "
@@ -298,7 +308,9 @@ int main(int argc, const char **argv) {
 		}
 	}
 
+	char	*err=error::getErrorString();
 	stdoutput.printf("error listening on port %d\n%s\n",
-				port,error::getErrorString());
+				port,err);
+	delete[] err;
 	return 1;
 }

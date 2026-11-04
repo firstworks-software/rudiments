@@ -8,7 +8,9 @@
 
 int main(int argc, const char **argv) {
 	if (!sys::halt()) {
-		stdoutput.printf("halt failed: %s\n",error::getErrorString());
+		char	*err=error::getErrorString();
+		stdoutput.printf("halt failed: %s\n",err);
+		delete[] err;
 		process::exit(1);
 	}
 }

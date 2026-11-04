@@ -18,8 +18,10 @@ int main(int argc, const char **argv) {
 		"Interrupted system call",
 		NULL
 	};
-	test("getErrorString()",
-		charstring::isInSet(error::getErrorString(),intr));
+	char	*err=error::getErrorString();
+	bool	ok=charstring::isInSet(err,intr);
+	delete[] err;
+	test("getErrorString()",ok);
 
 	error::clearError();
 	test("clearError()/getErrorNumber()",!error::getErrorNumber());
@@ -34,8 +36,10 @@ int main(int argc, const char **argv) {
 		"Undefined error: 0",
 		NULL
 	};
-	test("clearError()/getErrorString()",
-		charstring::isInSet(error::getErrorString(),success));
+	err=error::getErrorString();
+	ok=charstring::isInSet(err,success);
+	delete[] err;
+	test("clearError()/getErrorString()",ok);
 
 	return 0;
 }
