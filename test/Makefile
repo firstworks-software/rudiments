@@ -132,6 +132,93 @@ clean:
 	$(RMTREE) .libs
 	cd certificates $(AND) $(MAKE) clean
 
+# a test that includes test.cpp must be listed here so it rebuilds when test.cpp changes
+TESTCPPOBJS = \
+	aes128.$(OBJ) \
+	aes192.$(OBJ) \
+	aes256.$(OBJ) \
+	arc4.$(OBJ) \
+	avltree.$(OBJ) \
+	bignumber.$(OBJ) \
+	bytebuffer.$(OBJ) \
+	bytestring.$(OBJ) \
+	character.$(OBJ) \
+	charstring.$(OBJ) \
+	collectionprint.$(OBJ) \
+	commandline.$(OBJ) \
+	csprng.$(OBJ) \
+	csvdom.$(OBJ) \
+	csvsax.$(OBJ) \
+	datetime.$(OBJ) \
+	des.$(OBJ) \
+	dh.$(OBJ) \
+	dictionary.$(OBJ) \
+	directory.$(OBJ) \
+	domevents.$(OBJ) \
+	domnode.$(OBJ) \
+	dynamicarray.$(OBJ) \
+	dynamiclib.$(OBJ) \
+	environment.$(OBJ) \
+	error.$(OBJ) \
+	file.$(OBJ) \
+	filesystem.$(OBJ) \
+	groupentry.$(OBJ) \
+	handoff.$(OBJ) \
+	hostentry.$(OBJ) \
+	iconvert.$(OBJ) \
+	inidom.$(OBJ) \
+	jsondom.$(OBJ) \
+	linkedlist.$(OBJ) \
+	listener.$(OBJ) \
+	locale.$(OBJ) \
+	logger.$(OBJ) \
+	md5.$(OBJ) \
+	memorymap.$(OBJ) \
+	memorypool.$(OBJ) \
+	mvcproperties.$(OBJ) \
+	mvcresult.$(OBJ) \
+	parameterstring.$(OBJ) \
+	pbkdf2.$(OBJ) \
+	permissions.$(OBJ) \
+	prng.$(OBJ) \
+	process.$(OBJ) \
+	propdom.$(OBJ) \
+	protocolentry.$(OBJ) \
+	regularexpression.$(OBJ) \
+	resourcepool.$(OBJ) \
+	scalar.$(OBJ) \
+	semaphoreset.$(OBJ) \
+	sensitivevalue.$(OBJ) \
+	serviceentry.$(OBJ) \
+	sha1.$(OBJ) \
+	sha256.$(OBJ) \
+	sha512.$(OBJ) \
+	sharedmemory.$(OBJ) \
+	signal.$(OBJ) \
+	singledes.$(OBJ) \
+	singlylinkedlist.$(OBJ) \
+	snooze.$(OBJ) \
+	staticarray.$(OBJ) \
+	stringbuffer.$(OBJ) \
+	sys.$(OBJ) \
+	table.$(OBJ) \
+	thread.$(OBJ) \
+	threadmutex.$(OBJ) \
+	tripledes.$(OBJ) \
+	ucs2character.$(OBJ) \
+	ucs2charstring.$(OBJ) \
+	ucs2stringbuffer.$(OBJ) \
+	url.$(OBJ) \
+	urlhttprequest.$(OBJ) \
+	userentry.$(OBJ) \
+	wastebasket.$(OBJ) \
+	wcharacter.$(OBJ) \
+	wcharstring.$(OBJ) \
+	wstringbuffer.$(OBJ) \
+	xmldom.$(OBJ)
+
+$(TESTCPPOBJS): test.cpp
+
 tlsserver: tlsserver.cpp tlsserver.$(OBJ) 
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) tlsserver.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
