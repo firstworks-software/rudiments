@@ -10,6 +10,8 @@
 #include <rudiments/error.h>
 #include <rudiments/stdio.h>
 
+#define MAXMSGSIZE (5*1024*1024)
+
 static void usage() {
 	stdoutput.printf("client "
 			"[-host host] [-port port] [-socket socket] [-quiet] "
@@ -189,7 +191,9 @@ int main(int argc, const char **argv) {
 
 			if (!quiet) {
 				stdoutput.printf("\n  Sent message... "
-					"(size=%d):\n  ",msgbuf.getSize());
+					"(size=%llu):\n  ",
+					(unsigned long long)
+					msgbuf.getSize());
 				stdoutput.safePrint(msgbuf.getBuffer(),
 					(msgbuf.getSize()<=80)?
 						msgbuf.getSize():80);
@@ -226,6 +230,11 @@ int main(int argc, const char **argv) {
 				stdoutput.printf(
 					"  read() size failed (3): "
 					"unknown error\n");
+				break;
+			} else if (msgsize>MAXMSGSIZE) {
+				stdoutput.printf(
+					"  read() size failed (4): "
+					"size too large\n");
 				break;
 			}
 

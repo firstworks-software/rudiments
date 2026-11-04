@@ -12,6 +12,8 @@
 #include <rudiments/process.h>
 #include <rudiments/stdio.h>
 
+#define MAXMSGSIZE (5*1024*1024)
+
 #ifndef _WIN32
 const char	*sock="/tmp/socket.sck";
 #else
@@ -65,7 +67,7 @@ int main(int argc, const char **argv) {
 
 	// buffers
 	uint64_t	msgsize;
-	byte_t		msg[5*1024*1024];
+	byte_t		msg[MAXMSGSIZE];
 
 	for (;;) {
 
@@ -136,6 +138,11 @@ int main(int argc, const char **argv) {
 					"  read() size failed (3): "
 					"unknown error\n");
 				break;
+			} else if (msgsize>MAXMSGSIZE) {
+				stdoutput.printf(
+					"  read() size failed (4): "
+					"size too large\n");
+				break;
 			}
 
 			sizeread=fd->read(msg,msgsize,10,0);
@@ -143,24 +150,24 @@ int main(int argc, const char **argv) {
 				if (sizeread==0) {
 					if (!quiet) {
 						stdoutput.printf(
-							"  read() size failed "
+							"  read() msg failed "
 							"(0): eof\n");
 					}
 				} else if (error::getErrorNumber()) {
 					char	*err=error::getErrorString();
 					stdoutput.printf(
-						"  read() size failed (1): "
+						"  read() msg failed (1): "
 						"%s\n",err);
 					delete[] err;
 				} else {
 					stdoutput.printf(
-						"  read() size failed (2): "
+						"  read() msg failed (2): "
 						"unknown error\n");
 				}
 				break;
 			} else if (sizeread!=(ssize_t)msgsize) {
 				stdoutput.printf(
-					"  read() size failed (3): "
+					"  read() msg failed (3): "
 					"unknown error\n");
 				break;
 			}
@@ -168,7 +175,8 @@ int main(int argc, const char **argv) {
 			if (!quiet) {
 				stdoutput.printf(
 					"\nReceived message... "
-					"(size=%d):\n",msgsize);
+					"(size=%llu):\n",
+					(unsigned long long)msgsize);
 				stdoutput.safePrint(msg,
 					(msgsize<=70)?msgsize:70);
 				if (msgsize>70) {
@@ -210,24 +218,24 @@ int main(int argc, const char **argv) {
 				if (sizewritten==0) {
 					if (!quiet) {
 						stdoutput.printf(
-							"  write() size failed "
+							"  write() msg failed "
 							"(0): eof\n");
 					}
 				} else if (error::getErrorNumber()) {
 					char	*err=error::getErrorString();
 					stdoutput.printf(
-						"  write() size failed (1): "
+						"  write() msg failed (1): "
 						"%s\n",err);
 					delete[] err;
 				} else {
 					stdoutput.printf(
-						"  write() size failed (2): "
+						"  write() msg failed (2): "
 						"unknown error\n");
 				}
 				break;
 			} else if (sizewritten!=(ssize_t)msgsize) {
 				stdoutput.printf(
-					"  write() size failed (3): "
+					"  write() msg failed (3): "
 					"unknown error\n");
 				break;
 			}
