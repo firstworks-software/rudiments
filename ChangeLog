@@ -293,6 +293,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   float, double and long double text
 - fixed aes128, aes192, aes256, tripledes and singledes decrypt accepting a
   zero pad byte, empty input or inconsistent pad bytes
+- fixed charstring, wcharstring and ucs2charstring allocating printf() ending
+  the caller's va_list
 
 ### Security
 - fixed buffer overflow when unix socket file name is too long

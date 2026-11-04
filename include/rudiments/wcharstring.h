@@ -1597,6 +1597,8 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *
 		 *  Returns -1 if an error occurred.
 		 *
+		 *  The caller must call va_end() on "argp" afterward.
+		 *
 		 *  NOTE: non-wide character sequences will be converted to
 		 *  sequences of wide characters.
 		 *

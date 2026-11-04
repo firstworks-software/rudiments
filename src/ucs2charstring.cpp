@@ -2819,8 +2819,9 @@ ssize_t ucs2charstring::printf(ucs2_t *buffer, size_t len,
 ssize_t ucs2charstring::printf(ucs2_t **buffer, const ucs2_t *format, ...) {
 	va_list	args;
 	va_start(args,format);
-	// the printf() below will call va_end(args)
-	return printf(buffer,format,&args);
+	ssize_t	result=printf(buffer,format,&args);
+	va_end(args);
+	return result;
 }
 
 ssize_t ucs2charstring::printf(ucs2_t **buffer,
@@ -2845,7 +2846,6 @@ ssize_t ucs2charstring::printf(ucs2_t **buffer,
 	va_list	argp1;
 	va_copy(argp1,*argp);
 	ssize_t	size=printf(*buffer,0,format,argp);
-	va_end(*argp);
 	if (size!=-1) {
 		// cannot fail, wcharstring::printf sized a buffer this large
 		size_t	bufsize;

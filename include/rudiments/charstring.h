@@ -2569,6 +2569,8 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *
 		 *  Returns -1 if an error occurred.
 		 *
+		 *  The caller must call va_end() on "argp" afterward.
+		 *
 		 *  NOTE: wide character sequences will be converted to
 		 *  sequences of characters of the currently selected character
 		 *  set (eg. selected by the locale) which may be ASCII,

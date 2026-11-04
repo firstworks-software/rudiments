@@ -4635,8 +4635,9 @@ ssize_t charstring::printf(char *buffer, size_t len,
 ssize_t charstring::printf(char **buffer, const char *format, ...) {
 	va_list	args;
 	va_start(args,format);
-	// the printf() below will call va_end(args)
-	return printf(buffer,format,&args);
+	ssize_t	result=printf(buffer,format,&args);
+	va_end(args);
+	return result;
 }
 
 ssize_t charstring::printf(char **buffer, const char *format, va_list *argp) {
@@ -4659,7 +4660,6 @@ ssize_t charstring::printf(char **buffer, const char *format, va_list *argp) {
 	va_list	argp1;
 	va_copy(argp1,*argp);
 	ssize_t	size=printf(*buffer,0,format,argp);
-	va_end(*argp);
 	if (size!=-1) {
 		*buffer=new char[size+1];
 		size=printf(*buffer,size+1,format,&argp1);

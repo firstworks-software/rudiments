@@ -1699,6 +1699,8 @@ class RUDIMENTS_DLLSPEC ucs2charstring {
 		 *
 		 *  Returns -1 if an error occurred.
 		 *
+		 *  The caller must call va_end() on "argp" afterward.
+		 *
 		 *  NOTE: wide character sequences will be converted to
 		 *  sequences of UCS-2 characters. */
 		static ssize_t	printf(ucs2_t **buffer,
