@@ -98,18 +98,24 @@ int main(int argc, const char **argv) {
 	test("open: valid file",d.open(f,false,false));
 	void	*valid=d.getSymbol("strcmp");
 	test("getSymbol: valid symbol",valid);
-	test("getError: valid symbol",!d.getError());
+	char	*err=d.getError();
+	test("getError: valid symbol",!err);
+	delete[] err;
 	int (*strcmp)(const char *, const char *)=
 		(int (*)(const char *, const char *))valid;
 	test("strcmp(): ",!(*strcmp)("",""));
 	valid=d.getSymbol("strcmpbad");
 	test("getSymbol: invalid symbol",!valid);
-	test("getError: invalid symbol",d.getError());
+	err=d.getError();
+	test("getError: invalid symbol",err!=NULL);
+	delete[] err;
 	test("close",d.close());
 
 	// open invalid file
 	test("open: invalid file",!d.open("badfile",false,false));
-	test("getError: invalid file",d.getError()!=NULL);
+	err=d.getError();
+	test("getError: invalid file",err!=NULL);
+	delete[] err;
 
 	delete[] f;
 
