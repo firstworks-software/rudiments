@@ -1,3 +1,5 @@
+// Copyright (c) David Muse
+// See the COPYING file for more information
 #include <rudiments/stdio.h>
 #include <rudiments/process.h>
 #include <rudiments/datetime.h>
