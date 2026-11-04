@@ -202,6 +202,16 @@ int main(int argc, const char **argv) {
 	test("empty input: fresh object rejected",
 		emptyfresh.getDecryptedData()==NULL &&
 		emptyfresh.getError()!=ENCRYPTION_ERROR_SUCCESS);
+
+	// padding off: no input decrypts to empty output
+	aes256	emptypadoff;
+	emptypadoff.setKey(padoff.getKey(),padoff.getKeySize());
+	emptypadoff.setIv(zeroiv,sizeof(zeroiv));
+	emptypadoff.setUsePadding(false);
+	test("empty input: padding off decrypts empty",
+		emptypadoff.getDecryptedData()!=NULL &&
+		emptypadoff.getDecryptedDataSize()==0 &&
+		emptypadoff.getError()==ENCRYPTION_ERROR_SUCCESS);
 	stdoutput.printf("\n");
 
 	prng	rn;

@@ -412,6 +412,16 @@ int main(int argc, const char **argv) {
 	test("empty input: fresh object rejected",
 		emptyfresh.getDecryptedData()==NULL &&
 		emptyfresh.getError()!=ENCRYPTION_ERROR_SUCCESS);
+
+	// padding off: no input decrypts to empty output
+	tripledes	emptypadoff;
+	emptypadoff.setKey(nistkey,24);
+	emptypadoff.setIv(padiv,8);
+	emptypadoff.setUsePadding(false);
+	test("empty input: padding off decrypts empty",
+		emptypadoff.getDecryptedData()!=NULL &&
+		emptypadoff.getDecryptedDataSize()==0 &&
+		emptypadoff.getError()==ENCRYPTION_ERROR_SUCCESS);
 	stdoutput.printf("\n");
 
 	// setKey() must reject anything but the correct key size

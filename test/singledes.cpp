@@ -326,6 +326,16 @@ int main(int argc, const char **argv) {
 	test("empty input: fresh object rejected",
 		emptyfresh.getDecryptedData()==NULL &&
 		emptyfresh.getError()==ENCRYPTION_ERROR_INVALID_PADDING);
+
+	// padding off: no input decrypts to empty output
+	singledes	emptypadoff;
+	emptypadoff.setKey(fipskey,sizeof(fipskey));
+	emptypadoff.setIv(fipsiv,sizeof(fipsiv));
+	emptypadoff.setUsePadding(false);
+	test("empty input: padding off decrypts empty",
+		emptypadoff.getDecryptedData()!=NULL &&
+		emptypadoff.getDecryptedDataSize()==0 &&
+		emptypadoff.getError()==ENCRYPTION_ERROR_SUCCESS);
 	stdoutput.printf("\n");
 
 	// the Oracle O3LOGON password hash, checked against two public
