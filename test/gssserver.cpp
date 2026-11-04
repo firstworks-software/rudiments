@@ -1,3 +1,5 @@
+// Copyright (c) David Muse
+// See the COPYING file for more information
 #include <rudiments/inetsocketserver.h>
 #include <rudiments/inetsocketclient.h>
 #include <rudiments/stdio.h>
