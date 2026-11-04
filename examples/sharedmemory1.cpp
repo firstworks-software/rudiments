@@ -16,7 +16,9 @@ int main(int argc, const char **argv) {
         sharedmemory    shm;
         if (!shm.create(file::generateKey("shm",1),128,
                                 permissions::parsePermString("rw-------"))) {
-		stdoutput.printf("error: %s\n",error::getErrorString());
+		char	*err=error::getErrorString();
+		stdoutput.printf("error: %s\n",err);
+		delete[] err;
 		process::exit(1);
 	}
 

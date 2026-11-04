@@ -38,8 +38,9 @@ int main(int argc, const char **argv) {
 
 	// connect to a server on localhost, listening on port 8000
 	if (clnt.connect()<0) {
-		stdoutput.printf("connect failed: %s\n",
-					error::getErrorString());
+		char	*err=error::getErrorString();
+		stdoutput.printf("connect failed: %s\n",err);
+		delete[] err;
 		process::exit(1);
 	}
 
