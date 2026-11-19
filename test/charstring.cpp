@@ -177,17 +177,12 @@ typedef	void	(*charstobytes2b_t)(const char *, uint64_t,
 typedef	void	(*charstobytes3a_t)(const char *, output *);
 typedef	void	(*charstobytes3b_t)(const char *, uint64_t, output *);
 
-// Similar to bytesToCharsConsistencyTest(), for a char-to-byte_t family.
-// base64Decode() is the one exception to all six overloads agreeing: its
-// out-pointer overloads report a size that counts the NULL terminator, unless
-// the size is 0, and its output * overloads write one byte less.  Its callers
-// set "sizecountsnull".
+// similar to bytesToCharsConsistencyTest(), for a char-to-byte_t family
 static void charsToBytesConsistencyTest(const char *label,
 				charstobytes1a_t f1a, charstobytes1b_t f1b,
 				charstobytes2a_t f2a, charstobytes2b_t f2b,
 				charstobytes3a_t f3a, charstobytes3b_t f3b,
-				const char *input, uint64_t inputsize,
-				bool sizecountsnull) {
+				const char *input, uint64_t inputsize) {
 
 	// make a NULL-terminated copy of the input
 	char	*in=terminatedCopy(input,inputsize);
@@ -198,8 +193,6 @@ static void charsToBytesConsistencyTest(const char *label,
 	byte_t		*expected;
 	uint64_t	expectedsize;
 	f2b(exact,inputsize,&expected,&expectedsize);
-	uint64_t	writtensize=(sizecountsnull && expectedsize)?
-						expectedsize-1:expectedsize;
 
 	// buffer-returning overloads
 	byte_t	*result;
@@ -227,12 +220,12 @@ static void charsToBytesConsistencyTest(const char *label,
 	stringbuffer	sb;
 	if (terminated) {
 		f3a(in,&sb);
-		outputConsistencyCheck(label,"3a",&sb,expected,writtensize);
+		outputConsistencyCheck(label,"3a",&sb,expected,expectedsize);
 		f3a(in,NULL);
 		sb.clear();
 	}
 	f3b(exact,inputsize,&sb);
-	outputConsistencyCheck(label,"3b",&sb,expected,writtensize);
+	outputConsistencyCheck(label,"3b",&sb,expected,expectedsize);
 	f3b(exact,inputsize,NULL);
 
 	delete[] expected;
@@ -412,7 +405,7 @@ static void hexDecodeTest(const char *label,
 			charstring::hexDecode,charstring::hexDecode,
 			charstring::hexDecode,charstring::hexDecode,
 			charstring::hexDecode,charstring::hexDecode,
-			input,inputsize,false);
+			input,inputsize);
 }
 
 static void base64EncodeTest(const char *label,
@@ -435,8 +428,8 @@ static void base64EncodeTest(const char *label,
 			input,inputsize);
 }
 
-// "expectedsize" is the size that the out-pointer overloads report, which
-// counts the NULL terminator, so "expected" includes the terminator
+// "expectedsize" is the number of decoded bytes, which the out-pointer
+// overloads report, and the output * overloads write
 static void base64DecodeTest(const char *label,
 				const char *input, uint64_t inputsize,
 				const char *expected, uint64_t expectedsize) {
@@ -448,13 +441,40 @@ static void base64DecodeTest(const char *label,
 			(result && expected &&
 			resultsize==expectedsize &&
 			!bytestring::compare(result,expected,expectedsize)));
+
+	// NULL terminator after the reported size
+	stringbuffer	name;
+	name.append(label)->append(" NULL");
+	test(name.getString(),!result || result[resultsize]=='\0');
 	delete[] result;
+
+	// the buffer-returning overloads give a string of the decoded size,
+	// if the decoded bytes contain no NULL
+	if (expected && charstring::getLength(expected)==expectedsize) {
+		byte_t	*str=charstring::base64Decode(in,inputsize);
+		name.clear();
+		name.append(label)->append(" 1b length");
+		test(name.getString(),str &&
+			charstring::getLength((char *)str)==expectedsize);
+		delete[] str;
+		char	*term=terminatedCopy(input,inputsize);
+		if (charstring::getLength(term)==inputsize) {
+			str=charstring::base64Decode(term);
+			name.clear();
+			name.append(label)->append(" 1a length");
+			test(name.getString(),str &&
+				charstring::getLength((char *)str)==
+								expectedsize);
+			delete[] str;
+		}
+		delete[] term;
+	}
 	delete[] in;
 	charsToBytesConsistencyTest(label,
 			charstring::base64Decode,charstring::base64Decode,
 			charstring::base64Decode,charstring::base64Decode,
 			charstring::base64Decode,charstring::base64Decode,
-			input,inputsize,true);
+			input,inputsize);
 }
 
 // appends "count" copies of "str" to "sb"
@@ -507,7 +527,7 @@ static void quotedPrintableDecodeTest(const char *label,
 		charstring::quotedPrintableDecode,
 		charstring::quotedPrintableDecode,
 		charstring::quotedPrintableDecode,
-		input,inputsize,false);
+		input,inputsize);
 }
 
 static void escapeTest(const char *label,
@@ -1958,7 +1978,7 @@ int main(int argc, const char **argv) {
 	charstring::base64Encode(bytes,6,&encodedbytes,&encodedlen);
 	charstring::base64Decode(encodedbytes,encodedlen,
 					&decodedbytes,&decodedlen);
-	test("base64 test 5",
+	test("base64 test 5",decodedlen==6 &&
 		!bytestring::compare(decodedbytes,bytes,6));
 	delete[] encodedbytes;
 	delete[] decodedbytes;
@@ -1966,7 +1986,7 @@ int main(int argc, const char **argv) {
 	charstring::base64Encode(bytes,5,&encodedbytes,&encodedlen);
 	charstring::base64Decode(encodedbytes,encodedlen,
 					&decodedbytes,&decodedlen);
-	test("base64 test 6",
+	test("base64 test 6",decodedlen==5 &&
 		!bytestring::compare(decodedbytes,bytes,5));
 	delete[] encodedbytes;
 	delete[] decodedbytes;
@@ -1974,7 +1994,7 @@ int main(int argc, const char **argv) {
 	charstring::base64Encode(bytes,4,&encodedbytes,&encodedlen);
 	charstring::base64Decode(encodedbytes,encodedlen,
 					&decodedbytes,&decodedlen);
-	test("base64 test 7",
+	test("base64 test 7",decodedlen==4 &&
 		!bytestring::compare(decodedbytes,bytes,4));
 	delete[] encodedbytes;
 	delete[] decodedbytes;
@@ -1982,7 +2002,7 @@ int main(int argc, const char **argv) {
 	charstring::base64Encode(bytes,3,&encodedbytes,&encodedlen);
 	charstring::base64Decode(encodedbytes,encodedlen,
 					&decodedbytes,&decodedlen);
-	test("base64 test 8",
+	test("base64 test 8",decodedlen==3 &&
 		!bytestring::compare(decodedbytes,bytes,3));
 	delete[] encodedbytes;
 	delete[] decodedbytes;
@@ -1990,7 +2010,7 @@ int main(int argc, const char **argv) {
 	charstring::base64Encode(bytes,2,&encodedbytes,&encodedlen);
 	charstring::base64Decode(encodedbytes,encodedlen,
 					&decodedbytes,&decodedlen);
-	test("base64 test 9",
+	test("base64 test 9",decodedlen==2 &&
 		!bytestring::compare(decodedbytes,bytes,2));
 	delete[] encodedbytes;
 	delete[] decodedbytes;
@@ -1998,7 +2018,7 @@ int main(int argc, const char **argv) {
 	charstring::base64Encode(bytes,1,&encodedbytes,&encodedlen);
 	charstring::base64Decode(encodedbytes,encodedlen,
 					&decodedbytes,&decodedlen);
-	test("base64 test 10",
+	test("base64 test 10",decodedlen==1 &&
 		!bytestring::compare(decodedbytes,bytes,1));
 	delete[] encodedbytes;
 	delete[] decodedbytes;
@@ -2166,7 +2186,7 @@ int main(int argc, const char **argv) {
 			charstring::hexDecode,charstring::hexDecode,
 			charstring::hexDecode,charstring::hexDecode,
 			charstring::hexDecode,charstring::hexDecode,
-			encodedbytes,encodedlen,false);
+			encodedbytes,encodedlen);
 	stringbuffer	hexsb;
 	charstring::hexDecode(encodedbytes,&hexsb);
 	test("decode 3a round trip",
@@ -2239,58 +2259,87 @@ int main(int argc, const char **argv) {
 	base64DecodeTest("NULL, size 3",NULL,3,NULL,0);
 	base64DecodeTest("empty","",zero,"",0);
 	base64DecodeTest("TQ==, size 0","TQ==",zero,"",0);
-	base64DecodeTest("TQ==","TQ==",4,"M\0\0",4);
-	base64DecodeTest("TWE=","TWE=",4,"Ma\0",4);
-	base64DecodeTest("TWFu","TWFu",4,"Man",4);
-	base64DecodeTest("TWFubg==","TWFubg==",8,"Mann\0\0",7);
+	base64DecodeTest("TQ==","TQ==",4,"M",1);
+	base64DecodeTest("TWE=","TWE=",4,"Ma",2);
+	base64DecodeTest("TWFu","TWFu",4,"Man",3);
+	base64DecodeTest("YWJj","YWJj",4,"abc",3);
+	base64DecodeTest("TWFubg==","TWFubg==",8,"Mann",4);
+	base64DecodeTest("TWFubWE=","TWFubWE=",8,"Manma",5);
 	base64DecodeTest("aGVsbG8gd29ybGQ=","aGVsbG8gd29ybGQ=",16,
-							"hello world\0\0",13);
-	base64DecodeTest("QUFB","QUFB",4,"AAA",4);
-	base64DecodeTest("AAAA","AAAA",4,"\0\0\0",4);
-	base64DecodeTest("YQBi","YQBi",4,"a\0b",4);
-	base64DecodeTest("//7/","//7/",4,"\xff\xfe\xff",4);
-	base64DecodeTest("QQ==QQ==","QQ==QQ==",8,"A\0\0A\0\0",7);
-	base64DecodeTest("====","====",4,"\0\0\0",4);
-	base64DecodeTest("Q=Q=","Q=Q=",4,"\x40\x04\0",4);
+							"hello world",11);
+	base64DecodeTest("dGhlIHNhbXBsZSBub25jZQ==",
+				"dGhlIHNhbXBsZSBub25jZQ==",24,
+				"the sample nonce",16);
+	base64DecodeTest("QUFB","QUFB",4,"AAA",3);
+	base64DecodeTest("AAAA","AAAA",4,"\0\0\0",3);
+	base64DecodeTest("AA==","AA==",4,"\0",1);
+	base64DecodeTest("AAA=","AAA=",4,"\0\0",2);
+	base64DecodeTest("YQBi","YQBi",4,"a\0b",3);
+	base64DecodeTest("//7/","//7/",4,"\xff\xfe\xff",3);
+	stdoutput.printf("\n");
+
+
+	// base64 decode padding, characters after = in a group are not counted
+	stdoutput.printf("base64-decode padding...\n");
+	base64DecodeTest("QQ==QQ==","QQ==QQ==",8,"AA",2);
+	base64DecodeTest("TQ==TWE=","TQ==TWE=",8,"MMa",3);
+	base64DecodeTest("TQ==TWFu","TQ==TWFu",8,"MMan",4);
+	base64DecodeTest("Q=Q=","Q=Q=",4,"",0);
+	base64DecodeTest("QQ=Q","QQ=Q",4,"A",1);
+	base64DecodeTest("=","=",1,"",0);
+	base64DecodeTest("==","==",2,"",0);
+	base64DecodeTest("====","====",4,"",0);
+	base64DecodeTest("========","========",8,"",0);
 	stdoutput.printf("\n");
 
 
 	// base64 decode whitespace, skipped where a group starts
 	stdoutput.printf("base64-decode whitespace...\n");
-	base64DecodeTest("QUJD\\n","QUJD\n",5,"ABC",4);
-	base64DecodeTest("\\nQUJD","\nQUJD",5,"ABC",4);
-	base64DecodeTest("  QUJD","  QUJD",6,"ABC",4);
-	base64DecodeTest("QUJD QUJD","QUJD QUJD",9,"ABCABC",7);
-	base64DecodeTest("QUJD\\r\\nQUJD","QUJD\r\nQUJD",10,"ABCABC",7);
-	base64DecodeTest("2 spaces","  ",2,"",1);
+	base64DecodeTest("QUJD\\n","QUJD\n",5,"ABC",3);
+	base64DecodeTest("\\nQUJD","\nQUJD",5,"ABC",3);
+	base64DecodeTest("  QUJD","  QUJD",6,"ABC",3);
+	base64DecodeTest("QUJD QUJD","QUJD QUJD",9,"ABCABC",6);
+	base64DecodeTest("QUJD\\r\\nQUJD","QUJD\r\nQUJD",10,"ABCABC",6);
+	base64DecodeTest("YWJj\\nZGVm\\n","YWJj\nZGVm\n",10,"abcdef",6);
+	base64DecodeTest("YWJj\\r\\nZGVm\\r\\n","YWJj\r\nZGVm\r\n",12,
+								"abcdef",6);
+	base64DecodeTest("YWJj\\nTQ==\\n","YWJj\nTQ==\n",10,"abcM",4);
+	base64DecodeTest("YWJj\\r\\nTWE=\\r\\n","YWJj\r\nTWE=\r\n",12,
+								"abcMa",5);
+	base64DecodeTest("QQ==\\n","QQ==\n",5,"A",1);
+	base64DecodeTest("TQ== ","TQ== ",5,"M",1);
+	base64DecodeTest("TQ==\\r\\n\\t ","TQ==\r\n\t ",8,"M",1);
+	base64DecodeTest("2 spaces","  ",2,"",0);
+	base64DecodeTest("\\r\\n","\r\n",2,"",0);
 	stdoutput.printf("\n");
 
 
 	// base64 decode characters outside the alphabet
 	stdoutput.printf("base64-decode bad characters...\n");
-	base64DecodeTest("QU\\0D","QU\0D",4,"\x41\x7f\xc3",4);
-	base64DecodeTest("QU-_","QU-_",4,"\x41\x7f\xff",4);
-	base64DecodeTest("!!!!","!!!!",4,"\xff\xff\xff",4);
+	base64DecodeTest("QU\\0D","QU\0D",4,"\x41\x7f\xc3",3);
+	base64DecodeTest("QU-_","QU-_",4,"\x41\x7f\xff",3);
+	base64DecodeTest("!!!!","!!!!",4,"\xff\xff\xff",3);
 	base64DecodeTest("\\x80\\x80\\x80\\x80","\x80\x80\x80\x80",4,
-							"\xff\xff\xff",4);
-	base64DecodeTest("\\xc3\\xa9AA","\xc3\xa9" "AA",4,"\xff\xf0\0",4);
-	base64DecodeTest("QUJ\\x80","QUJ\x80",4,"AB\xff",4);
+							"\xff\xff\xff",3);
+	base64DecodeTest("\\xc3\\xa9AA","\xc3\xa9" "AA",4,"\xff\xf0\0",3);
+	base64DecodeTest("QUJ\\x80","QUJ\x80",4,"AB\xff",3);
 	stdoutput.printf("\n");
 
 
 	// base64 decode partial groups, missing characters count as =
 	stdoutput.printf("base64-decode partial groups...\n");
-	base64DecodeTest("A","A",1,"\0\0\0",4);
-	base64DecodeTest("QQ","QQ",2,"A\0\0",4);
-	base64DecodeTest("QQ=","QQ=",3,"A\0\0",4);
-	base64DecodeTest("QUJDR","QUJDR",5,"ABCD\0\0",7);
-	base64DecodeTest("QUJDRA","QUJDRA",6,"ABCD\0\0",7);
-	base64DecodeTest("QUJDRA=","QUJDRA=",7,"ABCD\0\0",7);
-	base64DecodeTest("QU JD","QU JD",5,"\x41\x7f\xc9\x0c\0\0",7);
-	base64DecodeTest("QU\\nJD==","QU\nJD==",7,"\x41\x7f\xc9\x0c\0\0",7);
-	base64DecodeTest("QQ==\\nQ","QQ==\nQ",6,"A\0\0@\0\0",7);
-	base64DecodeTest("QUJD\\x01","QUJD\x01",5,"ABC\xfc\0\0",7);
-	base64DecodeTest("QQ==QQ","QQ==QQ",6,"A\0\0A\0\0",7);
+	base64DecodeTest("A","A",1,"",0);
+	base64DecodeTest("QQ","QQ",2,"A",1);
+	base64DecodeTest("TQ","TQ",2,"M",1);
+	base64DecodeTest("QQ=","QQ=",3,"A",1);
+	base64DecodeTest("TWE","TWE",3,"Ma",2);
+	base64DecodeTest("QUJDR","QUJDR",5,"ABC",3);
+	base64DecodeTest("QUJDRA","QUJDRA",6,"ABCD",4);
+	base64DecodeTest("QUJDRA=","QUJDRA=",7,"ABCD",4);
+	base64DecodeTest("QUJDREU","QUJDREU",7,"ABCDE",5);
+	base64DecodeTest("QQ==\\nQ","QQ==\nQ",6,"A",1);
+	base64DecodeTest("QUJD\\x01","QUJD\x01",5,"ABC",3);
+	base64DecodeTest("QQ==QQ","QQ==QQ",6,"AA",2);
 	stdoutput.printf("\n");
 
 
@@ -2310,16 +2359,12 @@ int main(int argc, const char **argv) {
 			charstring::base64Decode,charstring::base64Decode,
 			charstring::base64Decode,charstring::base64Decode,
 			charstring::base64Decode,charstring::base64Decode,
-			encodedbytes,encodedlen,true);
+			encodedbytes,encodedlen);
 	stringbuffer	b64sb;
 	charstring::base64Decode(encodedbytes,&b64sb);
-	uint64_t	padsize=(3-bigsize%3)%3;
-	byte_t		padzeros[2]={0x00,0x00};
 	test("decode 3a round trip",
-		b64sb.getSize()==bigsize+padsize &&
-		!bytestring::compare(b64sb.getBuffer(),bigbytes,bigsize) &&
-		!bytestring::compare(b64sb.getBuffer()+bigsize,
-						padzeros,padsize));
+		b64sb.getSize()==bigsize &&
+		!bytestring::compare(b64sb.getBuffer(),bigbytes,bigsize));
 	stdoutput.printf("\n");
 
 
@@ -3752,7 +3797,7 @@ int main(int argc, const char **argv) {
 		charstring::quotedPrintableDecode,
 		charstring::quotedPrintableDecode,
 		charstring::quotedPrintableDecode,
-		encoded,encodedlength,false);
+		encoded,encodedlength);
 	delete[] encoded;
 	delete[] decoded;
 	stdoutput.printf("\n");
@@ -3945,7 +3990,7 @@ int main(int argc, const char **argv) {
 		charstring::quotedPrintableDecode,
 		charstring::quotedPrintableDecode,
 		charstring::quotedPrintableDecode,
-		encodedbytes,encodedlen,false);
+		encodedbytes,encodedlen);
 	stringbuffer	qpsb;
 	charstring::quotedPrintableDecode(encodedbytes,&qpsb);
 	test("decode 3a round trip",

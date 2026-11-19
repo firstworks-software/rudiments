@@ -125,6 +125,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   using openssl, if available
 - added scalar and attachData()/getData() examples to the mvcresult class
   documentation and reworded its wastebasket description
+- charstring::base64Decode() reports the exact decoded size now and drops =
+  padding bytes
 
 ### Removed
 - removed csprng's static isSupported() - it was always unconditionally

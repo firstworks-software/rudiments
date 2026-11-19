@@ -3569,16 +3569,23 @@ static void base64EncodeGroup(const byte_t *in, size_t size, char *out) {
 }
 
 // decodes 1-4 characters to 3 bytes, a missing character counts as = and
-// an invalid one (including bytes >= 0x80) as all one bits
-static void base64DecodeGroup(const char *in, size_t size, byte_t *out) {
+// an invalid one (including bytes >= 0x80) as all one bits, returns the
+// number of bytes the group really encodes: 1 less than the characters
+// before the first = or the end of the group, or 0 for fewer than 2
+static size_t base64DecodeGroup(const char *in, size_t size, byte_t *out) {
 	byte_t	data[4];
+	size_t	chars=4;
 	for (size_t i=0; i<4; i++) {
 		byte_t	c=(i<size)?(byte_t)in[i]:(byte_t)'=';
+		if (c=='=' && i<chars) {
+			chars=i;
+		}
 		data[i]=(c<sizeof(b64dcode))?(byte_t)b64dcode[c]:0xFF;
 	}
 	out[0]=data[0]<<2|data[1]>>4;
 	out[1]=(data[1]&0x0F)<<4|data[2]>>2;
 	out[2]=(data[2]&0x03)<<6|data[3];
+	return (chars<2)?0:chars-1;
 }
 
 void charstring::base64Encode(const byte_t *input,
@@ -3706,29 +3713,12 @@ void charstring::base64Decode(const char *input, uint64_t inputlen,
 		if (remaining>4) {
 			remaining=4;
 		}
-		base64DecodeGroup(input+inputindex,remaining,
+		outputindex+=base64DecodeGroup(input+inputindex,remaining,
 						(*output)+outputindex);
 		inputindex+=remaining;
-		outputindex+=3;
 	}
 	(*output)[outputindex]='\0';
-
-	// reset the outputsize
-	(*outputsize)=outputindex+1;
-
-	// NOTE: The below seemed correct at one point, but doesn't appear to
-	// be now that we're skipping whitespace in the loop above.  Lets keep
-	// it around just in case though.
-
-	// the output could contain some trailing \0's that are artifacts of
-	// the ='s in the encoded data, no big deal if the decoded data is
-	// supposed to be a string, but not ok for binary data.  Reduce
-	// outputsize accordingly.
-
-	// there can be at most 2 trailing ='s, each equal represents an
-	// additional trailing NULL, reduce outputsize accordingly
-	/*(*outputsize)-=(input[inputlen-1]=='=')+
-				(input[inputlen-2]=='=');*/
+	(*outputsize)=outputindex;
 }
 
 void charstring::base64Decode(const char *input, output *out) {
@@ -3759,8 +3749,9 @@ void charstring::base64Decode(const char *input, uint64_t inputlen,
 		if (remaining>4) {
 			remaining=4;
 		}
-		base64DecodeGroup(input+inputindex,remaining,group);
-		chunkedWriterAppend(&cw,group,3);
+		size_t	groupsize=base64DecodeGroup(input+inputindex,
+							remaining,group);
+		chunkedWriterAppend(&cw,group,groupsize);
 		inputindex+=remaining;
 	}
 	chunkedWriterFlush(&cw);

@@ -2016,15 +2016,21 @@ class RUDIMENTS_DLLSPEC charstring {
 
 		/** base64-decodes "input" and returns it in a buffer
 		 *  allocated inside the function.  This buffer must be
-		 *  deleted by the calling program.
+		 *  deleted by the calling program.  The buffer has a
+		 *  NULL terminator after the last decoded byte.
 		 *
-		 *  Each group of 4 characters decodes to 3 bytes, and the
-		 *  zero bytes that "=" padding stands for are kept.
-		 *  Whitespace is skipped where a group starts.  A missing
-		 *  character in a short final group counts as "=".  A
-		 *  character outside the base64 alphabet, including any
-		 *  byte at or above 0x80, does not stop decoding but
-		 *  decodes to unspecified bits. */
+		 *  Whitespace is skipped where a group of 4 characters
+		 *  starts.  A short final group is decoded as if padded
+		 *  with "=".  A group gives 1 byte fewer than the
+		 *  characters before its first "=", so 2 characters give
+		 *  1 byte, 3 give 2 and 4 give 3.  A group with fewer
+		 *  than 2 such characters, for example "====", "Q=Q=" or
+		 *  the "R" at the end of "QUJDR", gives no bytes.
+		 *  Characters after an "=" in a group are ignored, and
+		 *  decoding goes on with the next group, so "QQ==QQ=="
+		 *  gives "AA".  A character outside the base64 alphabet,
+		 *  including any byte at or above 0x80, does not stop
+		 *  decoding but decodes to unspecified bits. */
 		static	byte_t	*base64Decode(const char *input);
 
 		/** similar to base64Decode above but only decodes
@@ -2038,10 +2044,10 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  and returns the result in "output" and "outputsize"
 		 *  rather than in a return value.  "output" is allocated
 		 *  inside the function and must be deleted by the calling
-		 *  program.  For non-empty input, "outputsize" is 1 more
-		 *  than the number of decoded bytes, padding zero bytes
-		 *  included.  If "input" is NULL then "output" is set to NULL
-		 *  and "outputsize" to 0. */
+		 *  program.  "outputsize" is the number of decoded
+		 *  bytes, and output[outputsize] is a NULL terminator
+		 *  that "outputsize" does not count.  If "input" is NULL
+		 *  then "output" is set to NULL and "outputsize" to 0. */
 		static	void	base64Decode(const char *input,
 						byte_t **output,
 						uint64_t *outputsize);
@@ -2058,10 +2064,9 @@ class RUDIMENTS_DLLSPEC charstring {
 						uint64_t *outputsize);
 
 		/** base64-decodes "input" as base64Decode() above does,
-		 *  and writes the result to "out".  Writes the decoded
-		 *  bytes, padding zero bytes included, which for
-		 *  non-empty input is 1 less than the "outputsize" that
-		 *  the out-pointer forms of base64Decode() report.  Does
+		 *  and writes the result to "out".  Writes exactly the
+		 *  decoded bytes, the same "outputsize" bytes that the
+		 *  out-pointer forms of base64Decode() return.  Does
 		 *  nothing if "out" is NULL and writes nothing if "input"
 		 *  is NULL.  Never writes a NULL terminator.  Stops at the
 		 *  first failed or short write to "out". */
