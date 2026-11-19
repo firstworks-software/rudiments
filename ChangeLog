@@ -295,6 +295,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   zero pad byte, empty input or inconsistent pad bytes
 - fixed charstring, wcharstring and ucs2charstring allocating printf() ending
   the caller's va_list
+- fixed csvsax and csvdom losing the last field with no final line end
 
 ### Security
 - fixed buffer overflow when unix socket file name is too long

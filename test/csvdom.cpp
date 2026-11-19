@@ -778,6 +778,99 @@ int main() {
 		file::remove("embedded null.csv");
 	}
 
+	// input that ends with no line end must not lose the last field,
+	// and input that ends with a line end must not gain a record
+	{
+		struct eoicase {
+			const char	*description;
+			const char	*input;
+			uint64_t	columns;
+			const char	*column1;
+			uint64_t	records;
+			const char	*lastrecord[2];
+		};
+		const eoicase	cases[]={
+			{"last row has no line end",
+			"name,phone\nAl,555\nBo,556",2,"phone",2,{"Bo","556"}},
+			{"crlf, last row has no line end",
+			"name,phone\r\nAl,555\r\nBo,556",2,"phone",2,{"Bo","556"}},
+			{"quoted last field at end",
+			"name,phone\nAl,555\nBo,\"556\"",2,"phone",2,{"Bo","556"}},
+			{"empty last field at end",
+			"name,phone\nAl,555\nBo,",2,"phone",2,{"Bo",""}},
+			{"unclosed quote at end",
+			"a,b\n1,\"2",2,"b",1,{"1","2"}},
+			{"header only, no line end",
+			"name,phone",2,"phone",0,{NULL,NULL}},
+			{"last row ends with lf",
+			"name,phone\nAl,555\nBo,556\n",2,"phone",2,{"Bo","556"}},
+			{"last row ends with crlf",
+			"name,phone\r\nAl,555\r\nBo,556\r\n",2,"phone",2,
+								{"Bo","556"}},
+			{"header only, quoted last column, no line end",
+			"name,\"phone\"",2,"phone",0,{NULL,NULL}},
+			{"header only, trailing comma, no line end",
+			"name,",2,"",0,{NULL,NULL}},
+			{"empty input","",0,NULL,0,{NULL,NULL}}
+		};
+
+		for (uint16_t i=0; i<2; i++) {
+			for (uint16_t j=0; j<sizeof(cases)/sizeof(cases[0]); j++) {
+
+				const eoicase	*ec=&cases[j];
+
+				stringbuffer	name;
+				name.append(ec->description);
+				name.append((!i)?" (string)":" (file)");
+
+				stdoutput.printf("end of input - %s...\n",
+							name.getString());
+
+				csvdom	e;
+				if (!i) {
+					test(name.getString(),
+						e.parseString(ec->input));
+				} else {
+					file	f;
+					test("create file",f.create("eoi.csv",
+						permissions::parsePermString(
+							"rw-r--r--")));
+					test("write to file",
+						f.write(ec->input,
+						charstring::getLength(ec->input))==
+						(ssize_t)charstring::getLength(
+								ec->input));
+					f.close();
+					test(name.getString(),
+						e.parseFile("eoi.csv"));
+					file::remove("eoi.csv");
+				}
+
+				test("column count",
+					e.getColumnCount()==ec->columns);
+				test("record count",
+					e.getRecordCount()==ec->records);
+				if (ec->column1) {
+					test("column name 1",
+						!charstring::compare(
+						e.getColumnName(1),
+						ec->column1));
+				}
+				if (ec->records) {
+					uint64_t	last=ec->records-1;
+					test("last record, field 0",
+						!charstring::compare(
+						e.getField(last,(uint64_t)0),
+						ec->lastrecord[0]));
+					test("last record, field 1",
+						!charstring::compare(
+						e.getField(last,(uint64_t)1),
+						ec->lastrecord[1]));
+				}
+			}
+		}
+	}
+
 	stdoutput.printf("\n");
 
 	return 0;

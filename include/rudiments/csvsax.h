@@ -120,6 +120,8 @@ class RUDIMENTS_DLLSPEC csvsax : public sax {
 								bool quoted);
 
 		/** Gets called when the end of a record is encountered.
+		 *  A record, field, or column that is still open at the end
+		 *  of the input is reported as if a line end followed.
 		 *
 		 *  Returns true on success and false if an error occurred.
 		 *  Parsing stops if this method returns false.

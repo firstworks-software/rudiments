@@ -165,6 +165,48 @@ bool csvsax::parse() {
 
 		// handle end of file/string
 		if (eof) {
+
+			// an empty column or field isn't quoted
+			if (pvt->_state==COLUMN_START ||
+					pvt->_state==FIELD_START) {
+				quoted=false;
+			}
+
+			// end the header, as at a line end
+			if (pvt->_state==COLUMN_START ||
+					pvt->_state==COLUMN) {
+				pvt->_state=COLUMN_END;
+				if (!column(current.getString(),
+						current.getSize(),
+						quoted)) {
+					return false;
+				}
+				current.clear();
+				pvt->_state=HEADER_END;
+				if (!headerEnd()) {
+					return false;
+				}
+				pvt->_state=BODY_START;
+				if (!bodyStart()) {
+					return false;
+				}
+			}
+
+			// end the record, as at a line end
+			if (pvt->_state==FIELD_START ||
+					pvt->_state==FIELD) {
+				pvt->_state=FIELD_END;
+				if (!field(current.getString(),
+						current.getSize(),
+						quoted)) {
+					return false;
+				}
+				current.clear();
+				pvt->_state=RECORD_END;
+				if (!recordEnd()) {
+					return false;
+				}
+			}
 			break;
 		}
 

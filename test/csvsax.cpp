@@ -66,6 +66,77 @@ class oldstylecsvsax : public csvsax {
 		uint64_t	fieldcount;
 };
 
+class tracecsvsax : public csvsax {
+	public:
+		bool headerStart() {
+			trace.append("hs;");
+			return true;
+		}
+		bool column(const char *name, size_t namelength, bool quoted) {
+			trace.append((quoted)?"cq(":"c(");
+			trace.append(name,namelength)->append(");");
+			return true;
+		}
+		bool headerEnd() {
+			trace.append("he;");
+			return true;
+		}
+		bool bodyStart() {
+			trace.append("bs;");
+			return true;
+		}
+		bool recordStart() {
+			trace.append("rs;");
+			return true;
+		}
+		bool field(const char *value, size_t valuelength, bool quoted) {
+			trace.append((quoted)?"fq(":"f(");
+			trace.append(value,valuelength)->append(");");
+			return true;
+		}
+		bool recordEnd() {
+			trace.append("re;");
+			return true;
+		}
+		bool bodyEnd() {
+			trace.append("be;");
+			return true;
+		}
+		stringbuffer	trace;
+};
+
+// parses "input" as a string and as a file and checks that the callbacks
+// were called in the "expected" order, with the "expected" values
+void testTrace(const char *description,
+			const char *input, const char *expected) {
+
+	stringbuffer	name;
+
+	tracecsvsax	s;
+	name.append(description)->append(" (string)");
+	test(name.getString(),s.parseString(input));
+	name.append(" callbacks");
+	test(name.getString(),
+		!charstring::compare(s.trace.getString(),expected));
+
+	file	f;
+	test("create file",f.create("csvsaxtest.csv",
+			permissions::parsePermString("rw-r--r--")));
+	test("write to file",
+		f.write(input,charstring::getLength(input))==
+			(ssize_t)charstring::getLength(input));
+	f.close();
+
+	tracecsvsax	fs;
+	name.clear();
+	name.append(description)->append(" (file)");
+	test(name.getString(),fs.parseFile("csvsaxtest.csv"));
+	name.append(" callbacks");
+	test(name.getString(),
+		!charstring::compare(fs.trace.getString(),expected));
+	file::remove("csvsaxtest.csv");
+}
+
 int main() {
 
 	header("csvsax");
@@ -149,4 +220,48 @@ int main() {
 	test("quoted field bytes",
 			!charstring::compare(
 				qc.embeddednullvalue.getString(),"v\0" "1",3));
+
+	// input that ends with no line end: the open column or field is
+	// given and the header or record is ended as at a line end
+	testTrace("last row has no line end",
+		"name,phone\nAl,555\nBo,556",
+		"hs;c(name);c(phone);he;bs;"
+		"rs;f(Al);f(555);re;rs;f(Bo);f(556);re;be;");
+	testTrace("crlf, last row has no line end",
+		"name,phone\r\nAl,555\r\nBo,556",
+		"hs;c(name);c(phone);he;bs;"
+		"rs;f(Al);f(555);re;rs;f(Bo);f(556);re;be;");
+	testTrace("quoted last field at end",
+		"name,phone\nAl,555\nBo,\"556\"",
+		"hs;c(name);c(phone);he;bs;"
+		"rs;f(Al);f(555);re;rs;f(Bo);fq(556);re;be;");
+	testTrace("empty last field at end",
+		"name,phone\nAl,555\nBo,",
+		"hs;c(name);c(phone);he;bs;"
+		"rs;f(Al);f(555);re;rs;f(Bo);f();re;be;");
+	testTrace("unclosed quote at end",
+		"a,b\n1,\"2",
+		"hs;c(a);c(b);he;bs;rs;f(1);fq(2);re;be;");
+	testTrace("header only, no line end",
+		"name,phone",
+		"hs;c(name);c(phone);he;bs;be;");
+	testTrace("header only, quoted last column, no line end",
+		"name,\"phone\"",
+		"hs;c(name);cq(phone);he;bs;be;");
+	testTrace("header only, trailing comma, no line end",
+		"name,",
+		"hs;c(name);c();he;bs;be;");
+
+	// input that ends with a line end: no extra record
+	testTrace("last row ends with lf",
+		"name,phone\nAl,555\nBo,556\n",
+		"hs;c(name);c(phone);he;bs;"
+		"rs;f(Al);f(555);re;rs;f(Bo);f(556);re;be;");
+	testTrace("last row ends with crlf",
+		"name,phone\r\nAl,555\r\nBo,556\r\n",
+		"hs;c(name);c(phone);he;bs;"
+		"rs;f(Al);f(555);re;rs;f(Bo);f(556);re;be;");
+
+	// empty input: no columns and no records
+	testTrace("empty input","","hs;he;bs;be;");
 }
