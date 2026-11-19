@@ -299,6 +299,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   the caller's va_list
 - fixed csvsax and csvdom losing the last field with no final line end
 - documented treenode and avltreenode setValue() as not for applications
+- fixed dynamicarray assignment allocating about one initial extent of
+  extra memory
+- fixed dynamicarray copies of an arraycollection crashing when the source
+  is larger than the initial extent
 
 ### Security
 - fixed buffer overflow when unix socket file name is too long

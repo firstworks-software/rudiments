@@ -42,7 +42,6 @@ dynamicarray<valuetype> &dynamicarray<valuetype>::operator=(
 	if (this!=&v) {
 		clear(v.initcount,v.inccount);
 		arraycollection<valuetype>::operator=(v);
-		construct(v.initcount,v.inccount);
 		clone(v);
 	}
 	return *this;
@@ -55,7 +54,6 @@ dynamicarray<valuetype> &dynamicarray<valuetype>::operator=(
 	if (this!=&v) {
 		clear();
 		arraycollection<valuetype>::operator=(v);
-		construct(initcount,inccount);
 		clone(v);
 	}
 	return *this;
@@ -107,6 +105,10 @@ void dynamicarray<valuetype>::clone(dynamicarray<valuetype> &v) {
 template< class valuetype >
 inline
 void dynamicarray<valuetype>::clone(arraycollection<valuetype> &v) {
+
+	// extend storage to fit (do this before setting count)
+	extend(v.getCount());
+
 	lastcount=v.getCount();
 	bool	managevalues=this->getManageValues();
 	bool	managearrayvalues=this->getManageArrayValues();
