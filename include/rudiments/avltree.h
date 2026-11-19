@@ -17,7 +17,16 @@ class avltreenode : public treenode<valuetype> {
 		/** Deletes this instance of the avltreenode class. */
 		~avltreenode();
 
-		/** Sets the value stored in the node to "value". */
+		/** Sets the value stored in the node to "value".
+		 *
+		 *  This method is not meant for use by applications.  Only
+		 *  an implementation of avltree should call it.
+		 *
+		 *  To change the value of a node, call remove(treenode *)
+		 *  on the node, then call insert(valuetype) with the new
+		 *  value.  If setManageValues(true) or
+		 *  setManageArrayValues(true) has been called, remove() frees
+		 *  the old value, so the new value must not point into it. */
 		void	setValue(valuetype value);
 
 		/** Returns the value stored in the node. */

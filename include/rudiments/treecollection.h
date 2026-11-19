@@ -14,7 +14,16 @@ class treenode : public nodecollectionnode<valuetype> {
 		/** Deletes this instance of treenode. */
 		virtual ~treenode() {};
 
-		/** Sets the value stored in the node to "value". */
+		/** Sets the value stored in the node to "value".
+		 *
+		 *  This method is not meant for use by applications.  Only
+		 *  an implementation of treecollection should call it.
+		 *
+		 *  To change the value of a node, call remove(treenode *)
+		 *  on the node, then call insert(valuetype) with the new
+		 *  value.  If setManageValues(true) or
+		 *  setManageArrayValues(true) has been called, remove() frees
+		 *  the old value, so the new value must not point into it. */
 		virtual void	setValue(valuetype value)=0;
 
 		/** Returns the value stored in the node. */
