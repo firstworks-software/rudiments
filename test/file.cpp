@@ -32,6 +32,12 @@ const char	*contentsfile="/tmp/testfilecontents.txt";
 const char	*contentsfile="testfilecontents.txt";
 #endif
 
+#ifndef WIN32
+const char	*flushfile="/tmp/testfileflush.txt";
+#else
+const char	*flushfile="testfileflush.txt";
+#endif
+
 // getContents on files of known and unknown size and on read errors
 static void contentsTests() {
 
@@ -224,18 +230,35 @@ static void contentsTests() {
 class failfd : public filedescriptor {
 	public:
 			failfd(ssize_t mode);
+		void	setMode(ssize_t mode);
+		// the first count writes pass, the mode applies after them
+		void	setPassFirst(uint32_t count);
 	protected:
 		ssize_t	lowLevelWrite(const void *buf, size_t count);
 	private:
 		// 0 is normal, 1 is a short write, anything else is returned
-		ssize_t	mode;
+		ssize_t		mode;
+		uint32_t	passfirst;
 };
 
 failfd::failfd(ssize_t mode) : filedescriptor() {
 	this->mode=mode;
+	passfirst=0;
+}
+
+void failfd::setMode(ssize_t mode) {
+	this->mode=mode;
+}
+
+void failfd::setPassFirst(uint32_t count) {
+	passfirst=count;
 }
 
 ssize_t failfd::lowLevelWrite(const void *buf, size_t count) {
+	if (passfirst) {
+		passfirst--;
+		return filedescriptor::lowLevelWrite(buf,count);
+	}
 	if (!mode) {
 		return filedescriptor::lowLevelWrite(buf,count);
 	}
@@ -309,6 +332,392 @@ static void printfErrorTests() {
 		test("unbuffered wide printf(), closed pipe",result==-1);
 	}
 	#endif
+	stdoutput.printf("\n");
+
+	signalmanager::alarm(0);
+}
+
+// close the write side of a pipe and check that the read side holds
+// exactly the expected data
+static bool pipeHolds(filedescriptor *readfd, failfd *writefd,
+						const char *expected) {
+	if (!writefd->close()) {
+		return false;
+	}
+	size_t	length=charstring::getLength(expected);
+	char	buf[16];
+	if (readfd->read(buf,sizeof(buf))!=(ssize_t)length ||
+			bytestring::compare(buf,expected,length)) {
+		return false;
+	}
+	return !readfd->read(buf,sizeof(buf));
+}
+
+// flushWriteBuffer() on file descriptors that shorten or fail their writes
+static void flushErrorTests() {
+
+	signalmanager::alarm(60);
+
+	// stream, nothing pending
+	{
+		filedescriptor	readfd;
+		failfd		writefd(0);
+		test("stream, create pipe",
+			filedescriptor::createPipe(&readfd,&writefd));
+		test("stream, set buffer size",writefd.setWriteBufferSize(4));
+		test("stream, clean flush",writefd.flushWriteBuffer(-1,-1));
+		test("stream, write",writefd.write("abc")==3);
+		test("stream, flush",writefd.flushWriteBuffer(-1,-1));
+		test("stream, flush again",writefd.flushWriteBuffer(-1,-1));
+		test("stream, pipe holds abc",
+				pipeHolds(&readfd,&writefd,"abc"));
+	}
+
+	// stream, failed write
+	{
+		filedescriptor	readfd;
+		failfd		writefd(0);
+		test("stream failed, create pipe",
+			filedescriptor::createPipe(&readfd,&writefd));
+		test("stream failed, set buffer size",
+					writefd.setWriteBufferSize(4));
+		test("stream failed, write",writefd.write("abc")==3);
+		writefd.setMode(-1);
+		test("stream failed, flush",!writefd.flushWriteBuffer(-1,-1));
+		writefd.setMode(0);
+		test("stream failed, retry flush",
+					writefd.flushWriteBuffer(-1,-1));
+		test("stream failed, pipe holds abc",
+				pipeHolds(&readfd,&writefd,"abc"));
+	}
+
+	// stream, short write
+	{
+		filedescriptor	readfd;
+		failfd		writefd(0);
+		test("stream short, create pipe",
+			filedescriptor::createPipe(&readfd,&writefd));
+		test("stream short, set buffer size",
+					writefd.setWriteBufferSize(4));
+		test("stream short, write",writefd.write("abc")==3);
+		writefd.setMode(1);
+		test("stream short, flush",!writefd.flushWriteBuffer(-1,-1));
+		writefd.setMode(0);
+		test("stream short, retry flush",
+					writefd.flushWriteBuffer(-1,-1));
+		test("stream short, pipe holds abc",
+				pipeHolds(&readfd,&writefd,"abc"));
+	}
+
+	// stream, the auto-flush passes and the final flush fails
+	{
+		filedescriptor	readfd;
+		failfd		writefd(-1);
+		test("stream pass first, create pipe",
+			filedescriptor::createPipe(&readfd,&writefd));
+		test("stream pass first, set buffer size",
+					writefd.setWriteBufferSize(4));
+		writefd.setPassFirst(1);
+		test("stream pass first, write",writefd.write("abcdef")==6);
+		test("stream pass first, flush",
+					!writefd.flushWriteBuffer(-1,-1));
+		writefd.setMode(0);
+		test("stream pass first, retry flush",
+					writefd.flushWriteBuffer(-1,-1));
+		test("stream pass first, pipe holds abcdef",
+				pipeHolds(&readfd,&writefd,"abcdef"));
+	}
+
+	// storage, failed and short writes
+	ssize_t		modes[]={-1,1};
+	const char	*names[]={"storage failed","storage short"};
+	stringbuffer	title;
+	for (uint16_t i=0; i<sizeof(modes)/sizeof(modes[0]); i++) {
+		file::remove(flushfile);
+		file	fl;
+		test("storage, create file",fl.create(flushfile,
+				permissions::parsePermString("rw-rw----")));
+		failfd	writefd(0);
+		writefd.setFileDescriptor(fl.duplicate());
+		test("storage, set is stream",writefd.setIsStream(false));
+		test("storage, set buffer size",writefd.setWriteBufferSize(4));
+		test("storage, write",writefd.write("abc")==3);
+		writefd.setMode(modes[i]);
+		title.clear();
+		title.append(names[i])->append(", flush");
+		test(title.getString(),!writefd.flushWriteBuffer(-1,-1));
+		writefd.setMode(0);
+		title.clear();
+		title.append(names[i])->append(", retry flush");
+		test(title.getString(),writefd.flushWriteBuffer(-1,-1));
+		writefd.close();
+		fl.close();
+		char	*contents=file::getContents(flushfile);
+		title.clear();
+		title.append(names[i])->append(", file holds abc");
+		test(title.getString(),!charstring::compare(contents,"abc"));
+		delete[] contents;
+	}
+	file::remove(flushfile);
+	stdoutput.printf("\n");
+
+	signalmanager::alarm(0);
+}
+
+// write() through a full buffer on file descriptors
+// that shorten, fail, or time out their writes
+static void writeErrorTests() {
+
+	signalmanager::alarm(60);
+
+	// stream, clean writes that fill the buffer more than once
+	{
+		filedescriptor	readfd;
+		failfd		writefd(0);
+		test("clean, create pipe",
+			filedescriptor::createPipe(&readfd,&writefd));
+		test("clean, set buffer size",writefd.setWriteBufferSize(4));
+		test("clean, write abcdefghij",
+				writefd.write("abcdefghij")==10);
+		test("clean, flush",writefd.flushWriteBuffer(-1,-1));
+		test("clean, pipe holds abcdefghij",
+				pipeHolds(&readfd,&writefd,"abcdefghij"));
+	}
+	{
+		filedescriptor	readfd;
+		failfd		writefd(0);
+		test("clean buffered, create pipe",
+			filedescriptor::createPipe(&readfd,&writefd));
+		test("clean buffered, set buffer size",
+					writefd.setWriteBufferSize(4));
+		test("clean buffered, write ab",writefd.write("ab")==2);
+		test("clean buffered, write cde",writefd.write("cde")==3);
+		test("clean buffered, write fghijklmn",
+				writefd.write("fghijklmn")==9);
+		test("clean buffered, flush",writefd.flushWriteBuffer(-1,-1));
+		test("clean buffered, pipe holds abcdefghijklmn",
+				pipeHolds(&readfd,&writefd,"abcdefghijklmn"));
+	}
+
+	// stream, failed flush with data in the buffer
+	{
+		filedescriptor	readfd;
+		failfd		writefd(0);
+		test("failed buffered, create pipe",
+			filedescriptor::createPipe(&readfd,&writefd));
+		test("failed buffered, set buffer size",
+					writefd.setWriteBufferSize(4));
+		test("failed buffered, write ab",writefd.write("ab")==2);
+		writefd.setMode(-1);
+		test("failed buffered, write cde",writefd.write("cde")==-1);
+		test("failed buffered, write cdefgh",
+					writefd.write("cdefgh")==-1);
+		writefd.setMode(0);
+		test("failed buffered, retry cdefgh",
+					writefd.write("cdefgh")==6);
+		test("failed buffered, flush",
+					writefd.flushWriteBuffer(-1,-1));
+		test("failed buffered, pipe holds abcdefgh",
+				pipeHolds(&readfd,&writefd,"abcdefgh"));
+	}
+
+	// stream, short flush with data in the buffer
+	{
+		filedescriptor	readfd;
+		failfd		writefd(0);
+		test("short buffered, create pipe",
+			filedescriptor::createPipe(&readfd,&writefd));
+		test("short buffered, set buffer size",
+					writefd.setWriteBufferSize(4));
+		test("short buffered, write ab",writefd.write("ab")==2);
+		writefd.setMode(1);
+		test("short buffered, write cde",writefd.write("cde")==1);
+		writefd.setMode(0);
+		test("short buffered, retry de",writefd.write("de")==2);
+		test("short buffered, flush",writefd.flushWriteBuffer(-1,-1));
+		test("short buffered, pipe holds abcde",
+				pipeHolds(&readfd,&writefd,"abcde"));
+	}
+
+	// stream, short flush with an empty buffer
+	{
+		filedescriptor	readfd;
+		failfd		writefd(0);
+		test("short, create pipe",
+			filedescriptor::createPipe(&readfd,&writefd));
+		test("short, set buffer size",writefd.setWriteBufferSize(4));
+		writefd.setMode(1);
+		test("short, write abcdefgh",writefd.write("abcdefgh")==3);
+		writefd.setMode(0);
+		test("short, retry defgh",writefd.write("defgh")==5);
+		test("short, flush",writefd.flushWriteBuffer(-1,-1));
+		test("short, pipe holds abcdefgh",
+				pipeHolds(&readfd,&writefd,"abcdefgh"));
+	}
+
+	// stream, short flush in one pass with an empty buffer
+	{
+		filedescriptor	readfd;
+		failfd		writefd(0);
+		test("one pass, create pipe",
+			filedescriptor::createPipe(&readfd,&writefd));
+		test("one pass, set buffer size",writefd.setWriteBufferSize(4));
+		writefd.setAllowShortWrites(true);
+		writefd.setMode(1);
+		test("one pass, write abcdefgh",writefd.write("abcdefgh")==2);
+		writefd.setMode(0);
+		test("one pass, retry cdefgh",writefd.write("cdefgh")==6);
+		test("one pass, flush",writefd.flushWriteBuffer(-1,-1));
+		test("one pass, pipe holds abcdefgh",
+				pipeHolds(&readfd,&writefd,"abcdefgh"));
+	}
+
+	// stream, short flush in one pass that leaves earlier data
+	{
+		filedescriptor	readfd;
+		failfd		writefd(0);
+		test("one pass buffered, create pipe",
+			filedescriptor::createPipe(&readfd,&writefd));
+		test("one pass buffered, set buffer size",
+					writefd.setWriteBufferSize(4));
+		writefd.setAllowShortWrites(true);
+		test("one pass buffered, write abc",writefd.write("abc")==3);
+		writefd.setMode(1);
+		test("one pass buffered, write de",writefd.write("de")==0);
+		writefd.setMode(0);
+		test("one pass buffered, retry de",writefd.write("de")==2);
+		test("one pass buffered, flush",
+					writefd.flushWriteBuffer(-1,-1));
+		test("one pass buffered, pipe holds abcde",
+				pipeHolds(&readfd,&writefd,"abcde"));
+	}
+
+	// stream, the first flush passes and the second fails
+	{
+		filedescriptor	readfd;
+		failfd		writefd(-1);
+		test("second failed, create pipe",
+			filedescriptor::createPipe(&readfd,&writefd));
+		test("second failed, set buffer size",
+					writefd.setWriteBufferSize(4));
+		writefd.setPassFirst(1);
+		test("second failed, write abcdefghij",
+				writefd.write("abcdefghij")==4);
+		writefd.setMode(0);
+		test("second failed, retry efghij",
+				writefd.write("efghij")==6);
+		test("second failed, flush",writefd.flushWriteBuffer(-1,-1));
+		test("second failed, pipe holds abcdefghij",
+				pipeHolds(&readfd,&writefd,"abcdefghij"));
+	}
+
+	// stream, timed-out flush with data in the buffer
+	#ifndef WIN32
+	{
+		filedescriptor	readfd;
+		failfd		writefd(0);
+		test("timeout, create pipe",
+			filedescriptor::createPipe(&readfd,&writefd));
+
+		// fill the pipe
+		char	filler[4096];
+		bytestring::set(filler,'x',sizeof(filler));
+		test("timeout, set non-blocking",
+				writefd.setNonBlockingMode(true));
+		size_t	filled=0;
+		ssize_t	result;
+		do {
+			result=writefd.write(filler,sizeof(filler));
+			if (result>0) {
+				filled+=result;
+			}
+		} while (result==(ssize_t)sizeof(filler));
+		test("timeout, set blocking",
+				writefd.setNonBlockingMode(false));
+
+		// write through the buffer
+		test("timeout, set buffer size",writefd.setWriteBufferSize(4));
+		test("timeout, write ab",writefd.write("ab")==2);
+		test("timeout, write cdefgh",
+			writefd.write("cdefgh",0,1000)==RESULT_TIMEOUT);
+
+		// drain the pipe
+		size_t	drained=0;
+		while (drained<filled) {
+			result=readfd.read(filler,
+				(filled-drained<sizeof(filler))?
+					filled-drained:sizeof(filler));
+			if (result<=0) {
+				break;
+			}
+			drained+=result;
+		}
+		test("timeout, drain pipe",drained==filled);
+
+		// retry
+		test("timeout, retry cdefgh",writefd.write("cdefgh")==6);
+		test("timeout, flush",writefd.flushWriteBuffer(-1,-1));
+		test("timeout, pipe holds abcdefgh",
+				pipeHolds(&readfd,&writefd,"abcdefgh"));
+	}
+	#endif
+
+	// storage, failed and short realign after some bytes were copied in
+	ssize_t		modes[]={-1,1};
+	const char	*names[]={"storage failed","storage short"};
+	stringbuffer	title;
+	for (uint16_t i=0; i<sizeof(modes)/sizeof(modes[0]); i++) {
+		file::remove(flushfile);
+		file	fl;
+		test("storage, create file",fl.create(flushfile,
+				permissions::parsePermString("rw-rw----")));
+		failfd	writefd(0);
+		writefd.setFileDescriptor(fl.duplicate());
+		test("storage, set is stream",writefd.setIsStream(false));
+		test("storage, set buffer size",writefd.setWriteBufferSize(4));
+		writefd.setMode(modes[i]);
+		title.clear();
+		title.append(names[i])->append(", write abcdefgh");
+		test(title.getString(),writefd.write("abcdefgh")==4);
+		writefd.setMode(0);
+		title.clear();
+		title.append(names[i])->append(", retry efgh");
+		test(title.getString(),writefd.write("efgh")==4);
+		test("storage, flush",writefd.flushWriteBuffer(-1,-1));
+		writefd.close();
+		fl.close();
+		char	*contents=file::getContents(flushfile);
+		title.clear();
+		title.append(names[i])->append(", file holds abcdefgh");
+		test(title.getString(),
+				!charstring::compare(contents,"abcdefgh"));
+		delete[] contents;
+	}
+
+	// storage, failed realign with nothing copied in
+	{
+		file::remove(flushfile);
+		file	fl;
+		test("storage, create file",fl.create(flushfile,
+				permissions::parsePermString("rw-rw----")));
+		failfd	writefd(0);
+		writefd.setFileDescriptor(fl.duplicate());
+		test("storage, set is stream",writefd.setIsStream(false));
+		test("storage, set buffer size",writefd.setWriteBufferSize(4));
+		test("storage full, write abcd",writefd.write("abcd")==4);
+		writefd.setMode(-1);
+		test("storage full, write efgh",writefd.write("efgh")==-1);
+		writefd.setMode(0);
+		test("storage full, retry efgh",writefd.write("efgh")==4);
+		test("storage full, flush",writefd.flushWriteBuffer(-1,-1));
+		writefd.close();
+		fl.close();
+		char	*contents=file::getContents(flushfile);
+		test("storage full, file holds abcdefgh",
+				!charstring::compare(contents,"abcdefgh"));
+		delete[] contents;
+	}
+	file::remove(flushfile);
 	stdoutput.printf("\n");
 
 	signalmanager::alarm(0);
@@ -667,6 +1076,12 @@ int main(int argc, const char **argv) {
 
 		stdoutput.printf("\nprintf errors\n");
 		printfErrorTests();
+
+		stdoutput.printf("\nflush errors\n");
+		flushErrorTests();
+
+		stdoutput.printf("\nwrite errors\n");
+		writeErrorTests();
 
 	} else {
 

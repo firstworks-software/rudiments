@@ -47,6 +47,8 @@
 						int32_t sec, int32_t usec);
 		ssize_t	unBufferedWrite(const byte_t *buf, size_t count,
 						int32_t sec, int32_t usec);
+		ssize_t	writeBufferPasses(size_t *written, bool onepass,
+						int32_t sec, int32_t usec);
 
 		int32_t	getSockOpt(int32_t level, int32_t optname,
 					void *optval, socklen_t *optlen);

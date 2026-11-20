@@ -853,12 +853,20 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  the specified number of bytes to the file descriptor,
 		 *  even if several passes are necessary.
 		 *
+		 *  When write buffering is enabled, this setting also applies
+		 *  to the flush of a full stream buffer that write() makes.
+		 *  If "allow" is set true then that flush makes a single pass.
+		 *  If "allow" is set false then it makes as many passes as
+		 *  are necessary.  flushWriteBuffer() always makes as many
+		 *  passes as are necessary.
+		 *
 		 *  Defaults to false. */
 		void	setAllowShortWrites(bool allow);
 
-		/** Returns true if read()s will attempt to read the specified
-		 *  number of bytes from the file descriptor, even if several
-		 *  passes are necessary, and false otherwise. */
+		/** Returns true if write() will only attempt a single pass,
+		 *  and false if it will attempt to write the specified number
+		 *  of bytes to the file descriptor, even if several passes
+		 *  are necessary. */
 		bool	getAllowShortWrites();
 
 
@@ -1040,6 +1048,14 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  data is actually written to the file descriptor until the
 		 *  buffer is full or until it's flushed manually.
 		 *
+		 *  If the flush that a full buffer triggers is short or
+		 *  fails, then write() returns the number of bytes of the
+		 *  caller's data that were written or buffered, and returns a
+		 *  negative value only when that number is 0.  Bytes that were
+		 *  buffered count as written.  The bytes that were not
+		 *  accepted are not buffered, so a retry with the rest of the
+		 *  data neither repeats nor drops any bytes.
+		 *
 		 *  When using sockets, note that the user-space buffer
 		 *  described above is not the same as the tcp write buffer.
 		 *  The tcp write buffer is analogous, but resides in kernel
@@ -1086,7 +1102,17 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  contents of the write buffer to be written to the file
 		 *  descriptor immediately.  See setWriteBufferSize().
 		 *
-		 *  Returns true on success and false on failure.
+		 *  Returns true if the whole buffer was written or nothing was
+		 *  pending, and false on a short write (end of file, or a
+		 *  nonblocking descriptor that would block), an error, a
+		 *  timeout or an abort.
+		 *
+		 *  When false is returned, the bytes that were not written stay
+		 *  in the buffer so the flush can be retried.  For a stream,
+		 *  only those bytes stay, so a retry sends only them.  For
+		 *  storage, the whole block stays, and a retry writes it again
+		 *  at the same position.  errno is that of the failed write on
+		 *  an error, and can be 0 on a short write.
 		 *
 		 *  If the buffer cannot be flushed within "sec" seconds and
 		 *  "usec" microseconds, then the method will fail.  Set either

@@ -321,6 +321,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - fixed jsondom writeJson() to honor its indent argument
 - fixed collection write() and writeJson() printing unsigned numbers as
   signed
+- fixed filedescriptor buffered write() returning a wrong count and
+  resending bytes after a short flush, and ignoring setAllowShortWrites()
+- fixed filedescriptor::flushWriteBuffer() returning true after a write
+  error or a short write, and false with nothing to flush
 
 ### Security
 - fixed buffer overflow when unix socket file name is too long

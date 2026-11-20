@@ -2091,11 +2091,8 @@ ssize_t filedescriptor::streamBufferedWrite(
 	#endif
 
 	// do a bufffered write...
-	size_t	initialwritebuffersize=pvt->_writebuffertail-pvt->_writebuffer;
-	bool	first=true;
 	size_t	byteswritten=0;
-	size_t	bytesunwritten=count;
-	while (byteswritten<count) {
+	for (;;) {
 
 		// calculate the number of bytes currently buffered
 		size_t	writebuffersize=pvt->_writebuffertail-
@@ -2106,6 +2103,12 @@ ssize_t filedescriptor::streamBufferedWrite(
 		size_t	writebufferspace=pvt->_writebufferend-
 						pvt->_writebuffertail;
 
+		// calculate how many bytes to copy in
+		size_t	bytestocopy=count-byteswritten;
+		if (bytestocopy>writebufferspace) {
+			bytestocopy=writebufferspace;
+		}
+
 		#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
 		debugPrintf("	writebuffersize=%d\n",
 						(int)writebuffersize);
@@ -2113,80 +2116,68 @@ ssize_t filedescriptor::streamBufferedWrite(
 						(int)writebufferspace);
 		debugPrintf("	byteswritten=%d\n",
 						(int)byteswritten);
-		debugPrintf("	bytesunwritten=%d\n",
-						(int)bytesunwritten);
+		debugPrintf("buffering %d bytes\n",
+						(int)bytestocopy);
 		#endif
 
-		// if we have enough space to just buffer the data...
-		if (bytesunwritten<=writebufferspace) {
+		// copy the data into the buffer
+		// (use memcpy to improve performance by
+		// avoiding bytestring::copy()'s NULL checks)
+		memcpy(pvt->_writebuffertail,buf+byteswritten,bytestocopy);
+		pvt->_writebuffertail+=bytestocopy;
+		byteswritten+=bytestocopy;
 
-			#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
-			debugPrintf("buffering %d bytes\n",
-						(int)bytesunwritten);
-			#endif
-
-			// copy the data into the buffer
-			// (use memcpy to improve performance by
-			// avoiding bytestring::copy()'s NULL checks)
-			memcpy(pvt->_writebuffertail,buf,bytesunwritten);
-			pvt->_writebuffertail+=bytesunwritten;
-			byteswritten+=bytesunwritten;
-
-		// if we don't have enough space to just buffer the data...
-		} else {
-
-			#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
-			debugPrintf("just buffering %d bytes\n",
-						(int)writebufferspace);
-			#endif
-			#if defined(DEBUG_BUFFERING)
-			debugPrintf("auto-flush write buffer: %d bytes\n",
-				(int)(writebuffersize+writebufferspace));
-			#endif
-
-			// copy what we can of the data into the buffer
-			// (use memcpy to improve performance by
-			// avoiding bytestring::copy()'s NULL checks)
-			memcpy(pvt->_writebuffertail,buf,writebufferspace);
-
-			// attempt to write the contents of the buffer
-			// (temporarily allowing short writes)
-			bool	saveasw=pvt->_allowshortwrites;
-			pvt->_allowshortwrites=true;
-			ssize_t	result=unBufferedWrite(pvt->_writebuffer,
-					writebuffersize+writebufferspace,
-					sec,usec);
-			pvt->_allowshortwrites=saveasw;
-
-			// if we got an EOF, short write, error, timeout,
-			// abort, or max-write, then return that
-			if ((size_t)result!=writebuffersize+writebufferspace) {
-				return result;
-			}
-
-			// reset the buffer tail to the start of the buffer
-			pvt->_writebuffertail=pvt->_writebuffer;
-
-			// The first time the buffer is written, the number of
-			// bytes that were already in the buffer need to be
-			// taken into account when calculating byteswritten,
-			// bytesunwritten and buf.
-			size_t	adjustment=(first)?initialwritebuffersize:0;
-			if (first) {
-				first=false;
-			}
-
-			// update stats
-			byteswritten+=result-adjustment;
-			bytesunwritten-=result-adjustment;
-
-			// update the position in the buf that we're writing
-			buf+=result-adjustment;
+		// return if everything fit
+		if (byteswritten==count) {
+			return byteswritten;
 		}
-	}
 
-	// return the total number of bytes that we were able to write
-	return byteswritten;
+		#if defined(DEBUG_BUFFERING)
+		debugPrintf("auto-flush write buffer: %d bytes\n",
+				(int)(writebuffersize+bytestocopy));
+		#endif
+
+		// attempt to write the contents of the buffer
+		size_t	flushed=0;
+		ssize_t	result=writeBufferPasses(&flushed,
+						pvt->_allowshortwrites,
+						sec,usec);
+
+		// reset the buffer tail and keep going
+		if (result==1) {
+			pvt->_writebuffertail=pvt->_writebuffer;
+			continue;
+		}
+
+		// On a short or failed write, keep only the unwritten bytes
+		// from before this round.  The unwritten bytes of the caller
+		// come back out of the buffer, and are not counted, so a retry
+		// of the rest of the data neither repeats nor drops any bytes.
+		if (flushed<writebuffersize) {
+			bytestring::copyWithOverlap(pvt->_writebuffer,
+						pvt->_writebuffer+flushed,
+						writebuffersize-flushed);
+			pvt->_writebuffertail=pvt->_writebuffer+
+						writebuffersize-flushed;
+			byteswritten-=bytestocopy;
+		} else {
+			pvt->_writebuffertail=pvt->_writebuffer;
+			byteswritten-=bytestocopy-(flushed-writebuffersize);
+		}
+
+		#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
+		debugPrintf("short or failed auto-flush: "
+				"%d bytes flushed, %d bytes accepted\n",
+				(int)flushed,(int)byteswritten);
+		#endif
+
+		// return the count of the caller's bytes,
+		// or the error if there were none
+		if (byteswritten) {
+			return byteswritten;
+		}
+		return (result<0)?result:0;
+	}
 }
 
 ssize_t filedescriptor::storageBufferedWrite(
@@ -2209,13 +2200,18 @@ ssize_t filedescriptor::storageBufferedWrite(
 			// realign/fill the write buffer
 			result=realignWriteBuffer(sec,usec);
 			if (result) {
-				// if an error, timeout, abort, max-read,
-				// etc. occurred then return that
+				// If an error, timeout, abort, max-read, etc.
+				// occurred, then return the count of the bytes
+				// already copied in, or the error if there
+				// were none.  _offset counts only those bytes,
+				// so a retry writes the rest at the right
+				// offset.
 				#if defined(DEBUG_WRITE) && \
 						defined(DEBUG_BUFFERING)
 				debugPrintf("...,error: %d)\n",result);
 				#endif
-				return result;
+				return (byteswritten)?
+					(ssize_t)byteswritten:result;
 			}
 
 			// bail on out of file system space or simmilar
@@ -2323,6 +2319,16 @@ bool filedescriptor::flushWriteBuffer(int32_t sec, int32_t usec) {
 	debugPrintf(",attempting %d bytes",(int)writebuffersize);
 	#endif
 
+	// bail if nothing is pending
+	if (!writebuffersize) {
+		#if defined(DEBUG_BUFFERING)
+		debugPrintf(",nothing to flush)\n");
+		#endif
+		pvt->_writebufferreadavail=0;
+		pvt->_writebufferdirty=false;
+		return true;
+	}
+
 	// set the position in the file to write to
 	// (unless this is a streaming filedescriptor)
 	// FIXME: this appears to be necessary, though I need to figure out
@@ -2348,30 +2354,63 @@ bool filedescriptor::flushWriteBuffer(int32_t sec, int32_t usec) {
 	#endif
 
 	// write the contents of the buffer
-	// (temporarily not allowing short writes)
-	bool	saveasw=pvt->_allowshortwrites;
-	pvt->_allowshortwrites=false;
-	ssize_t	result=unBufferedWrite(pvt->_writebuffer,
-					writebuffersize,sec,usec);
-	pvt->_allowshortwrites=saveasw;
+	size_t	written=0;
+	ssize_t	result=writeBufferPasses(&written,false,sec,usec);
 
 	#if defined(DEBUG_BUFFERING)
-	debugPrintf("...,%d bytes,%s)\n",(int)result,
-			(result==(ssize_t)writebuffersize)?"true":"false");
+	debugPrintf("...,%d bytes,%s)\n",(int)written,
+					(result==1)?"true":"false");
 	#endif
 
-	// If the write succeeded, then reset the buffer tail and mark the
-	// buffer clean.  If not, then don't do either of those things so
-	// the buffer state will be the same as it was prior to the attempt,
-	// and the flush can be retried.
-	if (result) {
-		// reset the buffer tail and mark the buffer clean
+	// reset the buffer tail and mark the buffer clean
+	if (result==1) {
 		pvt->_writebuffertail=pvt->_writebuffer;
 		pvt->_writebufferreadavail=0;
 		pvt->_writebufferdirty=false;
 		return true;
 	}
+
+	// On a short or failed write to a stream, move the unwritten bytes to
+	// the front of the buffer, so a retry sends only those bytes.  A
+	// storage buffer is an image of the block at _writeblockoffset, so it
+	// stays as it is, and a retry writes the whole block there again.
+	if (pvt->_isstream && written) {
+		bytestring::copyWithOverlap(pvt->_writebuffer,
+					pvt->_writebuffer+written,
+					writebuffersize-written);
+		pvt->_writebuffertail-=written;
+	}
 	return false;
+}
+
+ssize_t filedescriptor::writeBufferPasses(size_t *written, bool onepass,
+						int32_t sec, int32_t usec) {
+
+	size_t	size=pvt->_writebuffertail-pvt->_writebuffer;
+	size_t	done=0;
+	ssize_t	result=1;
+
+	// write one pass per call
+	bool	saveasw=pvt->_allowshortwrites;
+	pvt->_allowshortwrites=true;
+	while (done<size) {
+		result=unBufferedWrite(pvt->_writebuffer+done,
+						size-done,sec,usec);
+		if (result<=0) {
+			break;
+		}
+		done+=result;
+		if (onepass) {
+			break;
+		}
+	}
+	pvt->_allowshortwrites=saveasw;
+
+	*written=done;
+	if (done==size) {
+		return 1;
+	}
+	return (result<0)?result:0;
 }
 
 ssize_t filedescriptor::unBufferedWrite(
