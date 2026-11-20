@@ -598,6 +598,30 @@ int main(int argc, const char **argv) {
 		"[7]","[\n  7\n]\n","<t v=\"7\"/>\n","<t v=\"7\"/>\n"
 	};
 	testTreeFailWrite("avltree (single)",&ati32s,sexpected);
+	avltree<uint16_t>	atu0;
+	atu0.insert((uint16_t)-1);
+	const char * const	umexpected0[]={
+		"<t v=\"65535\" lh=\"0\" rh=\"0\" bf=\"0\"/>\n",
+		"[65535]","[\n  65535\n]\n","<t v=\"65535\"/>\n",
+		"<t v=\"65535\"/>\n"
+	};
+	testTreeFailWrite("avltree (uint16_t max)",&atu0,umexpected0);
+	avltree<uint32_t>	atu1;
+	atu1.insert((uint32_t)-1);
+	const char * const	umexpected1[]={
+		"<t v=\"4294967295\" lh=\"0\" rh=\"0\" bf=\"0\"/>\n",
+		"[4294967295]","[\n  4294967295\n]\n","<t v=\"4294967295\"/>\n",
+		"<t v=\"4294967295\"/>\n"
+	};
+	testTreeFailWrite("avltree (uint32_t max)",&atu1,umexpected1);
+	avltree<uint64_t>	atu2;
+	atu2.insert((uint64_t)-1);
+	const char * const	umexpected2[]={
+		"<t v=\"18446744073709551615\" lh=\"0\" rh=\"0\" bf=\"0\"/>\n",
+		"[18446744073709551615]","[\n  18446744073709551615\n]\n","<t v=\"18446744073709551615\"/>\n",
+		"<t v=\"18446744073709551615\"/>\n"
+	};
+	testTreeFailWrite("avltree (uint64_t max)",&atu2,umexpected2);
 	avltree<int32_t>	eati32;
 	const char * const	eexpected[]={
 		"<t/>\n","[]","[\n]\n","<t/>\n","<t/>\n"
@@ -619,6 +643,22 @@ int main(int argc, const char **argv) {
 			"[\n\t" ESCENC ",\n\t\"plain\",\n\t42,\n\tnull\n]\n",
 			"v",ESCRAW);
 	testFailWrite("linkedlist (escaped)",&elle);
+
+	linkedlist<uint16_t>	llu0;
+	llu0.append((uint16_t)-1);
+	testEscape("linkedlist (uint16_t max)",&llu0,
+			"[65535]","[\n\t65535\n]\n","v","65535");
+	testFailWrite("linkedlist (uint16_t max)",&llu0);
+	linkedlist<uint32_t>	llu1;
+	llu1.append((uint32_t)-1);
+	testEscape("linkedlist (uint32_t max)",&llu1,
+			"[4294967295]","[\n\t4294967295\n]\n","v","4294967295");
+	testFailWrite("linkedlist (uint32_t max)",&llu1);
+	linkedlist<uint64_t>	llu2;
+	llu2.append((uint64_t)-1);
+	testEscape("linkedlist (uint64_t max)",&llu2,
+			"[18446744073709551615]","[\n\t18446744073709551615\n]\n","v","18446744073709551615");
+	testFailWrite("linkedlist (uint64_t max)",&llu2);
 
 	dynamicarray<const char *>	edae;
 	edae[0]=ESCRAW;
@@ -698,6 +738,27 @@ int main(int argc, const char **argv) {
 			"{\"1.500000\":1}","{\n\t\"1.500000\":1\n}\n",
 			"1.500000","1");
 	testFailWrite("dictionary (double key)",&edd);
+
+	dictionary<uint16_t,int32_t>	edu0;
+	edu0.setValue((uint16_t)-1,1);
+	testEscape("dictionary (uint16_t max key)",&edu0,
+			"{\"65535\":1}","{\n\t\"65535\":1\n}\n",
+			"65535","1");
+	testFailWrite("dictionary (uint16_t max key)",&edu0);
+
+	dictionary<uint32_t,int32_t>	edu1;
+	edu1.setValue((uint32_t)-1,1);
+	testEscape("dictionary (uint32_t max key)",&edu1,
+			"{\"4294967295\":1}","{\n\t\"4294967295\":1\n}\n",
+			"4294967295","1");
+	testFailWrite("dictionary (uint32_t max key)",&edu1);
+
+	dictionary<uint64_t,int32_t>	edu2;
+	edu2.setValue((uint64_t)-1,1);
+	testEscape("dictionary (uint64_t max key)",&edu2,
+			"{\"18446744073709551615\":1}","{\n\t\"18446744073709551615\":1\n}\n",
+			"18446744073709551615","1");
+	testFailWrite("dictionary (uint64_t max key)",&edu2);
 
 	avltree<const char *>	ate;
 	ate.insert(ESCRAW);

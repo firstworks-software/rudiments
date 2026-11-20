@@ -193,20 +193,20 @@ ssize_t collection::writeValue(output *out, byte_t value) {
 
 inline
 ssize_t collection::writeValue(output *out, uint16_t value) {
-	return out->printf("%hd",value);
+	return out->printf("%hu",value);
 }
 
 inline
 ssize_t collection::writeValue(output *out, uint32_t value) {
-	return out->printf("%d",value);
+	return out->printf("%u",value);
 }
 
 inline
 ssize_t collection::writeValue(output *out, uint64_t value) {
 	#ifdef RUDIMENTS_HAVE_LONG_LONG
-		return out->printf("%lld",(long long)value);
+		return out->printf("%llu",(unsigned long long)value);
 	#else
-		return out->printf("%ld",(long)value);
+		return out->printf("%lu",(unsigned long)value);
 	#endif
 }
 
@@ -369,20 +369,20 @@ ssize_t collection::writeJsonValue(output *out, byte_t value) {
 
 inline
 ssize_t collection::writeJsonValue(output *out, uint16_t value) {
-	return out->printf("%hd",value);
+	return out->printf("%hu",value);
 }
 
 inline
 ssize_t collection::writeJsonValue(output *out, uint32_t value) {
-	return out->printf("%d",value);
+	return out->printf("%u",value);
 }
 
 inline
 ssize_t collection::writeJsonValue(output *out, uint64_t value) {
 	#ifdef RUDIMENTS_HAVE_LONG_LONG
-		return out->printf("%lld",(long long)value);
+		return out->printf("%llu",(unsigned long long)value);
 	#else
-		return out->printf("%ld",(long)value);
+		return out->printf("%lu",(unsigned long)value);
 	#endif
 }
 
