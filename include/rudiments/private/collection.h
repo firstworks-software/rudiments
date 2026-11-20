@@ -63,6 +63,23 @@
 					const wchar_t *value,
 					size_t length);
 
+		// JSON allows only a string as an object key, so these write
+		// "key" as a quoted json string, even where writeJsonValue()
+		// would write it bare, such as a number, a bool, or null.
+		bool	writeJsonKey(ssize_t *retval, output *out,
+					stringbuffer *buf,
+					const wchar_t *key);
+		bool	writeJsonKey(ssize_t *retval, output *out,
+					stringbuffer *buf,
+					wchar_t *key);
+		bool	writeJsonKey(ssize_t *retval, output *out,
+					stringbuffer *buf,
+					wchar_t key);
+		template <class keytype>
+		bool	writeJsonKey(ssize_t *retval, output *out,
+					stringbuffer *buf,
+					const keytype &key);
+
 		// Each output converts wide characters in its own printf(), so
 		// the wide overloads write with printf() and count the bytes of
 		// the raw wide characters.

@@ -116,6 +116,9 @@ class dictionarycollection : public collection {
 		/** Writes a JSON representation of the dictionarycollection to
 		 *  standard output.
 		 *
+		 *  Each key is written as a JSON string, so a number, bool,
+		 *  or NULL key is quoted.
+		 *
 		 *  Returns the number of bytes written, or -1 if an error
 		 *  occurred.  A short write returns -1.  Any other error from
 		 *  the output, such as a timeout or abort, is returned
@@ -129,6 +132,9 @@ class dictionarycollection : public collection {
 		 *  indented.  If "indent" is false, then the collection
 		 *  is written without indentation.
 		 *
+		 *  Each key is written as a JSON string, so a number, bool,
+		 *  or NULL key is quoted.
+		 *
 		 *  Returns the number of bytes written, or -1 if an error
 		 *  occurred.  A short write returns -1.  Any other error from
 		 *  the output, such as a timeout or abort, is returned
@@ -137,6 +143,9 @@ class dictionarycollection : public collection {
 
 		/** Writes a JSON representation of the dictionarycollection to
 		 *  "out".
+		 *
+		 *  Each key is written as a JSON string, so a number, bool,
+		 *  or NULL key is quoted.
 		 *
 		 *  Returns the number of bytes written, or -1 if an error
 		 *  occurred.  A short write returns -1.  Any other error from
@@ -150,6 +159,9 @@ class dictionarycollection : public collection {
 		 *  If "indent" is true, then the output is automatically
 		 *  indented.  If "indent" is false, then the collection
 		 *  is written without indentation.
+		 *
+		 *  Each key is written as a JSON string, so a number, bool,
+		 *  or NULL key is quoted.
 		 *
 		 *  Returns the number of bytes written, or -1 if an error
 		 *  occurred.  A short write returns -1.  Any other error from

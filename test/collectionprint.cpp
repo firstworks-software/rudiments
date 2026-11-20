@@ -80,8 +80,9 @@ ssize_t failbuffer::failWrite(const byte_t *data, size_t size) {
 	return stringbuffer::write(data,size);
 }
 
+// "wide" counts the output in bytes, as it can hold nulls
 template <class collectiontype>
-void testFailWrite(const char *name, collectiontype *c) {
+void testFailWrite(const char *name, collectiontype *c, bool wide=false) {
 
 	for (uint16_t i=0; i<4; i++) {
 
@@ -99,7 +100,8 @@ void testFailWrite(const char *name, collectiontype *c) {
 		stringbuffer	title;
 		title.append(prefix.getString())->append(": clean run");
 		test(title.getString(),
-			cleanresult==(ssize_t)clean.getStringLength() &&
+			cleanresult==(ssize_t)((wide)?clean.getSize():
+						clean.getStringLength()) &&
 			total>0);
 
 		// fail or shorten each write
@@ -326,6 +328,31 @@ void testEscape(const char *name, collectiontype *c,
 			j.parseString(sb.getString()) &&
 			hasNode(j.getRootNode(),nodename,value));
 	}
+}
+
+// checks writeJson() of "c" against "expected" as raw bytes, and its return
+// value against the size of the output in bytes.  A wide key is written as raw
+// wchar_t bytes.
+template <class collectiontype>
+void testWideDictionary(const char *name, collectiontype *c,
+					bytebuffer *expected) {
+
+	stringbuffer	prefix;
+	prefix.append(name)->append(": writeJson");
+
+	stringbuffer	sb;
+	ssize_t	result=c->writeJson(&sb,false);
+	stringbuffer	title;
+	title.append(prefix.getString())->append(": bytes");
+	test(title.getString(),
+		sb.getSize()==expected->getSize() &&
+		!bytestring::compare(sb.getBuffer(),expected->getBuffer(),
+							expected->getSize()));
+	title.clear();
+	title.append(prefix.getString())->append(": count");
+	test(title.getString(),result==(ssize_t)sb.getSize());
+
+	testFailWrite(name,c,true);
 }
 
 int main(int argc, const char **argv) {
@@ -619,6 +646,59 @@ int main(int argc, const char **argv) {
 			edeexpected,edeindentexpected,"plain","42");
 	testFailWrite("dictionary (escaped)",&ede);
 
+	// keys that are not strings are written as strings
+	dictionary<int32_t,const char *>	edi;
+	edi.setValue(1,"a");
+	testEscape("dictionary (int32_t key)",&edi,
+			"{\"1\":\"a\"}","{\n\t\"1\":\"a\"\n}\n",
+			"1","a");
+	testFailWrite("dictionary (int32_t key)",&edi);
+
+	dictionary<const char *,int32_t>	edk;
+	edk.setValue("x",1);
+	edk.setValue("42",2);
+	edk.setValue((const char *)NULL,3);
+	const char	*edkexpected="{\"x\":1,\"42\":2,\"null\":3}";
+	const char	*edkindentexpected=
+			"{\n\t\"x\":1,\n\t\"42\":2,\n\t\"null\":3\n}\n";
+	testEscape("dictionary (string key)",&edk,
+			edkexpected,edkindentexpected,"x","1");
+	testEscape("dictionary (numeric string key)",&edk,
+			edkexpected,edkindentexpected,"42","2");
+	testEscape("dictionary (NULL key)",&edk,
+			edkexpected,edkindentexpected,"null","3");
+	testFailWrite("dictionary (string, numeric, and NULL keys)",&edk);
+
+	dictionary<char,int32_t>	edc;
+	edc.setValue('7',1);
+	edc.setValue('x',2);
+	const char	*edcexpected="{\"7\":1,\"x\":2}";
+	const char	*edcindentexpected="{\n\t\"7\":1,\n\t\"x\":2\n}\n";
+	testEscape("dictionary (digit char key)",&edc,
+			edcexpected,edcindentexpected,"7","1");
+	testEscape("dictionary (char key)",&edc,
+			edcexpected,edcindentexpected,"x","2");
+	testFailWrite("dictionary (char key)",&edc);
+
+	dictionary<bool,int32_t>	edb;
+	edb.setValue(true,1);
+	edb.setValue(false,2);
+	const char	*edbexpected="{\"true\":1,\"false\":2}";
+	const char	*edbindentexpected=
+			"{\n\t\"true\":1,\n\t\"false\":2\n}\n";
+	testEscape("dictionary (bool key)",&edb,
+			edbexpected,edbindentexpected,"true","1");
+	testEscape("dictionary (false bool key)",&edb,
+			edbexpected,edbindentexpected,"false","2");
+	testFailWrite("dictionary (bool key)",&edb);
+
+	dictionary<double,int32_t>	edd;
+	edd.setValue(1.5,1);
+	testEscape("dictionary (double key)",&edd,
+			"{\"1.500000\":1}","{\n\t\"1.500000\":1\n}\n",
+			"1.500000","1");
+	testFailWrite("dictionary (double key)",&edd);
+
 	avltree<const char *>	ate;
 	ate.insert(ESCRAW);
 	ate.insert("plain");
@@ -719,6 +799,16 @@ int main(int argc, const char **argv) {
 		atwmnull.insert((wchar_t *)NULL);
 		testWideWrite("avltree (wchar_t * null)",&atwmnull,0,NULL);
 		testWideWrite("avltree (wchar_t * null)",&atwmnull,1,&nj);
+
+		// wide keys are always written as strings
+		dictionary<const wchar_t *,int32_t>	dw;
+		dw.setValue(L"42",1);
+		bytebuffer	dwj;
+		dwj.append("{");
+		dwj.append(L"\"42\"");
+		dwj.append(":1}");
+		testWideDictionary("dictionary (const wchar_t * number key)",
+								&dw,&dwj);
 	}
 
 	stdoutput.printf("\n");

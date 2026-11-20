@@ -54,7 +54,7 @@ ssize_t dictionarycollection<keytype,valuetype>::writeJson(output *out,
 		if (!(((i)?incOrErr(&retval,out->write(','),1):true) &&
 			((indent)?incOrErr(&retval,
 					out->write("\n	",2),2):true) &&
-			this->writeJsonValue(&retval,out,&buf,
+			this->writeJsonKey(&retval,out,&buf,
 						node->getValue()) &&
 			incOrErr(&retval,out->write(':'),1) &&
 			this->writeJsonValue(&retval,out,&buf,

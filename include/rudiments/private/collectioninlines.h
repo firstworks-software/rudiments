@@ -517,6 +517,83 @@ ssize_t collection::writeJsonWideString(output *out,
 }
 
 inline
+bool collection::writeJsonKey(ssize_t *retval, output *out,
+						stringbuffer *buf,
+						const wchar_t *key) {
+
+	// null is narrow, so write it as is
+	if (!key) {
+		return incOrErr(retval,out->write("\"null\"",6),6);
+	}
+
+	// format the key into the buffer to get its size in bytes
+	size_t	length=wcharstring::getLength(key);
+	buf->clear();
+	if (writeJsonWideString(buf,key,length)<0) {
+		return incOrErr(retval,RESULT_ERROR);
+	}
+
+	// write the key
+	ssize_t	result=writeJsonWideString(out,key,length);
+	return incOrErr(retval,(result<0)?result:(ssize_t)buf->getSize());
+}
+
+inline
+bool collection::writeJsonKey(ssize_t *retval, output *out,
+						stringbuffer *buf,
+						wchar_t *key) {
+	return writeJsonKey(retval,out,buf,(const wchar_t *)key);
+}
+
+inline
+bool collection::writeJsonKey(ssize_t *retval, output *out,
+						stringbuffer *buf,
+						wchar_t key) {
+
+	// format the key into the buffer to get its size in bytes
+	buf->clear();
+	if (writeJsonWideString(buf,&key,1)<0) {
+		return incOrErr(retval,RESULT_ERROR);
+	}
+
+	// write the key
+	ssize_t	result=writeJsonWideString(out,&key,1);
+	return incOrErr(retval,(result<0)?result:(ssize_t)buf->getSize());
+}
+
+template <class keytype>
+inline
+bool collection::writeJsonKey(ssize_t *retval, output *out,
+						stringbuffer *buf,
+						const keytype &key) {
+
+	// format the key into the buffer
+	buf->clear();
+	if (writeJsonValue(buf,key)<0) {
+		return incOrErr(retval,RESULT_ERROR);
+	}
+
+	// a json string starts with a quote, so write the buffer as is
+	const char	*value=(const char *)buf->getBuffer();
+	uint64_t	length=buf->getSize();
+	if (length && value[0]=='"') {
+		return incOrErr(retval,out->write(value,(size_t)length),
+							(ssize_t)length);
+	}
+
+	// quote anything else
+	char		*encoded;
+	uint64_t	encodedlen;
+	charstring::jsonEncode(value,length,&encoded,&encodedlen);
+	if (!encoded) {
+		return incOrErr(retval,RESULT_ERROR);
+	}
+	ssize_t	result=out->write(encoded,(size_t)encodedlen);
+	delete[] encoded;
+	return incOrErr(retval,result,(ssize_t)encodedlen);
+}
+
+inline
 bool collection::writeJsonValue(ssize_t *retval, output *out,
 						stringbuffer *buf,
 						const wchar_t *value) {
