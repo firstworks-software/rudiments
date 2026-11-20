@@ -127,6 +127,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   documentation and reworded its wastebasket description
 - charstring::base64Decode() reports the exact decoded size now and drops =
   padding bytes
+- urlhttprequest skin variables are in last-set order now
 
 ### Removed
 - removed csprng's static isSupported() - it was always unconditionally
@@ -305,6 +306,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   is larger than the initial extent
 - fixed staticarray set() and zero() with a start index filling the wrong
   elements with the wrong byte
+- fixed a urlhttprequest leak of skin variable names and values
 
 ### Security
 - fixed buffer overflow when unix socket file name is too long

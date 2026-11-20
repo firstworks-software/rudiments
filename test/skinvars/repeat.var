@@ -1,0 +1,4 @@
+<skin>
+<var name="repeatvar">repeatval1</var>
+<var name="repeatvar">repeatval2</var>
+</skin>

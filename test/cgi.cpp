@@ -20,6 +20,19 @@ static bool httpModuleMain(httpserverapi *sapi) {
 	httpresponse	resp(sapi);
 
 
+	// set a skin variable to its own stored name and value
+	const char	*repeatval=req.getSkinVariable("repeatvar");
+	if (repeatval) {
+		const char * const *skinvars=req.getSkinVariables();
+		for (uint64_t i=0; skinvars[i]; i++) {
+			if (!charstring::compare(skinvars[i],"repeatvar")) {
+				req.setSkinVariable(skinvars[i],repeatval);
+				break;
+			}
+		}
+	}
+
+
 	// convenience methods
 
 	// send an http header

@@ -3,6 +3,7 @@
 
 #include <rudiments/stringbuffer.h>
 #include <rudiments/charstring.h>
+#include <rudiments/character.h>
 #include <rudiments/permissions.h>
 #include <rudiments/file.h>
 #include <rudiments/stdio.h>
@@ -17,6 +18,7 @@
 #define BODY "urlhttprequest.body"
 #define OUT "urlhttprequest.out"
 #define REST "urlhttprequest.rest"
+#define VG "urlhttprequest.vg"
 
 struct cgirun {
 	bool	exitedcleanly;
@@ -80,6 +82,115 @@ static bool hasParameter(cgirun *run, const char *nameandvalue) {
 	stringbuffer	line;
 	line.append("\n\t")->append(nameandvalue)->append("\n");
 	return charstring::contains(run->output,line.getString());
+}
+
+static bool hasSkinVariable(cgirun *run, const char *nameandvalue) {
+	stringbuffer	line;
+	line.append("\n")->append(nameandvalue)->append("\n");
+	return charstring::contains(run->output,line.getString());
+}
+
+static bool isBlankValgrindLine(const char *line) {
+
+	// skip the ==pid== prefix
+	if (line[0]!='=' || line[1]!='=') {
+		return false;
+	}
+	const char	*ptr=charstring::findFirst(line+2,"==");
+	if (!ptr) {
+		return false;
+	}
+
+	// check for anything after it
+	for (ptr=ptr+2; *ptr; ptr++) {
+		if (!character::isWhitespace(*ptr)) {
+			return false;
+		}
+	}
+	return true;
+}
+
+// Runs cgi.cgi under valgrind with the skin files that "pathinfo" selects
+// from skinvars/, counts the definite leak records of the copies that
+// setSkinVariable() makes, and counts the invalid read, write, and free
+// errors.  Returns false if valgrind can't run here.
+static bool runCgiUnderValgrind(const char *pathinfo,
+					cgirun *run, uint64_t *leaks,
+					uint64_t *errors) {
+
+	*leaks=0;
+	*errors=0;
+	run->output=charstring::duplicate("");
+
+	// libtool runs valgrind on the binary rather than on the wrapper
+	stringbuffer	cmd;
+	cmd.append("( env -i PATH=\"$PATH\" SCRIPT_NAME=/skinvars/cgi.cgi "
+			"DOCUMENT_ROOT=. SERVER_NAME=localhost "
+			"REQUEST_METHOD=GET");
+	cmd.append(" PATH_INFO='")->append(pathinfo)->append("'");
+	cmd.append(" timeout 30 sh ../libtool --mode=execute valgrind "
+			"--leak-check=full --show-leak-kinds=definite "
+			"--num-callers=30 --log-file=" VG " ./cgi.cgi > " OUT
+			" ) < /dev/null 2> /dev/null");
+
+	// run it
+	int	result=system(cmd.getString());
+	run->exitedcleanly=(result==0);
+	char	*output=file::getContents(OUT);
+	if (output) {
+		delete[] run->output;
+		run->output=output;
+	}
+	char	*log=file::getContents(VG);
+	file::remove(OUT);
+	file::remove(VG);
+
+	if (!charstring::contains(log,"HEAP SUMMARY")) {
+		delete[] log;
+		return false;
+	}
+
+	// count the loss records that come from setSkinVariable's copies
+	char		**lines=NULL;
+	uint64_t	linecount=0;
+	charstring::split(log,"\n",false,&lines,&linecount);
+	bool	inrecord=false;
+	bool	setskinvariable=false;
+	bool	duplicate=false;
+	for (uint64_t i=0; i<=linecount; i++) {
+		const char	*line=(i<linecount)?lines[i]:"";
+		if (charstring::contains(line,"Invalid read") ||
+			charstring::contains(line,"Invalid write") ||
+			charstring::contains(line,"Invalid free")) {
+			(*errors)++;
+		}
+		if (inrecord && (i==linecount || isBlankValgrindLine(line))) {
+			if (setskinvariable && duplicate) {
+				(*leaks)++;
+			}
+			inrecord=false;
+		} else if (charstring::contains(line,
+				"are definitely lost in loss record")) {
+			inrecord=true;
+			setskinvariable=false;
+			duplicate=false;
+		} else if (inrecord) {
+			if (charstring::contains(line,
+				"urlhttprequest::setSkinVariable")) {
+				setskinvariable=true;
+			}
+			if (charstring::contains(line,
+					"charstring::duplicate")) {
+				duplicate=true;
+			}
+		}
+	}
+	for (uint64_t i=0; i<linecount; i++) {
+		delete[] lines[i];
+	}
+	delete[] lines;
+	delete[] log;
+	return true;
 }
 
 int main() {
@@ -177,6 +288,46 @@ int main() {
 	test("huge content length, finishes quickly",run.elapsed<10);
 	test("huge content length, var1",hasParameter(&run,"var1=val1"));
 	test("huge content length, var2",hasParameter(&run,"var2=val2"));
+	delete[] run.output;
+	stdoutput.printf("\n");
+
+	// skin variable leaks
+	if (system("valgrind --version > /dev/null 2>&1")) {
+		stdoutput.printf("\tskin variable leaks: skipped, "
+						"no valgrind\n");
+		return 0;
+	}
+	uint64_t	leaks=0;
+	uint64_t	errors=0;
+
+	// two different skin variables
+	if (runCgiUnderValgrind("/unique/page",&run,&leaks,&errors)) {
+		test("unique skin variables, exit status",run.exitedcleanly);
+		test("unique skin variables, uniquevar1",
+			hasSkinVariable(&run,"uniquevar1=uniqueval1"));
+		test("unique skin variables, uniquevar2",
+			hasSkinVariable(&run,"uniquevar2=uniqueval2"));
+		test("unique skin variables, no leak",leaks==0);
+		test("unique skin variables, no memory error",errors==0);
+	} else {
+		stdoutput.printf("\tunique skin variables: skipped, "
+					"valgrind did not run\n");
+	}
+	delete[] run.output;
+	stdoutput.printf("\n");
+
+	// one skin variable set twice
+	if (runCgiUnderValgrind("/repeat/page",&run,&leaks,&errors)) {
+		test("repeated skin variable, exit status",run.exitedcleanly);
+		test("repeated skin variable, last value",
+			hasSkinVariable(&run,"repeatvar=repeatval2") &&
+			!charstring::contains(run.output,"repeatval1"));
+		test("repeated skin variable, no leak",leaks==0);
+		test("repeated skin variable, no memory error",errors==0);
+	} else {
+		stdoutput.printf("\trepeated skin variable: skipped, "
+					"valgrind did not run\n");
+	}
 	delete[] run.output;
 	stdoutput.printf("\n");
 

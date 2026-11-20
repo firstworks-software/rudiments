@@ -44,6 +44,8 @@ class urlhttprequestprivate {
 urlhttprequest::urlhttprequest(httpserverapi *sapi) : httprequest(sapi) {
 	pvt=new urlhttprequestprivate;
 	pvt->_sapi=sapi;
+	pvt->_skinvars.setManageArrayKeys(true);
+	pvt->_skinvars.setManageArrayValues(true);
 	initUrlVariables();
 	initSkinVariables();
 }
@@ -175,8 +177,15 @@ void urlhttprequest::parseSkinVariableFile(const char *skinvarfilename) {
 bool urlhttprequest::setSkinVariable(const char *name, const char *value) {
 	pvt->_dirtyskinvariables=true;
 	dirtyAllVars(true);
-	pvt->_skinvars.setValue(charstring::duplicate(name),
-				charstring::duplicate(value));
+
+	// The caller may pass the stored name or value, and remove() frees
+	// both, so copy them first.
+	char	*n=charstring::duplicate(name);
+	char	*v=charstring::duplicate(value);
+
+	// replace any existing variable
+	pvt->_skinvars.remove((char *)name);
+	pvt->_skinvars.setValue(n,v);
 	return true;
 }
 

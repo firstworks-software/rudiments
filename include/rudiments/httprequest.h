@@ -146,11 +146,16 @@ class RUDIMENTS_DLLSPEC httprequest : public input {
 
 		/** Returns a null terminated list of all variables.
 		 *  The order of the list is the order the variables were
-		 *  received in. */
+		 *  received in, except that the skin variables of a
+		 *  urlhttprequest are in the order they were last set in.
+		 *  A skin variable name remains valid until that name is set
+		 *  again or the urlhttprequest is destroyed. */
 		const char * const *getAllVariables();
 
 		/** Returns a null terminated list of the values corresponding
-		 *  to the variables returned from getAllVariables(). */
+		 *  to the variables returned from getAllVariables().  A skin
+		 *  variable value remains valid until its name is set again
+		 *  or the urlhttprequest is destroyed. */
 		const char * const *getAllValues();
 
 

@@ -151,24 +151,30 @@ class RUDIMENTS_DLLSPEC urlhttprequest : public httprequest {
 
 
 
-		/** Returns the value of skin variable "name". */
+		/** Returns the value of skin variable "name".  The value
+		 *  remains valid until "name" is set again or this instance
+		 *  is destroyed. */
 		const char	*getSkinVariable(const char *name);
 
 		/** Returns the number of skin variables. */
 		uint64_t	getSkinVariableCount();
 
 		/** Returns a null terminated list of skin variables.  The
-		 *  order of the list is the order the variables were received
-		 *  in. */
+		 *  order of the list is the order the variables were last set
+		 *  in.  Each name remains valid until that name is set again
+		 *  or this instance is destroyed. */
 		const char * const *getSkinVariables();
 
 		/** Returns a null terminated list of values corresponding to
-		 *  the variables returned from getSkinVariables(). */
+		 *  the variables returned from getSkinVariables().  Each value
+		 *  remains valid until its name is set again or this instance
+		 *  is destroyed. */
 		const char * const *getSkinValues();
 
 		/** Creates a new skin variable with name "name" and value
 		 *  "value" or updates an existing skin variable "name" to have
-		 *  value "value". */
+		 *  value "value".  An updated variable moves to the end of the
+		 *  order and the previous name and value are freed. */
 		bool	setSkinVariable(const char *name, const char *value);
 
 

@@ -128,7 +128,7 @@ clean:
 	$(RM) $(PROGS1)
 	$(RM) $(PROGS2)
 	$(RM) $(PROGS3)
-	$(RM) *.exe *.ilk *.idb *.pdb *.manifest *.lo *.o *.obj test.log testfile *.pem *.pfx *.xml *.sck *.ii *.csv *.json *.ini .prop handofffile *.cgi app1/app2/*.cgi semout semkey
+	$(RM) *.exe *.ilk *.idb *.pdb *.manifest *.lo *.o *.obj test.log testfile *.pem *.pfx *.xml *.sck *.ii *.csv *.json *.ini .prop handofffile *.cgi app1/app2/*.cgi semout semkey urlhttprequest.vg
 	$(RMTREE) .libs
 	cd certificates $(AND) $(MAKE) clean
 
