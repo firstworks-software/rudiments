@@ -393,14 +393,15 @@ bool avltree<valuetype>::clear() {
 	treenode<valuetype>	*node=top;
 	while (node) {
 
-		// go left as far as possible
-		while (node->getLeftChild()) {
-			node=node->getLeftChild();
-		}
-
-		// go right as far as possible
-		while (node->getRightChild()) {
-			node=node->getRightChild();
+		// descend to a leaf
+		for (;;) {
+			if (node->getLeftChild()) {
+				node=node->getLeftChild();
+			} else if (node->getRightChild()) {
+				node=node->getRightChild();
+			} else {
+				break;
+			}
 		}
 
 		// remove this node from its parent

@@ -110,6 +110,34 @@ char *toString(int32_t number) {
 }
 
 
+// value that counts its deletions
+class countedvalue : public object {
+	public:
+		countedvalue(int32_t key) {
+			this->key=key;
+		}
+		~countedvalue() {
+			deleted++;
+		}
+		int32_t		key;
+		static uint16_t	deleted;
+};
+
+uint16_t	countedvalue::deleted=0;
+
+
+// orders countedvalues by key rather than by address
+class countedcomparator : public comparator {
+	public:
+		using comparator::compare;
+		int32_t compare(object *value1, object *value2) {
+			int32_t	key1=((countedvalue *)value1)->key;
+			int32_t	key2=((countedvalue *)value2)->key;
+			return (key1<key2)?-1:((key1==key2)?0:1);
+		}
+};
+
+
 int main(int argc, char **argv) {
 
 	// 4096 nodes for systems with more than 1G of memory,
@@ -409,6 +437,25 @@ int main(int argc, char **argv) {
 	test("remove, getCount(): ",strbt.getCount()==2);
 	strbt.clear();
 	test("clear, getCount(): ",!strbt.getCount());
+	stdoutput.printf("\n");
+
+	// clear and delete, with a left child of a right child
+	stdoutput.printf("clear and delete, left child of right child...\n");
+	countedcomparator	countedcomp;
+	avltree<countedvalue *>	cvt;
+	cvt.setComparator(&countedcomp);
+	cvt.setManageValues(true);
+	cvt.insert(new countedvalue(2));
+	cvt.insert(new countedvalue(1));
+	cvt.insert(new countedvalue(4));
+	cvt.insert(new countedvalue(3));
+	test("insert, shape: ",
+		cvt.getTop()->getValue()->key==2 &&
+		cvt.getTop()->getRightChild()->getLeftChild()->
+						getValue()->key==3);
+	cvt.clear();
+	test("clear, deleted: ",countedvalue::deleted==4);
+	test("clear, getCount(): ",!cvt.getCount());
 	stdoutput.printf("\n");
 
 	// remove/clear and array delete
