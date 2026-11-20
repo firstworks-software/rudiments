@@ -63,6 +63,14 @@
 	#include <locale.h>
 #endif
 
+// for INT_MAX
+#ifdef RUDIMENTS_HAVE_LIMITS_H
+	#include <limits.h>
+#endif
+#ifndef INT_MAX
+	#define INT_MAX 2147483647
+#endif
+
 const wchar_t *wcharstring::findLast(const wchar_t *haystack,
 					const wchar_t *needle) {
 
@@ -2718,70 +2726,125 @@ ssize_t wcharstring::printf(wchar_t *buffer, size_t length,
 					const wchar_t *format, ...) {
 	va_list	args;
 	va_start(args,format);
-	size_t	result=printf(buffer,length,format,&args);
+	ssize_t	result=printf(buffer,length,format,&args);
 	va_end(args);
 	return result;
 }
+
+#ifdef RUDIMENTS_HAVE_VSWPRINTF
+// true if vswprintf() returned -1 with errno "err" because a buffer of
+// "buflen" characters was too small, false otherwise.  musl also reports an
+// encoding error as EOVERFLOW, so true can also mean an encoding error.
+static bool vswprintfBufferTooSmall(int32_t err, size_t buflen) {
+	if (!err) {
+		return true;
+	}
+	#ifdef E2BIG
+	if (err==E2BIG) {
+		return true;
+	}
+	#endif
+	#ifdef EOVERFLOW
+	if (err==EOVERFLOW) {
+		return true;
+	}
+	#endif
+	#ifdef EINVAL
+	if (err==EINVAL && !buflen) {
+		return true;
+	}
+	#endif
+	return false;
+}
+
+#if defined(EOVERFLOW) && \
+	defined(RUDIMENTS_HAVE_VFWPRINTF) && !defined(_WIN32)
+	#define RUDIMENTS_MEASURE_VSWPRINTF 1
+
+// sets "size" to the length of the formatted data, or to -1 on an error,
+// which also sets errno.  Returns false if the length can not be measured.
+static bool vswprintfMeasure(const wchar_t *format,
+					va_list *argp, ssize_t *size) {
+	FILE	*f=fopen("/dev/null","w");
+	if (!f) {
+		return false;
+	}
+	error::clearError();
+	va_list	argp1;
+	va_copy(argp1,*argp);
+	*size=vfwprintf(f,format,argp1);
+	int32_t	err=error::getErrorNumber();
+	va_end(argp1);
+	fclose(f);
+	error::setErrorNumber(err);
+	return (*size>-1 || err);
+}
+#endif
+#endif
 
 ssize_t wcharstring::printf(wchar_t *buffer, size_t length,
 					const wchar_t *format, va_list *argp) {
 	#ifdef RUDIMENTS_HAVE_VSWPRINTF
 
-		// On most platforms, vswprintf attempts to write formatted
-		// data into "buffer" and returns the number of bytes that were
-		// written (excluding the null terminator) if it's possible to
-		// fit them into the buffer.
+		// Unlike vsnprintf(), vswprintf() does not return the length
+		// of a result that does not fit in the buffer.  It returns -1
+		// instead.  By platform, errno stays unset or is E2BIG or
+		// EOVERFLOW, or EINVAL for a buffer of zero length.  Solaris 7
+		// returns the buffer length instead.  EOVERFLOW also means a
+		// result of more than INT_MAX characters.  An encoding error
+		// returns -1 and sets errno to EILSEQ, but musl sets EOVERFLOW
+		// instead.
 		//
-		// If an error occurs, then vswprintf returns -1 and sets errno.
-		//
-		// Platforms differ on what happens if trucation occurs though.
-		// Most platforms just return -1 and don't set errno.  Some
-		// platforms (freebsd) return -1 and set errno to EOVERFLOW.
-		// Some platforms (solaris 7) just return the number of bytes
-		// that were able to be written.
-		//
-		// We don't want any of these behaviors though.  In the case
-		// of truncation, we want to write truncated data to "buffer"
-		// and return the number of bytes that would have been written
-		// (excluding the NULL terminator) if truncation hadn't
-		// occurred, similar to the behavior of vsnprintf on
-		// well-behaved systems.
-		//
-		// So, we'll write to ever-larger buffers until we achieve
-		// success, copy out what we can to the original buffer, and
-		// return the number of bytes that would have been written
-		// (excluding the NULL terminator) if truncation hadn't
-		// occurred.
+		// So, format into larger and larger scratch buffers.  Copy
+		// what fits to "buffer", and return the full length, as
+		// vsnprintf() does.  Stop on any other error.  On EOVERFLOW,
+		// measure the length once with vfwprintf(), which returns the
+		// full length or reports the encoding error as EILSEQ.
 
-		size_t	buflen=length;
-		size_t	inc=16;
-		ssize_t	size=-1;
-		error::clearError();
-		do {
+		// reject a buffer larger than a size_t can hold
+		size_t	bufsize;
+		if (!bufferSize(length,1,0,sizeof(wchar_t),&bufsize)) {
+			return -1;
+		}
 
-			// size the scratch buffer
-			size_t	bufsize;
-			if (!bufferSize(buflen,1,0,sizeof(wchar_t),&bufsize)) {
+		// vswprintf() returns at most INT_MAX characters
+		size_t	maxbuflen=(size_t)INT_MAX+1;
+		if (maxbuflen>((size_t)-1)/sizeof(wchar_t)) {
+			maxbuflen=((size_t)-1)/sizeof(wchar_t);
+		}
+
+		size_t	buflen=(length>maxbuflen)?maxbuflen:length;
+		size_t	growthlimit=maxbuflen;
+		#ifdef RUDIMENTS_MEASURE_VSWPRINTF
+		bool	measured=false;
+		#endif
+		for (;;) {
+
+			// malloc() returns NULL, instead of an exception, when
+			// it can not allocate a large scratch buffer
+			wchar_t	*buf=(wchar_t *)malloc(
+					((buflen)?buflen:1)*sizeof(wchar_t));
+			if (!buf) {
+				#ifdef ENOMEM
+				error::setErrorNumber(ENOMEM);
+				#endif
 				return -1;
 			}
-			wchar_t	*buf=new wchar_t[bufsize];
 
 			// this loop may call vswprintf() more than once;
 			// reusing *argp directly across those calls is
 			// undefined behavior (see the va_copy() comment on
 			// charstring::printf()'s vsnprintf() calls) - each
 			// iteration gets its own copy instead
+			error::clearError();
 			va_list	argp1;
 			va_copy(argp1,*argp);
-			size=vswprintf(buf,buflen,format,argp1);
+			ssize_t	size=vswprintf(buf,buflen,format,argp1);
+			int32_t	err=error::getErrorNumber();
 			va_end(argp1);
 
-			// On most platforms, size-written equaling -1
-			// indicates truncation.
-			// On solaris-7-style platforms, size-written exactly
-			// equaling the size of the buffer size indicates
-			// truncation.
-			// If neither of those happened, then we have success.
+			// success, unless Solaris 7 filled the buffer
+			// (size<buflen here, so neither copy overruns "buf")
 			if (size>-1 && (size_t)size!=buflen) {
 				if ((size_t)(size+1)>length) {
 					// just copy out what we can
@@ -2791,39 +2854,66 @@ ssize_t wcharstring::printf(wchar_t *buffer, size_t length,
 					// the NULL terminator
 					copy(buffer,buf,size+1);
 				}
-				delete[] buf;
-				break;
+				free(buf);
+				return size;
 			}
-			#if defined(EINVAL) || \
-				defined(EOVERFLOW) || \
-				defined(EILSEQ) || \
-				defined(E2BIG)
-			// On freebsd-style platforms EINVAL is set if
-			// buflen==0 and EOVERFLOW or EILSEQ can be set when
-			// truncation occurs.  On linux/glibc, truncation by
-			// more than one wide character is reported as E2BIG
-			// instead (confirmed against glibc).  Ignore all of
-			// these.
-			else if (size==-1 &&
-				(error::getErrorNumber()==EINVAL ||
-				error::getErrorNumber()==EOVERFLOW ||
-				error::getErrorNumber()==EILSEQ ||
-				error::getErrorNumber()==E2BIG)) {
-				error::clearError();
+			free(buf);
+
+			// stop on an error other than a short buffer
+			if (size==-1 && !vswprintfBufferTooSmall(err,buflen)) {
+				error::setErrorNumber(err);
+				return -1;
+			}
+
+			#ifdef EOVERFLOW
+			if (size==-1 && err==EOVERFLOW) {
+
+				// measure the length once
+				#ifdef RUDIMENTS_MEASURE_VSWPRINTF
+				ssize_t	needed;
+				if (!measured) {
+					measured=true;
+					if (vswprintfMeasure(format,
+							argp,&needed)) {
+						if (needed==-1) {
+							return -1;
+						}
+						if ((size_t)needed>=maxbuflen) {
+							error::setErrorNumber(
+								EOVERFLOW);
+							return -1;
+						}
+						if ((size_t)needed>=buflen) {
+							buflen=needed+1;
+							continue;
+						}
+					}
+				}
+				#endif
+
+				// Without a measure, EOVERFLOW can be an encoding
+				// error.  So growth on EOVERFLOW alone stops at a
+				// buffer of this many characters.  A result of
+				// 1048576 characters or more fails.
+				const size_t	unmeasuredbuflen=1024*1024;
+				if (growthlimit>unmeasuredbuflen) {
+					growthlimit=unmeasuredbuflen;
+				}
 			}
 			#endif
 
-			delete[] buf;
-			buflen+=inc;
-
-			// adjust how quickly the buffer grows
-			// (this can certainly be optimized further)
-			inc*=2;
-			if (inc>1024) {
-				inc=1024;
+			// grow the scratch buffer, up to the limit
+			if (buflen>=growthlimit) {
+				#ifdef EOVERFLOW
+				error::setErrorNumber(EOVERFLOW);
+				#endif
+				return -1;
 			}
-		} while (!error::getErrorNumber());
-		return size;
+			buflen=(buflen<16)?16:buflen*2;
+			if (buflen>growthlimit) {
+				buflen=growthlimit;
+			}
+		}
 	#else
 		RUDIMENTS_SET_ENOSYS
 		return -1;

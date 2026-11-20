@@ -1520,6 +1520,14 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *  would take more bytes than a size_t can hold.  Also
 		 *  returns -1 if "len" is more than
 		 *  SIZE_MAX/sizeof(wchar_t), whatever the formatted data.
+		 *  Also returns -1 and sets errno to EILSEQ if a character can
+		 *  not be converted to a wide character.  Also returns -1 and
+		 *  sets errno to EOVERFLOW if the formatted data would take
+		 *  more than INT_MAX characters.  On some platforms vswprintf()
+		 *  reports a short buffer as EOVERFLOW.  If the length can not
+		 *  be measured there, a result of 1048576 or more characters
+		 *  also fails with EOVERFLOW.  In that case an encoding error
+		 *  can also set errno to EOVERFLOW instead of EILSEQ.
 		 *
 		 *  NOTE: non-wide character sequences will be converted to
 		 *  sequences of wide characters.
@@ -1553,6 +1561,14 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *  would take more bytes than a size_t can hold.  Also
 		 *  returns -1 if "len" is more than
 		 *  SIZE_MAX/sizeof(wchar_t), whatever the formatted data.
+		 *  Also returns -1 and sets errno to EILSEQ if a character can
+		 *  not be converted to a wide character.  Also returns -1 and
+		 *  sets errno to EOVERFLOW if the formatted data would take
+		 *  more than INT_MAX characters.  On some platforms vswprintf()
+		 *  reports a short buffer as EOVERFLOW.  If the length can not
+		 *  be measured there, a result of 1048576 or more characters
+		 *  also fails with EOVERFLOW.  In that case an encoding error
+		 *  can also set errno to EOVERFLOW instead of EILSEQ.
 		 *
 		 *  NOTE: non-wide character sequences will be converted to
 		 *  sequences of wide characters.
@@ -1575,6 +1591,14 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *  0 is returned.
 		 *
 		 *  Returns -1 if an error occurred.
+		 *  Also returns -1 and sets errno to EILSEQ if a character can
+		 *  not be converted to a wide character.  Also returns -1 and
+		 *  sets errno to EOVERFLOW if the formatted data would take
+		 *  more than INT_MAX characters.  On some platforms vswprintf()
+		 *  reports a short buffer as EOVERFLOW.  If the length can not
+		 *  be measured there, a result of 1048576 or more characters
+		 *  also fails with EOVERFLOW.  In that case an encoding error
+		 *  can also set errno to EOVERFLOW instead of EILSEQ.
 		 *
 		 *  NOTE: non-wide character sequences will be converted to
 		 *  sequences of wide characters.
@@ -1596,6 +1620,14 @@ class RUDIMENTS_DLLSPEC wcharstring {
 		 *  0 is returned.
 		 *
 		 *  Returns -1 if an error occurred.
+		 *  Also returns -1 and sets errno to EILSEQ if a character can
+		 *  not be converted to a wide character.  Also returns -1 and
+		 *  sets errno to EOVERFLOW if the formatted data would take
+		 *  more than INT_MAX characters.  On some platforms vswprintf()
+		 *  reports a short buffer as EOVERFLOW.  If the length can not
+		 *  be measured there, a result of 1048576 or more characters
+		 *  also fails with EOVERFLOW.  In that case an encoding error
+		 *  can also set errno to EOVERFLOW instead of EILSEQ.
 		 *
 		 *  The caller must call va_end() on "argp" afterward.
 		 *

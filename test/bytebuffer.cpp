@@ -8,6 +8,7 @@
 #include <rudiments/ucs2charstring.h>
 #include <rudiments/signalclasses.h>
 #include <rudiments/resultcodes.h>
+#include <rudiments/locale.h>
 #include <rudiments/stdio.h>
 #include <rudiments/stringbuffer.h>
 #include "test.cpp"
@@ -620,6 +621,23 @@ ssize_t failbytebuffer::write(const byte_t *data, size_t size) {
 	return mode;
 }
 
+// set a UTF-8 character type locale, if the host has one
+static bool setUtf8CType() {
+	const char	*names[]={
+		"C.UTF-8","C.utf8","en_US.UTF-8","en_US.utf8",
+	#ifdef _WIN32
+		".UTF8",
+	#endif
+		NULL
+	};
+	for (const char **name=names; *name; name++) {
+		if (locale::setCType(*name)) {
+			return true;
+		}
+	}
+	return false;
+}
+
 // printf() on a buffer that shortens or fails its writes
 static void testPrintfErrors() {
 
@@ -653,6 +671,31 @@ static void testPrintfErrors() {
 			test(title.getString(),
 				result==expected[i] && fb.writes==1);
 		}
+	}
+
+	// wide format that cannot be converted, writes nothing
+	if (wcharstring::supportsPrintf()) {
+		bool	utf8=setUtf8CType();
+		if (!utf8) {
+			stdoutput.printf("no UTF-8 locale available, "
+					"running in the C locale\n");
+		}
+		failbytebuffer	fb(0);
+		#ifdef _WIN32
+		ssize_t	result=fb.printf(L"abc%hs","\xff");
+		#else
+		ssize_t	result=fb.printf(L"abc%s","\xff");
+		#endif
+		if (result==RESULT_ERROR) {
+			test("wide printf(), bad format",
+				fb.getSize()==0 && fb.writes==0);
+		} else if (utf8) {
+			test("wide printf(), bad format",false);
+		} else {
+			stdoutput.printf("wide printf(), bad format "
+				"converted without error, skipped\n");
+		}
+		locale::setCType("C");
 	}
 
 	// ucs2

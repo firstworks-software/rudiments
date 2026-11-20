@@ -18,6 +18,7 @@
 #include <rudiments/charstring.h>
 #include <rudiments/bytestring.h>
 #include <rudiments/wcharstring.h>
+#include <rudiments/locale.h>
 #include "test.cpp"
 
 #ifndef WIN32
@@ -268,6 +269,26 @@ ssize_t failfd::lowLevelWrite(const void *buf, size_t count) {
 	return mode;
 }
 
+static bool pipeHolds(filedescriptor *readfd, failfd *writefd,
+						const char *expected);
+
+// set a UTF-8 character type locale, if the host has one
+static bool setUtf8CType() {
+	const char	*names[]={
+		"C.UTF-8","C.utf8","en_US.UTF-8","en_US.utf8",
+	#ifdef _WIN32
+		".UTF8",
+	#endif
+		NULL
+	};
+	for (const char **name=names; *name; name++) {
+		if (locale::setCType(*name)) {
+			return true;
+		}
+	}
+	return false;
+}
+
 // printf() on file descriptors that shorten or fail their writes
 static void printfErrorTests() {
 
@@ -306,6 +327,34 @@ static void printfErrorTests() {
 			title.append(names[i]);
 			test(title.getString(),result==expected[i]);
 		}
+
+		// buffered, a wide format that cannot be converted
+		bool	utf8=setUtf8CType();
+		if (!utf8) {
+			stdoutput.printf("no UTF-8 locale available, "
+					"running in the C locale\n");
+		}
+		filedescriptor	readfd;
+		failfd		writefd(0);
+		test("buffered bad format, create pipe",
+			filedescriptor::createPipe(&readfd,&writefd));
+		test("buffered bad format, set buffer size",
+					writefd.setWriteBufferSize(4));
+		#ifdef _WIN32
+		ssize_t	result=writefd.printf(L"abc%hs","\xff");
+		#else
+		ssize_t	result=writefd.printf(L"abc%s","\xff");
+		#endif
+		if (result==-1) {
+			test("buffered wide printf(), bad format",
+				pipeHolds(&readfd,&writefd,""));
+		} else if (utf8) {
+			test("buffered wide printf(), bad format",false);
+		} else {
+			stdoutput.printf("buffered wide printf(), bad "
+				"format converted without error, skipped\n");
+		}
+		locale::setCType("C");
 	}
 
 	// unbuffered, the read side of the pipe is closed

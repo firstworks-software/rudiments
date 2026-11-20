@@ -11,8 +11,35 @@
 #include <rudiments/locale.h>
 #include <rudiments/stdio.h>
 #include <limits.h>
+#include <errno.h>
 #include <rudiments/signalclasses.h>
 #include "test.cpp"
+
+// a wide format with a narrow string argument that is never valid UTF-8
+#ifdef _WIN32
+	#define BADFORMAT	L"abc%hs"
+	#define LONGBADFORMAT	L"%lsabc%hs"
+#else
+	#define BADFORMAT	L"abc%s"
+	#define LONGBADFORMAT	L"%lsabc%s"
+#endif
+
+// set a UTF-8 character type locale, if the host has one
+static bool setUtf8CType() {
+	const char	*names[]={
+		"C.UTF-8","C.utf8","en_US.UTF-8","en_US.utf8",
+	#ifdef _WIN32
+		".UTF8",
+	#endif
+		NULL
+	};
+	for (const char **name=names; *name; name++) {
+		if (locale::setCType(*name)) {
+			return true;
+		}
+	}
+	return false;
+}
 
 // returns an exact-size copy of the ASCII string "str"; NULL stays NULL
 static wchar_t *emptyPatternCopy(const char *str) {
@@ -1019,6 +1046,68 @@ int main(int argc, const char **argv) {
 		test("multi-step retry contents",
 			!wcharstring::compare(buf3,longretrystr));
 		delete[] buf3;
+
+		// a format that cannot be converted fails instead of looping;
+		// an alarm turns a hang into a failure
+		signalmanager::alarm(60);
+		bool	utf8=setUtf8CType();
+		if (!utf8) {
+			stdoutput.printf("no UTF-8 locale available, "
+					"running in the C locale\n");
+		}
+
+		// fixed buffer, left unchanged
+		for (size_t i=0; i<sizeof(buffer)/sizeof(buffer[0]); i++) {
+			buffer[i]=L'z';
+		}
+		errno=0;
+		size=wcharstring::printf(buffer,20,BADFORMAT,"\xff");
+		if (size==-1) {
+			test("bad format size",true);
+			test("bad format errno",errno==EILSEQ);
+			test("bad format buffer unchanged",
+				buffer[0]==L'z' && buffer[19]==L'z');
+		} else if (utf8) {
+			test("bad format size",false);
+		} else {
+			stdoutput.printf("bad format converted without "
+							"error, skipped\n");
+		}
+
+		// auto-allocated buffer, stays NULL
+		wchar_t	*buf4=NULL;
+		errno=0;
+		size=wcharstring::printf(&buf4,BADFORMAT,"\xff");
+		if (size==-1) {
+			test("bad format auto size",true);
+			test("bad format auto errno",errno==EILSEQ);
+			test("bad format auto buffer",buf4==NULL);
+		} else if (utf8) {
+			test("bad format auto size",false);
+		} else {
+			stdoutput.printf("bad format auto converted "
+						"without error, skipped\n");
+			delete[] buf4;
+		}
+
+		// a long prefix forces buffer growth before the bad byte
+		wchar_t	*buf5=NULL;
+		errno=0;
+		size=wcharstring::printf(&buf5,LONGBADFORMAT,
+						longretrystr,"\xff");
+		if (size==-1) {
+			test("bad format long size",true);
+			test("bad format long errno",errno==EILSEQ);
+			test("bad format long buffer",buf5==NULL);
+		} else if (utf8) {
+			test("bad format long size",false);
+		} else {
+			stdoutput.printf("bad format long converted "
+						"without error, skipped\n");
+			delete[] buf5;
+		}
+		locale::setCType("C");
+		signalmanager::alarm(0);
 	} else {
 		stdoutput.printf("not supported\n");
 	}

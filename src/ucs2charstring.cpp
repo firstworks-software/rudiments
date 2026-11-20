@@ -2793,7 +2793,7 @@ ssize_t ucs2charstring::printf(ucs2_t *buffer, size_t len,
 					const ucs2_t *format, ...) {
 	va_list	args;
 	va_start(args,format);
-	size_t	result=printf(buffer,len,format,&args);
+	ssize_t	result=printf(buffer,len,format,&args);
 	va_end(args);
 	return result;
 }
