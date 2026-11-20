@@ -171,7 +171,13 @@ class dictionary : public dictionarycollection<keytype,valuetype> {
 		/** Sets the value associated with each key in "dict" to the
 		 *  corresponding value from "dict".
 		 *  If "key" already exists, the value currently
-		 *  accociated with it is replaced with "value". */
+		 *  accociated with it is replaced with "value".
+		 *  Each key and value is copied as this dictionary's manage
+		 *  flags require, so the two dictionaries do not share the
+		 *  data that they delete.  Keys and values that this
+		 *  dictionary does not manage share the pointers of "dict".
+		 *  Each pair is set as setValue() sets it, so the same rules
+		 *  about the ownership of each key apply. */
 		void	setValues(dictionary<keytype,valuetype> *dict);
 
 		/** Sets "value" to the value associated with "key".

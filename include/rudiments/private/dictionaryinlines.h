@@ -291,19 +291,40 @@ inline
 void dictionary<keytype,valuetype>::setValues(
 					dictionary<keytype,valuetype> *dict) {
 	if (dict) {
+
+		// copy keys and values per our manage flags
+		bool	managekeys=this->getManageKeys();
+		bool	managearraykeys=this->getManageArrayKeys();
+		bool	managevalues=this->getManageValues();
+		bool	managearrayvalues=this->getManageArrayValues();
+
 		if (dict->trackinsertionorder) {
 			for (listnode<dictionarypair<keytype,valuetype> *>
 						*node=dict->list.getFirst();
 						node; node=node->getNext()) {
-				setValue(node->getValue()->getKey(),
-						node->getValue()->getValue());
+				dictionarypair<keytype,valuetype>
+						*pair=node->getValue();
+				setValue(node_duplicate_value(
+						&(pair->getKeyRef()),
+						managekeys,managearraykeys),
+					node_duplicate_value(
+						&(pair->getValueRef()),
+						managevalues,
+						managearrayvalues));
 			}
 		} else {
 			for (treenode<dictionarypair<keytype,valuetype> *>
 						*node=dict->tree.getFirst();
 						node; node=node->getNext()) {
-				setValue(node->getValue()->getKey(),
-						node->getValue()->getValue());
+				dictionarypair<keytype,valuetype>
+						*pair=node->getValue();
+				setValue(node_duplicate_value(
+						&(pair->getKeyRef()),
+						managekeys,managearraykeys),
+					node_duplicate_value(
+						&(pair->getValueRef()),
+						managevalues,
+						managearrayvalues));
 			}
 		}
 	}

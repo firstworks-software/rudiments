@@ -581,5 +581,72 @@ int main(int argc, const char **argv) {
 			!charstring::compare(ucd2.getValue("bird"),"parrot"));
 	stdoutput.printf("\n");
 
+	// setValues() from a managed dictionary
+	for (uint16_t i=0; i<2; i++) {
+
+		stdoutput.printf("setValues() from managed dictionary%s:\n",
+					(!i)?"":" (insertion order)");
+
+		dictionary<char *, char *>	*svsrc=
+					new dictionary<char *, char *>();
+		svsrc->setTrackInsertionOrder(i);
+		svsrc->setManageArrayKeys(true);
+		svsrc->setManageArrayValues(true);
+		svsrc->setValue(charstring::duplicate("one"),
+					charstring::duplicate("1"));
+		svsrc->setValue(charstring::duplicate("two"),
+					charstring::duplicate("2"));
+		svsrc->setValue(charstring::duplicate("three"),
+					charstring::duplicate("3"));
+
+		dictionary<char *, char *>	*svdst=
+					new dictionary<char *, char *>();
+		svdst->setManageArrayKeys(true);
+		svdst->setManageArrayValues(true);
+		svdst->setValues(svsrc);
+
+		test("setValues(dict): getCount",svdst->getCount()==3);
+		test("setValues(dict): getValue() one",
+			!charstring::compare(
+				svdst->getValue((char *)"one"),"1"));
+		test("setValues(dict): getValue() two",
+			!charstring::compare(
+				svdst->getValue((char *)"two"),"2"));
+		test("setValues(dict): getValue() three",
+			!charstring::compare(
+				svdst->getValue((char *)"three"),"3"));
+
+		// keys and values must be copies, not shared pointers
+		bool	success=true;
+		for (listnode<char *> *node=svsrc->getKeys()->getFirst();
+						node; node=node->getNext()) {
+			char	*key=node->getValue();
+			for (listnode<char *> *dnode=
+					svdst->getKeys()->getFirst();
+					dnode; dnode=dnode->getNext()) {
+				if (dnode->getValue()==key) {
+					success=false;
+				}
+			}
+			if (svdst->getValue(key)==svsrc->getValue(key)) {
+				success=false;
+			}
+		}
+
+		// delete both before testing, so a double free shows up
+		delete svsrc;
+		bool	survived=
+			!charstring::compare(
+				svdst->getValue((char *)"one"),"1") &&
+			!charstring::compare(
+				svdst->getValue((char *)"two"),"2") &&
+			!charstring::compare(
+				svdst->getValue((char *)"three"),"3");
+		delete svdst;
+		test("setValues(dict): keys and values copied",success);
+		test("setValues(dict): values after source delete",survived);
+		stdoutput.printf("\n");
+	}
+
 	return 0;
 }

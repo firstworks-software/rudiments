@@ -327,6 +327,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   error or a short write, and false with nothing to flush
 - fixed dictionary setValue() leaking the passed key when the key already
   exists and keys are managed
+- fixed a double free in dictionary setValues() from a managed dictionary
 
 ### Security
 - fixed buffer overflow when unix socket file name is too long
