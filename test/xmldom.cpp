@@ -5,6 +5,8 @@
 #include <rudiments/file.h>
 #include <rudiments/permissions.h>
 #include <rudiments/stdio.h>
+#include <rudiments/stringbuffer.h>
+#include <rudiments/charstring.h>
 #include "test.cpp"
 
 const char normal[]=
@@ -219,6 +221,115 @@ const char oddspacing[]=
 "	<!-- comment after test2 -->\n"
 "< / test >";
 
+// Counts writes and fails call number "failat" and every call after it
+// with "failcode".  If "shortwrite" is set, call number "failat" writes
+// half of its data instead (none of a single byte) and returns that count,
+// and the calls after it succeed.  Counts the calls made after the failure
+// and records the size of call number "failat".
+class failbuffer : public stringbuffer {
+	public:
+				failbuffer(size_t failat, bool shortwrite,
+						ssize_t failcode=RESULT_ERROR);
+		ssize_t	write(const byte_t *string, size_t size);
+		ssize_t	write(const char *string, size_t length);
+		size_t	writes;
+		size_t	writesafterfail;
+		size_t	failsize;
+	private:
+		ssize_t	failWrite(const byte_t *data, size_t size);
+		size_t	failat;
+		bool	shortwrite;
+		ssize_t	failcode;
+};
+
+failbuffer::failbuffer(size_t failat, bool shortwrite, ssize_t failcode) :
+								stringbuffer() {
+	writes=0;
+	writesafterfail=0;
+	failsize=0;
+	this->failat=failat;
+	this->shortwrite=shortwrite;
+	this->failcode=failcode;
+}
+
+ssize_t failbuffer::write(const byte_t *string, size_t size) {
+	return failWrite(string,size);
+}
+
+ssize_t failbuffer::write(const char *string, size_t length) {
+	return failWrite((const byte_t *)string,length);
+}
+
+ssize_t failbuffer::failWrite(const byte_t *data, size_t size) {
+	writes++;
+	if (failat && writes>failat) {
+		writesafterfail++;
+	}
+	if (failat && writes==failat) {
+		failsize=size;
+	}
+	if (failat && writes==failat && shortwrite) {
+		return stringbuffer::write(data,size/2);
+	}
+	if (failat && writes>=failat && !shortwrite) {
+		return failcode;
+	}
+	return stringbuffer::write(data,size);
+}
+
+static ssize_t writeJsonMethod(xmldom *x, uint16_t method, output *out) {
+	return x->writeJson(out,method!=0);
+}
+
+// clean and failed runs of writeJson() with and without indent
+static void testWriteJsonFailWrite(xmldom *x) {
+
+	const char	*names[]={"writeJson","writeJson indent"};
+	const char	*expected[]={"{}","{\n}\n"};
+
+	// hard error codes, 0 for a short write
+	const ssize_t	codes[]={RESULT_ERROR,RESULT_TIMEOUT,RESULT_ABORT,0};
+
+	for (uint16_t i=0; i<2; i++) {
+
+		// clean run
+		failbuffer	clean(0,false);
+		ssize_t	cleanresult=writeJsonMethod(x,i,&clean);
+		size_t	total=clean.writes;
+		stringbuffer	title;
+		title.append(names[i])->append(": clean run");
+		test(title.getString(),
+			cleanresult==(ssize_t)charstring::getLength(expected[i]) &&
+			cleanresult==(ssize_t)clean.getStringLength() &&
+			!charstring::compare(clean.getString(),expected[i]));
+
+		// fail or shorten each write
+		for (uint16_t c=0; c<4; c++) {
+			bool	shortwrite=!codes[c];
+			for (size_t failat=1; failat<=total; failat++) {
+				failbuffer	fb(failat,shortwrite,
+						(shortwrite)?RESULT_ERROR:codes[c]);
+				ssize_t	result=writeJsonMethod(x,i,&fb);
+				title.clear();
+				title.append(names[i]);
+				if (shortwrite) {
+					title.append(": short write ");
+				} else {
+					title.append(": fail write (");
+					title.append((int64_t)codes[c]);
+					title.append(") ");
+				}
+				title.append((uint64_t)failat)->append(" of ");
+				title.append((uint64_t)total);
+				test(title.getString(),
+					result==((shortwrite)?
+							RESULT_ERROR:codes[c]) &&
+					fb.writesafterfail==0);
+			}
+		}
+	}
+}
+
 int main(int argc, const char **argv) {
 
 	header("xmldom");
@@ -316,6 +427,9 @@ int main(int argc, const char **argv) {
 	delete[] oddspacingdotxml;
 	test("parse file",x.parseFile("oddspacing.xml"));
 	file::remove("oddspacing.xml");
+
+	stdoutput.printf("writeJson...\n");
+	testWriteJsonFailWrite(&x);
 
 	stdoutput.printf("\n");
 

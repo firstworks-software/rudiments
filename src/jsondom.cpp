@@ -305,27 +305,27 @@ ssize_t jsondom::writeNode(domnode *dn, output *out,
 				return retval;
 			}
 		}
-		if (!incOrErr(&retval,out->write('"'),1)) {
+		if (!incOrShort(&retval,out->write('"'),1)) {
 			return retval;
 		}
 		const char	*name=dn->getName();
 		ssize_t		len=charstring::getLength(name);
-		if (!incOrErr(&retval,out->write(name,len),len)) {
+		if (!incOrShort(&retval,out->write(name,len),len)) {
 			return retval;
 		}
-		if (!incOrErr(&retval,out->write('"'),1)) {
+		if (!incOrShort(&retval,out->write('"'),1)) {
 			return retval;
 		}
 		if (indent) {
-			if (!incOrErr(&retval,out->write(' '),1)) {
+			if (!incOrShort(&retval,out->write(' '),1)) {
 				return retval;
 			}
 		}
-		if (!incOrErr(&retval,out->write(':'),1)) {
+		if (!incOrShort(&retval,out->write(':'),1)) {
 			return retval;
 		}
 		if (indent) {
-			if (!incOrErr(&retval,out->write(' '),1)) {
+			if (!incOrShort(&retval,out->write(' '),1)) {
 				return retval;
 			}
 		}
@@ -337,7 +337,7 @@ ssize_t jsondom::writeNode(domnode *dn, output *out,
 			{
 			if (indent) {
 				if (*indentlevel && !inarray) {
-					if (!incOrErr(&retval,
+					if (!incOrShort(&retval,
 							out->write('\n'),1)) {
 						return retval;
 					}
@@ -350,11 +350,11 @@ ssize_t jsondom::writeNode(domnode *dn, output *out,
 					}
 				}
 			}
-			if (!incOrErr(&retval,out->write('{'),1)) {
+			if (!incOrShort(&retval,out->write('{'),1)) {
 				return retval;
 			}
 			if (indent) {
-				if (!incOrErr(&retval,out->write('\n'),1)) {
+				if (!incOrShort(&retval,out->write('\n'),1)) {
 					return retval;
 				}
 				*indentlevel=*indentlevel+2;
@@ -367,27 +367,30 @@ ssize_t jsondom::writeNode(domnode *dn, output *out,
 				if (first) {
 					first=false;
 				} else {
-					if (!incOrErr(&retval,
+					if (!incOrShort(&retval,
 							out->write(','),1)) {
-						return retval;
+						break;
 					}
 					if (indent) {
-						if (!incOrErr(&retval,
+						if (!incOrShort(&retval,
 							out->write('\n'),1)) {
-							return retval;
+							break;
 						}
 					}
 				}
 				if (!incOrErr(&retval,
 						writeNode(child,out,
 							indent,indentlevel))) {
-					return retval;
+					break;
 				}
 			}
 			pvt->_inarray.remove(pvt->_inarray.getLast());
+			if (retval<0) {
+				return retval;
+			}
 			if (indent) {
 				if (!first) {
-					if (!incOrErr(&retval,
+					if (!incOrShort(&retval,
 							out->write('\n'),1)) {
 						return retval;
 					}
@@ -398,14 +401,14 @@ ssize_t jsondom::writeNode(domnode *dn, output *out,
 					return retval;
 				}
 			}
-			if (!incOrErr(&retval,out->write('}'),1)) {
+			if (!incOrShort(&retval,out->write('}'),1)) {
 				return retval;
 			}
 			}
 			break;
 		case 's':
 			{
-			if (!incOrErr(&retval,out->write('"'),1)) {
+			if (!incOrShort(&retval,out->write('"'),1)) {
 				return retval;
 			}
 			size_t	vallen=0;
@@ -413,46 +416,46 @@ ssize_t jsondom::writeNode(domnode *dn, output *out,
 			if (val) {
 				for (size_t i=0; i<vallen; i++) {
 					if (*val=='\0') {
-						if (!incOrErr(&retval,
+						if (!incOrShort(&retval,
 							out->write("\\u0000",
 									6),
 							6)) {
 							return retval;
 						}
 					} else if (*val=='\b') {
-						if (!incOrErr(&retval,
+						if (!incOrShort(&retval,
 							out->write("\\b",2),
 							2)) {
 							return retval;
 						}
 					} else if (*val=='\f') {
-						if (!incOrErr(&retval,
+						if (!incOrShort(&retval,
 							out->write("\\f",2),
 							2)) {
 							return retval;
 						}
 					} else if (*val=='\n') {
-						if (!incOrErr(&retval,
+						if (!incOrShort(&retval,
 							out->write("\\n",2),
 							2)) {
 							return retval;
 						}
 					} else if (*val=='\r') {
-						if (!incOrErr(&retval,
+						if (!incOrShort(&retval,
 							out->write("\\r",2),
 							2)) {
 							return retval;
 						}
 					} else if (*val=='\t') {
-						if (!incOrErr(&retval,
+						if (!incOrShort(&retval,
 							out->write("\\t",2),
 							2)) {
 							return retval;
 						}
 					} else if (*val=='"' || *val=='\\') {
-						if (!incOrErr(&retval,
+						if (!incOrShort(&retval,
 							out->write('\\'),1) ||
-							!incOrErr(&retval,
+							!incOrShort(&retval,
 							out->write(*val),1)) {
 							return retval;
 						}
@@ -462,12 +465,12 @@ ssize_t jsondom::writeNode(domnode *dn, output *out,
 						char	esc[6]={'\\','u','0','0',
 							hex[(*val>>4)&0x0f],
 							hex[*val&0x0f]};
-						if (!incOrErr(&retval,
+						if (!incOrShort(&retval,
 							out->write(esc,6),6)) {
 							return retval;
 						}
 					} else {
-						if (!incOrErr(&retval,
+						if (!incOrShort(&retval,
 							out->write(*val),1)) {
 							return retval;
 						}
@@ -475,7 +478,7 @@ ssize_t jsondom::writeNode(domnode *dn, output *out,
 					val++;
 				}
 			}
-			if (!incOrErr(&retval,out->write('"'),1)) {
+			if (!incOrShort(&retval,out->write('"'),1)) {
 				return retval;
 			}
 			}
@@ -486,28 +489,29 @@ ssize_t jsondom::writeNode(domnode *dn, output *out,
 			const char	*v=getValue(dn,&vlen);
 			if (!charstring::isNullOrEmpty(v) || vlen) {
 				ssize_t	len=(ssize_t)vlen;
-				if (!incOrErr(&retval,out->write(v,len),len)) {
+				if (!incOrShort(&retval,
+						out->write(v,len),len)) {
 					return retval;
 				}
 			} else {
-				if (!incOrErr(&retval,out->write('0'),1)) {
+				if (!incOrShort(&retval,out->write('0'),1)) {
 					return retval;
 				}
 			}
 			}
 			break;
 		case 't':
-			if (!incOrErr(&retval,out->write("true",4),4)) {
+			if (!incOrShort(&retval,out->write("true",4),4)) {
 				return retval;
 			}
 			break;
 		case 'f':
-			if (!incOrErr(&retval,out->write("false",5),5)) {
+			if (!incOrShort(&retval,out->write("false",5),5)) {
 				return retval;
 			}
 			break;
 		case 'u':
-			if (!incOrErr(&retval,out->write("null",4),4)) {
+			if (!incOrShort(&retval,out->write("null",4),4)) {
 				return retval;
 			}
 			break;
@@ -515,7 +519,7 @@ ssize_t jsondom::writeNode(domnode *dn, output *out,
 			{
 			if (indent) {
 				if (*indentlevel) {
-					if (!incOrErr(&retval,
+					if (!incOrShort(&retval,
 							out->write('\n'),1)) {
 						return retval;
 					}
@@ -525,11 +529,11 @@ ssize_t jsondom::writeNode(domnode *dn, output *out,
 					return retval;
 				}
 			}
-			if (!incOrErr(&retval,out->write('['),1)) {
+			if (!incOrShort(&retval,out->write('['),1)) {
 				return retval;
 			}
 			if (indent) {
-				if (!incOrErr(&retval,out->write('\n'),1)) {
+				if (!incOrShort(&retval,out->write('\n'),1)) {
 					return retval;
 				}
 				*indentlevel=*indentlevel+2;
@@ -542,14 +546,14 @@ ssize_t jsondom::writeNode(domnode *dn, output *out,
 				if (first) {
 					first=false;
 				} else {
-					if (!incOrErr(&retval,
+					if (!incOrShort(&retval,
 							out->write(','),1)) {
-						return retval;
+						break;
 					}
 					if (indent) {
-						if (!incOrErr(&retval,
+						if (!incOrShort(&retval,
 							out->write('\n'),1)) {
-							return retval;
+							break;
 						}
 					}
 				}
@@ -557,19 +561,22 @@ ssize_t jsondom::writeNode(domnode *dn, output *out,
 					if (!incOrErr(&retval,
 						writeIndent(out,
 							*indentlevel))) {
-						return retval;
+						break;
 					}
 				}
 				if (!incOrErr(&retval,
 						writeNode(child,out,
 							indent,indentlevel))) {
-					return retval;
+					break;
 				}
 			}
 			pvt->_inarray.remove(pvt->_inarray.getLast());
+			if (retval<0) {
+				return retval;
+			}
 			if (indent) {
 				if (!first) {
-					if (!incOrErr(&retval,
+					if (!incOrShort(&retval,
 							out->write('\n'),1)) {
 						return retval;
 					}
@@ -580,7 +587,7 @@ ssize_t jsondom::writeNode(domnode *dn, output *out,
 					return retval;
 				}
 			}
-			if (!incOrErr(&retval,out->write(']'),1)) {
+			if (!incOrShort(&retval,out->write(']'),1)) {
 				return retval;
 			}
 			}
@@ -593,7 +600,20 @@ ssize_t jsondom::writeNode(domnode *dn, output *out,
 			}
 			break;
 	}
-	return false;
+	return retval;
+}
+
+bool jsondom::incOrShort(ssize_t *retval, ssize_t val, ssize_t expected) {
+
+	// a short write is an error, but incOrErr() leaves a non-negative
+	// retval in that case
+	if (!incOrErr(retval,val,expected)) {
+		if (*retval>-1) {
+			*retval=RESULT_ERROR;
+		}
+		return false;
+	}
+	return true;
 }
 
 const char *jsondom::getType(domnode *dn) {
@@ -683,5 +703,5 @@ ssize_t jsondom::writeJson(output *out) {
 }
 
 ssize_t jsondom::writeJson(output *out, bool indent) {
-	return write(out,true);
+	return write(out,indent);
 }

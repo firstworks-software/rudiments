@@ -316,6 +316,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - fixed swapped allowed and denied lists in urlhttprequest access checks
 - fixed mvcresult writeJson() output for a message or key that needs json
   escaping
+- fixed dom and jsondom writeJson() write errors and the missing closing
+  brace of indented dom output
+- fixed jsondom writeJson() to honor its indent argument
 
 ### Security
 - fixed buffer overflow when unix socket file name is too long

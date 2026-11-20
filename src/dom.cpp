@@ -192,10 +192,21 @@ ssize_t dom::writeJson(output *out, bool indent) {
 	// just write a degenerate object here.  Child classes can provide
 	// implementations as necessary.
 	ssize_t	retval=0;
-	incOrErr(&retval,out->write('{')) &&
-	(indent)?incOrErr(&retval,out->write('\n')):true &&
-	incOrErr(&retval,out->write('}')) &&
-	(indent)?incOrErr(&retval,out->write('\n')):true;
+
+	// begin object
+	if (!(incOrErr(&retval,out->write('{'),1) &&
+		((indent)?incOrErr(&retval,out->write('\n'),1):true)) &&
+		retval>-1) {
+		retval=RESULT_ERROR;
+	}
+
+	// end object
+	if (!(retval>-1 &&
+		incOrErr(&retval,out->write('}'),1) &&
+		((indent)?incOrErr(&retval,out->write('\n'),1):true)) &&
+		retval>-1) {
+		retval=RESULT_ERROR;
+	}
 	return retval;
 }
 
@@ -443,6 +454,10 @@ ssize_t dom::writeIndent(output *out, uint16_t indent) {
 	ssize_t	retval=0;
 	for (uint16_t i=0; i<indent; i++) {
 		if (!incOrErr(&retval,out->write(' '),1)) {
+			// a short write is an error
+			if (retval>-1) {
+				retval=RESULT_ERROR;
+			}
 			break;
 		}
 	}

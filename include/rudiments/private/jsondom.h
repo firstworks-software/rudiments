@@ -17,6 +17,8 @@
 					output *out,
 					bool indent,
 					uint16_t *indentlevel);
+		bool	incOrShort(ssize_t *retval,
+					ssize_t val, ssize_t expected);
 
 	friend class domnode;
 	private:
