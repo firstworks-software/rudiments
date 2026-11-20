@@ -173,6 +173,15 @@ static void testResultFailWrite(const char *name, mvcresult *m,
 	}
 }
 
+// a message and keys with a quote, a backslash, a newline, and control
+// characters, as raw C strings and as JSON strings
+#define ESCRAW "q\"b\\s\n\x01" "\x1f" "e"
+#define ESCENC "\"q\\\"b\\\\s\\u000a\\u0001\\u001fe\""
+#define ESCKEYRAW "k\"\\\n\x01" "\x1f"
+#define ESCKEYENC "\"k\\\"\\\\\\u000a\\u0001\\u001f\""
+#define ESCKEY2RAW "a\"b\\c"
+#define ESCKEY2ENC "\"a\\\"b\\\\c\""
+
 int main() {
 
 	header("mvcresult");
@@ -426,8 +435,8 @@ int main() {
 	ra.setSuccess();
 	const char * const	aexpected[]={
 		"{\"s\":true,\"c\":0,\"m\":\"\"}",
-		"{\n\"s\": true,\n\"c\": 0,\n\"m\": \"\"\n}\n",
-		"{\n\"s\": true,\n\"c\": 0,\n\"m\": \"\"\n}\n"
+		"{\n\t\"s\": true,\n\t\"c\": 0,\n\t\"m\": \"\"\n}\n",
+		"{\n\t\"s\": true,\n\t\"c\": 0,\n\t\"m\": \"\"\n}\n"
 	};
 	testResultFailWrite("success",&ra,aexpected);
 
@@ -435,8 +444,8 @@ int main() {
 	ra3.setSuccess(200,"ok");
 	const char * const	a3expected[]={
 		"{\"s\":true,\"c\":200,\"m\":\"ok\"}",
-		"{\n\"s\": true,\n\"c\": 200,\n\"m\": \"ok\"\n}\n",
-		"{\n\"s\": true,\n\"c\": 200,\n\"m\": \"ok\"\n}\n"
+		"{\n\t\"s\": true,\n\t\"c\": 200,\n\t\"m\": \"ok\"\n}\n",
+		"{\n\t\"s\": true,\n\t\"c\": 200,\n\t\"m\": \"ok\"\n}\n"
 	};
 	testResultFailWrite("success with message",&ra3,a3expected);
 
@@ -444,7 +453,11 @@ int main() {
 	rb4.setSuccess();
 	rb4.setData("list",&list);
 	const char * const	b4expected[]={
-		"{\"s\":true,\"c\":0,\"m\":\"\",\"list\":[1,2]}",NULL,NULL
+		"{\"s\":true,\"c\":0,\"m\":\"\",\"list\":[1,2]}",
+		"{\n\t\"s\": true,\n\t\"c\": 0,\n\t\"m\": \"\",\n"
+		"\t\"list\": [\n\t\t1,\n\t\t2\n\t]\n}\n",
+		"{\n\t\"s\": true,\n\t\"c\": 0,\n\t\"m\": \"\",\n"
+		"\t\"list\": [\n\t\t1,\n\t\t2\n\t]\n}\n"
 	};
 	testResultFailWrite("list",&rb4,b4expected);
 
@@ -455,7 +468,20 @@ int main() {
 	const char * const	ltexpected[]={
 		"{\"s\":true,\"c\":0,\"m\":\"\",\"list\":[1,2],"
 		"\"table\":{\"c\":[\"x\",\"y\"],\"r\":[[\"a\",\"b\"]]}}",
-		NULL,NULL
+		"{\n\t\"s\": true,\n\t\"c\": 0,\n\t\"m\": \"\",\n"
+		"\t\"list\": [\n\t\t1,\n\t\t2\n\t],\n"
+		"\t\"table\": {\n"
+		"\t\t\"c\": [\n\t\t\t\"x\",\n\t\t\t\"y\"\n\t\t],\n"
+		"\t\t\"r\": [\n\t\t\t[\n\t\t\t\t\"a\",\n\t\t\t\t\"b\"\n"
+		"\t\t\t]\n\t\t]\n"
+		"\t}\n}\n",
+		"{\n\t\"s\": true,\n\t\"c\": 0,\n\t\"m\": \"\",\n"
+		"\t\"list\": [\n\t\t1,\n\t\t2\n\t],\n"
+		"\t\"table\": {\n"
+		"\t\t\"c\": [\n\t\t\t\"x\",\n\t\t\t\"y\"\n\t\t],\n"
+		"\t\t\"r\": [\n\t\t\t[\n\t\t\t\t\"a\",\n\t\t\t\t\"b\"\n"
+		"\t\t\t]\n\t\t]\n"
+		"\t}\n}\n"
 	};
 	testResultFailWrite("list and table",&rlt,ltexpected);
 
@@ -466,7 +492,14 @@ int main() {
 	const char * const	ltrexpected[]={
 		"{\"s\":true,\"c\":0,\"m\":\"\",\"list\":[1,2],"
 		"\"tree\":[2,[1],[3]]}",
-		NULL,NULL
+		"{\n\t\"s\": true,\n\t\"c\": 0,\n\t\"m\": \"\",\n"
+		"\t\"list\": [\n\t\t1,\n\t\t2\n\t],\n"
+		"\t\"tree\": [\n\t  2,\n\t  [\n\t    1\n\t  ],\n"
+		"\t  [\n\t    3\n\t  ]\n\t]\n}\n",
+		"{\n\t\"s\": true,\n\t\"c\": 0,\n\t\"m\": \"\",\n"
+		"\t\"list\": [\n\t\t1,\n\t\t2\n\t],\n"
+		"\t\"tree\": [\n\t  2,\n\t  [\n\t    1\n\t  ],\n"
+		"\t  [\n\t    3\n\t  ]\n\t]\n}\n"
 	};
 	testResultFailWrite("list and tree",&rltr,ltrexpected);
 
@@ -479,7 +512,24 @@ int main() {
 		"{\"s\":true,\"c\":0,\"m\":\"\",\"list\":[1,2],"
 		"\"table\":{\"c\":[\"x\",\"y\"],\"r\":[[\"a\",\"b\"]]},"
 		"\"tree\":[2,[1],[3]]}",
-		NULL,NULL
+		"{\n\t\"s\": true,\n\t\"c\": 0,\n\t\"m\": \"\",\n"
+		"\t\"list\": [\n\t\t1,\n\t\t2\n\t],\n"
+		"\t\"table\": {\n"
+		"\t\t\"c\": [\n\t\t\t\"x\",\n\t\t\t\"y\"\n\t\t],\n"
+		"\t\t\"r\": [\n\t\t\t[\n\t\t\t\t\"a\",\n\t\t\t\t\"b\"\n"
+		"\t\t\t]\n\t\t]\n"
+		"\t},\n"
+		"\t\"tree\": [\n\t  2,\n\t  [\n\t    1\n\t  ],\n"
+		"\t  [\n\t    3\n\t  ]\n\t]\n}\n",
+		"{\n\t\"s\": true,\n\t\"c\": 0,\n\t\"m\": \"\",\n"
+		"\t\"list\": [\n\t\t1,\n\t\t2\n\t],\n"
+		"\t\"table\": {\n"
+		"\t\t\"c\": [\n\t\t\t\"x\",\n\t\t\t\"y\"\n\t\t],\n"
+		"\t\t\"r\": [\n\t\t\t[\n\t\t\t\t\"a\",\n\t\t\t\t\"b\"\n"
+		"\t\t\t]\n\t\t]\n"
+		"\t},\n"
+		"\t\"tree\": [\n\t  2,\n\t  [\n\t    1\n\t  ],\n"
+		"\t  [\n\t    3\n\t  ]\n\t]\n}\n"
 	};
 	testResultFailWrite("list, table, and tree",&rall,allexpected);
 
@@ -487,7 +537,11 @@ int main() {
 	rn.setSuccess();
 	rn.setData("n",NULL);
 	const char * const	nexpected[]={
-		"{\"s\":true,\"c\":0,\"m\":\"\",\"n\":null}",NULL,NULL
+		"{\"s\":true,\"c\":0,\"m\":\"\",\"n\":null}",
+		"{\n\t\"s\": true,\n\t\"c\": 0,\n\t\"m\": \"\",\n"
+		"\t\"n\": null\n}\n",
+		"{\n\t\"s\": true,\n\t\"c\": 0,\n\t\"m\": \"\",\n"
+		"\t\"n\": null\n}\n"
 	};
 	testResultFailWrite("null",&rn,nexpected);
 
@@ -497,7 +551,12 @@ int main() {
 	rln.setData("n",NULL);
 	const char * const	lnexpected[]={
 		"{\"s\":true,\"c\":0,\"m\":\"\",\"list\":[1,2],\"n\":null}",
-		NULL,NULL
+		"{\n\t\"s\": true,\n\t\"c\": 0,\n\t\"m\": \"\",\n"
+		"\t\"list\": [\n\t\t1,\n\t\t2\n\t],\n"
+		"\t\"n\": null\n}\n",
+		"{\n\t\"s\": true,\n\t\"c\": 0,\n\t\"m\": \"\",\n"
+		"\t\"list\": [\n\t\t1,\n\t\t2\n\t],\n"
+		"\t\"n\": null\n}\n"
 	};
 	testResultFailWrite("list and null",&rln,lnexpected);
 
@@ -506,8 +565,8 @@ int main() {
 	rd.setData("list",&list);
 	const char * const	dexpected[]={
 		"{\"s\":false,\"c\":7,\"m\":\"bad\"}",
-		"{\n\"s\": false,\n\"c\": 7,\n\"m\": \"bad\"\n}\n",
-		"{\n\"s\": false,\n\"c\": 7,\n\"m\": \"bad\"\n}\n"
+		"{\n\t\"s\": false,\n\t\"c\": 7,\n\t\"m\": \"bad\"\n}\n",
+		"{\n\t\"s\": false,\n\t\"c\": 7,\n\t\"m\": \"bad\"\n}\n"
 	};
 	testResultFailWrite("failed with list",&rd,dexpected);
 
@@ -515,10 +574,72 @@ int main() {
 	rf.setFailed();
 	const char * const	fexpected[]={
 		"{\"s\":false,\"c\":0,\"m\":\"\"}",
-		"{\n\"s\": false,\n\"c\": 0,\n\"m\": \"\"\n}\n",
-		"{\n\"s\": false,\n\"c\": 0,\n\"m\": \"\"\n}\n"
+		"{\n\t\"s\": false,\n\t\"c\": 0,\n\t\"m\": \"\"\n}\n",
+		"{\n\t\"s\": false,\n\t\"c\": 0,\n\t\"m\": \"\"\n}\n"
 	};
 	testResultFailWrite("failed",&rf,fexpected);
+
+	// a quote, a backslash, a newline, and control characters
+	mvcresult	rem;
+	rem.setSuccess(5,ESCRAW);
+	const char * const	emexpected[]={
+		"{\"s\":true,\"c\":5,\"m\":" ESCENC "}",
+		"{\n\t\"s\": true,\n\t\"c\": 5,\n\t\"m\": " ESCENC "\n}\n",
+		"{\n\t\"s\": true,\n\t\"c\": 5,\n\t\"m\": " ESCENC "\n}\n"
+	};
+	testResultFailWrite("escaped message",&rem,emexpected);
+
+	mvcresult	rek;
+	rek.setSuccess();
+	rek.setData(ESCKEYRAW,&list);
+	const char * const	ekexpected[]={
+		"{\"s\":true,\"c\":0,\"m\":\"\","
+		ESCKEYENC ":[1,2]}",
+		"{\n\t\"s\": true,\n\t\"c\": 0,\n\t\"m\": \"\",\n"
+		"\t" ESCKEYENC ": [\n\t\t1,\n\t\t2\n\t]\n}\n",
+		"{\n\t\"s\": true,\n\t\"c\": 0,\n\t\"m\": \"\",\n"
+		"\t" ESCKEYENC ": [\n\t\t1,\n\t\t2\n\t]\n}\n"
+	};
+	testResultFailWrite("escaped key",&rek,ekexpected);
+
+	mvcresult	rekn;
+	rekn.setSuccess();
+	rekn.setData(ESCKEYRAW,&list);
+	rekn.setData(ESCKEY2RAW,NULL);
+	const char * const	eknexpected[]={
+		"{\"s\":true,\"c\":0,\"m\":\"\","
+		ESCKEYENC ":[1,2]," ESCKEY2ENC ":null}",
+		"{\n\t\"s\": true,\n\t\"c\": 0,\n\t\"m\": \"\",\n"
+		"\t" ESCKEYENC ": [\n\t\t1,\n\t\t2\n\t],\n"
+		"\t" ESCKEY2ENC ": null\n}\n",
+		"{\n\t\"s\": true,\n\t\"c\": 0,\n\t\"m\": \"\",\n"
+		"\t" ESCKEYENC ": [\n\t\t1,\n\t\t2\n\t],\n"
+		"\t" ESCKEY2ENC ": null\n}\n"
+	};
+	testResultFailWrite("escaped keys, list and null",&rekn,eknexpected);
+
+	mvcresult	remk;
+	remk.setSuccess(5,ESCRAW);
+	remk.setData(ESCKEYRAW,&list);
+	const char * const	emkexpected[]={
+		"{\"s\":true,\"c\":5,\"m\":" ESCENC ","
+		ESCKEYENC ":[1,2]}",
+		"{\n\t\"s\": true,\n\t\"c\": 5,\n\t\"m\": " ESCENC ",\n"
+		"\t" ESCKEYENC ": [\n\t\t1,\n\t\t2\n\t]\n}\n",
+		"{\n\t\"s\": true,\n\t\"c\": 5,\n\t\"m\": " ESCENC ",\n"
+		"\t" ESCKEYENC ": [\n\t\t1,\n\t\t2\n\t]\n}\n"
+	};
+	testResultFailWrite("escaped message and key",&remk,emkexpected);
+
+	mvcresult	rfe;
+	rfe.setFailed(7,ESCRAW);
+	rfe.setData(ESCKEYRAW,&list);
+	const char * const	feexpected[]={
+		"{\"s\":false,\"c\":7,\"m\":" ESCENC "}",
+		"{\n\t\"s\": false,\n\t\"c\": 7,\n\t\"m\": " ESCENC "\n}\n",
+		"{\n\t\"s\": false,\n\t\"c\": 7,\n\t\"m\": " ESCENC "\n}\n"
+	};
+	testResultFailWrite("failed with escaped message",&rfe,feexpected);
 
 	stdoutput.printf("\n");
 

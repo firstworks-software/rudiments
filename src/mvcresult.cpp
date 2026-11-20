@@ -156,9 +156,12 @@ ssize_t mvcresult::writeJson(output *out, bool indent) {
 
 	ssize_t	retval=0;
 
-	size_t	mlen=charstring::getLength(pvt->_message);
 	char	*code=charstring::parseNumber(pvt->_code);
 	size_t	clen=charstring::getLength(code);
+
+	// encode the message, a NULL message as ""
+	stringbuffer	enc;
+	charstring::jsonEncode((pvt->_message)?pvt->_message:"",&enc);
 
 	// begin object
 	if (!(incOrErr(&retval,out->write('{'),1) &&
@@ -169,6 +172,7 @@ ssize_t mvcresult::writeJson(output *out, bool indent) {
 
 	// success: true/false
 	if (!(retval>-1 &&
+		((indent)?incOrErr(&retval,out->write('\t'),1):true) &&
 		incOrErr(&retval,out->write("\"s\":",4),4) &&
 		((indent)?incOrErr(&retval,out->write(' '),1):true) &&
 		((pvt->_success)?incOrErr(&retval,out->write("true",4),4):
@@ -181,6 +185,7 @@ ssize_t mvcresult::writeJson(output *out, bool indent) {
 
 	// status code
 	if (!(retval>-1 &&
+		((indent)?incOrErr(&retval,out->write('\t'),1):true) &&
 		incOrErr(&retval,out->write("\"c\":",4),4) &&
 		((indent)?incOrErr(&retval,out->write(' '),1):true) &&
 		incOrErr(&retval,out->write(code,clen),clen) &&
@@ -192,11 +197,12 @@ ssize_t mvcresult::writeJson(output *out, bool indent) {
 
 	// status message
 	if (!(retval>-1 &&
+		((indent)?incOrErr(&retval,out->write('\t'),1):true) &&
 		incOrErr(&retval,out->write("\"m\":",4),4) &&
 		((indent)?incOrErr(&retval,out->write(' '),1):true) &&
-		incOrErr(&retval,out->write('"'),1) &&
-		incOrErr(&retval,out->write(pvt->_message,mlen),mlen) &&
-		incOrErr(&retval,out->write('"'),1) &&
+		incOrErr(&retval,out->write(enc.getString(),
+						enc.getStringLength()),
+						enc.getStringLength()) &&
 		((pvt->_success && pvt->_data.getKeys()->getFirst())?
 				incOrErr(&retval,out->write(','),1):true) &&
 		((indent)?incOrErr(&retval,out->write('\n'),1):true)) &&
@@ -207,26 +213,20 @@ ssize_t mvcresult::writeJson(output *out, bool indent) {
 	if (pvt->_success && retval>-1) {
 
 		// collections
-		bool	first=true;
 		for (listnode<char *> *key=
 				pvt->_data.getKeys()->getFirst();
 				key && retval>-1; key=key->getNext()) {
 
-			ssize_t	klen=charstring::getLength(key->getValue());
-			
-			if (first) {
-				first=false;
-			} else if (!(incOrErr(&retval,out->write(','),1) &&
-					((indent)?incOrErr(&retval,
-						out->write('\n'),1):true)) &&
-					retval>-1) {
-				retval=RESULT_ERROR;
-			}
-			if (!(retval>-1 &&
-				incOrErr(&retval,out->write('"'),1) &&
-				incOrErr(&retval,out->write(
-						key->getValue(),klen),klen) &&
-				incOrErr(&retval,out->write("\":",2),2) &&
+			// key, a NULL key as ""
+			enc.clear();
+			charstring::jsonEncode((key->getValue())?
+						key->getValue():"",&enc);
+			if (!(((indent)?incOrErr(&retval,
+						out->write('\t'),1):true) &&
+				incOrErr(&retval,out->write(enc.getString(),
+						enc.getStringLength()),
+						enc.getStringLength()) &&
+				incOrErr(&retval,out->write(':'),1) &&
 				((indent)?incOrErr(&retval,
 						out->write(' '),1):true)) &&
 				retval>-1) {
@@ -235,18 +235,63 @@ ssize_t mvcresult::writeJson(output *out, bool indent) {
 			if (retval<0) {
 				break;
 			}
+
+			// value
 			collection	*c=
 				pvt->_data.getValue(key->getValue());
-			if (c) {
-				ssize_t	r=c->writeJson(out,indent);
+			if (!c) {
+				if (!incOrErr(&retval,
+						out->write("null",4),4) &&
+						retval>-1) {
+					retval=RESULT_ERROR;
+				}
+			} else if (!indent) {
+				ssize_t	r=c->writeJson(out,false);
 				if (r<0) {
 					retval=r;
 				} else {
 					retval+=r;
 				}
-			} else if (!incOrErr(&retval,
-						out->write("null",4),4) &&
-					retval>-1) {
+			} else {
+
+				// indent the collection one more level
+				stringbuffer	cbuf;
+				ssize_t	r=c->writeJson(&cbuf,true);
+				if (r<0) {
+					retval=r;
+					break;
+				}
+				const char	*start=cbuf.getString();
+				const char	*end=start+
+						cbuf.getStringLength();
+				if (end!=start && *(end-1)=='\n') {
+					end--;
+				}
+				enc.clear();
+				for (const char *ch=start; ch!=end; ch++) {
+					if (*ch=='\n') {
+						enc.append(start,ch-start+1);
+						enc.append('\t');
+						start=ch+1;
+					}
+				}
+				enc.append(start,end-start);
+				if (!incOrErr(&retval,
+						out->write(enc.getString(),
+						enc.getStringLength()),
+						enc.getStringLength()) &&
+						retval>-1) {
+					retval=RESULT_ERROR;
+				}
+			}
+
+			// separator
+			if (!(retval>-1 &&
+				((key->getNext())?incOrErr(&retval,
+						out->write(','),1):true) &&
+				((indent)?incOrErr(&retval,
+						out->write('\n'),1):true)) &&
+				retval>-1) {
 				retval=RESULT_ERROR;
 			}
 		}

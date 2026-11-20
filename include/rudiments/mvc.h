@@ -462,6 +462,17 @@ class RUDIMENTS_DLLSPEC mvcresult : virtual public object {
 		/** Writes a representation (currently JSON) of the contents of
 		 *  the instance to standard output.
 		 *
+		 *  The message and each key are written as JSON strings.  A
+		 *  double quote, a backslash, and each byte below 0x20 are
+		 *  escaped, so a newline is written as \\u000a.  A NULL
+		 *  message or key is written as an empty string.
+		 *
+		 *  The representation is indented.  Each member of the object
+		 *  is on a line of its own, indented by one tab.  Each line of
+		 *  a collection after its first is indented by one more tab.
+		 *  A comma between two members ends the last line of the first
+		 *  one.
+		 *
 		 *  Returns the number of bytes written, or -1 if an error
 		 *  occurred.  A short write returns -1.  Any other error from
 		 *  the output, such as a timeout or abort, is returned
@@ -471,6 +482,17 @@ class RUDIMENTS_DLLSPEC mvcresult : virtual public object {
 		/** Writes a representation (currently JSON) of the contents of
 		 *  the instance to "out".
 		 *
+		 *  The message and each key are written as JSON strings.  A
+		 *  double quote, a backslash, and each byte below 0x20 are
+		 *  escaped, so a newline is written as \\u000a.  A NULL
+		 *  message or key is written as an empty string.
+		 *
+		 *  The representation is indented.  Each member of the object
+		 *  is on a line of its own, indented by one tab.  Each line of
+		 *  a collection after its first is indented by one more tab.
+		 *  A comma between two members ends the last line of the first
+		 *  one.
+		 *
 		 *  Returns the number of bytes written, or -1 if an error
 		 *  occurred.  A short write returns -1.  Any other error from
 		 *  the output, such as a timeout or abort, is returned
@@ -479,6 +501,17 @@ class RUDIMENTS_DLLSPEC mvcresult : virtual public object {
 
 		/** Writes an indented JSON representation of the contents of
 		 *  the instance to standard output.
+		 *
+		 *  The message and each key are written as JSON strings.  A
+		 *  double quote, a backslash, and each byte below 0x20 are
+		 *  escaped, so a newline is written as \\u000a.  A NULL
+		 *  message or key is written as an empty string.
+		 *
+		 *  In the indented representation, each member of the object
+		 *  is on a line of its own, indented by one tab.  Each line of
+		 *  a collection after its first is indented by one more tab.
+		 *  A comma between two members ends the last line of the first
+		 *  one.
 		 *
 		 *  Returns the number of bytes written, or -1 if an error
 		 *  occurred.  A short write returns -1.  Any other error from
@@ -492,6 +525,16 @@ class RUDIMENTS_DLLSPEC mvcresult : virtual public object {
 		 *  The representation is indented if "indent" is true and not
 		 *  indented if "indent" is false.
 		 *
+		 *  The message and each key are written as JSON strings.  A
+		 *  double quote, a backslash, and each byte below 0x20 are
+		 *  escaped, so a newline is written as \\u000a.  A NULL
+		 *  message or key is written as an empty string.
+		 *
+		 *  If indented, each member of the object is on a line of its
+		 *  own, indented by one tab.  Each line of a collection after
+		 *  its first is indented by one more tab.  A comma between two
+		 *  members ends the last line of the first one.
+		 *
 		 *  Returns the number of bytes written, or -1 if an error
 		 *  occurred.  A short write returns -1.  Any other error from
 		 *  the output, such as a timeout or abort, is returned
@@ -500,6 +543,17 @@ class RUDIMENTS_DLLSPEC mvcresult : virtual public object {
 
 		/** Writes an indented JSON representation of the contents of
 		 *  the instance to "out".
+		 *
+		 *  The message and each key are written as JSON strings.  A
+		 *  double quote, a backslash, and each byte below 0x20 are
+		 *  escaped, so a newline is written as \\u000a.  A NULL
+		 *  message or key is written as an empty string.
+		 *
+		 *  In the indented representation, each member of the object
+		 *  is on a line of its own, indented by one tab.  Each line of
+		 *  a collection after its first is indented by one more tab.
+		 *  A comma between two members ends the last line of the first
+		 *  one.
 		 *
 		 *  Returns the number of bytes written, or -1 if an error
 		 *  occurred.  A short write returns -1.  Any other error from
@@ -512,6 +566,16 @@ class RUDIMENTS_DLLSPEC mvcresult : virtual public object {
 		 *
 		 *  The representation is indented if "indent" is true and not
 		 *  indented if "indent" is false.
+		 *
+		 *  The message and each key are written as JSON strings.  A
+		 *  double quote, a backslash, and each byte below 0x20 are
+		 *  escaped, so a newline is written as \\u000a.  A NULL
+		 *  message or key is written as an empty string.
+		 *
+		 *  If indented, each member of the object is on a line of its
+		 *  own, indented by one tab.  Each line of a collection after
+		 *  its first is indented by one more tab.  A comma between two
+		 *  members ends the last line of the first one.
 		 *
 		 *  Returns the number of bytes written, or -1 if an error
 		 *  occurred.  A short write returns -1.  Any other error from

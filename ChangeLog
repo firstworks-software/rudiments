@@ -130,6 +130,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - urlhttprequest skin variables are in last-set order now
 - urlhttprequest denies every non-empty value when a skin has no allowed
   list now
+- mvcresult writes indented json differently now - top-level keys are
+  indented and a comma follows a nested closing bracket on its line, so
+  output that a dependent project parses may change
 
 ### Removed
 - removed csprng's static isSupported() - it was always unconditionally
@@ -311,6 +314,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - fixed a urlhttprequest leak of skin variable names and values
 - fixed an avltree clear() leak of the left subtree of a right child
 - fixed swapped allowed and denied lists in urlhttprequest access checks
+- fixed mvcresult writeJson() output for a message or key that needs json
+  escaping
 
 ### Security
 - fixed buffer overflow when unix socket file name is too long
