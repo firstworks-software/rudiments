@@ -183,17 +183,22 @@ class RUDIMENTS_DLLSPEC urlhttprequest : public httprequest {
 		 *  against the "denied-methods" and "allowed-methods"
 		 *  skin variables (in that order) using regular
 		 *  expression syntax to determine whether the client's
-		 *  IP address is allowed to access this cgi.
+		 *  request method is allowed to access this cgi.  An empty
+		 *  request method is allowed.  Otherwise the method is
+		 *  denied unless "allowed-methods" is set and matches it
+		 *  and "denied-methods" does not.
 		 * 
 		 *  This method may be overriden to provide customized
-		 *  ip-based security. */
+		 *  request-method-based security. */
 		virtual bool	isMethodAllowed();
 
 		/** Matches the REMOTE_ADDR environment variable against
 		 *  the "denied-ips" and "allowed-ips" skin
 		 *  variables (in that order) using regular expression 
 		 *  syntax to determine whether the client's IP address
-		 *  is allowed to access this cgi.
+		 *  is allowed to access this cgi.  The address is denied
+		 *  unless "allowed-ips" is set and matches it and
+		 *  "denied-ips" does not.
 		 * 
 		 *  This method may be overriden to provide customized
 		 *  ip-based security. */
@@ -202,8 +207,11 @@ class RUDIMENTS_DLLSPEC urlhttprequest : public httprequest {
 		/** Matches the HTTP_REFERER environment variable against
 		 *  the "denied-referers" and "allowed-referers" 
 		 *  skin variables (in that order) using regular 
-		 *  expression syntax to determine whether the client's 
-		 *  IP address is allowed to access this cgi.
+		 *  expression syntax to determine whether the client's
+		 *  referer is allowed to access this cgi.  An empty
+		 *  referer is allowed.  Otherwise the referer is denied
+		 *  unless "allowed-referers" is set and matches it and
+		 *  "denied-referers" does not.
 		 * 
 		 *  This method may be overriden to provide customized
 		 *  referer-based security. */

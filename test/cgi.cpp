@@ -37,6 +37,15 @@ static bool httpModuleMain(httpserverapi *sapi) {
 
 	// send an http header
 	resp.writeTextPlainHeaderBlock();
+
+	// access checks
+	if (req.getSkinVariable("accesschecks")) {
+		stdoutput.printf("isMethodAllowed=%d\n",req.isMethodAllowed());
+		stdoutput.printf("isIpAllowed=%d\n",req.isIpAllowed());
+		stdoutput.printf("isRefererAllowed=%d\n",
+						req.isRefererAllowed());
+	}
+
 	req.writeVariables();
 
 

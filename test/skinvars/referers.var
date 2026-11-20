@@ -1,0 +1,7 @@
+<skin>
+<var name="accesschecks">yes</var>
+<var name="allowed-ips">^10\.0\.0\.1$</var>
+<var name="denied-ips">^10\.0\.0\.5$</var>
+<var name="allowed-referers">^http://[a-z]+\.example\.com/$</var>
+<var name="denied-referers">^http://bad\.example\.com/$</var>
+</skin>

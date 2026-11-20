@@ -78,15 +78,51 @@ static void runCgi(const char *method,
 	file::remove(REST);
 }
 
+// Runs cgi.cgi with the skin files that "pathinfo" selects from skinvars/.
+// The remote address and referer are left unset when NULL.
+static void runCgiAccessCheck(const char *pathinfo,
+					const char *method,
+					const char *remoteaddr,
+					const char *referer,
+					cgirun *run) {
+
+	// build the command
+	stringbuffer	cmd;
+	cmd.append("env -i PATH=\"$PATH\" SCRIPT_NAME=/skinvars/cgi.cgi "
+			"DOCUMENT_ROOT=. SERVER_NAME=localhost");
+	cmd.append(" PATH_INFO='")->append(pathinfo)->append("'");
+	cmd.append(" REQUEST_METHOD='")->append(method)->append("'");
+	if (remoteaddr) {
+		cmd.append(" REMOTE_ADDR='")->append(remoteaddr)->append("'");
+	}
+	if (referer) {
+		cmd.append(" HTTP_REFERER='")->append(referer)->append("'");
+	}
+	cmd.append(" timeout 30 ./cgi.cgi > " OUT " < /dev/null 2> /dev/null");
+
+	// run it
+	time_t	start=time(NULL);
+	int	result=system(cmd.getString());
+	run->elapsed=time(NULL)-start;
+	run->exitedcleanly=(result==0);
+	run->output=file::getContents(OUT);
+	if (!run->output) {
+		run->output=charstring::duplicate("");
+	}
+	run->restsize=0;
+
+	file::remove(OUT);
+}
+
 static bool hasParameter(cgirun *run, const char *nameandvalue) {
 	stringbuffer	line;
 	line.append("\n\t")->append(nameandvalue)->append("\n");
 	return charstring::contains(run->output,line.getString());
 }
 
-static bool hasSkinVariable(cgirun *run, const char *nameandvalue) {
+static bool hasLine(cgirun *run, const char *text) {
 	stringbuffer	line;
-	line.append("\n")->append(nameandvalue)->append("\n");
+	line.append("\n")->append(text)->append("\n");
 	return charstring::contains(run->output,line.getString());
 }
 
@@ -291,6 +327,91 @@ int main() {
 	delete[] run.output;
 	stdoutput.printf("\n");
 
+	// allowed ips only, with a match
+	runCgiAccessCheck("/allowips/page","GET","10.0.0.1",NULL,&run);
+	test("allowed ip, exit status",run.exitedcleanly);
+	test("allowed ip, allowed",hasLine(&run,"isIpAllowed=1"));
+	delete[] run.output;
+
+	// allowed ips only, with no match
+	runCgiAccessCheck("/allowips/page","GET","10.0.0.2",NULL,&run);
+	test("unlisted ip, exit status",run.exitedcleanly);
+	test("unlisted ip, denied",hasLine(&run,"isIpAllowed=0"));
+	delete[] run.output;
+
+	// ip in both the allowed and denied lists
+	runCgiAccessCheck("/denyips/page","GET","10.0.0.5",NULL,&run);
+	test("denied ip, exit status",run.exitedcleanly);
+	test("denied ip, denied",hasLine(&run,"isIpAllowed=0"));
+	delete[] run.output;
+
+	// ip in the allowed list only, with a denied list set
+	runCgiAccessCheck("/denyips/page","GET","10.0.0.6",NULL,&run);
+	test("allowed ip beside denied list, exit status",run.exitedcleanly);
+	test("allowed ip beside denied list, allowed",
+					hasLine(&run,"isIpAllowed=1"));
+	delete[] run.output;
+
+	// denied ips only, with a match
+	runCgiAccessCheck("/deniedonlyips/page","GET","10.0.0.5",NULL,&run);
+	test("denied-only ip, exit status",run.exitedcleanly);
+	test("denied-only ip, denied",hasLine(&run,"isIpAllowed=0"));
+	delete[] run.output;
+
+	// denied ips only, with no match: no allowed list denies everything
+	runCgiAccessCheck("/deniedonlyips/page","GET","10.0.0.6",NULL,&run);
+	test("ip with no allowed list, exit status",run.exitedcleanly);
+	test("ip with no allowed list, denied",
+					hasLine(&run,"isIpAllowed=0"));
+	delete[] run.output;
+	stdoutput.printf("\n");
+
+	// allowed ip, denied referer
+	runCgiAccessCheck("/referers/page","GET",
+				"10.0.0.1","http://bad.example.com/",&run);
+	test("denied referer, exit status",run.exitedcleanly);
+	test("denied referer, ip allowed",hasLine(&run,"isIpAllowed=1"));
+	test("denied referer, referer denied",
+					hasLine(&run,"isRefererAllowed=0"));
+	delete[] run.output;
+
+	// denied ip, allowed referer
+	runCgiAccessCheck("/referers/page","GET",
+				"10.0.0.5","http://good.example.com/",&run);
+	test("allowed referer, exit status",run.exitedcleanly);
+	test("allowed referer, ip denied",hasLine(&run,"isIpAllowed=0"));
+	test("allowed referer, referer allowed",
+					hasLine(&run,"isRefererAllowed=1"));
+	delete[] run.output;
+
+	// unlisted referer
+	runCgiAccessCheck("/referers/page","GET",
+				"10.0.0.1","http://other.test/",&run);
+	test("unlisted referer, exit status",run.exitedcleanly);
+	test("unlisted referer, referer denied",
+					hasLine(&run,"isRefererAllowed=0"));
+	delete[] run.output;
+	stdoutput.printf("\n");
+
+	// method in the allowed list only
+	runCgiAccessCheck("/methods/page","GET",NULL,NULL,&run);
+	test("allowed method, exit status",run.exitedcleanly);
+	test("allowed method, allowed",hasLine(&run,"isMethodAllowed=1"));
+	delete[] run.output;
+
+	// method in both the allowed and denied lists
+	runCgiAccessCheck("/methods/page","POST",NULL,NULL,&run);
+	test("denied method, exit status",run.exitedcleanly);
+	test("denied method, denied",hasLine(&run,"isMethodAllowed=0"));
+	delete[] run.output;
+
+	// unlisted method
+	runCgiAccessCheck("/methods/page","PUT",NULL,NULL,&run);
+	test("unlisted method, exit status",run.exitedcleanly);
+	test("unlisted method, denied",hasLine(&run,"isMethodAllowed=0"));
+	delete[] run.output;
+	stdoutput.printf("\n");
+
 	// skin variable leaks
 	if (system("valgrind --version > /dev/null 2>&1")) {
 		stdoutput.printf("\tskin variable leaks: skipped, "
@@ -304,9 +425,9 @@ int main() {
 	if (runCgiUnderValgrind("/unique/page",&run,&leaks,&errors)) {
 		test("unique skin variables, exit status",run.exitedcleanly);
 		test("unique skin variables, uniquevar1",
-			hasSkinVariable(&run,"uniquevar1=uniqueval1"));
+			hasLine(&run,"uniquevar1=uniqueval1"));
 		test("unique skin variables, uniquevar2",
-			hasSkinVariable(&run,"uniquevar2=uniqueval2"));
+			hasLine(&run,"uniquevar2=uniqueval2"));
 		test("unique skin variables, no leak",leaks==0);
 		test("unique skin variables, no memory error",errors==0);
 	} else {
@@ -320,7 +441,7 @@ int main() {
 	if (runCgiUnderValgrind("/repeat/page",&run,&leaks,&errors)) {
 		test("repeated skin variable, exit status",run.exitedcleanly);
 		test("repeated skin variable, last value",
-			hasSkinVariable(&run,"repeatvar=repeatval2") &&
+			hasLine(&run,"repeatvar=repeatval2") &&
 			!charstring::contains(run.output,"repeatval1"));
 		test("repeated skin variable, no leak",leaks==0);
 		test("repeated skin variable, no memory error",errors==0);

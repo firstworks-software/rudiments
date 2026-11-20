@@ -1,0 +1,4 @@
+<skin>
+<var name="accesschecks">yes</var>
+<var name="allowed-ips">^10\.0\.0\.1$</var>
+</skin>

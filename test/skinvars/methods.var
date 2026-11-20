@@ -1,0 +1,5 @@
+<skin>
+<var name="accesschecks">yes</var>
+<var name="allowed-methods">^(GET|POST)$</var>
+<var name="denied-methods">^POST$</var>
+</skin>
