@@ -239,10 +239,11 @@ static void setPositionLimits() {
 	signalmanager::alarm(0);
 }
 
-// check the text of one number write
+// check the text and byte count of one number write
 static void checkWrite(const char *name, wstringbuffer *sb,
 				ssize_t result, const wchar_t *expected) {
-	test(name,result>0 &&
+	test(name,result==(ssize_t)(wcharstring::getLength(expected)*
+						sizeof(wchar_t)) &&
 		!wcharstring::compare(sb->getString(),expected));
 }
 
@@ -325,6 +326,22 @@ static void numberOutput() {
 	checkWrite("write int64 9223372036854775807",&sb,
 			sb.write(maxint64),L"9223372036854775807");
 
+	// float and double writes
+	sb.clear();
+	checkWrite("write float",&sb,sb.write((float)1.5),L"1.5000");
+	sb.clear();
+	checkWrite("write float scale",&sb,sb.write((float)1.5,2),L"1.50");
+	sb.clear();
+	checkWrite("write float precision scale",&sb,
+			sb.write((float)1.5,8,2),L"    1.50");
+	sb.clear();
+	checkWrite("write double",&sb,sb.write((double)1.5),L"1.5000");
+	sb.clear();
+	checkWrite("write double scale",&sb,sb.write((double)1.5,2),L"1.50");
+	sb.clear();
+	checkWrite("write double precision scale",&sb,
+			sb.write((double)1.5,8,2),L"    1.50");
+
 	// every unsigned write agrees with the append of the same number
 	wstringbuffer	ap;
 	bool		ok=true;
@@ -355,6 +372,77 @@ static void numberOutput() {
 	signalmanager::alarm(0);
 }
 
+// float and double appends go at the end, not the current position
+static void appendFloat() {
+
+	stdoutput.printf("append float and double...\n");
+
+	wstringbuffer	sb;
+	size_t		len;
+
+	sb.clear();
+	sb.append(L"abc");
+	sb.setPositionRelativeToBeginning(1);
+	sb.append((float)1.5);
+	len=wcharstring::getLength(L"abc1.5000");
+	test("append float",
+		!wcharstring::compare(sb.getString(),L"abc1.5000") &&
+		sb.getPosition()==(off64_t)len &&
+		sb.getSize()==len*sizeof(wchar_t));
+
+	sb.clear();
+	sb.append(L"abc");
+	sb.setPositionRelativeToBeginning(1);
+	sb.append((float)1.5,2);
+	len=wcharstring::getLength(L"abc1.50");
+	test("append float scale",
+		!wcharstring::compare(sb.getString(),L"abc1.50") &&
+		sb.getPosition()==(off64_t)len &&
+		sb.getSize()==len*sizeof(wchar_t));
+
+	sb.clear();
+	sb.append(L"abc");
+	sb.setPositionRelativeToBeginning(1);
+	sb.append((float)1.5,8,2);
+	len=wcharstring::getLength(L"abc    1.50");
+	test("append float precision",
+		!wcharstring::compare(sb.getString(),L"abc    1.50") &&
+		sb.getPosition()==(off64_t)len &&
+		sb.getSize()==len*sizeof(wchar_t));
+
+	sb.clear();
+	sb.append(L"abc");
+	sb.setPositionRelativeToBeginning(1);
+	sb.append(1.5);
+	len=wcharstring::getLength(L"abc1.5000");
+	test("append double",
+		!wcharstring::compare(sb.getString(),L"abc1.5000") &&
+		sb.getPosition()==(off64_t)len &&
+		sb.getSize()==len*sizeof(wchar_t));
+
+	sb.clear();
+	sb.append(L"abc");
+	sb.setPositionRelativeToBeginning(1);
+	sb.append(1.5,2);
+	len=wcharstring::getLength(L"abc1.50");
+	test("append double scale",
+		!wcharstring::compare(sb.getString(),L"abc1.50") &&
+		sb.getPosition()==(off64_t)len &&
+		sb.getSize()==len*sizeof(wchar_t));
+
+	sb.clear();
+	sb.append(L"abc");
+	sb.setPositionRelativeToBeginning(1);
+	sb.append(1.5,8,2);
+	len=wcharstring::getLength(L"abc    1.50");
+	test("append double precision",
+		!wcharstring::compare(sb.getString(),L"abc    1.50") &&
+		sb.getPosition()==(off64_t)len &&
+		sb.getSize()==len*sizeof(wchar_t));
+
+	stdoutput.printf("\n");
+}
+
 int main(int argc, const char **argv) {
 
 	header("wstringbuffer");
@@ -362,6 +450,7 @@ int main(int argc, const char **argv) {
 	stringBufferBasics();
 	setPositionLimits();
 	numberOutput();
+	appendFloat();
 
 	if (!wcharstring::supportsPrintf()) {
 		stdoutput.printf("	not supported\n\n");

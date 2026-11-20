@@ -328,6 +328,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - fixed dictionary setValue() leaking the passed key when the key already
   exists and keys are managed
 - fixed a double free in dictionary setValues() from a managed dictionary
+- fixed stringbuffer and wstringbuffer append(float) and append(double)
+  writing at the current position, and wstringbuffer write(number)
+  returning characters instead of bytes
 
 ### Security
 - fixed buffer overflow when unix socket file name is too long

@@ -150,12 +150,84 @@ static void positionRange() {
 	stdoutput.printf("\n");
 }
 
+// float and double appends go at the end, not the current position
+static void appendFloat() {
+
+	stdoutput.printf("append float and double...\n");
+
+	stringbuffer	sb;
+	size_t		len;
+
+	sb.clear();
+	sb.append("abc");
+	sb.setPositionRelativeToBeginning(1);
+	sb.append((float)1.5);
+	len=charstring::getLength("abc1.5000");
+	test("append float",
+		!charstring::compare(sb.getString(),"abc1.5000") &&
+		sb.getPosition()==(off64_t)(len) &&
+		sb.getSize()==len);
+
+	sb.clear();
+	sb.append("abc");
+	sb.setPositionRelativeToBeginning(1);
+	sb.append((float)1.5,2);
+	len=charstring::getLength("abc1.50");
+	test("append float scale",
+		!charstring::compare(sb.getString(),"abc1.50") &&
+		sb.getPosition()==(off64_t)(len) &&
+		sb.getSize()==len);
+
+	sb.clear();
+	sb.append("abc");
+	sb.setPositionRelativeToBeginning(1);
+	sb.append((float)1.5,8,2);
+	len=charstring::getLength("abc    1.50");
+	test("append float precision",
+		!charstring::compare(sb.getString(),"abc    1.50") &&
+		sb.getPosition()==(off64_t)(len) &&
+		sb.getSize()==len);
+
+	sb.clear();
+	sb.append("abc");
+	sb.setPositionRelativeToBeginning(1);
+	sb.append(1.5);
+	len=charstring::getLength("abc1.5000");
+	test("append double",
+		!charstring::compare(sb.getString(),"abc1.5000") &&
+		sb.getPosition()==(off64_t)(len) &&
+		sb.getSize()==len);
+
+	sb.clear();
+	sb.append("abc");
+	sb.setPositionRelativeToBeginning(1);
+	sb.append(1.5,2);
+	len=charstring::getLength("abc1.50");
+	test("append double scale",
+		!charstring::compare(sb.getString(),"abc1.50") &&
+		sb.getPosition()==(off64_t)(len) &&
+		sb.getSize()==len);
+
+	sb.clear();
+	sb.append("abc");
+	sb.setPositionRelativeToBeginning(1);
+	sb.append(1.5,8,2);
+	len=charstring::getLength("abc    1.50");
+	test("append double precision",
+		!charstring::compare(sb.getString(),"abc    1.50") &&
+		sb.getPosition()==(off64_t)(len) &&
+		sb.getSize()==len);
+
+	stdoutput.printf("\n");
+}
+
 int main(int argc, const char **argv) {
 
 	header("stringbuffer");
 
 	numberOutput();
 	positionRange();
+	appendFloat();
 
 	const char	alphabet[]="abcdefghijklmnopqrstuvwxyz";
 	const uint32_t	iterations=5;

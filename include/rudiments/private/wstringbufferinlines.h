@@ -242,14 +242,30 @@ wstringbuffer *wstringbuffer::append(float number) {
 
 inline
 wstringbuffer *wstringbuffer::append(float number, uint16_t scale) {
-	printf(L"%.*f",scale,number);
+
+	// format as narrow text, then widen and append at the end
+	char	*num=NULL;
+	if (charstring::printf(&num,"%.*f",scale,number)!=-1) {
+		wchar_t	*wide=wcharstring::duplicate(num);
+		append(wide);
+		delete[] wide;
+	}
+	delete[] num;
 	return this;
 }
 
 inline
 wstringbuffer *wstringbuffer::append(float number, uint16_t precision,
 							uint16_t scale) {
-	printf(L"%*.*f",precision,scale,number);
+
+	// format as narrow text, then widen and append at the end
+	char	*num=NULL;
+	if (charstring::printf(&num,"%*.*f",precision,scale,number)!=-1) {
+		wchar_t	*wide=wcharstring::duplicate(num);
+		append(wide);
+		delete[] wide;
+	}
+	delete[] num;
 	return this;
 }
 
@@ -260,14 +276,30 @@ wstringbuffer *wstringbuffer::append(double number) {
 
 inline
 wstringbuffer *wstringbuffer::append(double number, uint16_t scale) {
-	printf(L"%.*f",scale,number);
+
+	// format as narrow text, then widen and append at the end
+	char	*num=NULL;
+	if (charstring::printf(&num,"%.*f",scale,number)!=-1) {
+		wchar_t	*wide=wcharstring::duplicate(num);
+		append(wide);
+		delete[] wide;
+	}
+	delete[] num;
 	return this;
 }
 
 inline
 wstringbuffer *wstringbuffer::append(double number, uint16_t precision,
 							uint16_t scale) {
-	printf(L"%*.*f",precision,scale,number);
+
+	// format as narrow text, then widen and append at the end
+	char	*num=NULL;
+	if (charstring::printf(&num,"%*.*f",precision,scale,number)!=-1) {
+		wchar_t	*wide=wcharstring::duplicate(num);
+		append(wide);
+		delete[] wide;
+	}
+	delete[] num;
 	return this;
 }
 
@@ -289,7 +321,9 @@ ssize_t wstringbuffer::write(wchar_t character) {
 inline
 ssize_t wstringbuffer::write(int16_t number) {
 	if (wcharstring::supportsPrintf()) {
-		return printf(L"%hd",number);
+		ssize_t	result=printf(L"%hd",number);
+		return (result<0)?result:
+			result*(ssize_t)sizeof(wchar_t);
 	} else {
 		wchar_t	*s=wcharstring::parseNumber(number);
 		ssize_t	retval=write(s);
@@ -301,7 +335,9 @@ ssize_t wstringbuffer::write(int16_t number) {
 inline
 ssize_t wstringbuffer::write(int32_t number) {
 	if (wcharstring::supportsPrintf()) {
-		return printf(L"%d",number);
+		ssize_t	result=printf(L"%d",number);
+		return (result<0)?result:
+			result*(ssize_t)sizeof(wchar_t);
 	} else {
 		wchar_t	*s=wcharstring::parseNumber(number);
 		ssize_t	retval=write(s);
@@ -313,7 +349,9 @@ ssize_t wstringbuffer::write(int32_t number) {
 inline
 ssize_t wstringbuffer::write(int64_t number) {
 	if (wcharstring::supportsPrintf()) {
-		return printf(L"%lld",(long long)number);
+		ssize_t	result=printf(L"%lld",(long long)number);
+		return (result<0)?result:
+			result*(ssize_t)sizeof(wchar_t);
 	} else {
 		wchar_t	*s=wcharstring::parseNumber(number);
 		ssize_t	retval=write(s);
@@ -325,7 +363,9 @@ ssize_t wstringbuffer::write(int64_t number) {
 inline
 ssize_t wstringbuffer::write(uint16_t number) {
 	if (wcharstring::supportsPrintf()) {
-		return printf(L"%hu",(unsigned int)number);
+		ssize_t	result=printf(L"%hu",(unsigned int)number);
+		return (result<0)?result:
+			result*(ssize_t)sizeof(wchar_t);
 	} else {
 		wchar_t	*s=wcharstring::parseNumber(number);
 		ssize_t	retval=write(s);
@@ -337,7 +377,9 @@ ssize_t wstringbuffer::write(uint16_t number) {
 inline
 ssize_t wstringbuffer::write(uint32_t number) {
 	if (wcharstring::supportsPrintf()) {
-		return printf(L"%u",(unsigned int)number);
+		ssize_t	result=printf(L"%u",(unsigned int)number);
+		return (result<0)?result:
+			result*(ssize_t)sizeof(wchar_t);
 	} else {
 		wchar_t	*s=wcharstring::parseNumber(number);
 		ssize_t	retval=write(s);
@@ -349,7 +391,9 @@ ssize_t wstringbuffer::write(uint32_t number) {
 inline
 ssize_t wstringbuffer::write(uint64_t number) {
 	if (wcharstring::supportsPrintf()) {
-		return printf(L"%llu",(unsigned long long)number);
+		ssize_t	result=printf(L"%llu",(unsigned long long)number);
+		return (result<0)?result:
+			result*(ssize_t)sizeof(wchar_t);
 	} else {
 		wchar_t	*s=wcharstring::parseNumber(number);
 		ssize_t	retval=write(s);
@@ -373,7 +417,9 @@ ssize_t wstringbuffer::write(float number) {
 inline
 ssize_t wstringbuffer::write(float number, uint16_t scale) {
 	if (wcharstring::supportsPrintf()) {
-		return printf(L"%.*f",scale,number);
+		ssize_t	result=printf(L"%.*f",scale,number);
+		return (result<0)?result:
+			result*(ssize_t)sizeof(wchar_t);
 	} else {
 		wchar_t	*s=wcharstring::parseNumber(number,scale);
 		ssize_t	retval=write(s);
@@ -385,7 +431,9 @@ ssize_t wstringbuffer::write(float number, uint16_t scale) {
 inline
 ssize_t wstringbuffer::write(float number, uint16_t precision, uint16_t scale) {
 	if (wcharstring::supportsPrintf()) {
-		return printf(L"%*.*f",precision,scale,number);
+		ssize_t	result=printf(L"%*.*f",precision,scale,number);
+		return (result<0)?result:
+			result*(ssize_t)sizeof(wchar_t);
 	} else {
 		wchar_t	*s=wcharstring::parseNumber(number,precision,scale);
 		ssize_t	retval=write(s);
@@ -409,7 +457,9 @@ ssize_t wstringbuffer::write(double number) {
 inline
 ssize_t wstringbuffer::write(double number, uint16_t scale) {
 	if (wcharstring::supportsPrintf()) {
-		return printf(L"%.*f",scale,number);
+		ssize_t	result=printf(L"%.*f",scale,number);
+		return (result<0)?result:
+			result*(ssize_t)sizeof(wchar_t);
 	} else {
 		wchar_t	*s=wcharstring::parseNumber(number,scale);
 		ssize_t	retval=write(s);
@@ -422,7 +472,9 @@ inline
 ssize_t wstringbuffer::write(double number,
 				 uint16_t precision, uint16_t scale) {
 	if (wcharstring::supportsPrintf()) {
-		return printf(L"%*.*f",precision,scale,number);
+		ssize_t	result=printf(L"%*.*f",precision,scale,number);
+		return (result<0)?result:
+			result*(ssize_t)sizeof(wchar_t);
 	} else {
 		wchar_t	*s=wcharstring::parseNumber(number,precision,scale);
 		ssize_t	retval=write(s);

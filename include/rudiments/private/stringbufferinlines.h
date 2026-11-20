@@ -188,7 +188,13 @@ stringbuffer *stringbuffer::append(uint16_t number) {
 
 inline
 stringbuffer *stringbuffer::append(float number, uint16_t scale) {
-	printf("%.*f",scale,number);
+
+	// format the number, then append it at the end
+	char	*num=NULL;
+	if (charstring::printf(&num,"%.*f",scale,number)!=-1) {
+		append(num);
+	}
+	delete[] num;
 	return this;
 }
 
@@ -200,20 +206,38 @@ stringbuffer *stringbuffer::append(float number) {
 inline
 stringbuffer *stringbuffer::append(float number, uint16_t precision,
 							uint16_t scale) {
-	printf("%*.*f",precision,scale,number);
+
+	// format the number, then append it at the end
+	char	*num=NULL;
+	if (charstring::printf(&num,"%*.*f",precision,scale,number)!=-1) {
+		append(num);
+	}
+	delete[] num;
 	return this;
 }
 
 inline
 stringbuffer *stringbuffer::append(double number, uint16_t precision,
 							uint16_t scale) {
-	printf("%*.*f",precision,scale,number);
+
+	// format the number, then append it at the end
+	char	*num=NULL;
+	if (charstring::printf(&num,"%*.*f",precision,scale,number)!=-1) {
+		append(num);
+	}
+	delete[] num;
 	return this;
 }
 
 inline
 stringbuffer *stringbuffer::append(double number, uint16_t scale) {
-	printf("%.*f",scale,number);
+
+	// format the number, then append it at the end
+	char	*num=NULL;
+	if (charstring::printf(&num,"%.*f",scale,number)!=-1) {
+		append(num);
+	}
+	delete[] num;
 	return this;
 }
 

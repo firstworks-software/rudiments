@@ -115,7 +115,7 @@ class RUDIMENTS_DLLSPEC wstringbuffer : public bytebuffer {
 		 *  written.  If necessary, the internal buffer will grow to
 		 *  accommodate the new data.
 		 *
-		 *  Returns -1 on error. */
+		 *  Returns the number of bytes written or -1 on error. */
 		ssize_t	write(int16_t number);
 
 		/** Converts "number" to a string and writes it to the
@@ -124,16 +124,16 @@ class RUDIMENTS_DLLSPEC wstringbuffer : public bytebuffer {
 		 *  written.  If necessary, the internal buffer will grow to
 		 *  accommodate the new data.
 		 *
-		 *  Returns -1 on error. */
+		 *  Returns the number of bytes written or -1 on error. */
 		ssize_t	write(int32_t number);
 
 		/** Converts "number" to a string and writes it to the
 		 *  wstringbuffer at the current position and increments the
 		 *  current position to the next byte after the data that was
-		 *  written.  If necessary, the inernal buffer will grow to
+		 *  written.  If necessary, the internal buffer will grow to
 		 *  accommodate the new data.
 		 *
-		 *  Returns -1 on error. */
+		 *  Returns the number of bytes written or -1 on error. */
 		ssize_t	write(int64_t number);
 
 		/** Converts "number" to a string and writes it to the
@@ -142,7 +142,7 @@ class RUDIMENTS_DLLSPEC wstringbuffer : public bytebuffer {
 		 *  written.  If necessary, the internal buffer will grow to
 		 *  accommodate the new data.
 		 *
-		 *  Returns -1 on error. */
+		 *  Returns the number of bytes written or -1 on error. */
 		ssize_t	write(uint16_t number);
 
 		/** Converts "number" to a string and writes it to the
@@ -151,7 +151,7 @@ class RUDIMENTS_DLLSPEC wstringbuffer : public bytebuffer {
 		 *  written.  If necessary, the internal buffer will grow to
 		 *  accommodate the new data.
 		 *
-		 *  Returns -1 on error. */
+		 *  Returns the number of bytes written or -1 on error. */
 		ssize_t	write(uint32_t number);
 
 		/** Converts "number" to a string and writes it to the
@@ -160,16 +160,16 @@ class RUDIMENTS_DLLSPEC wstringbuffer : public bytebuffer {
 		 *  written.  If necessary, the internal buffer will grow to
 		 *  accommodate the new data.
 		 *
-		 *  Returns -1 on error. */
+		 *  Returns the number of bytes written or -1 on error. */
 		ssize_t	write(uint64_t number);
 
 		/** Converts "number" to a string (using a default scale of 4)
 		 *  and writes it to the wstringbuffer at the current position
 		 *  and increments the current position to the next byte after
-		 *  the data that was written.  If necessary, the interna
+		 *  the data that was written.  If necessary, the internal
 		 *  buffer will grow to accommodate the new data.
 		 *
-		 *  Returns -1 on error. */
+		 *  Returns the number of bytes written or -1 on error. */
 		ssize_t	write(float number);
 
 		/** Converts "number" to a string using the specified "scale"
@@ -178,7 +178,7 @@ class RUDIMENTS_DLLSPEC wstringbuffer : public bytebuffer {
 		 *  the data that was written.  If necessary, the internal
 		 *  buffer will grow to accommodate the new data.
 		 *
-		 *  Returns -1 on error. */
+		 *  Returns the number of bytes written or -1 on error. */
 		ssize_t	write(float number, uint16_t scale);
 
 		/** Converts "number" to a string using the specified
@@ -188,7 +188,7 @@ class RUDIMENTS_DLLSPEC wstringbuffer : public bytebuffer {
 		 *  necessary, the internal buffer will grow to accommodate the
 		 *  new data.
 		 *
-		 *  Returns -1 on error. */
+		 *  Returns the number of bytes written or -1 on error. */
 		ssize_t	write(float number, uint16_t precision,
 							uint16_t scale);
 
@@ -198,7 +198,7 @@ class RUDIMENTS_DLLSPEC wstringbuffer : public bytebuffer {
 		 *  the data that was written.  If necessary, the internal
 		 *  buffer will grow to accommodate the new data.
 		 *
-		 *  Returns -1 on error. */
+		 *  Returns the number of bytes written or -1 on error. */
 		ssize_t	write(double number);
 
 		/** Converts "number" to a string using the specified "scale"
@@ -207,7 +207,7 @@ class RUDIMENTS_DLLSPEC wstringbuffer : public bytebuffer {
 		 *  the data that was written.  If necessary, the internal
 		 *  buffer will grow to accommodate the new data.
 		 *
-		 *  Returns -1 on error. */
+		 *  Returns the number of bytes written or -1 on error. */
 		ssize_t	write(double number, uint16_t scale);
 
 		/** Converts "number" to a string using the specified
@@ -217,7 +217,7 @@ class RUDIMENTS_DLLSPEC wstringbuffer : public bytebuffer {
 		 *  necessary, the internal buffer will grow to accommodate the
 		 *  new data.
 		 *
-		 *  Returns -1 on error. */
+		 *  Returns the number of bytes written or -1 on error. */
 		ssize_t	write(double number, uint16_t precision,
 							uint16_t scale);
 
