@@ -264,7 +264,7 @@ ssize_t collection::writeJsonValue(output *out, const char *value) {
 	} else if (charstring::isNumber(value)) {
 		return out->printf("%s",value);
 	}
-	return out->printf("\"%s\"",value);
+	return writeJsonString(out,value,charstring::getLength(value));
 }
 
 inline
@@ -274,7 +274,7 @@ ssize_t collection::writeJsonValue(output *out, char *value) {
 	} else if (charstring::isNumber(value)) {
 		return out->printf("%s",value);
 	}
-	return out->printf("\"%s\"",value);
+	return writeJsonString(out,value,charstring::getLength(value));
 }
 
 inline
@@ -284,7 +284,7 @@ ssize_t collection::writeJsonValue(output *out, const wchar_t *value) {
 	} else if (wcharstring::isNumber(value)) {
 		return out->printf(L"%ls",value);
 	}
-	return out->printf(L"\"%ls\"",value);
+	return writeJsonWideString(out,value,wcharstring::getLength(value));
 }
 
 inline
@@ -294,7 +294,7 @@ ssize_t collection::writeJsonValue(output *out, wchar_t *value) {
 	} else if (wcharstring::isNumber(value)) {
 		return out->printf(L"%ls",value);
 	}
-	return out->printf(L"\"%ls\"",value);
+	return writeJsonWideString(out,value,wcharstring::getLength(value));
 }
 
 inline
@@ -302,7 +302,7 @@ ssize_t collection::writeJsonValue(output *out, char value) {
 	if (character::isDigit(value)) {
 		return out->printf("%c",value);
 	}
-	return out->printf("\"%c\"",value);
+	return writeJsonString(out,&value,1);
 }
 
 inline
@@ -310,7 +310,7 @@ ssize_t collection::writeJsonValue(output *out, wchar_t value) {
 	if (character::isDigit(value)) {
 		return out->printf(L"%lc",value);
 	}
-	return out->printf(L"\"%lc\"",value);
+	return writeJsonWideString(out,&value,1);
 }
 
 inline
@@ -344,7 +344,8 @@ ssize_t collection::writeJsonValue(output *out, const byte_t *value) {
 	} else if (charstring::isNumber((const char *)value)) {
 		return out->printf("%s",value);
 	}
-	return out->printf("\"%s\"",value);
+	return writeJsonString(out,(const char *)value,
+				charstring::getLength((const char *)value));
 }
 
 inline
@@ -354,7 +355,8 @@ ssize_t collection::writeJsonValue(output *out, byte_t *value) {
 	} else if (charstring::isNumber((char *)value)) {
 		return out->printf("%s",value);
 	}
-	return out->printf("\"%s\"",value);
+	return writeJsonString(out,(const char *)value,
+				charstring::getLength((const char *)value));
 }
 
 inline
@@ -362,7 +364,7 @@ ssize_t collection::writeJsonValue(output *out, byte_t value) {
 	if (character::isDigit(value)) {
 		return out->printf("%c",value);
 	}
-	return out->printf("\"%c\"",value);
+	return writeJsonString(out,(const char *)&value,1);
 }
 
 inline
@@ -441,6 +443,77 @@ ssize_t collection::writeJsonValue(output *out, const valuetype &value) {
 	// Why this cast to const void *?  gcc 3.3.6 on openbsd 7.0 for luna88k
 	// segfaults without it, and it doesn't hurt other compilers.
 	return out->printf("\"%p\"",(const void *)&value);
+}
+
+inline
+ssize_t collection::writeJsonString(output *out,
+					const char *value,
+					uint64_t length) {
+
+	// encode the value
+	char		*encoded;
+	uint64_t	encodedlen;
+	charstring::jsonEncode(value,length,&encoded,&encodedlen);
+	if (!encoded) {
+		return RESULT_ERROR;
+	}
+
+	// write the encoded value
+	ssize_t	result=out->write(encoded,(size_t)encodedlen);
+	delete[] encoded;
+	return result;
+}
+
+inline
+ssize_t collection::writeJsonWideString(output *out,
+					const wchar_t *value,
+					size_t length) {
+
+	// check the size, including the quotes and the terminator
+	if (length>(~((size_t)0)/sizeof(wchar_t)-3)/6) {
+		return RESULT_ERROR;
+	}
+
+	// size the encoded value
+	size_t	size=3;
+	for (size_t i=0; i<length; i++) {
+		if (value[i]==L'"' || value[i]==L'\\') {
+			size+=2;
+		} else if ((uint32_t)value[i]<0x20) {
+			size+=6;
+		} else {
+			size++;
+		}
+	}
+
+	// encode the value
+	const wchar_t	*hex=L"0123456789abcdef";
+	wchar_t		*encoded=new wchar_t[size];
+	wchar_t		*e=encoded;
+	*e++=L'"';
+	for (size_t i=0; i<length; i++) {
+		wchar_t	c=value[i];
+		if (c==L'"' || c==L'\\') {
+			*e++=L'\\';
+			*e++=c;
+		} else if ((uint32_t)c<0x20) {
+			*e++=L'\\';
+			*e++=L'u';
+			*e++=L'0';
+			*e++=L'0';
+			*e++=hex[(c>>4)&0x0F];
+			*e++=hex[c&0x0F];
+		} else {
+			*e++=c;
+		}
+	}
+	*e++=L'"';
+	*e=L'\0';
+
+	// write the encoded value with printf(), so the output converts it
+	ssize_t	result=out->printf(L"%ls",encoded);
+	delete[] encoded;
+	return result;
 }
 
 inline

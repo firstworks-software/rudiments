@@ -5,7 +5,29 @@
 #include <rudiments/stringbuffer.h>
 #include <rudiments/charstring.h>
 #include <rudiments/signalclasses.h>
+#include <rudiments/jsondom.h>
 #include "test.cpp"
+
+// a quote, a backslash, and a newline, as a raw C string and as a JSON string
+#define ESCRAW "q\"b\\s\nl"
+#define ESCENC "\"q\\\"b\\\\s\\u000al\""
+
+// returns true if "n" or a node below it has a "v" attribute of "value"
+bool hasValue(domnode *n, const char *value) {
+	if (n->isNullNode()) {
+		return false;
+	}
+	if (!charstring::compare(n->getAttributeValue("v"),value)) {
+		return true;
+	}
+	for (domnode *c=n->getFirstTagChild();
+			!c->isNullNode(); c=c->getNextTagSibling()) {
+		if (hasValue(c,value)) {
+			return true;
+		}
+	}
+	return false;
+}
 
 char	cn[2];
 const char	*colname(uint64_t col) {
@@ -902,6 +924,73 @@ int main(int argc, char **argv) {
 	testBlockWrite("zero columns, never all rows",7,0,3,true,
 				zerocolsjson,zerocolsindentjson);
 	signalmanager::alarm(0);
+	stdoutput.printf("\n");
+
+	// a quote, a backslash, and a newline in a column name and a cell
+	stdoutput.printf("escaped column names and values...\n");
+	{
+		table<const char *>	et;
+		et.setColumnName(0,ESCRAW);
+		et.setColumnName(1,"plain");
+		et.setValue(0,0,ESCRAW);
+		et.setValue(0,1,"42");
+		et.setValue(1,0,"plain");
+		et.setValue(1,1,(const char *)NULL);
+		const char	*expected[]={
+			"{\"c\":[" ESCENC ",\"plain\"],"
+			"\"r\":[[" ESCENC ",42],[\"plain\",null]]}",
+			"{\n"
+			"\t\"c\": [\n"
+			"\t\t" ESCENC ",\n"
+			"\t\t\"plain\"\n"
+			"\t],\n"
+			"\t\"r\": [\n"
+			"\t\t[\n"
+			"\t\t\t" ESCENC ",\n"
+			"\t\t\t42\n"
+			"\t\t],\n"
+			"\t\t[\n"
+			"\t\t\t\"plain\",\n"
+			"\t\t\tnull\n"
+			"\t\t]\n"
+			"\t]\n"
+			"}\n"
+		};
+		for (uint16_t i=0; i<2; i++) {
+			const char	*how=(!i)?"writeJson":"writeJson indent";
+			stringbuffer	sb;
+			ssize_t	result=et.writeJson(&sb,i==1);
+			stringbuffer	title;
+			title.append(how)->append(": output");
+			test(title.getString(),
+				!charstring::compare(sb.getString(),
+							expected[i]));
+			title.clear();
+			title.append(how)->append(": return value");
+			test(title.getString(),
+				result==(ssize_t)sb.getStringLength());
+
+			// the escaped column name is the first value of "c"
+			jsondom	j;
+			domnode	*c=NULL;
+			bool	parsed=j.parseString(sb.getString());
+			if (parsed) {
+				c=j.getRootNode()->getFirstTagChild()->
+							getFirstTagChild("c");
+			}
+			title.clear();
+			title.append(how)->append(": parses");
+			test(title.getString(),
+				parsed &&
+				!charstring::compare(
+					c->getFirstTagChild()->
+						getAttributeValue("v"),
+					ESCRAW) &&
+				hasValue(j.getRootNode()->
+					getFirstTagChild()->
+					getFirstTagChild("r"),ESCRAW));
+		}
+	}
 	stdoutput.printf("\n");
 
 	// write errors and short writes

@@ -8,6 +8,7 @@
 #include <rudiments/charstring.h>
 #include <rudiments/stringbuffer.h>
 #include <rudiments/stdio.h>
+#include <rudiments/jsondom.h>
 #include "test.cpp"
 
 class countedlist : public linkedlist<int32_t> {
@@ -181,6 +182,11 @@ static void testResultFailWrite(const char *name, mvcresult *m,
 #define ESCKEYENC "\"k\\\"\\\\\\u000a\\u0001\\u001f\""
 #define ESCKEY2RAW "a\"b\\c"
 #define ESCKEY2ENC "\"a\\\"b\\\\c\""
+
+// a collection value with a quote, a backslash, and a newline, as a raw C
+// string and as a JSON string
+#define ESCVALRAW "q\"b\\s\nl"
+#define ESCVALENC "\"q\\\"b\\\\s\\u000al\""
 
 int main() {
 
@@ -640,6 +646,75 @@ int main() {
 		"{\n\t\"s\": false,\n\t\"c\": 7,\n\t\"m\": " ESCENC "\n}\n"
 	};
 	testResultFailWrite("failed with escaped message",&rfe,feexpected);
+
+	// a quote, a backslash, and a newline in collection values and a
+	// column name
+	linkedlist<const char *>	elist;
+	elist.append(ESCVALRAW);
+	elist.append("plain");
+	elist.append("42");
+	elist.append((const char *)NULL);
+
+	table<const char *>	etbl;
+	etbl.setColumnName(0,ESCVALRAW);
+	etbl.setColumnName(1,"plain");
+	etbl.setValue(0,0,ESCVALRAW);
+	etbl.setValue(0,1,"42");
+	etbl.setValue(1,0,"plain");
+	etbl.setValue(1,1,(const char *)NULL);
+
+	mvcresult	rev;
+	rev.setSuccess();
+	rev.setData("list",&elist);
+	rev.setData("table",&etbl);
+	const char * const	evexpected[]={
+		"{\"s\":true,\"c\":0,\"m\":\"\","
+		"\"list\":[" ESCVALENC ",\"plain\",42,null],"
+		"\"table\":{\"c\":[" ESCVALENC ",\"plain\"],"
+		"\"r\":[[" ESCVALENC ",42],[\"plain\",null]]}}",
+		"{\n\t\"s\": true,\n\t\"c\": 0,\n\t\"m\": \"\",\n"
+		"\t\"list\": [\n\t\t" ESCVALENC ",\n\t\t\"plain\",\n"
+		"\t\t42,\n\t\tnull\n\t],\n"
+		"\t\"table\": {\n"
+		"\t\t\"c\": [\n\t\t\t" ESCVALENC ",\n\t\t\t\"plain\"\n\t\t],\n"
+		"\t\t\"r\": [\n"
+		"\t\t\t[\n\t\t\t\t" ESCVALENC ",\n\t\t\t\t42\n\t\t\t],\n"
+		"\t\t\t[\n\t\t\t\t\"plain\",\n\t\t\t\tnull\n\t\t\t]\n"
+		"\t\t]\n"
+		"\t}\n}\n",
+		"{\n\t\"s\": true,\n\t\"c\": 0,\n\t\"m\": \"\",\n"
+		"\t\"list\": [\n\t\t" ESCVALENC ",\n\t\t\"plain\",\n"
+		"\t\t42,\n\t\tnull\n\t],\n"
+		"\t\"table\": {\n"
+		"\t\t\"c\": [\n\t\t\t" ESCVALENC ",\n\t\t\t\"plain\"\n\t\t],\n"
+		"\t\t\"r\": [\n"
+		"\t\t\t[\n\t\t\t\t" ESCVALENC ",\n\t\t\t\t42\n\t\t\t],\n"
+		"\t\t\t[\n\t\t\t\t\"plain\",\n\t\t\t\tnull\n\t\t\t]\n"
+		"\t\t]\n"
+		"\t}\n}\n"
+	};
+	testResultFailWrite("escaped collection values",&rev,evexpected);
+
+	// the escaped values parse back to the raw strings
+	for (uint16_t i=0; i<2; i++) {
+		stringbuffer	esb;
+		rev.writeJson(&esb,i==1);
+		jsondom	j;
+		bool	parsed=j.parseString(esb.getString());
+		domnode	*o=(parsed)?j.getRootNode()->getFirstTagChild():NULL;
+		test((!i)?"escaped collection values: writeJson: parses":
+			"escaped collection values: writeJson indent: parses",
+			parsed &&
+			!charstring::compare(
+				o->getFirstTagChild("list")->
+					getFirstTagChild()->
+					getAttributeValue("v"),ESCVALRAW) &&
+			!charstring::compare(
+				o->getFirstTagChild("table")->
+					getFirstTagChild("c")->
+					getFirstTagChild()->
+					getAttributeValue("v"),ESCVALRAW));
+	}
 
 	stdoutput.printf("\n");
 

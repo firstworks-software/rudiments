@@ -314,8 +314,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - fixed a urlhttprequest leak of skin variable names and values
 - fixed an avltree clear() leak of the left subtree of a right child
 - fixed swapped allowed and denied lists in urlhttprequest access checks
-- fixed mvcresult writeJson() output for a message or key that needs json
-  escaping
+- fixed collection and mvcresult writeJson() output for a string, key, or
+  column name that needs json escaping
 - fixed dom and jsondom writeJson() write errors and the missing closing
   brace of indented dom output
 - fixed jsondom writeJson() to honor its indent argument

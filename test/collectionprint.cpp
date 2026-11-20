@@ -12,6 +12,7 @@
 #include <rudiments/stringbuffer.h>
 #include <rudiments/bytestring.h>
 #include <rudiments/wcharstring.h>
+#include <rudiments/jsondom.h>
 #include "test.cpp"
 
 const char *numbers[]={
@@ -267,6 +268,66 @@ void testWideValue(const char *name, avltree<const wchar_t *> *t,
 	testWideWrite(name,t,1,&j);
 }
 
+// a quote, a backslash, and a newline, as a raw C string and as a JSON string
+#define ESCRAW "q\"b\\s\nl"
+#define ESCENC "\"q\\\"b\\\\s\\u000al\""
+
+// returns true if "n" or a node below it has the name "name", or NULL to skip
+// that check, and a "v" attribute of "value"
+bool hasNode(domnode *n, const char *name, const char *value) {
+	if (n->isNullNode()) {
+		return false;
+	}
+	if ((!name || !charstring::compare(n->getName(),name)) &&
+		!charstring::compare(n->getAttributeValue("v"),value)) {
+		return true;
+	}
+	for (domnode *c=n->getFirstTagChild();
+			!c->isNullNode(); c=c->getNextTagSibling()) {
+		if (hasNode(c,name,value)) {
+			return true;
+		}
+	}
+	return false;
+}
+
+// checks writeJson() of "c" against "expected" and "expectedindent", parses
+// each with jsondom, and checks that the parsed tree has a node with the
+// name "name", or NULL to skip that check, and the value "value"
+template <class collectiontype>
+void testEscape(const char *name, collectiontype *c,
+				const char *expected, const char *expectedindent,
+				const char *nodename, const char *value) {
+
+	for (uint16_t i=0; i<2; i++) {
+
+		bool	indent=(i==1);
+
+		stringbuffer	prefix;
+		prefix.append(name);
+		prefix.append((indent)?": writeJson indent":": writeJson");
+
+		stringbuffer	sb;
+		ssize_t	result=c->writeJson(&sb,indent);
+		stringbuffer	title;
+		title.append(prefix.getString())->append(": output");
+		test(title.getString(),
+			!charstring::compare(sb.getString(),
+					(indent)?expectedindent:expected));
+
+		title.clear();
+		title.append(prefix.getString())->append(": return value");
+		test(title.getString(),result==(ssize_t)sb.getStringLength());
+
+		jsondom	j;
+		title.clear();
+		title.append(prefix.getString())->append(": parses");
+		test(title.getString(),
+			j.parseString(sb.getString()) &&
+			hasNode(j.getRootNode(),nodename,value));
+	}
+}
+
 int main(int argc, const char **argv) {
 
 	header("collectionprint");
@@ -518,6 +579,72 @@ int main(int argc, const char **argv) {
 
 	stdoutput.printf("\n");
 
+	// a quote, a backslash, and a newline in values and keys
+	stdoutput.printf("escaped values...\n");
+
+	linkedlist<const char *>	elle;
+	elle.append(ESCRAW);
+	elle.append("plain");
+	elle.append("42");
+	elle.append((const char *)NULL);
+	testEscape("linkedlist (const char *)",&elle,
+			"[" ESCENC ",\"plain\",42,null]",
+			"[\n\t" ESCENC ",\n\t\"plain\",\n\t42,\n\tnull\n]\n",
+			"v",ESCRAW);
+	testFailWrite("linkedlist (escaped)",&elle);
+
+	dynamicarray<const char *>	edae;
+	edae[0]=ESCRAW;
+	edae[1]="plain";
+	edae[2]="42";
+	edae[3]=NULL;
+	testEscape("dynamicarray (const char *)",&edae,
+			"[" ESCENC ",\"plain\",42,null]",
+			"[\n\t" ESCENC ",\n\t\"plain\",\n\t42,\n\tnull\n]\n",
+			"v",ESCRAW);
+	testFailWrite("dynamicarray (escaped)",&edae);
+
+	dictionary<const char *,const char *>	ede;
+	ede.setValue(ESCRAW,ESCRAW);
+	ede.setValue("plain","42");
+	ede.setValue("n",(const char *)NULL);
+	const char	*edeexpected=
+			"{" ESCENC ":" ESCENC ",\"plain\":42,\"n\":null}";
+	const char	*edeindentexpected=
+			"{\n\t" ESCENC ":" ESCENC ",\n"
+			"\t\"plain\":42,\n\t\"n\":null\n}\n";
+	testEscape("dictionary (escaped key and value)",&ede,
+			edeexpected,edeindentexpected,ESCRAW,ESCRAW);
+	testEscape("dictionary (plain key)",&ede,
+			edeexpected,edeindentexpected,"plain","42");
+	testFailWrite("dictionary (escaped)",&ede);
+
+	avltree<const char *>	ate;
+	ate.insert(ESCRAW);
+	ate.insert("plain");
+	ate.insert("42");
+	testEscape("avltree (const char *)",&ate,
+			"[\"plain\",[42],[" ESCENC "]]",
+			"[\n  \"plain\",\n  [\n    42\n  ],\n"
+			"  [\n    " ESCENC "\n  ]\n]\n",
+			"v",ESCRAW);
+	testTreeFailWrite("avltree (escaped)",&ate,NULL);
+
+	linkedlist<char>	ellc;
+	ellc.append('"');
+	ellc.append('\\');
+	ellc.append('\n');
+	ellc.append('7');
+	ellc.append('a');
+	testEscape("linkedlist (char)",&ellc,
+			"[\"\\\"\",\"\\\\\",\"\\u000a\",7,\"a\"]",
+			"[\n\t\"\\\"\",\n\t\"\\\\\",\n\t\"\\u000a\",\n"
+			"\t7,\n\t\"a\"\n]\n",
+			"v","\"");
+	testFailWrite("linkedlist (escaped char)",&ellc);
+
+	stdoutput.printf("\n");
+
 	if (wcharstring::supportsPrintf()) {
 		// wide values
 		stdoutput.printf("wide values...\n");
@@ -531,6 +658,12 @@ int main(int argc, const char **argv) {
 		atwn.insert(L"42");
 		testWideValue("avltree (const wchar_t * number)",&atwn,L"42",
 								L"42");
+
+		avltree<const wchar_t *>	atwe;
+		atwe.insert(L"q\"b\\s\nl");
+		testWideValue("avltree (const wchar_t * escaped)",&atwe,
+						L"q\"b\\s\nl",
+						L"\"q\\\"b\\\\s\\u000al\"");
 
 		wchar_t	wstr[]={L'h',L'i',0};
 		avltree<wchar_t *>	atwm;

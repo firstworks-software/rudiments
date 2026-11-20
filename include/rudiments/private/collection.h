@@ -54,6 +54,15 @@
 		ssize_t	writeJsonValue(output *out, const valuetype &value);
 
 	protected:
+		// These write the first "length" characters of "value" as a
+		// quoted json string, with the escapes of jsonEncode().
+		ssize_t	writeJsonString(output *out,
+					const char *value,
+					uint64_t length);
+		ssize_t	writeJsonWideString(output *out,
+					const wchar_t *value,
+					size_t length);
+
 		// Each output converts wide characters in its own printf(), so
 		// the wide overloads write with printf() and count the bytes of
 		// the raw wide characters.
