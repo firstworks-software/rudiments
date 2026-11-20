@@ -436,6 +436,70 @@ int main(int argc, const char **argv) {
 				!charchardict.getValue((char *)"one"));
 	stdoutput.printf("\n");
 
+	// repeated keys with managed array keys
+	stdoutput.printf("repeated keys, managed array keys:\n");
+	dictionary<char *, char *>	rkdict;
+	rkdict.setManageArrayKeys(true);
+
+	// same key, different pointer
+	char	*rkkey1=charstring::duplicate("one");
+	rkdict.setValue(rkkey1,(char *)"first");
+	rkdict.setValue(charstring::duplicate("one"),(char *)"second");
+	test("repeat key: getCount",rkdict.getCount()==1);
+	test("repeat key: getKeys()->getCount",
+		rkdict.getKeys()->getCount()==1);
+	test("repeat key: getValue()",
+		!charstring::compare(rkdict.getValue((char *)"one"),"second"));
+	test("repeat key: stored key kept",
+		rkdict.getKeys()->getFirst()->getValue()==rkkey1);
+
+	// same key, same pointer
+	rkdict.setValue(rkkey1,(char *)"third");
+	test("repeat pointer: getCount",rkdict.getCount()==1);
+	test("repeat pointer: getValue()",
+		!charstring::compare(rkdict.getValue((char *)"one"),"third"));
+	test("repeat pointer: key still valid",
+		!charstring::compare(rkkey1,"one"));
+	rkdict.clear();
+
+	// same key, different pointers, through arrays
+	char	*rkkeys1[]={
+		charstring::duplicate("one"),
+		charstring::duplicate("two"),
+		NULL
+	};
+	char	*rkvals1[]={
+		(char *)"1",(char *)"2",NULL
+	};
+	char	*rkkeys2[]={
+		charstring::duplicate("one"),
+		charstring::duplicate("two"),
+		NULL
+	};
+	char	*rkvals2[]={
+		(char *)"11",(char *)"22",NULL
+	};
+	rkdict.setValues(rkkeys1,rkvals1);
+	rkdict.setValues(rkkeys2,rkvals2);
+	test("repeat array: getCount",rkdict.getCount()==2);
+	test("repeat array: getKeys()->getCount",
+		rkdict.getKeys()->getCount()==2);
+	test("repeat array: getValue() one",
+		!charstring::compare(rkdict.getValue((char *)"one"),"11"));
+	test("repeat array: getValue() two",
+		!charstring::compare(rkdict.getValue((char *)"two"),"22"));
+
+	// same pointers through arrays
+	rkdict.setValues(rkkeys1,rkvals2);
+	test("repeat array pointers: getCount",rkdict.getCount()==2);
+	test("repeat array pointers: getValue() one",
+		!charstring::compare(rkdict.getValue((char *)"one"),"11"));
+	test("repeat array pointers: keys still valid",
+		!charstring::compare(rkkeys1[0],"one") &&
+		!charstring::compare(rkkeys1[1],"two"));
+	rkdict.clear();
+	stdoutput.printf("\n");
+
 	// copy and assignment
 	for (uint16_t i=0; i<2; i++) {
 

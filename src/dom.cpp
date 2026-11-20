@@ -571,8 +571,9 @@ const char *dom::cacheString(const char *string) {
 	}
 	uint64_t	refcount;
 	if (pvt->_strcache.getValue((char *)string,&refcount)) {
-		pvt->_strcache.setValue((char *)string,refcount+1);
-		return pvt->_strcache.getKey((char *)string);
+		char	*key=pvt->_strcache.getKey((char *)string);
+		pvt->_strcache.setValue(key,refcount+1);
+		return key;
 	}
 	char	*copy=charstring::duplicate(string);
 	pvt->_strcache.setValue(copy,1);
@@ -587,7 +588,9 @@ void dom::unCacheString(const char *string) {
 	if (pvt->_strcache.getValue((char *)string,&refcount)) {
 		refcount--;
 		if (refcount) {
-			pvt->_strcache.setValue((char *)string,refcount);
+			pvt->_strcache.setValue(
+				pvt->_strcache.getKey((char *)string),
+				refcount);
 		} else {
 			pvt->_strcache.remove((char *)string);
 		}

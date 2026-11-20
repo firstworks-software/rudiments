@@ -211,6 +211,11 @@ inline
 void dictionary<keytype,valuetype>::setValue(keytype key, valuetype value) {
 	dictionarypair<keytype,valuetype>	*dnode=getNode(key);
 	if (dnode) {
+		// keep the stored key, free the passed one
+		if (key!=dnode->getKey()) {
+			node_delete_value(&key,this->getManageKeys(),
+						this->getManageArrayKeys());
+		}
 		dnode->setValue(value);
 	} else {
 		dnode=new dictionarypair<keytype,valuetype>(key,value);

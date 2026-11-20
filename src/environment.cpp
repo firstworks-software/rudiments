@@ -126,7 +126,8 @@ bool environment::setValue(const char *variable, const char *value) {
 		char	*oldpestr=NULL;
 		if (_envstrings->getValue((char *)variable,&oldpestr)) {
 			free((void *)oldpestr);
-			_envstrings->setValue((char *)variable,pestr);
+			_envstrings->setValue(
+				_envstrings->getKey((char *)variable),pestr);
 		} else {
 			_envstrings->setValue(
 				charstring::duplicate(variable),pestr);

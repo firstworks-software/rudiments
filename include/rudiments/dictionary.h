@@ -118,28 +118,43 @@ class dictionary : public dictionarycollection<keytype,valuetype> {
 
 		/** Sets the value associated with "key" to "value".
 		 *  If "key" already exists, the value currently
-		 *  accociated with it is replaced with "value". */
+		 *  accociated with it is replaced with "value".
+		 *
+		 *  If "key" is new, the dictionary stores it and, if
+		 *  setManageKeys(true) or setManageArrayKeys(true) has been
+		 *  called, deletes it later.
+		 *
+		 *  If "key" already exists and the dictionary manages keys,
+		 *  the dictionary keeps the stored key and deletes "key"
+		 *  (unless it is the stored key).  The caller must not use or
+		 *  delete "key" after the call in that case. */
 		void	setValue(keytype key, valuetype value);
 
 		/** Sets the value associated with each key in the "keys"
 		 *  array to the corresponding value in the "values" array.
 		 *  Assumes that keys is NULL terminated.
 		 *  If "key" already exists, the value currently
-		 *  accociated with it is replaced with "value". */
+		 *  accociated with it is replaced with "value".
+		 *  Each pair is set as setValue() sets it, so the same rules
+		 *  about the ownership of each key apply. */
 		void	setValues(keytype *keys, valuetype *values);
 
 		/** Sets the value associated with each key in the "keys"
 		 *  array to the corresponding value in the "values" array.
 		 *  Assumes that keys is NULL terminated.
 		 *  If "key" already exists, the value currently
-		 *  accociated with it is replaced with "value". */
+		 *  accociated with it is replaced with "value".
+		 *  Each pair is set as setValue() sets it, so the same rules
+		 *  about the ownership of each key apply. */
 		void	setValues(keytype const *keys, valuetype const *values);
 
 		/** Sets the value associated with each of "count" keys
 		 *  in the "keys" array to the corresponding value in the
 		 *  "values" array.
 		 *  If "key" already exists, the value currently
-		 *  accociated with it is replaced with "value". */
+		 *  accociated with it is replaced with "value".
+		 *  Each pair is set as setValue() sets it, so the same rules
+		 *  about the ownership of each key apply. */
 		void	setValues(keytype *keys, valuetype *values,
 							uint64_t count);
 
@@ -147,7 +162,9 @@ class dictionary : public dictionarycollection<keytype,valuetype> {
 		 *  in the "keys" array to the corresponding value in the
 		 *  "values" array.
 		 *  If "key" already exists, the value currently
-		 *  accociated with it is replaced with "value". */
+		 *  accociated with it is replaced with "value".
+		 *  Each pair is set as setValue() sets it, so the same rules
+		 *  about the ownership of each key apply. */
 		void	setValues(keytype const *keys, valuetype const *values,
 								uint64_t count);
 

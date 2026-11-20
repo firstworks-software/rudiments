@@ -400,6 +400,9 @@ bool url::httpOpen(const char *urlname, char *userpwd) {
 			headervalue=colon;
 		}
 
+		// The value points into the key's buffer, so a repeated
+		// header must replace the stored key, not keep it.
+		headerdict.remove(headerkey);
 		headerdict.setValue(headerkey,headervalue);
 	}
 	delete[] headers;
