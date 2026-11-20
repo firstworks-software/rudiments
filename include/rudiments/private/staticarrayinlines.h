@@ -105,7 +105,7 @@ template< class valuetype, uint64_t count >
 inline
 void staticarray<valuetype,count>::set(byte_t value,
 				uint64_t start, uint64_t setcount) {
-	bytestring::set(data,value+start,sizeof(valuetype)*setcount);
+	bytestring::set(data+start,value,sizeof(valuetype)*setcount);
 }
 
 template< class valuetype, uint64_t count >

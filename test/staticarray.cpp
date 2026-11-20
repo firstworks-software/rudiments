@@ -35,6 +35,89 @@ void testclass::setValue(uint32_t value) {
 
 #define COUNT 4096
 
+// an element with every byte set to "value"
+template< class valuetype >
+static valuetype filled(byte_t value) {
+	uint64_t	v=0;
+	for (uint8_t i=0; i<sizeof(valuetype); i++) {
+		v=(v<<8)|value;
+	}
+	return (valuetype)v;
+}
+
+// true if the elements of a 4 element array match
+template< class valuetype >
+static bool matches(staticarray<valuetype,4> &sa,
+			valuetype v0, valuetype v1,
+			valuetype v2, valuetype v3) {
+	return (sa[0]==v0 && sa[1]==v1 && sa[2]==v2 && sa[3]==v3);
+}
+
+// set() and zero() with and without a start, on a 4 element array
+template< class valuetype >
+static void testSetZero() {
+
+	stdoutput.printf("set and zero, %d byte elements...\n",
+						(int)sizeof(valuetype));
+
+	valuetype	ff=filled<valuetype>(0xff);
+	valuetype	ab=filled<valuetype>(0xab);
+	valuetype	x10=filled<valuetype>(0x10);
+	valuetype	z=0;
+
+	staticarray<valuetype,4>	sa;
+
+	// fill
+	sa.set(0xff);
+	test("set(value), fill is exact",matches(sa,ff,ff,ff,ff));
+
+	// start and count that are not 0
+	sa.zero(2,2);
+	test("zero(2,2)",matches(sa,ff,ff,z,z));
+	sa.set(0xff);
+	sa.set(0xab,1,2);
+	test("set(0xab,1,2)",matches(sa,ff,ab,ab,ff));
+	sa.set(0xff);
+	sa.set(0x10,3,1);
+	test("set(0x10,3,1)",matches(sa,ff,ff,ff,x10));
+
+	// count only
+	sa.set(0xff);
+	sa.zero(1);
+	test("zero(1)",matches(sa,z,ff,ff,ff));
+	sa.set(0xff);
+	sa.set(0xab,2);
+	test("set(0xab,2)",matches(sa,ab,ab,ff,ff));
+
+	// all elements
+	sa.set(0xff);
+	sa.set(0xab);
+	test("set(0xab)",matches(sa,ab,ab,ab,ab));
+	sa.zero();
+	test("zero()",matches(sa,z,z,z,z));
+
+	// start of 0
+	sa.set(0xff);
+	sa.set(0xab,0,3);
+	test("set(0xab,0,3)",matches(sa,ab,ab,ab,ff));
+	sa.set(0xff);
+	sa.zero(0,3);
+	test("zero(0,3)",matches(sa,z,z,z,ff));
+
+	// count of 0
+	sa.set(0xff);
+	sa.set(0xab,2,0);
+	test("set(0xab,2,0)",matches(sa,ff,ff,ff,ff));
+	sa.set(0xab,4,0);
+	test("set(0xab,4,0)",matches(sa,ff,ff,ff,ff));
+	sa.zero(1,0);
+	test("zero(1,0)",matches(sa,ff,ff,ff,ff));
+	sa.zero(0);
+	test("zero(0)",matches(sa,ff,ff,ff,ff));
+
+	stdoutput.printf("\n");
+}
+
 
 int main(int argc, const char **argv) {
 
@@ -265,6 +348,13 @@ int main(int argc, const char **argv) {
 	sa5.clear();
 	test("create, zero, clear",true);
 	stdoutput.printf("\n");
+
+
+
+	// set and zero
+	testSetZero<uint8_t>();
+	testSetZero<uint32_t>();
+	testSetZero<uint64_t>();
 
 
 

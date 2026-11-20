@@ -97,15 +97,19 @@ class staticarray : public arraycollection<valuetype> {
 		/** Deletes this instance of the staticarray class. */
 		~staticarray();
 
-		/** Sets all bytes of all elements of the staticcarray to 0. */
+		/** Sets all bytes of all elements of the staticarray to 0. */
 		void	zero();
 
 		/** Sets all bytes of the first "zerocount" elements of the
-		 *  dynamicarray to 0. */
+		 *  staticarray to 0. */
 		void	zero(uint64_t zerocount);
 
-		/** Sets all bytes of "zerocount" elements of the dynamicarray,
-		 *  starting at "start", to 0. */
+		/** Sets all bytes of "zerocount" elements of the staticarray,
+		 *  starting at element "start", to 0.
+		 *
+		 *  "start" and "zerocount" are in elements.  The range must
+		 *  lie within the array: "start" + "zerocount" must not be
+		 *  greater than the number of elements of the array. */
 		void	zero(uint64_t start, uint64_t zerocount);
 
 		/** Sets all bytes of all elements of the staticarray to
@@ -113,11 +117,15 @@ class staticarray : public arraycollection<valuetype> {
 		void	set(byte_t value);
 
 		/** Sets all bytes of the first "setcount" elements of the
- 		 *  dynamicarray to "value". */
+		 *  staticarray to "value". */
 		void	set(byte_t value, uint64_t setcount);
 
-		/** Sets all bytes of "setcount" elements of the dynamicarray,
-		 *  starting at "start", to "value". */
+		/** Sets all bytes of "setcount" elements of the staticarray,
+		 *  starting at element "start", to "value".
+		 *
+		 *  "start" and "setcount" are in elements.  The range must
+		 *  lie within the array: "start" + "setcount" must not be
+		 *  greater than the number of elements of the array. */
 		void	set(byte_t value, uint64_t start, uint64_t setcount);
 
 		/** Provides read/write access to the "index"th element of the

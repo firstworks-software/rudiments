@@ -303,6 +303,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   extra memory
 - fixed dynamicarray copies of an arraycollection crashing when the source
   is larger than the initial extent
+- fixed staticarray set() and zero() with a start index filling the wrong
+  elements with the wrong byte
 
 ### Security
 - fixed buffer overflow when unix socket file name is too long
