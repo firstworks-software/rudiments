@@ -87,3 +87,24 @@ off64_t sys::getMaxOff64T() {
 			}
 	}
 }
+
+inline
+int sys::getMinInt() {
+	// assumes two's complement
+	return -getMaxInt()-1;
+}
+
+inline
+int sys::getMaxInt() {
+	return (int)(((unsigned int)-1)/2);
+}
+
+inline
+unsigned int sys::getMinUInt() {
+	return 0;
+}
+
+inline
+unsigned int sys::getMaxUInt() {
+	return (unsigned int)-1;
+}

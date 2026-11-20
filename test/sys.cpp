@@ -230,6 +230,18 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("Max off64_t"
 			"				: %lld\n",
 			(int64_t)sys::getMaxOff64T());
+	stdoutput.printf("Min int"
+			"					: %lld\n",
+			(int64_t)sys::getMinInt());
+	stdoutput.printf("Max int"
+			"					: %lld\n",
+			(int64_t)sys::getMaxInt());
+	stdoutput.printf("Min unsigned int"
+			"			: %s\n",
+			charstring::parseNumber((uint64_t)sys::getMinUInt()));
+	stdoutput.printf("Max unsigned int"
+			"			: %s\n",
+			charstring::parseNumber((uint64_t)sys::getMaxUInt()));
 
 	// these should be non-empty/non-null
 	test("OS Name",!charstring::isNullOrEmpty(osname));
@@ -240,6 +252,21 @@ int main(int argc, const char **argv) {
 		!charstring::compare(sys::getRudimentsVersion(),
 						RUDIMENTS_VERSION));
 	test("Host Name",!charstring::isNullOrEmpty(hostname));
+
+	// int limits
+	test("Max int",sys::getMaxInt()>0);
+	test("Min int",sys::getMinInt()<0);
+	test("Min int/max int",sys::getMinInt()+1==-sys::getMaxInt());
+	test("Min unsigned int",sys::getMinUInt()==0);
+	test("Max unsigned int",sys::getMaxUInt()!=0);
+	test("Max unsigned int/max int",
+		sys::getMaxUInt()==(unsigned int)sys::getMaxInt()*2+1);
+	test("Max unsigned int/all bits",sys::getMaxUInt()==~0U);
+	test("Max int/max unsigned int",
+		sys::getMaxInt()==(int)(sys::getMaxUInt()>>1));
+	test("Max int minimum",sys::getMaxInt()>=32767);
+	test("Min int maximum",sys::getMinInt()<=-32767);
+	test("Max unsigned int minimum",sys::getMaxUInt()>=65535);
 
 	// these should either return non-zero or -1 for unsupported
 	test("Max Cmd Line Arg Length",

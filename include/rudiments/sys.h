@@ -477,6 +477,22 @@ class RUDIMENTS_DLLSPEC sys {
 		 *  platform. */
 		static	off64_t	getMaxOff64T();
 
+		/** Returns the minimum value that an int can store on this
+		 *  platform. */
+		static	int	getMinInt();
+
+		/** Returns the maximum value that an int can store on this
+		 *  platform. */
+		static	int	getMaxInt();
+
+		/** Returns the minimum value that an unsigned int can store on
+		 *  this platform. */
+		static	unsigned int	getMinUInt();
+
+		/** Returns the maximum value that an unsigned int can store on
+		 *  this platform. */
+		static	unsigned int	getMaxUInt();
+
 	#include <rudiments/private/sys.h>
 };
 

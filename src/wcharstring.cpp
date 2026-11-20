@@ -63,14 +63,6 @@
 	#include <locale.h>
 #endif
 
-// for INT_MAX
-#ifdef RUDIMENTS_HAVE_LIMITS_H
-	#include <limits.h>
-#endif
-#ifndef INT_MAX
-	#define INT_MAX 2147483647
-#endif
-
 const wchar_t *wcharstring::findLast(const wchar_t *haystack,
 					const wchar_t *needle) {
 
@@ -2808,7 +2800,7 @@ ssize_t wcharstring::printf(wchar_t *buffer, size_t length,
 		}
 
 		// vswprintf() returns at most INT_MAX characters
-		size_t	maxbuflen=(size_t)INT_MAX+1;
+		size_t	maxbuflen=(size_t)sys::getMaxInt()+1;
 		if (maxbuflen>((size_t)-1)/sizeof(wchar_t)) {
 			maxbuflen=((size_t)-1)/sizeof(wchar_t);
 		}

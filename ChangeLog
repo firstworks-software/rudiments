@@ -93,6 +93,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   takes the manage flags
 - added removeData(), clearData(), and detachData() methods to mvcresult
 - added detach() methods to wastebasket
+- added sys::getMinInt(), sys::getMaxInt(), sys::getMinUInt() and
+  sys::getMaxUInt()
 
 ### Changed
 - encryption and hash isSupported() is a non-pure virtual now, defaulting
