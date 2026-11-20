@@ -378,13 +378,13 @@ class RUDIMENTS_DLLSPEC output : virtual public object {
 		 *
 		 *  Returns the number of bytes written on success.
 		 *
-		 *  Returns RESULT_ERROR if the data could not be formatted,
-		 *  in which case nothing is written, or if fewer bytes were
-		 *  written than were formatted (a short write).  If the
-		 *  underlying write returns RESULT_ERROR, RESULT_TIMEOUT,
-		 *  RESULT_ABORT, or another negative result, then that result
-		 *  is returned.  After a short write or an error, part of the
-		 *  data may already have been written.
+		 *  Returns RESULT_ERROR if the data could not be formatted, or
+		 *  if fewer bytes were written than were formatted (a short
+		 *  write).  If the underlying write returns RESULT_ERROR,
+		 *  RESULT_TIMEOUT, RESULT_ABORT, or another negative result,
+		 *  then that result is returned.  After a formatting error, a
+		 *  short write or an error, part of the data may already have
+		 *  been written.
 		 *
 		 *  If the output is buffered, then data that fits in the
 		 *  buffer counts as written.  An error that occurs when the
@@ -408,13 +408,13 @@ class RUDIMENTS_DLLSPEC output : virtual public object {
 		 *
 		 *  Returns the number of bytes written on success.
 		 *
-		 *  Returns RESULT_ERROR if the data could not be formatted,
-		 *  in which case nothing is written, or if fewer bytes were
-		 *  written than were formatted (a short write).  If the
-		 *  underlying write returns RESULT_ERROR, RESULT_TIMEOUT,
-		 *  RESULT_ABORT, or another negative result, then that result
-		 *  is returned.  After a short write or an error, part of the
-		 *  data may already have been written.
+		 *  Returns RESULT_ERROR if the data could not be formatted, or
+		 *  if fewer bytes were written than were formatted (a short
+		 *  write).  If the underlying write returns RESULT_ERROR,
+		 *  RESULT_TIMEOUT, RESULT_ABORT, or another negative result,
+		 *  then that result is returned.  After a formatting error, a
+		 *  short write or an error, part of the data may already have
+		 *  been written.
 		 *
 		 *  If the output is buffered, then data that fits in the
 		 *  buffer counts as written.  An error that occurs when the
@@ -439,13 +439,13 @@ class RUDIMENTS_DLLSPEC output : virtual public object {
 		 *  converts the data to the character set of the current
 		 *  locale and returns the number of bytes written.
 		 *
-		 *  Returns RESULT_ERROR if the data could not be formatted,
-		 *  in which case nothing is written, or if less data was
-		 *  written than was formatted (a short write).  If the
-		 *  underlying write returns RESULT_ERROR, RESULT_TIMEOUT,
-		 *  RESULT_ABORT, or another negative result, then that result
-		 *  is returned.  After a short write or an error, part of the
-		 *  data may already have been written.
+		 *  Returns RESULT_ERROR if the data could not be formatted, or
+		 *  if less data was written than was formatted (a short write).
+		 *  If the underlying write returns RESULT_ERROR,
+		 *  RESULT_TIMEOUT, RESULT_ABORT, or another negative result,
+		 *  then that result is returned.  After a formatting error, a
+		 *  short write or an error, part of the data may already have
+		 *  been written.
 		 *
 		 *  If the output is buffered, then data that fits in the
 		 *  buffer counts as written.  An error that occurs when the
@@ -473,13 +473,13 @@ class RUDIMENTS_DLLSPEC output : virtual public object {
 		 *  converts the data to the character set of the current
 		 *  locale and returns the number of bytes written.
 		 *
-		 *  Returns RESULT_ERROR if the data could not be formatted,
-		 *  in which case nothing is written, or if less data was
-		 *  written than was formatted (a short write).  If the
-		 *  underlying write returns RESULT_ERROR, RESULT_TIMEOUT,
-		 *  RESULT_ABORT, or another negative result, then that result
-		 *  is returned.  After a short write or an error, part of the
-		 *  data may already have been written.
+		 *  Returns RESULT_ERROR if the data could not be formatted, or
+		 *  if less data was written than was formatted (a short write).
+		 *  If the underlying write returns RESULT_ERROR,
+		 *  RESULT_TIMEOUT, RESULT_ABORT, or another negative result,
+		 *  then that result is returned.  After a formatting error, a
+		 *  short write or an error, part of the data may already have
+		 *  been written.
 		 *
 		 *  If the output is buffered, then data that fits in the
 		 *  buffer counts as written.  An error that occurs when the
@@ -503,13 +503,13 @@ class RUDIMENTS_DLLSPEC output : virtual public object {
 		 *  character set of the current locale and returns the number
 		 *  of bytes written.
 		 *
-		 *  Returns RESULT_ERROR if the data could not be formatted,
-		 *  in which case nothing is written, or if less data was
-		 *  written than was formatted (a short write).  If the
-		 *  underlying write returns RESULT_ERROR, RESULT_TIMEOUT,
-		 *  RESULT_ABORT, or another negative result, then that result
-		 *  is returned.  After a short write or an error, part of the
-		 *  data may already have been written.
+		 *  Returns RESULT_ERROR if the data could not be formatted, or
+		 *  if less data was written than was formatted (a short write).
+		 *  If the underlying write returns RESULT_ERROR,
+		 *  RESULT_TIMEOUT, RESULT_ABORT, or another negative result,
+		 *  then that result is returned.  After a formatting error, a
+		 *  short write or an error, part of the data may already have
+		 *  been written.
 		 *
 		 *  If the output is buffered, then data that fits in the
 		 *  buffer counts as written.  An error that occurs when the
@@ -540,13 +540,13 @@ class RUDIMENTS_DLLSPEC output : virtual public object {
 		 *  character set of the current locale and returns the number
 		 *  of bytes written.
 		 *
-		 *  Returns RESULT_ERROR if the data could not be formatted,
-		 *  in which case nothing is written, or if less data was
-		 *  written than was formatted (a short write).  If the
-		 *  underlying write returns RESULT_ERROR, RESULT_TIMEOUT,
-		 *  RESULT_ABORT, or another negative result, then that result
-		 *  is returned.  After a short write or an error, part of the
-		 *  data may already have been written.
+		 *  Returns RESULT_ERROR if the data could not be formatted, or
+		 *  if less data was written than was formatted (a short write).
+		 *  If the underlying write returns RESULT_ERROR,
+		 *  RESULT_TIMEOUT, RESULT_ABORT, or another negative result,
+		 *  then that result is returned.  After a formatting error, a
+		 *  short write or an error, part of the data may already have
+		 *  been written.
 		 *
 		 *  If the output is buffered, then data that fits in the
 		 *  buffer counts as written.  An error that occurs when the

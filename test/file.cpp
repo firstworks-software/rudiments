@@ -381,6 +381,33 @@ static void printfErrorTests() {
 		test("unbuffered wide printf(), closed pipe",result==-1);
 	}
 	#endif
+
+	// unbuffered, a wide format that cannot be converted
+	if (wcharstring::supportsPrintf()) {
+		bool	utf8=setUtf8CType();
+		if (!utf8) {
+			stdoutput.printf("no UTF-8 locale available, "
+					"running in the C locale\n");
+		}
+		filedescriptor	readfd;
+		filedescriptor	writefd;
+		test("unbuffered bad format, create pipe",
+			filedescriptor::createPipe(&readfd,&writefd));
+		#ifdef _WIN32
+		ssize_t	result=writefd.printf(L"abc%hs","\xff");
+		#else
+		ssize_t	result=writefd.printf(L"abc%s","\xff");
+		#endif
+		if (result==-1) {
+			test("unbuffered wide printf(), bad format",true);
+		} else if (utf8) {
+			test("unbuffered wide printf(), bad format",false);
+		} else {
+			stdoutput.printf("unbuffered wide printf(), bad "
+				"format converted without error, skipped\n");
+		}
+		locale::setCType("C");
+	}
 	stdoutput.printf("\n");
 
 	signalmanager::alarm(0);
