@@ -172,6 +172,13 @@ int32_t comparator::compare(uint64_t value1, uint64_t value2) {
 
 inline
 int32_t comparator::compare(float value1, float value2) {
+	// nans equal each other and order after every number
+	if (value1!=value1) {
+		return (value2!=value2)?0:1*sense;
+	}
+	if (value2!=value2) {
+		return -1*sense;
+	}
 	if (value1<value2) {
 		return -1*sense;
 	} else if (value1==value2) {
@@ -183,6 +190,13 @@ int32_t comparator::compare(float value1, float value2) {
 
 inline
 int32_t comparator::compare(double value1, double value2) {
+	// nans equal each other and order after every number
+	if (value1!=value1) {
+		return (value2!=value2)?0:1*sense;
+	}
+	if (value2!=value2) {
+		return -1*sense;
+	}
 	if (value1<value2) {
 		return -1*sense;
 	} else if (value1==value2) {
@@ -194,6 +208,13 @@ int32_t comparator::compare(double value1, double value2) {
 
 inline
 int32_t comparator::compare(long double value1, long double value2) {
+	// nans equal each other and order after every number
+	if (value1!=value1) {
+		return (value2!=value2)?0:1*sense;
+	}
+	if (value2!=value2) {
+		return -1*sense;
+	}
 	if (value1<value2) {
 		return -1*sense;
 	} else if (value1==value2) {

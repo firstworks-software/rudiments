@@ -435,23 +435,21 @@ void testNonFinite(const char *name, const char *format) {
 
 	// keys are written with printf text, not as null
 
-	// getValue() can't find a nan key, so the value is NULL, which is
-	// written as null either way.
 	stringbuffer	nantext;
 	nantext.printf(format,nan);
 	stringbuffer	expected;
 	expected.append("{\"")->append(nantext.getString());
-	expected.append("\":null}");
+	expected.append("\":\"v\"}");
 	stringbuffer	expectedindent;
 	expectedindent.append("{\n\t\"")->append(nantext.getString());
-	expectedindent.append("\":null\n}\n");
+	expectedindent.append("\":\"v\"\n}\n");
 	title.clear();
 	title.append("dictionary (")->append(name)->append(" nan key)");
 	dictionary<floattype,const char *>	dn;
-	dn.setValue(nan,NULL);
+	dn.setValue(nan,"v");
 	testEscape(title.getString(),&dn,
 			expected.getString(),expectedindent.getString(),
-			nantext.getString(),NULL);
+			nantext.getString(),"v");
 	testFailWrite(title.getString(),&dn);
 
 	stringbuffer	inftext;

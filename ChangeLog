@@ -356,6 +356,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - fixed charstring::base64Decode() decoding white space inside a group as
   data
 - fixed wide printf() dropping the output after a null character
+- fixed nan values not being found or sorted correctly in a dictionary,
+  avltree, linkedlist or singlylinkedlist
 
 ### Security
 - fixed buffer overflow when unix socket file name is too long

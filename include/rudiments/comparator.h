@@ -134,17 +134,26 @@ class comparator {
 
 		/** Returns an integer less than, equal to, or greater than 0
 		 *  if value1 is, respectively, less than, equal to, or greater
-		 *  than value2. */
+		 *  than value2.  Two nans are equal and a nan is greater
+		 *  than every number, including infinity (less, if
+		 *  setReverse() is true).  Not in effect when compiled
+		 *  with -ffast-math. */
 		virtual	int32_t compare(float value1, float value2);
 
 		/** Returns an integer less than, equal to, or greater than 0
 		 *  if value1 is, respectively, less than, equal to, or greater
-		 *  than value2. */
+		 *  than value2.  Two nans are equal and a nan is greater
+		 *  than every number, including infinity (less, if
+		 *  setReverse() is true).  Not in effect when compiled
+		 *  with -ffast-math. */
 		virtual	int32_t compare(double value1, double value2);
 
 		/** Returns an integer less than, equal to, or greater than 0
 		 *  if value1 is, respectively, less than, equal to, or greater
-		 *  than value2. */
+		 *  than value2.  Two nans are equal and a nan is greater
+		 *  than every number, including infinity (less, if
+		 *  setReverse() is true).  Not in effect when compiled
+		 *  with -ffast-math. */
 		virtual	int32_t compare(long double value1,
 						long double value2);
 

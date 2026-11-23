@@ -635,5 +635,40 @@ int main(int argc, char **argv) {
 	}
 	stdoutput.printf("\n");
 
+	// 11172 dictionary - a nan key cannot be found
+	// nan sorts after every number, reverse puts nan first
+	stdoutput.printf("nan ordering:\n");
+	volatile double	zero=0;
+	double		nan=zero/zero;
+	double		inf=1/zero;
+	for (uint16_t r=0; r<2; r++) {
+		avltree<double>	nl;
+		nl.getComparator()->setReverse(r==1);
+		nl.insert(nan);
+		nl.insert(inf);
+		nl.insert(1.5);
+		nl.insert(-inf);
+		nl.insert(nan);
+		treenode<double>	*n=nl.getFirst();
+		double	v[5];
+		uint16_t	c=0;
+		while (n && c<5) {
+			v[c++]=n->getValue();
+			n=n->getNext();
+		}
+		bool	ok=(c==5 && !n);
+		if (ok && r==0) {
+			ok=(v[0]==-inf && v[1]==1.5 && v[2]==inf &&
+				v[3]!=v[3] && v[4]!=v[4]);
+		} else if (ok) {
+			ok=(v[0]!=v[0] && v[1]!=v[1] && v[2]==inf &&
+				v[3]==1.5 && v[4]==-inf);
+		}
+		test((r)?"nan ordering (reverse)":"nan ordering",ok);
+		test("find(nan)",nl.find(nan)!=NULL);
+		test("remove(nan)",nl.remove(nan));
+		test("remove(nan): getCount",nl.getCount()==4);
+	}
+	stdoutput.printf("\n");
 	return 0;
 }

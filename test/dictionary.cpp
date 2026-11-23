@@ -6,6 +6,59 @@
 #include <rudiments/stdio.h>
 #include "test.cpp"
 
+// 11172 dictionary - a nan key cannot be found
+template <class floattype>
+void testNanKey(const char *name) {
+
+	stdoutput.printf("%s nan key:\n",name);
+	volatile floattype	zero=0;
+	floattype		nan=zero/zero;
+	floattype		inf=1/zero;
+
+	// nan key alone
+	dictionary<floattype,const char *>	d;
+	d.setValue(nan,"v");
+	test("nan: setValue()/getValue()",
+		!charstring::compare(d.getValue(nan),"v"));
+	test("nan: getCount",d.getCount()==1);
+
+	// replace the value
+	d.setValue(nan,"w");
+	test("nan: setValue() replaces",
+		!charstring::compare(d.getValue(nan),"w"));
+	test("nan: replace getCount",d.getCount()==1);
+	test("nan: replace getKeys()->getCount",
+		d.getKeys()->getCount()==1);
+
+	// nan among ordinary and infinite keys
+	d.setValue(inf,"i");
+	d.setValue(-inf,"m");
+	d.setValue((floattype)1.5,"x");
+	d.setValue((floattype)0,"z");
+	test("mixed: getCount",d.getCount()==5);
+	test("mixed: getKeys()->getCount",d.getKeys()->getCount()==5);
+	test("mixed: getValue(nan)",
+		!charstring::compare(d.getValue(nan),"w"));
+	test("mixed: getValue(inf)",
+		!charstring::compare(d.getValue(inf),"i"));
+	test("mixed: getValue(-inf)",
+		!charstring::compare(d.getValue(-inf),"m"));
+	test("mixed: getValue(1.5)",
+		!charstring::compare(d.getValue((floattype)1.5),"x"));
+	test("mixed: getValue(0)",
+		!charstring::compare(d.getValue((floattype)0),"z"));
+
+	// remove
+	test("remove(nan)",d.remove(nan));
+	test("remove(nan): getValue()",!d.getValue(nan));
+	test("remove(nan): getCount",d.getCount()==4);
+	test("remove(nan) again",!d.remove(nan));
+	test("remove(nan): others kept",
+		!charstring::compare(d.getValue(inf),"i") &&
+		!charstring::compare(d.getValue(-inf),"m"));
+	stdoutput.printf("\n");
+}
+
 int main(int argc, const char **argv) {
 
 	header("dictionary");
@@ -647,6 +700,9 @@ int main(int argc, const char **argv) {
 		test("setValues(dict): values after source delete",survived);
 		stdoutput.printf("\n");
 	}
+
+	testNanKey<float>("float");
+	testNanKey<double>("double");
 
 	return 0;
 }
