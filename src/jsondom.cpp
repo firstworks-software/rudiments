@@ -310,15 +310,18 @@ ssize_t jsondom::writeNode(domnode *dn, output *out,
 				return retval;
 			}
 		}
-		if (!incOrShort(&retval,out->write('"'),1)) {
-			return retval;
-		}
 		const char	*name=dn->getName();
-		ssize_t		len=charstring::getLength(name);
-		if (!incOrShort(&retval,out->write(name,len),len)) {
-			return retval;
+		char		*enc=NULL;
+		uint64_t	enclen=0;
+		charstring::jsonEncode((name)?name:"",&enc,&enclen);
+		if (!enc) {
+			return RESULT_ERROR;
 		}
-		if (!incOrShort(&retval,out->write('"'),1)) {
+		bool	ok=incOrShort(&retval,
+				out->write(enc,(size_t)enclen),
+				(ssize_t)enclen);
+		delete[] enc;
+		if (!ok) {
 			return retval;
 		}
 		if (indent) {

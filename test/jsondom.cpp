@@ -738,6 +738,33 @@ int main() {
 		}
 	}
 
+	// object member names escaped on write
+	{
+		stdoutput.printf("member names...\n");
+
+		const char	*input="{\"a\":1,\"\":2,"
+					"\"q\\\"b\\\\s\\u000al\":3}";
+
+		jsondom	m;
+		test("member names parse",m.parseString(input));
+		m.writeFile("names.json",
+			permissions::parsePermString("rw-r--r--"),false);
+		char	*contents=file::getContents("names.json");
+		test("member names escaped on write",
+			!charstring::compare(contents,input));
+		jsondom	m2;
+		test("member names reparse",m2.parseString(contents));
+		delete[] contents;
+		file::remove("names.json");
+		m2.writeFile("names.json",
+			permissions::parsePermString("rw-r--r--"),false);
+		contents=file::getContents("names.json");
+		test("member names round trip",
+			!charstring::compare(contents,input));
+		delete[] contents;
+		file::remove("names.json");
+	}
+
 	stdoutput.printf("writeJson...\n");
 	testWriteJsonFailWrite();
 

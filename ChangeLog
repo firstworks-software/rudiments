@@ -235,7 +235,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   oversized CONTENT_LENGTH
 - jsonsax decodes \u escapes to UTF-8 and accepts exponents
 - jsonsax rejects invalid numbers such as leading zeros
-- jsondom escapes quotes, backslashes and control characters when writing
+- jsondom escapes quotes, backslashes and control characters in values
+  and member names when writing
 - fixed charstring::base64Decode() overruns on malformed input
 - fixed charstring::urlDecode() handling of malformed % sequences
 - fixed charstring::quotedPrintableDecode() reading one byte past the
