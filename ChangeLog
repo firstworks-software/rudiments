@@ -351,6 +351,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - fixed jsondom indented output of an array nested in an array
 - fixed csvsax not reporting the start of the body on a header-only input
   whose header ends at a bare line feed or carriage return
+- fixed the count that filedescriptor unbuffered read() returns after a
+  later pass fails, times out or is interrupted
 
 ### Security
 - fixed buffer overflow when unix socket file name is too long

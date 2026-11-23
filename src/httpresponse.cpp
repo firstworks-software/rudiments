@@ -5,6 +5,7 @@
 #include <rudiments/httpresponse.h>
 #include <rudiments/charstring.h>
 #include <rudiments/stringbuffer.h>
+#include <rudiments/error.h>
 
 class httpresponseprivate {
 	friend class httpresponse;
@@ -242,9 +243,14 @@ ssize_t httpresponse::write(file *filebuffer) {
 	char	buffer[1024];
 	ssize_t	count=0;
 	for (;;) {
+		error::clearError();
 		ssize_t	size=filebuffer->read(buffer,sizeof(buffer));
+		int32_t	err=error::getErrorNumber();
 		if (size<=0) {
 			return size;
+		}
+		if (size<(ssize_t)sizeof(buffer) && err && err!=EAGAIN) {
+			return RESULT_ERROR;
 		}
 		ssize_t	result=write(buffer,size);
 		if (result>=0) {

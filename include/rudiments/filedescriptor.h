@@ -523,7 +523,14 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 
 		/** Reads "size" bytes from the file descriptor into "buf".
 		 *  Returns the number of bytes that were successfully read or
-		 *  RESULT_ERROR if an error occurred. */
+		 *  RESULT_ERROR if an error occurred.
+		 *
+		 *  If an error, an interrupt or the shut-down flag occurs
+		 *  after some bytes were read, then the number of bytes that
+		 *  were read is returned instead of RESULT_ERROR.  After
+		 *  such a failure the system error is set, so a caller that
+		 *  needs to tell a short count from the end of data checks
+		 *  the system error.  See setAllowShortReads(). */
 		ssize_t	read(void *buf, size_t size);
 
 		/** Reads from the file desciptor into "buffer" until
@@ -677,7 +684,15 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  descriptor into "buffer" with a timeout of "sec" seconds
 		 *  and "usec" microseconds.  Returns the number of bytes that
 		 *  were successfully read, RESULT_ERROR if an error
-		 *  occurred or RESULT_TIMEOUT if a timeout occurred. */
+		 *  occurred or RESULT_TIMEOUT if a timeout occurred.
+		 *
+		 *  If an error, an interrupt, the shut-down flag or a timeout
+		 *  occurs after some bytes were read, then the number of bytes
+		 *  that were read is returned instead of RESULT_ERROR or
+		 *  RESULT_TIMEOUT.  After such a failure the system error is
+		 *  set, so a caller that needs to tell a short count from
+		 *  the end of data checks the system error.  See
+		 *  setAllowShortReads(). */
 		ssize_t	read(void *buf, size_t size,
 					int32_t sec, int32_t usec);
 
@@ -776,7 +791,10 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		/** If "retry" is true then a read will be automatically
 		 *  retried if it is interrupted by a signal.  If "retry" is
 		 *  false then, if a read is interrupted by a signal, it
-		 *  will fail and the system error will be set to EINTR.
+		 *  will fail and the system error will be set to EINTR.  If
+		 *  some bytes were read before the interrupt, then the number
+		 *  of bytes that were read is returned instead of
+		 *  RESULT_ERROR.
 		 *
 		 *  Defaults to false. */
 		void	setRetryInterruptedReads(bool retry);
@@ -847,7 +865,12 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  
 		 *  If "allow" is set false then read() will attempt to read
 		 *  the specified number of bytes from the file descriptor,
-		 *  even if several passes are necessary.
+		 *  even if several passes are necessary.  If a later pass
+		 *  fails, is interrupted, meets the shut-down flag or times
+		 *  out, then read() returns the number of bytes that the
+		 *  earlier passes read, unless that number is 0.  The system
+		 *  error is then set, so a caller that needs to tell a short
+		 *  count from the end of data checks the system error.
 		 *
 		 *  Defaults to false. */
 		void	setAllowShortReads(bool allow);

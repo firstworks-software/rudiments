@@ -1251,6 +1251,22 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 		return result;
 	}
 
+	// a short read that ended in an error is an error too,
+	// but a short read at the end of the data is not
+	if (result<(ssize_t)pvt->_writeblocksize &&
+			error::getErrorNumber() &&
+			error::getErrorNumber()!=EAGAIN) {
+		#if defined(DEBUG_BUFFERING)
+		debugPrintf("...error reading after %d bytes)\n",result);
+		#endif
+		#ifdef ETIMEDOUT
+		if (error::getErrorNumber()==ETIMEDOUT) {
+			return RESULT_TIMEOUT;
+		}
+		#endif
+		return RESULT_ERROR;
+	}
+
 	#if defined(DEBUG_BUFFERING)
 	if (!result) {
 		debugPrintf("...EOF");
@@ -1916,6 +1932,19 @@ ssize_t filedescriptor::unBufferedRead(byte_t *buf, size_t count,
 				#ifdef DEBUG_READ
 				debugPrintf(",ERROR/TIMEOUT)\n");
 				#endif
+				// return earlier passes, if any
+				if (totalread) {
+					if (waitresult==RESULT_TIMEOUT) {
+						#ifdef ETIMEDOUT
+						error::setErrorNumber(ETIMEDOUT);
+						#else
+						error::setErrorNumber(EIO);
+						#endif
+					} else if (!error::getErrorNumber()) {
+						error::setErrorNumber(EIO);
+					}
+					return totalread;
+				}
 				return waitresult;
 			}
 		}
@@ -1967,12 +1996,21 @@ ssize_t filedescriptor::unBufferedRead(byte_t *buf, size_t count,
 				// if we got an EINTR, then we may need to
 				// retry the read
 				if (process::getShutDownFlag()) {
+					// return earlier passes, if any
+					if (totalread) {
+						error::setErrorNumber(EINTR);
+						return totalread;
+					}
 					return RESULT_ERROR;
 				} else if (pvt->_retryinterruptedreads) {
 					continue;
 				} else {
-					totalread=totalread+actualread;
-					break;
+					// a failed pass adds nothing
+					if (actualread>0) {
+						totalread+=actualread;
+					}
+					return (totalread || actualread>=0)?
+						totalread:RESULT_ERROR;
 				}
 			} else if (actualread==0 &&
 					error::getErrorNumber()==0) {
@@ -1986,6 +2024,13 @@ ssize_t filedescriptor::unBufferedRead(byte_t *buf, size_t count,
 				#ifdef DEBUG_READ
 				debugPrintf(",ERROR)\n");
 				#endif
+				// return earlier passes, if any
+				if (totalread) {
+					if (!error::getErrorNumber()) {
+						error::setErrorNumber(EIO);
+					}
+					return totalread;
+				}
 				return RESULT_ERROR;
 			}
 		}

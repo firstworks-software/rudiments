@@ -44,6 +44,12 @@ const char	*flushfile="/tmp/testfileflush.txt";
 const char	*flushfile="testfileflush.txt";
 #endif
 
+#ifndef WIN32
+const char	*readfile="/tmp/testfileread.txt";
+#else
+const char	*readfile="testfileread.txt";
+#endif
+
 // getContents on files of known and unknown size and on read errors
 static void contentsTests() {
 
@@ -310,6 +316,81 @@ ssize_t failfd::lowLevelWrite(const void *buf, size_t count) {
 ssize_t failfd::countWritten(ssize_t result) {
 	if (result>0) {
 		written+=result;
+	}
+	return result;
+}
+
+// a file descriptor or file whose lowLevelRead() can shorten or fail
+template <class base>
+class failreader : public base {
+	public:
+			failreader(ssize_t mode);
+		void	setMode(ssize_t mode);
+		// the first count reads are short, then the mode applies
+		void	setShortFirst(uint32_t count);
+		// errno that a failed read sets
+		void	setFailErrorNumber(int32_t errnum);
+		// bytes that lowLevelRead() read
+		size_t	getRead();
+	protected:
+		ssize_t	lowLevelRead(void *buf, size_t count);
+	private:
+		ssize_t	countRead(ssize_t result);
+
+		// 0 is normal, anything else is returned
+		ssize_t		mode;
+		uint32_t	shortfirst;
+		int32_t		failerrnum;
+		size_t		bytesread;
+};
+
+template <class base>
+failreader<base>::failreader(ssize_t mode) : base() {
+	this->mode=mode;
+	shortfirst=0;
+	failerrnum=0;
+	bytesread=0;
+}
+
+template <class base>
+void failreader<base>::setMode(ssize_t mode) {
+	this->mode=mode;
+}
+
+template <class base>
+void failreader<base>::setShortFirst(uint32_t count) {
+	shortfirst=count;
+}
+
+template <class base>
+void failreader<base>::setFailErrorNumber(int32_t errnum) {
+	failerrnum=errnum;
+}
+
+template <class base>
+size_t failreader<base>::getRead() {
+	return bytesread;
+}
+
+template <class base>
+ssize_t failreader<base>::lowLevelRead(void *buf, size_t count) {
+	if (shortfirst) {
+		shortfirst--;
+		return countRead(base::lowLevelRead(buf,count/2));
+	}
+	if (!mode) {
+		return countRead(base::lowLevelRead(buf,count));
+	}
+	if (mode<0 && failerrnum) {
+		error::setErrorNumber(failerrnum);
+	}
+	return mode;
+}
+
+template <class base>
+ssize_t failreader<base>::countRead(ssize_t result) {
+	if (result>0) {
+		bytesread+=result;
 	}
 	return result;
 }
@@ -1349,6 +1430,315 @@ static void partialWriteTests() {
 	signalmanager::alarm(0);
 }
 
+// unbuffered read() in several passes, where a later pass
+// fails, is interrupted, times out, or meets the end of the data
+static void partialReadTests() {
+
+	signalmanager::alarm(60);
+
+	char		buf[8];
+	ssize_t		result;
+	int32_t		errnum;
+	stringbuffer	title;
+
+	// read error on the second pass, with errno set and with errno 0,
+	// either way errno is EIO afterwards
+	int32_t		errnums[]={EIO,0};
+	const char	*names[]={"second error","second silent error"};
+	for (uint16_t i=0; i<sizeof(errnums)/sizeof(errnums[0]); i++) {
+		failreader<filedescriptor>	readfd(-1);
+		filedescriptor			writefd;
+		title.clear();
+		title.append(names[i])->append(", create pipe");
+		test(title.getString(),
+			filedescriptor::createPipe(&readfd,&writefd));
+		title.clear();
+		title.append(names[i])->append(", write abcdefgh");
+		test(title.getString(),writefd.write("abcdefgh")==8);
+		readfd.setFailErrorNumber(errnums[i]);
+		readfd.setShortFirst(1);
+		result=readfd.read(buf,sizeof(buf));
+		errnum=error::getErrorNumber();
+		title.clear();
+		title.append(names[i])->append(", read 8");
+		test(title.getString(),result==4);
+		title.clear();
+		title.append(names[i])->append(", errno");
+		test(title.getString(),errnum==EIO);
+		title.clear();
+		title.append(names[i])->append(", read");
+		test(title.getString(),readfd.getRead()==4);
+		title.clear();
+		title.append(names[i])->append(", buffer holds abcd");
+		test(title.getString(),!bytestring::compare(buf,"abcd",4));
+		readfd.setMode(0);
+		title.clear();
+		title.append(names[i])->append(", pipe holds efgh");
+		test(title.getString(),pipeHolds(&readfd,&writefd,"efgh"));
+	}
+
+	// read error on the first pass
+	{
+		failreader<filedescriptor>	readfd(-1);
+		filedescriptor			writefd;
+		test("first error, create pipe",
+			filedescriptor::createPipe(&readfd,&writefd));
+		test("first error, write abcdefgh",
+				writefd.write("abcdefgh")==8);
+		readfd.setFailErrorNumber(EIO);
+		result=readfd.read(buf,sizeof(buf));
+		errnum=error::getErrorNumber();
+		test("first error, read 8",result==RESULT_ERROR);
+		test("first error, errno",errnum==EIO);
+		test("first error, read",!readfd.getRead());
+		readfd.setMode(0);
+		test("first error, pipe holds abcdefgh",
+				pipeHolds(&readfd,&writefd,"abcdefgh"));
+	}
+
+	// interrupt on the second pass, not retried
+	{
+		failreader<filedescriptor>	readfd(-1);
+		filedescriptor			writefd;
+		test("second eintr, create pipe",
+			filedescriptor::createPipe(&readfd,&writefd));
+		test("second eintr, write abcdefgh",
+				writefd.write("abcdefgh")==8);
+		readfd.setFailErrorNumber(EINTR);
+		readfd.setShortFirst(1);
+		result=readfd.read(buf,sizeof(buf));
+		errnum=error::getErrorNumber();
+		test("second eintr, read 8",result==4);
+		test("second eintr, errno",errnum==EINTR);
+		test("second eintr, read",readfd.getRead()==4);
+		test("second eintr, buffer holds abcd",
+				!bytestring::compare(buf,"abcd",4));
+		readfd.setMode(0);
+		test("second eintr, pipe holds efgh",
+				pipeHolds(&readfd,&writefd,"efgh"));
+	}
+
+	// interrupt on the first pass, not retried
+	{
+		failreader<filedescriptor>	readfd(-1);
+		filedescriptor			writefd;
+		test("first eintr, create pipe",
+			filedescriptor::createPipe(&readfd,&writefd));
+		test("first eintr, write abcdefgh",
+				writefd.write("abcdefgh")==8);
+		readfd.setFailErrorNumber(EINTR);
+		result=readfd.read(buf,sizeof(buf));
+		test("first eintr, read 8",result==RESULT_ERROR);
+		test("first eintr, read",!readfd.getRead());
+		readfd.setMode(0);
+		test("first eintr, pipe holds abcdefgh",
+				pipeHolds(&readfd,&writefd,"abcdefgh"));
+	}
+
+	// shut-down flag and an interrupt on the second pass
+	{
+		failreader<filedescriptor>	readfd(-1);
+		filedescriptor			writefd;
+		test("second shutdown, create pipe",
+			filedescriptor::createPipe(&readfd,&writefd));
+		test("second shutdown, write abcdefgh",
+				writefd.write("abcdefgh")==8);
+		readfd.setFailErrorNumber(EINTR);
+		readfd.setShortFirst(1);
+		process::setShutDownFlag(true);
+		result=readfd.read(buf,sizeof(buf));
+		errnum=error::getErrorNumber();
+		process::setShutDownFlag(false);
+		test("second shutdown, read 8",result==4);
+		test("second shutdown, errno",errnum==EINTR);
+		test("second shutdown, read",readfd.getRead()==4);
+		test("second shutdown, buffer holds abcd",
+				!bytestring::compare(buf,"abcd",4));
+		readfd.setMode(0);
+		test("second shutdown, pipe holds efgh",
+				pipeHolds(&readfd,&writefd,"efgh"));
+	}
+
+	// shut-down flag and an interrupt on the first pass
+	{
+		failreader<filedescriptor>	readfd(-1);
+		filedescriptor			writefd;
+		test("first shutdown, create pipe",
+			filedescriptor::createPipe(&readfd,&writefd));
+		test("first shutdown, write abcdefgh",
+				writefd.write("abcdefgh")==8);
+		readfd.setFailErrorNumber(EINTR);
+		process::setShutDownFlag(true);
+		result=readfd.read(buf,sizeof(buf));
+		process::setShutDownFlag(false);
+		test("first shutdown, read 8",result==RESULT_ERROR);
+		test("first shutdown, read",!readfd.getRead());
+		readfd.setMode(0);
+		test("first shutdown, pipe holds abcdefgh",
+				pipeHolds(&readfd,&writefd,"abcdefgh"));
+	}
+
+	// timeout after a partial pass
+	#ifndef WIN32
+	{
+		filedescriptor	readfd;
+		filedescriptor	writefd;
+		test("partial timeout, create pipe",
+			filedescriptor::createPipe(&readfd,&writefd));
+		test("partial timeout, write abcd",writefd.write("abcd")==4);
+		result=readfd.read(buf,sizeof(buf),0,1000);
+		errnum=error::getErrorNumber();
+		test("partial timeout, read 8",result==4);
+		#ifdef ETIMEDOUT
+		test("partial timeout, errno",errnum==ETIMEDOUT);
+		#else
+		test("partial timeout, errno",errnum==EIO);
+		#endif
+		test("partial timeout, buffer holds abcd",
+				!bytestring::compare(buf,"abcd",4));
+
+		// read from the empty pipe
+		test("empty timeout, read 8",
+			readfd.read(buf,sizeof(buf),0,1000)==RESULT_TIMEOUT);
+	}
+	#endif
+
+	// end of data after a partial pass
+	{
+		filedescriptor	readfd;
+		filedescriptor	writefd;
+		test("partial eof, create pipe",
+			filedescriptor::createPipe(&readfd,&writefd));
+		test("partial eof, write abcd",writefd.write("abcd")==4);
+		test("partial eof, close",writefd.close());
+		result=readfd.read(buf,sizeof(buf));
+		errnum=error::getErrorNumber();
+		test("partial eof, read 8",result==4);
+		test("partial eof, errno",!errnum);
+		test("partial eof, buffer holds abcd",
+				!bytestring::compare(buf,"abcd",4));
+	}
+
+	// library callers that read in several passes,
+	// with errno set and with errno 0
+	file::remove(readfile);
+	{
+		file	fl;
+		test("contents, create file",fl.create(readfile,
+				permissions::parsePermString("rw-rw----")));
+		test("contents, write abcdefgh",fl.write("abcdefgh")==8);
+		test("contents, close",fl.close());
+	}
+	const char	*cnames[]={"contents error","contents silent error"};
+	const char	*pnames[]={"pipe contents error",
+					"pipe contents silent error"};
+	const char	*snames[]={"storage error","storage silent error"};
+	for (uint16_t i=0; i<sizeof(errnums)/sizeof(errnums[0]); i++) {
+
+		// getContents() of a file of known size, read error mid-file
+		{
+			failreader<file>	fl(-1);
+			title.clear();
+			title.append(cnames[i])->append(", open");
+			test(title.getString(),fl.open(readfile,O_RDONLY));
+			fl.setFailErrorNumber(errnums[i]);
+			fl.setShortFirst(1);
+			byte_t	*contents=(byte_t *)1;
+			size_t	size=1;
+			title.clear();
+			title.append(cnames[i])->append(", byte_t **");
+			test(title.getString(),
+				fl.getContents(&contents,&size)==
+								RESULT_ERROR &&
+				!contents && !size);
+			title.clear();
+			title.append(cnames[i])->append(", read");
+			test(title.getString(),fl.getRead()==4);
+		}
+
+		// getContents() of a pipe, read error mid-data
+		{
+			failreader<file>	readfd(-1);
+			filedescriptor		writefd;
+			title.clear();
+			title.append(pnames[i])->append(", create pipe");
+			test(title.getString(),
+				filedescriptor::createPipe(&readfd,&writefd));
+			title.clear();
+			title.append(pnames[i])->append(", write abcdefgh");
+			test(title.getString(),writefd.write("abcdefgh")==8);
+			readfd.setFailErrorNumber(errnums[i]);
+			readfd.setShortFirst(1);
+			byte_t	*contents=(byte_t *)1;
+			size_t	size=1;
+			title.clear();
+			title.append(pnames[i])->append(", byte_t **");
+			test(title.getString(),
+				readfd.getContents(&contents,&size)==
+								RESULT_ERROR &&
+				!contents && !size);
+			// Linux reports a size of 0 for a pipe, BSD reports
+			// the bytes waiting in it, so the count of bytes read
+			// depends on the platform.
+			title.clear();
+			title.append(pnames[i])->append(", read");
+			test(title.getString(),readfd.getRead()>0);
+		}
+
+		// storage buffer, read error after part of the block
+		{
+			file	fl;
+			title.clear();
+			title.append(snames[i])->append(", open");
+			test(title.getString(),fl.open(readfile,O_RDWR));
+			failreader<filedescriptor>	readfd(-1);
+			readfd.setFileDescriptor(fl.duplicate());
+			title.clear();
+			title.append(snames[i])->append(", set is stream");
+			test(title.getString(),readfd.setIsStream(false));
+			title.clear();
+			title.append(snames[i])->append(", set buffer size");
+			test(title.getString(),readfd.setWriteBufferSize(8));
+			readfd.setFailErrorNumber(errnums[i]);
+			readfd.setShortFirst(1);
+			result=readfd.read(buf,sizeof(buf));
+			title.clear();
+			title.append(snames[i])->append(", read 8");
+			test(title.getString(),result==RESULT_ERROR);
+			title.clear();
+			title.append(snames[i])->append(", read");
+			test(title.getString(),readfd.getRead()==4);
+			readfd.close();
+			fl.close();
+		}
+	}
+
+	// storage buffer, timeout after part of the block
+	#ifdef ETIMEDOUT
+	{
+		file	fl;
+		test("storage timeout, open",fl.open(readfile,O_RDWR));
+		failreader<filedescriptor>	readfd(-1);
+		readfd.setFileDescriptor(fl.duplicate());
+		test("storage timeout, set is stream",
+					readfd.setIsStream(false));
+		test("storage timeout, set buffer size",
+					readfd.setWriteBufferSize(8));
+		readfd.setFailErrorNumber(ETIMEDOUT);
+		readfd.setShortFirst(1);
+		result=readfd.read(buf,sizeof(buf));
+		test("storage timeout, read 8",result==RESULT_TIMEOUT);
+		test("storage timeout, read",readfd.getRead()==4);
+		readfd.close();
+		fl.close();
+	}
+	#endif
+	file::remove(readfile);
+	stdoutput.printf("\n");
+
+	signalmanager::alarm(0);
+}
+
 int main(int argc, const char **argv) {
 
 	char	*osname=sys::getOperatingSystemName();
@@ -1717,6 +2107,9 @@ int main(int argc, const char **argv) {
 
 		stdoutput.printf("\npartial writes\n");
 		partialWriteTests();
+
+		stdoutput.printf("\npartial reads\n");
+		partialReadTests();
 
 	} else {
 

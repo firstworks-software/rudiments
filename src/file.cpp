@@ -424,8 +424,12 @@ ssize_t file::getContents(byte_t **buffer, size_t *buffersize,
 			} else {
 				intbuffersize=filesize;
 				intbuffer=new byte_t[intbuffersize+extra];
+				error::clearError();
 				ssize_t	bytes=read(intbuffer,intbuffersize);
-				if (bytes<0) {
+				if (bytes<0 ||
+					((size_t)bytes<intbuffersize &&
+					error::getErrorNumber() &&
+					error::getErrorNumber()!=EAGAIN)) {
 					delete[] intbuffer;
 					intbuffer=NULL;
 					intbuffersize=0;
@@ -445,8 +449,12 @@ ssize_t file::getContents(byte_t **buffer, size_t *buffersize,
 			// more intelligent size.
 			byte_t	buf[16*1024];
 			for (;;) {
+				error::clearError();
 				ssize_t	s=read(buf,sizeof(buf));
-				if (s<0) {
+				if (s<0 ||
+					(s<(ssize_t)sizeof(buf) &&
+					error::getErrorNumber() &&
+					error::getErrorNumber()!=EAGAIN)) {
 					// cts frees what it accumulated
 					failed=true;
 					break;
