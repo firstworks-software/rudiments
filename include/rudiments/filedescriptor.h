@@ -249,7 +249,12 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 
 		/** Writes "size" bytes of "buffer" to the file descriptor.
  		 *  Returns the number of bytes that were successfully written
- 		 *  or RESULT_ERROR if an error occurred. */
+ 		 *  or RESULT_ERROR if an error occurred.
+ 		 *
+ 		 *  If an error or an interrupt occurs after some bytes were
+ 		 *  written, then the number of bytes that were written is
+ 		 *  returned instead of RESULT_ERROR.  See
+ 		 *  setAllowShortWrites(). */
 		ssize_t	write(const void *buffer, size_t size);
 
 		/** Writes "number" to the file descriptor with a timeout of
@@ -417,7 +422,12 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  a timeout of "sec" seconds and "usec" microseconds.
 		 *  Returns the number of bytes that were successfully written
 		 *  or RESULT_ERROR if an error occurred or RESULT_TIMEOUT if a
-		 *  timeout occurred. */
+		 *  timeout occurred.
+		 *
+		 *  If an error, an interrupt or a timeout occurs after some
+		 *  bytes were written, then the number of bytes that were
+		 *  written is returned instead of RESULT_ERROR or
+		 *  RESULT_TIMEOUT.  See setAllowShortWrites(). */
 		ssize_t	write(const void *buffer, size_t size,
 					int32_t sec, int32_t usec);
 
@@ -778,7 +788,10 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		/** If "retry" is true then a write will be automatically
 		 *  retried if it is interrupted by a signal.  If "retry" is
 		 *  false then, if a write is interrupted by a signal, it
-		 *  will fail and the system error will be set to EINTR.
+		 *  will fail and the system error will be set to EINTR.  If
+		 *  some bytes were written before the interrupt, then the
+		 *  number of bytes that were written is returned instead of
+		 *  RESULT_ERROR.
 		 *
 		 *  Defaults to false. */
 		void	setRetryInterruptedWrites(bool retry);
@@ -851,7 +864,10 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  
 		 *  If "allow" is set false then write() will attempt to write
 		 *  the specified number of bytes to the file descriptor,
-		 *  even if several passes are necessary.
+		 *  even if several passes are necessary.  If a later pass
+		 *  fails, is interrupted or times out, then write() returns
+		 *  the number of bytes that the earlier passes wrote, unless
+		 *  that number is 0.
 		 *
 		 *  When write buffering is enabled, this setting also applies
 		 *  to the flush of a full stream buffer that write() makes.

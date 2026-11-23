@@ -2429,6 +2429,11 @@ ssize_t filedescriptor::unBufferedWrite(
 				#ifdef DEBUG_WRITE
 				debugPrintf(",ERROR/TIMEOUT)\n");
 				#endif
+				// return earlier passes, if any
+				if (totalwrite) {
+					error::setErrorNumber(olderrno);
+					return totalwrite;
+				}
 				return waitresult;
 			}
 		}
@@ -2481,13 +2486,24 @@ ssize_t filedescriptor::unBufferedWrite(
 				// if we got an EINTR, then we may need to
 				// retry the write
 				if (process::getShutDownFlag()) {
+					// return earlier passes, if any
+					if (totalwrite) {
+						pvt->_writeerrno=EINTR;
+						error::setErrorNumber(olderrno);
+						return totalwrite;
+					}
 					return RESULT_ERROR;
 				} else if (pvt->_retryinterruptedwrites) {
 					continue;
 				} else {
-					totalwrite=totalwrite+actualwrite;
+					// a failed pass adds nothing
+					if (actualwrite>0) {
+						totalwrite+=actualwrite;
+					}
 					pvt->_writeerrno=EINTR;
-					break;
+					error::setErrorNumber(olderrno);
+					return (totalwrite || actualwrite>=0)?
+						totalwrite:RESULT_ERROR;
 				}
 			} else if (actualwrite==0 &&
 					error::getErrorNumber()==0) {
@@ -2501,6 +2517,12 @@ ssize_t filedescriptor::unBufferedWrite(
 				#ifdef DEBUG_WRITE
 				debugPrintf(",ERROR)\n");
 				#endif
+				// return earlier passes, if any
+				if (totalwrite) {
+					pvt->_writeerrno=error::getErrorNumber();
+					error::setErrorNumber(olderrno);
+					return totalwrite;
+				}
 				return RESULT_ERROR;
 			}
 		}

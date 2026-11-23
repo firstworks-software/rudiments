@@ -239,6 +239,8 @@ class failfd : public filedescriptor {
 		void	setMode(ssize_t mode);
 		// the first count writes pass, the mode applies after them
 		void	setPassFirst(uint32_t count);
+		// after those, count writes are short, then the mode applies
+		void	setShortFirst(uint32_t count);
 		// errno that a failed write sets
 		void	setFailErrorNumber(int32_t errnum);
 		// bytes that lowLevelWrite() wrote
@@ -251,6 +253,7 @@ class failfd : public filedescriptor {
 		// 0 is normal, 1 is a short write, anything else is returned
 		ssize_t		mode;
 		uint32_t	passfirst;
+		uint32_t	shortfirst;
 		int32_t		failerrnum;
 		size_t		written;
 };
@@ -258,6 +261,7 @@ class failfd : public filedescriptor {
 failfd::failfd(ssize_t mode) : filedescriptor() {
 	this->mode=mode;
 	passfirst=0;
+	shortfirst=0;
 	failerrnum=0;
 	written=0;
 }
@@ -268,6 +272,10 @@ void failfd::setMode(ssize_t mode) {
 
 void failfd::setPassFirst(uint32_t count) {
 	passfirst=count;
+}
+
+void failfd::setShortFirst(uint32_t count) {
+	shortfirst=count;
 }
 
 void failfd::setFailErrorNumber(int32_t errnum) {
@@ -282,6 +290,10 @@ ssize_t failfd::lowLevelWrite(const void *buf, size_t count) {
 	if (passfirst) {
 		passfirst--;
 		return countWritten(filedescriptor::lowLevelWrite(buf,count));
+	}
+	if (shortfirst) {
+		shortfirst--;
+		return countWritten(filedescriptor::lowLevelWrite(buf,count/2));
 	}
 	if (!mode) {
 		return countWritten(filedescriptor::lowLevelWrite(buf,count));
@@ -1196,6 +1208,147 @@ static void writeErrorTests() {
 	signalmanager::alarm(0);
 }
 
+// unbuffered write() in several passes, where a later pass
+// fails, is interrupted, or times out
+static void partialWriteTests() {
+
+	signalmanager::alarm(60);
+
+	// write error on the second pass
+	{
+		filedescriptor	readfd;
+		failfd		writefd(-1);
+		test("second error, create pipe",
+			filedescriptor::createPipe(&readfd,&writefd));
+		writefd.setFailErrorNumber(EIO);
+		writefd.setShortFirst(1);
+		test("second error, write abcdefgh",
+				writefd.write("abcdefgh")==4);
+		test("second error, written",writefd.getWritten()==4);
+		test("second error, pipe holds abcd",
+				pipeHolds(&readfd,&writefd,"abcd"));
+	}
+
+	// write error on the first pass
+	{
+		filedescriptor	readfd;
+		failfd		writefd(-1);
+		test("first error, create pipe",
+			filedescriptor::createPipe(&readfd,&writefd));
+		writefd.setFailErrorNumber(EIO);
+		test("first error, write abcdefgh",
+				writefd.write("abcdefgh")==RESULT_ERROR);
+		test("first error, written",!writefd.getWritten());
+		test("first error, pipe holds nothing",
+				pipeHolds(&readfd,&writefd,""));
+	}
+
+	// interrupt on the second pass, not retried
+	{
+		filedescriptor	readfd;
+		failfd		writefd(-1);
+		test("second eintr, create pipe",
+			filedescriptor::createPipe(&readfd,&writefd));
+		writefd.setFailErrorNumber(EINTR);
+		writefd.setShortFirst(1);
+		test("second eintr, write abcdefgh",
+				writefd.write("abcdefgh")==4);
+		test("second eintr, written",writefd.getWritten()==4);
+		test("second eintr, pipe holds abcd",
+				pipeHolds(&readfd,&writefd,"abcd"));
+	}
+
+	// interrupt on the first pass, not retried
+	{
+		filedescriptor	readfd;
+		failfd		writefd(-1);
+		test("first eintr, create pipe",
+			filedescriptor::createPipe(&readfd,&writefd));
+		writefd.setFailErrorNumber(EINTR);
+		test("first eintr, write abcdefgh",
+				writefd.write("abcdefgh")==RESULT_ERROR);
+		test("first eintr, written",!writefd.getWritten());
+		test("first eintr, pipe holds nothing",
+				pipeHolds(&readfd,&writefd,""));
+	}
+
+	// shut-down flag and an interrupt on the second pass
+	{
+		filedescriptor	readfd;
+		failfd		writefd(-1);
+		test("second shutdown, create pipe",
+			filedescriptor::createPipe(&readfd,&writefd));
+		writefd.setFailErrorNumber(EINTR);
+		writefd.setShortFirst(1);
+		process::setShutDownFlag(true);
+		ssize_t	result=writefd.write("abcdefgh");
+		process::setShutDownFlag(false);
+		test("second shutdown, write abcdefgh",result==4);
+		test("second shutdown, written",writefd.getWritten()==4);
+		test("second shutdown, pipe holds abcd",
+				pipeHolds(&readfd,&writefd,"abcd"));
+	}
+
+	// shut-down flag and an interrupt on the first pass
+	{
+		filedescriptor	readfd;
+		failfd		writefd(-1);
+		test("first shutdown, create pipe",
+			filedescriptor::createPipe(&readfd,&writefd));
+		writefd.setFailErrorNumber(EINTR);
+		process::setShutDownFlag(true);
+		ssize_t	result=writefd.write("abcdefgh");
+		process::setShutDownFlag(false);
+		test("first shutdown, write abcdefgh",result==RESULT_ERROR);
+		test("first shutdown, written",!writefd.getWritten());
+		test("first shutdown, pipe holds nothing",
+				pipeHolds(&readfd,&writefd,""));
+	}
+
+	// timeout after a partial pass
+	#ifndef WIN32
+	{
+		filedescriptor	readfd;
+		failfd		writefd(0);
+		test("partial timeout, create pipe",
+			filedescriptor::createPipe(&readfd,&writefd));
+
+		// fill the pipe
+		char	filler[4096];
+		bytestring::set(filler,'x',sizeof(filler));
+		test("partial timeout, set non-blocking",
+				writefd.setNonBlockingMode(true));
+		ssize_t	result;
+		do {
+			result=writefd.write(filler,sizeof(filler));
+		} while (result==(ssize_t)sizeof(filler));
+
+		// make room for part of the next write
+		test("partial timeout, read 4096",
+			readfd.read(filler,sizeof(filler))==
+						(ssize_t)sizeof(filler));
+
+		// write more than there is room for
+		char	buf[8192];
+		bytestring::set(buf,'y',sizeof(buf));
+		size_t	before=writefd.getWritten();
+		test("partial timeout, write 8192",
+			writefd.write(buf,sizeof(buf),0,1000)==4096);
+		test("partial timeout, written",
+				writefd.getWritten()-before==4096);
+
+		// write to the full pipe
+		test("full timeout, write 8192",
+			writefd.write(buf,sizeof(buf),0,1000)==RESULT_TIMEOUT);
+		test("full timeout, written",
+				writefd.getWritten()-before==4096);
+	}
+	#endif
+	stdoutput.printf("\n");
+
+	signalmanager::alarm(0);
+}
+
 int main(int argc, const char **argv) {
 
 	char	*osname=sys::getOperatingSystemName();
@@ -1561,6 +1714,9 @@ int main(int argc, const char **argv) {
 
 		stdoutput.printf("\nwrite errors\n");
 		writeErrorTests();
+
+		stdoutput.printf("\npartial writes\n");
+		partialWriteTests();
 
 	} else {
 

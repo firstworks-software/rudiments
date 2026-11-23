@@ -343,6 +343,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - fixed jsondom parsing of a value after an array nested in an array
 - fixed filedescriptor wide printf() clearing errno on success
 - fixed dom writeFile() error reports on a failed write or final flush
+- fixed the count that filedescriptor unbuffered write() returns after a
+  later pass fails, times out or is interrupted
 
 ### Security
 - fixed buffer overflow when unix socket file name is too long
