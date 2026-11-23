@@ -2836,15 +2836,19 @@ ssize_t wcharstring::printf(wchar_t *buffer, size_t length,
 			va_end(argp1);
 
 			// success, unless Solaris 7 filled the buffer
-			// (size<buflen here, so neither copy overruns "buf")
+			// (size<buflen here, so neither copy overruns "buf",
+			// and the copies are bytewise because "buf" can
+			// contain nulls)
 			if (size>-1 && (size_t)size!=buflen) {
 				if ((size_t)(size+1)>length) {
 					// just copy out what we can
-					copy(buffer,buf,length);
+					bytestring::copy(buffer,buf,
+						length*sizeof(wchar_t));
 				} else {
 					// copy out everything, including
 					// the NULL terminator
-					copy(buffer,buf,size+1);
+					bytestring::copy(buffer,buf,
+						(size+1)*sizeof(wchar_t));
 				}
 				free(buf);
 				return size;

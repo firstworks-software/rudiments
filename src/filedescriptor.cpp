@@ -3485,26 +3485,8 @@ ssize_t filedescriptor::printfDelegate(const char *format, va_list *argp) {
 		ssize_t	size=charstring::printf(&buffer,format,argp);
 	#endif
 
-	// Use write(), even without a write buffer, so that the socket
-	// layer and any lowLevelWrite() override see the data.
-	if (size<0) {
-		size=RESULT_ERROR;
-	} else {
-		pvt->_writeerrno=0;
-		ssize_t	result=write(buffer,size);
-		if (result==size) {
-			error::setErrorNumber(olderr);
-		} else {
-
-			// An unbuffered write that ends early on EAGAIN or
-			// EINTR restores the old errno.  So set EAGAIN or
-			// EINTR here.
-			if (pvt->_writeerrno) {
-				error::setErrorNumber(pvt->_writeerrno);
-			}
-			size=(result<0)?result:RESULT_ERROR;
-		}
-	}
+	// write the buffer to the file descriptor
+	size=(size<0)?RESULT_ERROR:printfWrite(buffer,size,olderr);
 
 	// clean up
 	#ifdef RUDIMENTS_HAVE_VASPRINTF
@@ -3514,6 +3496,85 @@ ssize_t filedescriptor::printfDelegate(const char *format, va_list *argp) {
 	#endif
 
 	return size;
+}
+
+ssize_t filedescriptor::printfWrite(const char *buffer, ssize_t size,
+							int32_t olderr) {
+
+	// Use write(), even without a write buffer, so that the socket
+	// layer and any lowLevelWrite() override see the data.
+	pvt->_writeerrno=0;
+	ssize_t	result=write(buffer,size);
+	if (result==size) {
+		error::setErrorNumber(olderr);
+		return size;
+	}
+
+	// An unbuffered write that ends early on EAGAIN or
+	// EINTR restores the old errno.  So set EAGAIN or
+	// EINTR here.
+	if (pvt->_writeerrno) {
+		error::setErrorNumber(pvt->_writeerrno);
+	}
+	return (result<0)?result:RESULT_ERROR;
+}
+
+// Converts "size" wide characters at "buffer" to the character set of the
+// current locale, one null-separated run at a time, because %ls stops at a
+// null.  "buffer[size]" must be a null.  Sets "converted" to a new buffer
+// that the caller must delete[].  Returns the number of bytes, or -1 on an
+// error.
+static ssize_t wideToLocale(const wchar_t *buffer, size_t size,
+							char **converted) {
+
+	*converted=NULL;
+	const wchar_t	*end=buffer+size;
+
+	// measure the runs, plus a null after each one
+	size_t	total=0;
+	const wchar_t	*run=buffer;
+	for (;;) {
+		// Some compilers throw a warning if they see "printf(NULL..."
+		// at all.  Using *converted here works around that.
+		ssize_t	mbsize=charstring::printf(*converted,0,"%ls",run);
+		if (mbsize<0) {
+			return -1;
+		}
+		if ((size_t)mbsize>=(((size_t)-1)>>1)-total) {
+			#ifdef EOVERFLOW
+			error::setErrorNumber(EOVERFLOW);
+			#endif
+			return -1;
+		}
+		total+=mbsize+1;
+		run+=wcharstring::getLength(run);
+		if (run>=end) {
+			break;
+		}
+		run++;
+	}
+
+	// convert the runs, separated by nulls
+	char	*buf=new char[total];
+	char	*pos=buf;
+	run=buffer;
+	for (;;) {
+		size_t	remain=total-(pos-buf);
+		ssize_t	mbsize=charstring::printf(pos,remain,"%ls",run);
+		if (mbsize<0 || (size_t)mbsize>=remain) {
+			delete[] buf;
+			return -1;
+		}
+		pos+=mbsize+1;
+		run+=wcharstring::getLength(run);
+		if (run>=end) {
+			break;
+		}
+		run++;
+	}
+
+	*converted=buf;
+	return total-1;
 }
 
 ssize_t filedescriptor::printfDelegate(const wchar_t *format, va_list *argp) {
@@ -3559,18 +3620,16 @@ ssize_t filedescriptor::printfDelegate(const wchar_t *format, va_list *argp) {
 	size=write(convertedbuffer);
 	delete[] convertedbuffer;
 	#else
-	// print the buffer to the filedescriptor
-	// (converting to the current locale during the process)
-	size=printf("%ls",buffer);
+	// convert the buffer to the current locale
+	// and write it to the file descriptor
+	char	*converted=NULL;
+	size=wideToLocale(buffer,size,&converted);
+	size=(size<0)?RESULT_ERROR:printfWrite(converted,size,olderr);
+	delete[] converted;
 	#endif
 
 	// clean up
 	delete[] buffer;
-
-	// formatting clears errno, so restore it on success
-	if (size>=0) {
-		error::setErrorNumber(olderr);
-	}
 
 	return size;
 }

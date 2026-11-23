@@ -11,6 +11,7 @@
 #include <rudiments/locale.h>
 #include <rudiments/stdio.h>
 #include <rudiments/stringbuffer.h>
+#include <wchar.h>
 #include "test.cpp"
 
 // seconds before a hang kills the test
@@ -581,6 +582,14 @@ static void testPrintfPaths() {
 		test("wide printf(), large data",
 			!bytestring::compare(bb.getBuffer()+4*ws,
 					L"000000000000",12*ws));
+		bb.clear();
+
+		// a null in the data (a non-const variable, because a
+		// constant 0 selects the va_list * overload)
+		wint_t	nul=0;
+		wchar_t	withnull[]={L'a',0,L'b'};
+		test("wide printf(), null return",bb.printf(L"a%lcb",nul)==3);
+		test("wide printf(), null data",holds(&bb,withnull,3*ws));
 		bb.clear();
 	}
 

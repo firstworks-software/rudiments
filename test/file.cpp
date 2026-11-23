@@ -21,6 +21,7 @@
 #include <rudiments/ucs2charstring.h>
 #include <rudiments/locale.h>
 #include <signal.h>
+#include <wchar.h>
 #ifndef _WIN32
 	#include <unistd.h>
 #endif
@@ -483,6 +484,8 @@ size_t stublayer::getLargestWrite() {
 
 static bool pipeHolds(filedescriptor *readfd, filedescriptor *writefd,
 						const char *expected);
+static bool pipeHolds(filedescriptor *readfd, filedescriptor *writefd,
+				const char *expected, size_t length);
 
 // set a UTF-8 character type locale, if the host has one
 static bool setUtf8CType() {
@@ -669,6 +672,52 @@ static void printfErrorTests() {
 		locale::setCType("C");
 	}
 
+	// wide, a null in the data (a non-const variable, because a
+	// constant 0 selects the va_list * overload)
+	if (wcharstring::supportsPrintf()) {
+		wint_t	nul=0;
+		{
+			filedescriptor	readfd;
+			failfd		writefd(0);
+			test("unbuffered null, create pipe",
+				filedescriptor::createPipe(&readfd,&writefd));
+			test("unbuffered wide printf(), null",
+				writefd.printf(L"a%lcb",nul)==3);
+			test("unbuffered wide printf(), null, pipe holds it",
+				pipeHolds(&readfd,&writefd,"a\0b",3));
+		}
+		{
+			filedescriptor	readfd;
+			failfd		writefd(0);
+			test("buffered null, create pipe",
+				filedescriptor::createPipe(&readfd,&writefd));
+			test("buffered null, set buffer size",
+					writefd.setWriteBufferSize(4));
+			test("buffered wide printf(), null",
+				writefd.printf(L"a%lcb",nul)==3);
+			test("buffered wide printf(), null, flush",
+				writefd.flushWriteBuffer(-1,-1));
+			test("buffered wide printf(), null, pipe holds it",
+				pipeHolds(&readfd,&writefd,"a\0b",3));
+		}
+		if (setUtf8CType()) {
+			filedescriptor	readfd;
+			failfd		writefd(0);
+			test("multibyte null, create pipe",
+				filedescriptor::createPipe(&readfd,&writefd));
+			test("multibyte wide printf(), null",
+				writefd.printf(L"h%lsllo|%lc|x",
+						L"\x00e9",nul)==10);
+			test("multibyte wide printf(), null, pipe holds it",
+				pipeHolds(&readfd,&writefd,
+						"h\xc3\xa9llo|\0|x",10));
+		} else {
+			stdoutput.printf("no UTF-8 locale available, "
+				"multibyte wide printf(), null, skipped\n");
+		}
+		locale::setCType("C");
+	}
+
 	// ucs2 printf is unsupported, fails and writes nothing
 	if (!ucs2charstring::supportsPrintf()) {
 		ucs2literal(format,"abc");
@@ -740,6 +789,25 @@ static void printfSocketLayerTests() {
 			title.append(", pipe empty");
 			test(title.getString(),pipeHolds(&readfd,&writefd,""));
 		}
+	}
+
+	// wide, a null in the data, in one write
+	if (wcharstring::supportsPrintf()) {
+		stublayer	layer(1024);
+		filedescriptor	readfd;
+		filedescriptor	writefd;
+		test("socket layer null, create pipe",
+			filedescriptor::createPipe(&readfd,&writefd));
+		writefd.setSocketLayer(&layer);
+		wint_t	nul=0;
+		ssize_t	result=writefd.printf(L"a%lcb",nul);
+		writefd.setSocketLayer(NULL);
+		test("wide printf() null, count",result==3);
+		test("wide printf() null, layer has it",
+			!bytestring::compare(layer.getData(),"a\0b",3));
+		test("wide printf() null, layer writes",layer.getWrites()==1);
+		test("wide printf() null, pipe empty",
+					pipeHolds(&readfd,&writefd,""));
 	}
 	stdoutput.printf("\n");
 
@@ -907,10 +975,17 @@ static void printfErrnoTests() {
 // exactly the expected data
 static bool pipeHolds(filedescriptor *readfd, filedescriptor *writefd,
 						const char *expected) {
+	return pipeHolds(readfd,writefd,expected,
+				charstring::getLength(expected));
+}
+
+// close the write side of a pipe and check that the read side holds
+// exactly the "length" bytes of expected data
+static bool pipeHolds(filedescriptor *readfd, filedescriptor *writefd,
+				const char *expected, size_t length) {
 	if (!writefd->close()) {
 		return false;
 	}
-	size_t	length=charstring::getLength(expected);
 	char	buf[64];
 	if (readfd->read(buf,sizeof(buf))!=(ssize_t)length ||
 			bytestring::compare(buf,expected,length)) {

@@ -355,6 +355,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   later pass fails, times out or is interrupted
 - fixed charstring::base64Decode() decoding white space inside a group as
   data
+- fixed wide printf() dropping the output after a null character
 
 ### Security
 - fixed buffer overflow when unix socket file name is too long

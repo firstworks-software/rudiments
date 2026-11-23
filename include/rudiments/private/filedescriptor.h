@@ -75,6 +75,9 @@
 
 		filedescriptorprivate	*pvt;
 
+		ssize_t	printfWrite(const char *buffer, ssize_t size,
+							int32_t olderr);
+
 	public:
 		filedescriptor(int32_t fd);
 		static void	*getHandleFromFileDescriptor(int32_t fd);

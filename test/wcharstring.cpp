@@ -12,6 +12,7 @@
 #include <rudiments/stdio.h>
 #include <limits.h>
 #include <errno.h>
+#include <wchar.h>
 #include <rudiments/signalclasses.h>
 #include "test.cpp"
 
@@ -1008,8 +1009,32 @@ int main(int argc, const char **argv) {
 		wchar_t	*buf=NULL;
 		size=wcharstring::printf(&buf,L"%lc%d%ls",L'a',123,L"hello");
 		test("size",size==9);
-		test("contents",!wcharstring::compare(buffer,L"a123hello"));
+		test("contents",!wcharstring::compare(buf,L"a123hello"));
 		delete[] buf;
+
+		// a null in the data (a non-const variable, because a
+		// constant 0 selects the va_list * overload)
+		wint_t	nul=0;
+		size=wcharstring::printf(buffer,20,L"a%lcb",nul);
+		test("null size",size==3);
+		test("null contents",
+			buffer[0]==L'a' && buffer[1]==0 &&
+			buffer[2]==L'b' && buffer[3]==0);
+		wchar_t	*nbuf=NULL;
+		size=wcharstring::printf(&nbuf,L"a%lcb",nul);
+		test("null size",size==3);
+		test("null contents",
+			nbuf && nbuf[0]==L'a' && nbuf[1]==0 &&
+			nbuf[2]==L'b' && nbuf[3]==0);
+		delete[] nbuf;
+		for (size_t i=0; i<20; i++) {
+			buffer[i]=L'z';
+		}
+		size=wcharstring::printf(buffer,3,L"a%lcbc",nul);
+		test("null truncated size",size==4);
+		test("null truncated contents",
+			buffer[0]==L'a' && buffer[1]==0 &&
+			buffer[2]==L'b' && buffer[3]==L'z');
 
 		// force the truncation-retry loop through a real retry
 		// (ticket #10023 - each retry needs its own va_copy'd
