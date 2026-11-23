@@ -54,6 +54,11 @@
 		ssize_t	writeJsonValue(output *out, const valuetype &value);
 
 	protected:
+		// These return true if "value" is a json number with no
+		// exponent, such as -12 or 1.5.
+		static bool	isJsonNumber(const char *value);
+		static bool	isJsonNumber(const wchar_t *value);
+
 		// These write the first "length" characters of "value" as a
 		// quoted json string, with the escapes of jsonEncode().
 		ssize_t	writeJsonString(output *out,
@@ -66,6 +71,8 @@
 		// JSON allows only a string as an object key, so these write
 		// "key" as a quoted json string, even where writeJsonValue()
 		// would write it bare, such as a number, a bool, or null.
+		// A floating point key is written as writeValue() writes it,
+		// so nan and inf keep their text.
 		bool	writeJsonKey(ssize_t *retval, output *out,
 					stringbuffer *buf,
 					const wchar_t *key);
@@ -75,10 +82,24 @@
 		bool	writeJsonKey(ssize_t *retval, output *out,
 					stringbuffer *buf,
 					wchar_t key);
+		bool	writeJsonKey(ssize_t *retval, output *out,
+					stringbuffer *buf,
+					float key);
+		bool	writeJsonKey(ssize_t *retval, output *out,
+					stringbuffer *buf,
+					double key);
+		bool	writeJsonKey(ssize_t *retval, output *out,
+					stringbuffer *buf,
+					long double key);
 		template <class keytype>
 		bool	writeJsonKey(ssize_t *retval, output *out,
 					stringbuffer *buf,
 					const keytype &key);
+
+		// This writes the key in "buf" as is if it is a quoted json
+		// string, and quotes it otherwise.
+		bool	writeJsonKeyBuffer(ssize_t *retval, output *out,
+					stringbuffer *buf);
 
 		// Each output converts wide characters in its own printf(), so
 		// the wide overloads write with printf() and count the bytes of

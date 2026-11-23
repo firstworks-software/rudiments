@@ -355,6 +355,131 @@ void testWideDictionary(const char *name, collectiontype *c,
 	testFailWrite(name,c,true);
 }
 
+// strings that look like numbers: only a json number is written bare
+const char *numstrs[]={
+	"007","02134",".5","-.5","0","-0","12","1.5","-1.5"
+};
+const wchar_t *wnumstrs[]={
+	L"007",L"02134",L".5",L"-.5",L"0",L"-0",L"12",L"1.5",L"-1.5"
+};
+const wchar_t *wnumjson[]={
+	L"\"007\"",L"\"02134\"",L"\".5\"",L"\"-.5\"",
+	L"0",L"-0",L"12",L"1.5",L"-1.5"
+};
+#define NUMSTRJSON \
+	"[\"007\",\"02134\",\".5\",\"-.5\",0,-0,12,1.5,-1.5]"
+#define NUMSTRJSONINDENT \
+	"[\n\t\"007\",\n\t\"02134\",\n\t\".5\",\n\t\"-.5\",\n" \
+	"\t0,\n\t-0,\n\t12,\n\t1.5,\n\t-1.5\n]\n"
+
+// checks writeJson() of a list of numstrs, with values of "valuetype"
+template <class valuetype>
+void testNumericStrings(const char *name) {
+	linkedlist<valuetype>	ll;
+	for (uint16_t i=0; i<sizeof(numstrs)/sizeof(numstrs[0]); i++) {
+		ll.append((valuetype)numstrs[i]);
+	}
+	testEscape(name,&ll,NUMSTRJSON,NUMSTRJSONINDENT,"v","02134");
+	testEscape(name,&ll,NUMSTRJSON,NUMSTRJSONINDENT,"v","-1.5");
+	testFailWrite(name,&ll);
+}
+
+// checks that nan, inf, and -inf values of "floattype" are written as null,
+// and that keys keep the text that "format" gives them
+template <class floattype>
+void testNonFinite(const char *name, const char *format) {
+
+	volatile floattype	zero=0;
+	floattype		nan=zero/zero;
+	floattype		inf=1/zero;
+
+	stringbuffer	title;
+	title.append("linkedlist (")->append(name)->append(")");
+	linkedlist<floattype>	ll;
+	ll.append(nan);
+	ll.append(inf);
+	ll.append(-inf);
+	ll.append(1.5);
+	testEscape(title.getString(),&ll,
+			"[null,null,null,1.500000]",
+			"[\n\tnull,\n\tnull,\n\tnull,\n\t1.500000\n]\n",
+			"v","1.500000");
+	testFailWrite(title.getString(),&ll);
+
+	title.clear();
+	title.append("avltree (")->append(name)->append(")");
+	avltree<floattype>	at;
+	at.insert(inf);
+	at.insert(1.5);
+	at.insert(-inf);
+	testEscape(title.getString(),&at,
+			"[1.500000,[null],[null]]",
+			"[\n  1.500000,\n  [\n    null\n  ],\n"
+			"  [\n    null\n  ]\n]\n",
+			"v","1.500000");
+	testTreeFailWrite(title.getString(),&at,NULL);
+
+	title.clear();
+	title.append("dictionary (const char *, ")->append(name)->append(")");
+	dictionary<const char *,floattype>	dv;
+	dv.setValue("n",nan);
+	dv.setValue("i",inf);
+	dv.setValue("m",-inf);
+	dv.setValue("x",1.5);
+	testEscape(title.getString(),&dv,
+			"{\"n\":null,\"i\":null,\"m\":null,\"x\":1.500000}",
+			"{\n\t\"n\":null,\n\t\"i\":null,\n\t\"m\":null,\n"
+			"\t\"x\":1.500000\n}\n",
+			"x","1.500000");
+	testFailWrite(title.getString(),&dv);
+
+	// keys are written with printf text, not as null
+
+	// getValue() can't find a nan key, so the value is NULL, which is
+	// written as null either way.
+	stringbuffer	nantext;
+	nantext.printf(format,nan);
+	stringbuffer	expected;
+	expected.append("{\"")->append(nantext.getString());
+	expected.append("\":null}");
+	stringbuffer	expectedindent;
+	expectedindent.append("{\n\t\"")->append(nantext.getString());
+	expectedindent.append("\":null\n}\n");
+	title.clear();
+	title.append("dictionary (")->append(name)->append(" nan key)");
+	dictionary<floattype,const char *>	dn;
+	dn.setValue(nan,NULL);
+	testEscape(title.getString(),&dn,
+			expected.getString(),expectedindent.getString(),
+			nantext.getString(),NULL);
+	testFailWrite(title.getString(),&dn);
+
+	stringbuffer	inftext;
+	inftext.printf(format,inf);
+	stringbuffer	minftext;
+	minftext.printf(format,-inf);
+	expected.clear();
+	expected.append("{\"")->append(inftext.getString());
+	expected.append("\":1,\"")->append(minftext.getString());
+	expected.append("\":2}");
+	expectedindent.clear();
+	expectedindent.append("{\n\t\"")->append(inftext.getString());
+	expectedindent.append("\":1,\n\t\"")->append(minftext.getString());
+	expectedindent.append("\":2\n}\n");
+	title.clear();
+	title.append("dictionary (")->append(name)->append(" inf keys)");
+	dictionary<floattype,int32_t>	di;
+	di.setValue(inf,1);
+	di.setValue(-inf,2);
+	testEscape(title.getString(),&di,
+			expected.getString(),expectedindent.getString(),
+			inftext.getString(),"1");
+	testEscape(title.getString(),&di,
+			expected.getString(),expectedindent.getString(),
+			minftext.getString(),"2");
+	testFailWrite(title.getString(),&di);
+}
+
 int main(int argc, const char **argv) {
 
 	header("collectionprint");
@@ -786,6 +911,22 @@ int main(int argc, const char **argv) {
 
 	stdoutput.printf("\n");
 
+	// only a string that is a json number is written bare
+	stdoutput.printf("numeric strings...\n");
+	testNumericStrings<const char *>("linkedlist (const char * numbers)");
+	testNumericStrings<char *>("linkedlist (char * numbers)");
+	testNumericStrings<const byte_t *>(
+				"linkedlist (const byte_t * numbers)");
+	testNumericStrings<byte_t *>("linkedlist (byte_t * numbers)");
+	stdoutput.printf("\n");
+
+	// nan and inf values are written as null
+	stdoutput.printf("nan and inf...\n");
+	testNonFinite<float>("float","%f");
+	testNonFinite<double>("double","%f");
+	testNonFinite<long double>("long double","%Lf");
+	stdoutput.printf("\n");
+
 	if (wcharstring::supportsPrintf()) {
 		// wide values
 		stdoutput.printf("wide values...\n");
@@ -799,6 +940,17 @@ int main(int argc, const char **argv) {
 		atwn.insert(L"42");
 		testWideValue("avltree (const wchar_t * number)",&atwn,L"42",
 								L"42");
+
+		for (uint16_t i=0;
+				i<sizeof(wnumstrs)/sizeof(wnumstrs[0]); i++) {
+			avltree<const wchar_t *>	atwns;
+			atwns.insert(wnumstrs[i]);
+			stringbuffer	title;
+			title.append("avltree (const wchar_t * ");
+			title.append(numstrs[i])->append(")");
+			testWideValue(title.getString(),&atwns,
+						wnumstrs[i],wnumjson[i]);
+		}
 
 		avltree<const wchar_t *>	atwe;
 		atwe.insert(L"q\"b\\s\nl");
@@ -819,6 +971,24 @@ int main(int argc, const char **argv) {
 		wmj.append(L"\"hi\"");
 		wmj.append("]");
 		testWideWrite("avltree (wchar_t *)",&atwm,1,&wmj);
+
+		wchar_t	wzip[]={L'0',L'2',L'1',L'3',L'4',0};
+		avltree<wchar_t *>	atwz;
+		atwz.insert(wzip);
+		bytebuffer	wzj;
+		wzj.append("[");
+		wzj.append(L"\"02134\"");
+		wzj.append("]");
+		testWideWrite("avltree (wchar_t * 02134)",&atwz,1,&wzj);
+
+		wchar_t	wneg[]={L'-',L'1',L'.',L'5',0};
+		avltree<wchar_t *>	atwng;
+		atwng.insert(wneg);
+		bytebuffer	wngj;
+		wngj.append("[");
+		wngj.append(L"-1.5");
+		wngj.append("]");
+		testWideWrite("avltree (wchar_t * -1.5)",&atwng,1,&wngj);
 
 		avltree<wchar_t>	atwc;
 		atwc.insert((wchar_t)0x263A);

@@ -258,10 +258,76 @@ ssize_t collection::writeValue(output *out, const valuetype &value) {
 }
 
 inline
+bool collection::isJsonNumber(const char *value) {
+
+	// sign
+	if (*value=='-') {
+		value++;
+	}
+
+	// integer part, with no leading zero
+	if (*value=='0') {
+		value++;
+	} else if (*value>='1' && *value<='9') {
+		while (*value>='0' && *value<='9') {
+			value++;
+		}
+	} else {
+		return false;
+	}
+
+	// fraction, with at least one digit
+	if (*value=='.') {
+		value++;
+		if (!(*value>='0' && *value<='9')) {
+			return false;
+		}
+		while (*value>='0' && *value<='9') {
+			value++;
+		}
+	}
+
+	return !*value;
+}
+
+inline
+bool collection::isJsonNumber(const wchar_t *value) {
+
+	// sign
+	if (*value==L'-') {
+		value++;
+	}
+
+	// integer part, with no leading zero
+	if (*value==L'0') {
+		value++;
+	} else if (*value>=L'1' && *value<=L'9') {
+		while (*value>=L'0' && *value<=L'9') {
+			value++;
+		}
+	} else {
+		return false;
+	}
+
+	// fraction, with at least one digit
+	if (*value==L'.') {
+		value++;
+		if (!(*value>=L'0' && *value<=L'9')) {
+			return false;
+		}
+		while (*value>=L'0' && *value<=L'9') {
+			value++;
+		}
+	}
+
+	return !*value;
+}
+
+inline
 ssize_t collection::writeJsonValue(output *out, const char *value) {
 	if (!value) {
 		return out->write("null");
-	} else if (charstring::isNumber(value)) {
+	} else if (isJsonNumber(value)) {
 		return out->printf("%s",value);
 	}
 	return writeJsonString(out,value,charstring::getLength(value));
@@ -271,7 +337,7 @@ inline
 ssize_t collection::writeJsonValue(output *out, char *value) {
 	if (!value) {
 		return out->write("null");
-	} else if (charstring::isNumber(value)) {
+	} else if (isJsonNumber(value)) {
 		return out->printf("%s",value);
 	}
 	return writeJsonString(out,value,charstring::getLength(value));
@@ -281,7 +347,7 @@ inline
 ssize_t collection::writeJsonValue(output *out, const wchar_t *value) {
 	if (!value) {
 		return out->write("null");
-	} else if (wcharstring::isNumber(value)) {
+	} else if (isJsonNumber(value)) {
 		return out->printf(L"%ls",value);
 	}
 	return writeJsonWideString(out,value,wcharstring::getLength(value));
@@ -291,7 +357,7 @@ inline
 ssize_t collection::writeJsonValue(output *out, wchar_t *value) {
 	if (!value) {
 		return out->write("null");
-	} else if (wcharstring::isNumber(value)) {
+	} else if (isJsonNumber(value)) {
 		return out->printf(L"%ls",value);
 	}
 	return writeJsonWideString(out,value,wcharstring::getLength(value));
@@ -341,7 +407,7 @@ inline
 ssize_t collection::writeJsonValue(output *out, const byte_t *value) {
 	if (!value) {
 		return out->write("null");
-	} else if (charstring::isNumber((const char *)value)) {
+	} else if (isJsonNumber((const char *)value)) {
 		return out->printf("%s",value);
 	}
 	return writeJsonString(out,(const char *)value,
@@ -352,7 +418,7 @@ inline
 ssize_t collection::writeJsonValue(output *out, byte_t *value) {
 	if (!value) {
 		return out->write("null");
-	} else if (charstring::isNumber((char *)value)) {
+	} else if (isJsonNumber((const char *)value)) {
 		return out->printf("%s",value);
 	}
 	return writeJsonString(out,(const char *)value,
@@ -388,16 +454,28 @@ ssize_t collection::writeJsonValue(output *out, uint64_t value) {
 
 inline
 ssize_t collection::writeJsonValue(output *out, float value) {
+	// json has no nan or inf
+	if (value!=value || value-value!=value-value) {
+		return out->write("null");
+	}
 	return out->printf("%f",value);
 }
 
 inline
 ssize_t collection::writeJsonValue(output *out, double value) {
+	// json has no nan or inf
+	if (value!=value || value-value!=value-value) {
+		return out->write("null");
+	}
 	return out->printf("%f",value);
 }
 
 inline
 ssize_t collection::writeJsonValue(output *out, long double value) {
+	// json has no nan or inf
+	if (value!=value || value-value!=value-value) {
+		return out->write("null");
+	}
 	return out->printf("%Lf",value);
 }
 
@@ -561,6 +639,45 @@ bool collection::writeJsonKey(ssize_t *retval, output *out,
 	return incOrErr(retval,(result<0)?result:(ssize_t)buf->getSize());
 }
 
+inline
+bool collection::writeJsonKey(ssize_t *retval, output *out,
+						stringbuffer *buf,
+						float key) {
+
+	// format the key into the buffer
+	buf->clear();
+	if (writeValue(buf,key)<0) {
+		return incOrErr(retval,RESULT_ERROR);
+	}
+	return writeJsonKeyBuffer(retval,out,buf);
+}
+
+inline
+bool collection::writeJsonKey(ssize_t *retval, output *out,
+						stringbuffer *buf,
+						double key) {
+
+	// format the key into the buffer
+	buf->clear();
+	if (writeValue(buf,key)<0) {
+		return incOrErr(retval,RESULT_ERROR);
+	}
+	return writeJsonKeyBuffer(retval,out,buf);
+}
+
+inline
+bool collection::writeJsonKey(ssize_t *retval, output *out,
+						stringbuffer *buf,
+						long double key) {
+
+	// format the key into the buffer
+	buf->clear();
+	if (writeValue(buf,key)<0) {
+		return incOrErr(retval,RESULT_ERROR);
+	}
+	return writeJsonKeyBuffer(retval,out,buf);
+}
+
 template <class keytype>
 inline
 bool collection::writeJsonKey(ssize_t *retval, output *out,
@@ -572,6 +689,12 @@ bool collection::writeJsonKey(ssize_t *retval, output *out,
 	if (writeJsonValue(buf,key)<0) {
 		return incOrErr(retval,RESULT_ERROR);
 	}
+	return writeJsonKeyBuffer(retval,out,buf);
+}
+
+inline
+bool collection::writeJsonKeyBuffer(ssize_t *retval, output *out,
+						stringbuffer *buf) {
 
 	// a json string starts with a quote, so write the buffer as is
 	const char	*value=(const char *)buf->getBuffer();

@@ -320,7 +320,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - fixed an avltree clear() leak of the left subtree of a right child
 - fixed swapped allowed and denied lists in urlhttprequest access checks
 - fixed collection, dictionary and mvcresult writeJson() output for a string,
-  key, or column name that needs json escaping or quoting
+  key, or column name that needs json escaping or quoting, or a nan or inf value
 - fixed dom and jsondom writeJson() write errors and the missing closing
   brace of indented dom output
 - fixed jsondom writeJson() to honor its indent argument
