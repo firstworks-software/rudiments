@@ -136,19 +136,18 @@ ssize_t dom::writeFile(const char *filename, mode_t perms, bool indent) {
 		err=error::getErrorNumber();
 	}
 
-	// flush the write buffer
-	fl.flushWriteBuffer(-1,-1);
-
-	// since flushWriteBuffer() might also (silently) fail and set errno,
-	// we need to restore whatever error we saved earlier because that's
-	// the error that we care about
-	if (retval<0) {
-		error::setErrorNumber(err);
+	// flush the write buffer, saving its error if the write succeeded
+	if (!fl.flushWriteBuffer(-1,-1) && retval>=0) {
+		retval=RESULT_ERROR;
+		err=error::getErrorNumber();
 	}
 
-	// close (allowing this to overwrite the earlier error)
+	// close, allowing a close error to overwrite the saved error
 	if (!fl.close()) {
 		retval=RESULT_ERROR;
+	} else if (retval<0) {
+		// a successful close() clears errno, so restore the saved error
+		error::setErrorNumber(err);
 	}
 
 	// return the result

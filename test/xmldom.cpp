@@ -330,6 +330,40 @@ static void testWriteJsonFailWrite(xmldom *x) {
 	}
 }
 
+// writeFile() to a full device, with the error in the final flush and in
+// an earlier write
+static void testWriteFileFull() {
+
+	if (!file::exists("/dev/full")) {
+		return;
+	}
+
+	xmldom	x(false);
+	mode_t	perms=permissions::parsePermString("rw-rw-rw-");
+
+	// smaller than the write buffer
+	x.parseString("<test>small</test>");
+	error::clearError();
+	ssize_t	result=x.writeFile("/dev/full",perms,false);
+	int32_t	errnum=error::getErrorNumber();
+	test("writeFile /dev/full, small",result==RESULT_ERROR);
+	test("writeFile /dev/full, small, errno ENOSPC",errnum==ENOSPC);
+
+	// larger than the write buffer
+	stringbuffer	large;
+	large.append("<test>");
+	for (uint16_t i=0; i<1000; i++) {
+		large.append("large");
+	}
+	large.append("</test>");
+	x.parseString(large.getString());
+	error::clearError();
+	result=x.writeFile("/dev/full",perms,false);
+	errnum=error::getErrorNumber();
+	test("writeFile /dev/full, large",result==RESULT_ERROR);
+	test("writeFile /dev/full, large, errno ENOSPC",errnum==ENOSPC);
+}
+
 int main(int argc, const char **argv) {
 
 	header("xmldom");
@@ -430,6 +464,9 @@ int main(int argc, const char **argv) {
 
 	stdoutput.printf("writeJson...\n");
 	testWriteJsonFailWrite(&x);
+
+	stdoutput.printf("writeFile full...\n");
+	testWriteFileFull();
 
 	stdoutput.printf("\n");
 
