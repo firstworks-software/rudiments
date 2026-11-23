@@ -155,6 +155,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   from the export list, non-openssl builds
 - removed bundled regex engine from the export list on built-in-regex
   builds
+- removed configure tests for fdopen and the FILE descriptor member
 
 ### Fixed
 - fixed two bugs in the bytestring fallbacks used on platforms whose

@@ -574,26 +574,8 @@
 /* Some systems have fdatasync */
 /* #undef RUDIMENTS_HAVE_FDATASYNC */
 
-/* Some systems have fdopen */
-/* #undef RUDIMENTS_HAVE_FDOPEN */
-
 /* Some systems have FD_CLOEXEC */
 /* #undef RUDIMENTS_HAVE_FD_CLOEXEC */
-
-/* Some systems have FILE->_file */
-#define RUDIMENTS_HAVE_FILE_FILE 1
-
-/* Some systems have FILE->__filedes */
-/* #undef RUDIMENTS_HAVE_FILE_FILEDES */
-
-/* Some systems have FILE->_fileno */
-/* #undef RUDIMENTS_HAVE_FILE_FILENO */
-
-/* Some systems have FILE->_fd */
-/* #undef RUDIMENTS_HAVE_FILE__FD */
-
-/* Some systems have FILE->__file */
-/* #undef RUDIMENTS_HAVE_FILE__FILE */
 
 /* Some systems have FindFirstFile */
 #define RUDIMENTS_HAVE_FINDFIRSTFILE 1
