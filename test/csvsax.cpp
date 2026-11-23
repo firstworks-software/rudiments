@@ -261,6 +261,15 @@ int main() {
 		"name,phone\r\nAl,555\r\nBo,556\r\n",
 		"hs;c(name);c(phone);he;bs;"
 		"rs;f(Al);f(555);re;rs;f(Bo);f(556);re;be;");
+	testTrace("header only, lf",
+		"name,phone\n",
+		"hs;c(name);c(phone);he;bs;be;");
+	testTrace("header only, crlf",
+		"name,phone\r\n",
+		"hs;c(name);c(phone);he;bs;be;");
+	testTrace("header only, cr alone",
+		"name,phone\r",
+		"hs;c(name);c(phone);he;bs;be;");
 
 	// empty input: no columns and no records
 	testTrace("empty input","","hs;he;bs;be;");

@@ -192,6 +192,14 @@ bool csvsax::parse() {
 				}
 			}
 
+			// start the body, as at the next record
+			if (pvt->_state==HEADER_END) {
+				pvt->_state=BODY_START;
+				if (!bodyStart()) {
+					return false;
+				}
+			}
+
 			// end the record, as at a line end
 			if (pvt->_state==FIELD_START ||
 					pvt->_state==FIELD) {
