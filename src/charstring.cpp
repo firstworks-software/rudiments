@@ -3701,21 +3701,23 @@ void charstring::base64Decode(const char *input, uint64_t inputlen,
 	*output=new byte_t[size];
 	uint64_t	outputindex=0;
 	uint64_t	inputindex=0;
-	while (inputindex<inputlen) {
+	char		group[4];
+	for (;;) {
 
-		// ignore whitespace
-		if (character::isWhitespace((byte_t)input[inputindex])) {
-			inputindex++;
-			continue;
+		// gather up to 4 characters, skip whitespace
+		size_t	groupsize=0;
+		while (groupsize<4 && inputindex<inputlen) {
+			char	c=input[inputindex++];
+			if (!character::isWhitespace((byte_t)c)) {
+				group[groupsize++]=c;
+			}
+		}
+		if (!groupsize) {
+			break;
 		}
 
-		uint64_t	remaining=inputlen-inputindex;
-		if (remaining>4) {
-			remaining=4;
-		}
-		outputindex+=base64DecodeGroup(input+inputindex,remaining,
+		outputindex+=base64DecodeGroup(group,groupsize,
 						(*output)+outputindex);
-		inputindex+=remaining;
 	}
 	(*output)[outputindex]='\0';
 	(*outputsize)=outputindex;
@@ -3735,24 +3737,25 @@ void charstring::base64Decode(const char *input, uint64_t inputlen,
 
 	chunkedwriter	cw;
 	chunkedWriterInit(&cw,out,true);
-	byte_t		group[3];
+	char		group[4];
+	byte_t		decoded[3];
 	uint64_t	inputindex=0;
-	while (inputindex<inputlen && !cw.failed) {
+	while (!cw.failed) {
 
-		// ignore whitespace
-		if (character::isWhitespace((byte_t)input[inputindex])) {
-			inputindex++;
-			continue;
+		// gather up to 4 characters, skip whitespace
+		size_t	groupsize=0;
+		while (groupsize<4 && inputindex<inputlen) {
+			char	c=input[inputindex++];
+			if (!character::isWhitespace((byte_t)c)) {
+				group[groupsize++]=c;
+			}
+		}
+		if (!groupsize) {
+			break;
 		}
 
-		uint64_t	remaining=inputlen-inputindex;
-		if (remaining>4) {
-			remaining=4;
-		}
-		size_t	groupsize=base64DecodeGroup(input+inputindex,
-							remaining,group);
-		chunkedWriterAppend(&cw,group,groupsize);
-		inputindex+=remaining;
+		size_t	decodedsize=base64DecodeGroup(group,groupsize,decoded);
+		chunkedWriterAppend(&cw,decoded,decodedsize);
 	}
 	chunkedWriterFlush(&cw);
 }

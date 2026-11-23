@@ -2019,9 +2019,11 @@ class RUDIMENTS_DLLSPEC charstring {
 		 *  deleted by the calling program.  The buffer has a
 		 *  NULL terminator after the last decoded byte.
 		 *
-		 *  Whitespace is skipped where a group of 4 characters
-		 *  starts.  A short final group is decoded as if padded
-		 *  with "=".  A group gives 1 byte fewer than the
+		 *  Whitespace is skipped anywhere in the input, and
+		 *  groups of 4 characters are counted from the
+		 *  characters that are not whitespace.  A short final
+		 *  group is decoded as if padded with "=".  A group
+		 *  gives 1 byte fewer than the
 		 *  characters before its first "=", so 2 characters give
 		 *  1 byte, 3 give 2 and 4 give 3.  A group with fewer
 		 *  than 2 such characters, for example "====", "Q=Q=" or

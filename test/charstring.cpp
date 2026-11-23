@@ -2293,7 +2293,7 @@ int main(int argc, const char **argv) {
 	stdoutput.printf("\n");
 
 
-	// base64 decode whitespace, skipped where a group starts
+	// base64 decode whitespace, skipped anywhere
 	stdoutput.printf("base64-decode whitespace...\n");
 	base64DecodeTest("QUJD\\n","QUJD\n",5,"ABC",3);
 	base64DecodeTest("\\nQUJD","\nQUJD",5,"ABC",3);
@@ -2311,6 +2311,17 @@ int main(int argc, const char **argv) {
 	base64DecodeTest("TQ==\\r\\n\\t ","TQ==\r\n\t ",8,"M",1);
 	base64DecodeTest("2 spaces","  ",2,"",0);
 	base64DecodeTest("\\r\\n","\r\n",2,"",0);
+
+	// #11140 charstring::base64Decode - a line break inside a 4-character
+	// group is decoded as data
+	base64DecodeTest("QU JD","QU JD",5,"ABC",3);
+	base64DecodeTest("QU\\nJD==","QU\nJD==",7,"ABC",3);
+	base64DecodeTest("QU\\r\\nJD","QU\r\nJD",6,"ABC",3);
+	base64DecodeTest("YW\\nJj","YW\nJj",5,"abc",3);
+	base64DecodeTest("A\\n","A\n",2,"",0);
+	base64DecodeTest("QQ\\n","QQ\n",3,"A",1);
+	base64DecodeTest("QQ=\\n=","QQ=\n=",5,"A",1);
+	base64DecodeTest("Q Q = =","Q Q = =",7,"A",1);
 	stdoutput.printf("\n");
 
 
