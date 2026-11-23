@@ -434,10 +434,12 @@ class RUDIMENTS_DLLSPEC output : virtual public object {
 		 *  standard wprintf formatting rules.
 		 *
 		 *  Returns the number of characters written on success.
-		 *  However, a filedescriptor that has a write buffer, or that
-		 *  cannot write wide characters directly (as on Windows),
-		 *  converts the data to the character set of the current
-		 *  locale and returns the number of bytes written.
+		 *  However, a filedescriptor always converts the data to the
+		 *  character set of the current locale and returns the number
+		 *  of bytes written.  If the data can't be converted, then
+		 *  nothing is written and RESULT_ERROR is returned, so a
+		 *  program that hasn't called setlocale() can fail on non-ASCII
+		 *  text.
 		 *
 		 *  Returns RESULT_ERROR if the data could not be formatted, or
 		 *  if less data was written than was formatted (a short write).
@@ -468,10 +470,12 @@ class RUDIMENTS_DLLSPEC output : virtual public object {
 		 *  va_list.
 		 *
 		 *  Returns the number of characters written on success.
-		 *  However, a filedescriptor that has a write buffer, or that
-		 *  cannot write wide characters directly (as on Windows),
-		 *  converts the data to the character set of the current
-		 *  locale and returns the number of bytes written.
+		 *  However, a filedescriptor always converts the data to the
+		 *  character set of the current locale and returns the number
+		 *  of bytes written.  If the data can't be converted, then
+		 *  nothing is written and RESULT_ERROR is returned, so a
+		 *  program that hasn't called setlocale() can fail on non-ASCII
+		 *  text.
 		 *
 		 *  Returns RESULT_ERROR if the data could not be formatted, or
 		 *  if less data was written than was formatted (a short write).
