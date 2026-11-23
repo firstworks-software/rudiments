@@ -3506,7 +3506,7 @@ ssize_t filedescriptor::printfUcs2Delegate(const ucs2_t *format,
 
 	// write the formatted data to a buffer
 	ucs2_t	*buffer=NULL;
-	ssize_t		size=ucs2charstring::printf(&buffer,format,argp);
+	ssize_t	size=ucs2charstring::printf(&buffer,format,argp);
 	if (size<=0) {
 		delete[] buffer;
 		return (size<0)?RESULT_ERROR:0;
