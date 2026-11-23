@@ -1706,9 +1706,6 @@
 /* Some systems have va_copy */
 #define RUDIMENTS_HAVE_VA_COPY 1
 
-/* Some systems have vdprintf */
-/* #undef RUDIMENTS_HAVE_VDPRINTF */
-
 /* Some systems have vfwprintf */
 #define RUDIMENTS_HAVE_VFWPRINTF 1
 

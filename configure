@@ -37469,35 +37469,6 @@ printf "%s\n" "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.beam conftest.$ac_ext
 
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for vdprintf" >&5
-printf %s "checking for vdprintf... " >&6; }
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#ifdef RUDIMENTS_HAVE_STDARG_H
-	#include <stdarg.h>
-#endif
-#include <stdio.h>
-int
-main (void)
-{
-va_list a; vdprintf(0,0,a);
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_link "$LINENO"
-then :
-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-printf "%s\n" "yes" >&6; }
-printf "%s\n" "#define RUDIMENTS_HAVE_VDPRINTF 1" >>confdefs.h
-
-else $as_nop
-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
-printf "%s\n" "no" >&6; }
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.beam \
-    conftest$ac_exeext conftest.$ac_ext
-
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for vasprintf" >&5
 printf %s "checking for vasprintf... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext

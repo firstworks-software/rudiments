@@ -3756,13 +3756,6 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_STDARG_H
 #include <stdio.h>],
 va_list a; _vsnprintf(0,0,0,a);,[AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE__VSNPRINTF,1,Some systems have _vsnprintf)], AC_MSG_RESULT(no))
 
-AC_MSG_CHECKING(for vdprintf)
-AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDARG_H
-	#include <stdarg.h>
-#endif
-#include <stdio.h>],
-va_list a; vdprintf(0,0,a);,AC_MSG_RESULT(yes) AC_DEFINE(RUDIMENTS_HAVE_VDPRINTF,1,Some systems have vdprintf), AC_MSG_RESULT(no))
-
 AC_MSG_CHECKING(for vasprintf)
 AC_TRY_LINK([#ifdef RUDIMENTS_HAVE_STDARG_H
 	#include <stdarg.h>
