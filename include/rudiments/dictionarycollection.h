@@ -119,6 +119,15 @@ class dictionarycollection : public collection {
 		 *  Each key is written as a JSON string, so a number, bool,
 		 *  or NULL key is quoted.
 		 *
+		 *  A float, double, or long double key is written with enough
+		 *  digits to read back as the same number.  A nan or inf key
+		 *  keeps its printf text.  A NULL string key is written as
+		 *  "null", the same name as the string key "null".  An empty
+		 *  string key is written as "".  An enum key, or a class key
+		 *  with only a conversion operator, is written as an address,
+		 *  so such keys can share a name.  Any other two different
+		 *  keys get different names.
+		 *
 		 *  Returns the number of bytes written, or -1 if an error
 		 *  occurred.  A short write returns -1.  Any other error from
 		 *  the output, such as a timeout or abort, is returned
@@ -135,6 +144,15 @@ class dictionarycollection : public collection {
 		 *  Each key is written as a JSON string, so a number, bool,
 		 *  or NULL key is quoted.
 		 *
+		 *  A float, double, or long double key is written with enough
+		 *  digits to read back as the same number.  A nan or inf key
+		 *  keeps its printf text.  A NULL string key is written as
+		 *  "null", the same name as the string key "null".  An empty
+		 *  string key is written as "".  An enum key, or a class key
+		 *  with only a conversion operator, is written as an address,
+		 *  so such keys can share a name.  Any other two different
+		 *  keys get different names.
+		 *
 		 *  Returns the number of bytes written, or -1 if an error
 		 *  occurred.  A short write returns -1.  Any other error from
 		 *  the output, such as a timeout or abort, is returned
@@ -146,6 +164,15 @@ class dictionarycollection : public collection {
 		 *
 		 *  Each key is written as a JSON string, so a number, bool,
 		 *  or NULL key is quoted.
+		 *
+		 *  A float, double, or long double key is written with enough
+		 *  digits to read back as the same number.  A nan or inf key
+		 *  keeps its printf text.  A NULL string key is written as
+		 *  "null", the same name as the string key "null".  An empty
+		 *  string key is written as "".  An enum key, or a class key
+		 *  with only a conversion operator, is written as an address,
+		 *  so such keys can share a name.  Any other two different
+		 *  keys get different names.
 		 *
 		 *  Returns the number of bytes written, or -1 if an error
 		 *  occurred.  A short write returns -1.  Any other error from
@@ -162,6 +189,15 @@ class dictionarycollection : public collection {
 		 *
 		 *  Each key is written as a JSON string, so a number, bool,
 		 *  or NULL key is quoted.
+		 *
+		 *  A float, double, or long double key is written with enough
+		 *  digits to read back as the same number.  A nan or inf key
+		 *  keeps its printf text.  A NULL string key is written as
+		 *  "null", the same name as the string key "null".  An empty
+		 *  string key is written as "".  An enum key, or a class key
+		 *  with only a conversion operator, is written as an address,
+		 *  so such keys can share a name.  Any other two different
+		 *  keys get different names.
 		 *
 		 *  Returns the number of bytes written, or -1 if an error
 		 *  occurred.  A short write returns -1.  Any other error from

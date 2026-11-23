@@ -5,6 +5,8 @@
 #include <rudiments/wcharstring.h>
 #include <rudiments/character.h>
 
+#include <float.h>
+
 inline
 collection::collection() :
 	object(),
@@ -155,6 +157,14 @@ ssize_t collection::writeValue(output *out, wchar_t value) {
 inline
 ssize_t collection::writeValue(output *out, bool value) {
 	return out->printf("%s",(value)?"true":"false");
+}
+
+inline
+ssize_t collection::writeValue(output *out, signed char value) {
+	// Why signed char and not int8_t?  Where int8_t is char, such as
+	// solaris with _CHAR_IS_SIGNED, an int8_t overload would duplicate
+	// the char overload.  signed char is always a distinct type.
+	return out->printf("%d",(int32_t)value);
 }
 
 inline
@@ -382,6 +392,14 @@ ssize_t collection::writeJsonValue(output *out, wchar_t value) {
 inline
 ssize_t collection::writeJsonValue(output *out, bool value) {
 	return out->printf("%s",(value)?"true":"false");
+}
+
+inline
+ssize_t collection::writeJsonValue(output *out, signed char value) {
+	// Why signed char and not int8_t?  Where int8_t is char, such as
+	// solaris with _CHAR_IS_SIGNED, an int8_t overload would duplicate
+	// the char overload.  signed char is always a distinct type.
+	return out->printf("%d",(int32_t)value);
 }
 
 inline
@@ -646,7 +664,10 @@ bool collection::writeJsonKey(ssize_t *retval, output *out,
 
 	// format the key into the buffer
 	buf->clear();
-	if (writeValue(buf,key)<0) {
+	ssize_t	result=(key-key==0)?
+			buf->printf("%.*g",2+FLT_MANT_DIG*30103/100000,key):
+			writeValue(buf,key);
+	if (result<0) {
 		return incOrErr(retval,RESULT_ERROR);
 	}
 	return writeJsonKeyBuffer(retval,out,buf);
@@ -659,7 +680,10 @@ bool collection::writeJsonKey(ssize_t *retval, output *out,
 
 	// format the key into the buffer
 	buf->clear();
-	if (writeValue(buf,key)<0) {
+	ssize_t	result=(key-key==0)?
+			buf->printf("%.*g",2+DBL_MANT_DIG*30103/100000,key):
+			writeValue(buf,key);
+	if (result<0) {
 		return incOrErr(retval,RESULT_ERROR);
 	}
 	return writeJsonKeyBuffer(retval,out,buf);
@@ -672,7 +696,10 @@ bool collection::writeJsonKey(ssize_t *retval, output *out,
 
 	// format the key into the buffer
 	buf->clear();
-	if (writeValue(buf,key)<0) {
+	ssize_t	result=(key-key==0)?
+			buf->printf("%.*Lg",2+LDBL_MANT_DIG*30103/100000,key):
+			writeValue(buf,key);
+	if (result<0) {
 		return incOrErr(retval,RESULT_ERROR);
 	}
 	return writeJsonKeyBuffer(retval,out,buf);

@@ -322,12 +322,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - fixed an avltree clear() leak of the left subtree of a right child
 - fixed swapped allowed and denied lists in urlhttprequest access checks
 - fixed collection, dictionary and mvcresult writeJson() output for a string,
-  key, or column name that needs json escaping or quoting, or a nan or inf value
+  key, or column name that needs json escaping or quoting, or a nan or inf
+  value, and dictionary write() and writeJson() of a float key losing digits
 - fixed dom and jsondom writeJson() write errors and the missing closing
   brace of indented dom output
 - fixed jsondom writeJson() to honor its indent argument
 - fixed collection write() and writeJson() printing unsigned numbers as
-  signed
+  signed and an int8_t as an address
 - fixed filedescriptor buffered write() returning a wrong count and
   resending bytes after a short flush, and ignoring setAllowShortWrites()
 - fixed filedescriptor::flushWriteBuffer() returning true after a write

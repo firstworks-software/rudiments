@@ -13,6 +13,7 @@
 #include <rudiments/bytestring.h>
 #include <rudiments/wcharstring.h>
 #include <rudiments/jsondom.h>
+#include <float.h>
 #include "test.cpp"
 
 const char *numbers[]={
@@ -478,6 +479,48 @@ void testNonFinite(const char *name, const char *format) {
 	testFailWrite(title.getString(),&di);
 }
 
+// checks write() of "c" against "expected" and its return value
+template <class collectiontype>
+void testWrite(const char *name, collectiontype *c, const char *expected) {
+	stringbuffer	sb;
+	ssize_t		result=c->write(&sb);
+	stringbuffer	title;
+	title.append(name)->append(": write output");
+	test(title.getString(),
+		!charstring::compare(sb.getString(),expected));
+	title.clear();
+	title.append(name)->append(": write return value");
+	test(title.getString(),result==(ssize_t)sb.getStringLength());
+}
+
+// checks that the keys "a" and "b" of "floattype", which differ, are written
+// as the different member names "atext" and "btext" by write() and writeJson()
+template <class floattype>
+void testFloatKeys(const char *name, floattype a, floattype b,
+				const char *atext, const char *btext) {
+
+	stringbuffer	title;
+	title.append(name)->append(" keys differ");
+	test(title.getString(),charstring::compare(atext,btext));
+
+	stringbuffer	expected;
+	expected.append("{\"")->append(atext)->append("\":1,\"");
+	expected.append(btext)->append("\":2}");
+	stringbuffer	expectedindent;
+	expectedindent.append("{\n\t\"")->append(atext)->append("\":1,\n\t\"");
+	expectedindent.append(btext)->append("\":2\n}\n");
+
+	dictionary<floattype,int32_t>	d;
+	d.setValue(a,1);
+	d.setValue(b,2);
+	testEscape(name,&d,expected.getString(),expectedindent.getString(),
+								atext,"1");
+	testEscape(name,&d,expected.getString(),expectedindent.getString(),
+								btext,"2");
+	testWrite(name,&d,expectedindent.getString());
+	testFailWrite(name,&d);
+}
+
 int main(int argc, const char **argv) {
 
 	header("collectionprint");
@@ -858,9 +901,88 @@ int main(int argc, const char **argv) {
 	dictionary<double,int32_t>	edd;
 	edd.setValue(1.5,1);
 	testEscape("dictionary (double key)",&edd,
-			"{\"1.500000\":1}","{\n\t\"1.500000\":1\n}\n",
-			"1.500000","1");
+			"{\"1.5\":1}","{\n\t\"1.5\":1\n}\n",
+			"1.5","1");
 	testFailWrite("dictionary (double key)",&edd);
+
+	// float keys that are close together are written as different names
+	stringbuffer	fa;
+	stringbuffer	fb;
+	fa.printf("%.9g",(double)1e-7f);
+	fb.printf("%.9g",(double)1.0000001e-7f);
+	testFloatKeys<float>("dictionary (float colliding keys)",
+				1e-7f,1.0000001e-7f,
+				fa.getString(),fb.getString());
+
+	stringbuffer	da;
+	stringbuffer	db;
+	da.printf("%.17g",1e-7);
+	db.printf("%.17g",2e-7);
+	testFloatKeys<double>("dictionary (double colliding keys)",
+				1e-7,2e-7,da.getString(),db.getString());
+
+	stringbuffer	ldfmt;
+	ldfmt.append("%.")->append((int32_t)(2+LDBL_MANT_DIG*30103/100000));
+	ldfmt.append("Lg");
+	stringbuffer	la;
+	stringbuffer	lb;
+	la.printf(ldfmt.getString(),1e-7L);
+	lb.printf(ldfmt.getString(),2e-7L);
+	testFloatKeys<long double>("dictionary (long double colliding keys)",
+				1e-7L,2e-7L,la.getString(),lb.getString());
+
+	// int8_t keys and values are written as numbers
+	dictionary<int8_t,int32_t>	ed8;
+	ed8.setValue(1,10);
+	ed8.setValue(-2,20);
+	ed8.setValue(127,30);
+	ed8.setValue(-128,40);
+	const char	*ed8expected=
+			"{\"1\":10,\"-2\":20,\"127\":30,\"-128\":40}";
+	const char	*ed8indentexpected=
+			"{\n\t\"1\":10,\n\t\"-2\":20,\n\t\"127\":30,\n"
+			"\t\"-128\":40\n}\n";
+	testEscape("dictionary (int8_t key)",&ed8,
+			ed8expected,ed8indentexpected,"1","10");
+	testEscape("dictionary (negative int8_t key)",&ed8,
+			ed8expected,ed8indentexpected,"-2","20");
+	testEscape("dictionary (max int8_t key)",&ed8,
+			ed8expected,ed8indentexpected,"127","30");
+	testEscape("dictionary (min int8_t key)",&ed8,
+			ed8expected,ed8indentexpected,"-128","40");
+	testWrite("dictionary (int8_t key)",&ed8,ed8indentexpected);
+	testFailWrite("dictionary (int8_t key)",&ed8);
+
+	dictionary<int32_t,int8_t>	ed8v;
+	ed8v.setValue(1,5);
+	ed8v.setValue(2,-3);
+	testEscape("dictionary (int8_t values)",&ed8v,
+			"{\"1\":5,\"2\":-3}","{\n\t\"1\":5,\n\t\"2\":-3\n}\n",
+			"2","-3");
+	testWrite("dictionary (int8_t values)",&ed8v,
+			"{\n\t\"1\":5,\n\t\"2\":-3\n}\n");
+	testFailWrite("dictionary (int8_t values)",&ed8v);
+
+	linkedlist<int8_t>	ll8;
+	ll8.append(5);
+	ll8.append(-3);
+	testEscape("linkedlist (int8_t)",&ll8,
+			"[5,-3]","[\n\t5,\n\t-3\n]\n","v","-3");
+	testWrite("linkedlist (int8_t)",&ll8,"[\n\t5,\n\t-3\n]\n");
+	testFailWrite("linkedlist (int8_t)",&ll8);
+
+	// NULL and "null" are written as the same name, and "" as an empty name
+	dictionary<const char *,int32_t>	edn;
+	edn.setValue((const char *)NULL,1);
+	edn.setValue("null",2);
+	edn.setValue("",3);
+	testEscape("dictionary (NULL, \"null\" and empty keys)",&edn,
+			"{\"null\":1,\"null\":2,\"\":3}",
+			"{\n\t\"null\":1,\n\t\"null\":2,\n\t\"\":3\n}\n",
+			"","3");
+	testWrite("dictionary (NULL, \"null\" and empty keys)",&edn,
+			"{\n\t\"null\":1,\n\t\"null\":2,\n\t\"\":3\n}\n");
+	testFailWrite("dictionary (NULL, \"null\" and empty keys)",&edn);
 
 	dictionary<uint16_t,int32_t>	edu0;
 	edu0.setValue((uint16_t)-1,1);
