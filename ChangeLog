@@ -341,6 +341,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - fixed ucs2charstring::printf() and output::printfUcs2() returning success
   off Windows
 - fixed jsondom parsing of a value after an array nested in an array
+- fixed filedescriptor wide printf() clearing errno on success
 
 ### Security
 - fixed buffer overflow when unix socket file name is too long

@@ -3461,6 +3461,8 @@ ssize_t filedescriptor::printfDelegate(const wchar_t *format, va_list *argp) {
 	// fclose() also writes the buffered data a second time.  So, format to
 	// memory and print that.
 
+	int32_t	olderr=error::getErrorNumber();
+
 	// write the formatted data to a buffer
 	wchar_t	*buffer=NULL;
 	ssize_t	size=wcharstring::printf(&buffer,format,argp);
@@ -3498,18 +3500,29 @@ ssize_t filedescriptor::printfDelegate(const wchar_t *format, va_list *argp) {
 	// clean up
 	delete[] buffer;
 
+	// formatting clears errno, so restore it on success
+	if (size>=0) {
+		error::setErrorNumber(olderr);
+	}
+
 	return size;
 }
 
 ssize_t filedescriptor::printfUcs2Delegate(const ucs2_t *format,
 							va_list *argp) {
 
+	int32_t	olderr=error::getErrorNumber();
+
 	// write the formatted data to a buffer
 	ucs2_t	*buffer=NULL;
 	ssize_t	size=ucs2charstring::printf(&buffer,format,argp);
 	if (size<=0) {
 		delete[] buffer;
-		return (size<0)?RESULT_ERROR:0;
+		if (size<0) {
+			return RESULT_ERROR;
+		}
+		error::setErrorNumber(olderr);
+		return 0;
 	}
 
 	// My charstring::duplicate() method currently only converts to ascii,
@@ -3529,6 +3542,11 @@ ssize_t filedescriptor::printfUcs2Delegate(const ucs2_t *format,
 
 	// clean up
 	delete[] buffer;
+
+	// formatting clears errno, so restore it on success
+	if (size>=0) {
+		error::setErrorNumber(olderr);
+	}
 
 	return size;
 }

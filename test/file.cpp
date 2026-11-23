@@ -711,6 +711,38 @@ static void printfErrnoTests() {
 				pipeHolds(&readfd,&writefd,"abc"));
 	}
 
+	// wide success leaves errno as it was, for #11168 filedescriptor -
+	// a wide printf() that succeeds sets errno to 0
+	if (wcharstring::supportsPrintf()) {
+		filedescriptor	readfd;
+		filedescriptor	writefd;
+		test("wide success, create pipe",
+			filedescriptor::createPipe(&readfd,&writefd));
+		error::setErrorNumber(ENOENT);
+		ssize_t	result=writefd.printf(L"%ls",L"def");
+		int32_t	errnum=error::getErrorNumber();
+		test("wide printf(), success",result==3);
+		test("wide printf(), success, errno unchanged",
+							errnum==ENOENT);
+		error::clearError();
+		test("wide success, pipe holds def",
+				pipeHolds(&readfd,&writefd,"def"));
+	}
+	if (wcharstring::supportsPrintf()) {
+		filedescriptor	readfd;
+		filedescriptor	writefd;
+		test("wide empty, create pipe",
+			filedescriptor::createPipe(&readfd,&writefd));
+		error::setErrorNumber(ENOENT);
+		ssize_t	result=writefd.printf(L"%ls",L"");
+		int32_t	errnum=error::getErrorNumber();
+		test("wide printf(), empty",result==0);
+		test("wide printf(), empty, errno unchanged",errnum==ENOENT);
+		error::clearError();
+		test("wide empty, pipe holds nothing",
+				pipeHolds(&readfd,&writefd,""));
+	}
+
 	#ifndef _WIN32
 
 	// full non-blocking pipe
