@@ -238,6 +238,11 @@ bool jsondom::arrayEnd() {
 	indent(pvt->_indent);
 	debugPrintf("]");
 #endif
+	domnode		*parent=pvt->_current->getParent();
+	const char	*t=parent->getAttributeValue("t");
+	if (t && t[0]=='a') {
+		pvt->_current=parent;
+	}
 	return true;
 }
 

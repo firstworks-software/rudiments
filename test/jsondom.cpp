@@ -713,6 +713,31 @@ int main() {
 		test("bad hex fails",!e.parseString("[\"\\u12g4\"]"));
 	}
 
+	// nested arrays round trip
+	{
+		stdoutput.printf("nested arrays...\n");
+
+		const char	*inputs[]={
+			"[[1],[2]]",
+			"{\"b\":[[2,3]],\"e\":1}",
+			"[[[1]],2]",
+			"[[],1]",
+			NULL
+		};
+
+		jsondom	n;
+		for (const char **input=inputs; *input; input++) {
+			n.parseString(*input);
+			n.writeFile("nested.json",
+				permissions::parsePermString("rw-r--r--"),
+				false);
+			char	*contents=file::getContents("nested.json");
+			test(*input,!charstring::compare(contents,*input));
+			delete[] contents;
+			file::remove("nested.json");
+		}
+	}
+
 	stdoutput.printf("writeJson...\n");
 	testWriteJsonFailWrite();
 
