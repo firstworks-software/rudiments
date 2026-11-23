@@ -334,8 +334,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   exists and keys are managed
 - fixed a double free in dictionary setValues() from a managed dictionary
 - fixed stringbuffer and wstringbuffer append(float) and append(double)
-  writing at the current position, and wstringbuffer write(number)
-  returning characters instead of bytes
+  writing at the current position, wstringbuffer write(number)
+  returning characters instead of bytes, and wstringbuffer write(float)
+  and write(double) using scale 6 without wide printf
 - fixed a memory leak in filedescriptor wide printf() to an unbuffered
   descriptor
 - fixed ucs2charstring::printf() and output::printfUcs2() returning success

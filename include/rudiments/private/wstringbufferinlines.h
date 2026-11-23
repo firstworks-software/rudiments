@@ -407,7 +407,7 @@ ssize_t wstringbuffer::write(float number) {
 	if (wcharstring::supportsPrintf()) {
 		return write(number,4);
 	} else {
-		wchar_t	*s=wcharstring::parseNumber(number);
+		wchar_t	*s=wcharstring::parseNumber(number,4);
 		ssize_t	retval=write(s);
 		delete[] s;
 		return retval;
@@ -447,7 +447,7 @@ ssize_t wstringbuffer::write(double number) {
 	if (wcharstring::supportsPrintf()) {
 		return write(number,4);
 	} else {
-		wchar_t	*s=wcharstring::parseNumber(number);
+		wchar_t	*s=wcharstring::parseNumber(number,4);
 		ssize_t	retval=write(s);
 		delete[] s;
 		return retval;
