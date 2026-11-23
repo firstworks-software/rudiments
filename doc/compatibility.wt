@@ -19,7 +19,7 @@ uClibc-linux systems are also supported.
 Platform-specific functions and variants are used if they exist.  For example:
 
 * strcasecmp, strncasecmp, strchrnul, strpbrk, strspn, strcspn
-* vdprintf, vasprintf and vsnprintf preferred to vsprintf
+* vasprintf and vsnprintf preferred to vsprintf
 * kqueue, epoll, port_create, /dev/poll and poll preferred to select
 * !CryptGenRandom, arc4random, random and rand preferred to lrand48
 * reentrant functions preferred to mutex-protected thread-unsafe versions

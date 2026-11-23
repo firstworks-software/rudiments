@@ -273,6 +273,8 @@ class filedescriptorprivate {
 		int32_t		_nodelay;
 
 		size_t		_maxssizet;
+
+		int32_t		_writeerrno;
 };
 
 filedescriptor::filedescriptor() : input(), output() {
@@ -321,6 +323,7 @@ void filedescriptor::construct() {
 	pvt->_readbufferend=NULL;
 	pvt->_nodelay=0;
 	pvt->_maxssizet=(size_t)sys::getMaxSSizeT();
+	pvt->_writeerrno=0;
 }
 
 filedescriptor::~filedescriptor() {
@@ -2401,6 +2404,7 @@ ssize_t filedescriptor::unBufferedWrite(
 	// * retrying interrupted writes, if necessary
 
 	int32_t	olderrno=error::getErrorNumber();
+	pvt->_writeerrno=0;
 
 	size_t	totalwrite=0;
 	size_t	sizetowrite;
@@ -2468,6 +2472,7 @@ ssize_t filedescriptor::unBufferedWrite(
 				#endif
 				// if we got an EAGAIN, and we're in
 				// non-blocking mode, then try again
+				pvt->_writeerrno=EAGAIN;
 				break;
 			} else if (error::getErrorNumber()==EINTR) {
 				#ifdef DEBUG_WRITE
@@ -2481,6 +2486,7 @@ ssize_t filedescriptor::unBufferedWrite(
 					continue;
 				} else {
 					totalwrite=totalwrite+actualwrite;
+					pvt->_writeerrno=EINTR;
 					break;
 				}
 			} else if (actualwrite==0 &&
@@ -3397,106 +3403,39 @@ bool filedescriptor::getCloseOnExec() {
 	#endif
 }
 
-// Without vdprintf(), an unbuffered printf() formats to memory and writes the
-// result to the file descriptor.  It does not use a stdio stream, for the
-// reasons given in the wide printfDelegate().
-//
-// On Windows, a socket can only be written with send(), so an unbuffered
-// printf() there uses write() instead.
-#if !defined(RUDIMENTS_HAVE_VDPRINTF) && !defined(_WIN32)
-	#define RUDIMENTS_PRINTF_WRITE_DIRECT 1
-
-// writes all "size" bytes of "buffer" to "fd".  Returns "size" on success or
-// RESULT_ERROR if write() fails, which sets errno, or if write() returns 0,
-// which leaves errno 0.
-static ssize_t writeDirect(int32_t fd, const char *buffer, size_t size) {
-
-	int32_t	olderr=error::getErrorNumber();
-
-	size_t	total=0;
-	while (total<size) {
-
-		// limit size of individual writes
-		size_t	count=size-total;
-		if (count>SSIZE_MAX) {
-			count=SSIZE_MAX;
-		}
-
-		// write, retrying interrupted writes
-		error::clearError();
-		#if defined(RUDIMENTS_HAVE__WRITE)
-			ssize_t	result=_write(fd,buffer+total,count);
-		#elif defined(RUDIMENTS_HAVE_WRITE)
-			ssize_t	result=::write(fd,buffer+total,count);
-		#else
-			#error no write or anything like it
-		#endif
-		if (result==-1 && error::getErrorNumber()==EINTR &&
-					!process::getShutDownFlag()) {
-			continue;
-		}
-		if (result<=0) {
-			return RESULT_ERROR;
-		}
-		total+=result;
-	}
-
-	error::setErrorNumber(olderr);
-	return total;
-}
-#endif
-
 ssize_t filedescriptor::printfDelegate(const char *format, va_list *argp) {
 
-	ssize_t	size=0;
-
-	#ifdef RUDIMENTS_HAVE_VDPRINTF
-
-	// If we're not buffering writes...
-	if (!pvt->_writebuffer) {
-
-		// use vdprintf if it's available
-		// (on some platforms (redhat 9), it tends to set
-		// errno=ESPIPE, even on success, so save/restore
-		// errno too)
-		int32_t	olderr=error::getErrorNumber();
-		int	result=vdprintf(pvt->_fd,format,*argp);
-		if (result>-1) {
-			error::setErrorNumber(olderr);
-		}
-		return result;
-	}
-
-	#endif
-
-	// If we are buffering writes though, don't use the above because it
-	// would bypass the buffer.  Without vdprintf(), unbuffered writes come
-	// here too.
+	int32_t	olderr=error::getErrorNumber();
 
 	// write the formatted data to a buffer
 	char	*buffer=NULL;
 	#ifdef RUDIMENTS_HAVE_VASPRINTF
-		size=vasprintf(&buffer,format,*argp);
+		ssize_t	size=vasprintf(&buffer,format,*argp);
 		if (size<0) {
 			buffer=NULL;
 		}
 	#else
-		size=charstring::printf(&buffer,format,argp);
+		ssize_t	size=charstring::printf(&buffer,format,argp);
 	#endif
 
-	// write the buffer to the file descriptor
+	// Use write(), even without a write buffer, so that the socket
+	// layer and any lowLevelWrite() override see the data.
 	if (size<0) {
 		size=RESULT_ERROR;
-	#ifdef RUDIMENTS_PRINTF_WRITE_DIRECT
-	} else if (!pvt->_writebuffer) {
-		size=writeDirect(pvt->_fd,buffer,size);
-	#endif
 	} else {
+		pvt->_writeerrno=0;
 		ssize_t	result=write(buffer,size);
-		if (result<0) {
-			size=result;
-		} else if (result!=size) {
-			size=RESULT_ERROR;
+		if (result==size) {
+			error::setErrorNumber(olderr);
+		} else {
+
+			// An unbuffered write that ends early on EAGAIN or
+			// EINTR restores the old errno.  So set EAGAIN or
+			// EINTR here.
+			if (pvt->_writeerrno) {
+				error::setErrorNumber(pvt->_writeerrno);
+			}
+			size=(result<0)?result:RESULT_ERROR;
 		}
 	}
 

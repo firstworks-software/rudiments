@@ -390,14 +390,22 @@ class RUDIMENTS_DLLSPEC output : virtual public object {
 		 *  buffer counts as written.  An error that occurs when the
 		 *  buffer is flushed later is not reported by this method.
 		 *
+		 *  On a filedescriptor, this method formats the data in memory
+		 *  and then calls write(), whether the output is buffered or
+		 *  not.  So a socket layer and a lowLevelWrite() override
+		 *  apply to the data.
+		 *  A full non-blocking descriptor gives RESULT_ERROR with errno
+		 *  EAGAIN.  An interrupted write gives RESULT_ERROR with errno
+		 *  EINTR, unless setRetryInterruptedWrites(true) enables a
+		 *  retry.
+		 *
 		 *  NOTE: The various implemententations of this method
-		 *  use whatever underlying v(d/s/f)printf() functions are
+		 *  use whatever underlying v(as/s/f)printf() functions are
 		 *  available, which, as it turns out, yield fairly
 		 *  inconsistent results between each other, especially across
 		 *  platforms, when printing wide characters.  Don't be
 		 *  surprised if you get different results, when printf()ing
-		 *  wide strings to a stringbuffer vs. filedescriptor, or to a
-		 *  buffered vs. unbuffered file descriptor. */
+		 *  wide strings to a stringbuffer vs. filedescriptor. */
 		virtual	ssize_t	printf(const char *format, ...);
 
 		/** Writes "argp" using "format" which should comply with
@@ -420,14 +428,22 @@ class RUDIMENTS_DLLSPEC output : virtual public object {
 		 *  buffer counts as written.  An error that occurs when the
 		 *  buffer is flushed later is not reported by this method.
 		 *
+		 *  On a filedescriptor, this method formats the data in memory
+		 *  and then calls write(), whether the output is buffered or
+		 *  not.  So a socket layer and a lowLevelWrite() override
+		 *  apply to the data.
+		 *  A full non-blocking descriptor gives RESULT_ERROR with errno
+		 *  EAGAIN.  An interrupted write gives RESULT_ERROR with errno
+		 *  EINTR, unless setRetryInterruptedWrites(true) enables a
+		 *  retry.
+		 *
 		 *  NOTE: The various implemententations of this method
-		 *  use whatever underlying v(d/s/f)printf() functions are
+		 *  use whatever underlying v(as/s/f)printf() functions are
 		 *  available, which, as it turns out, yield fairly
 		 *  inconsistent results between each other, especially across
 		 *  platforms, when printing wide characters.  Don't be
 		 *  surprised if you get different results, when printf()ing
-		 *  wide strings to a stringbuffer vs. filedescriptor, or to a
-		 *  buffered vs. unbuffered file descriptor. */
+		 *  wide strings to a stringbuffer vs. filedescriptor. */
 		virtual	ssize_t	printf(const char *format, va_list *argp);
 
 		/** Writes "..." using "format" which should comply with
@@ -453,14 +469,22 @@ class RUDIMENTS_DLLSPEC output : virtual public object {
 		 *  buffer counts as written.  An error that occurs when the
 		 *  buffer is flushed later is not reported by this method.
 		 *
+		 *  On a filedescriptor, this method formats the data in memory
+		 *  and then calls write(), whether the output is buffered or
+		 *  not.  So a socket layer and a lowLevelWrite() override
+		 *  apply to the data.
+		 *  A full non-blocking descriptor gives RESULT_ERROR with errno
+		 *  EAGAIN.  An interrupted write gives RESULT_ERROR with errno
+		 *  EINTR, unless setRetryInterruptedWrites(true) enables a
+		 *  retry.
+		 *
 		 *  NOTE: The various implemententations of this method
-		 *  use whatever underlying v(d/s/f)printf() functions are
+		 *  use whatever underlying v(as/s/f)printf() functions are
 		 *  available, which, as it turns out, yield fairly
 		 *  inconsistent results between each other, especially across
 		 *  platforms, when printing wide characters.  Don't be
 		 *  surprised if you get different results, when printf()ing
-		 *  wide strings to a stringbuffer vs. filedescriptor, or to a
-		 *  buffered vs. unbuffered file descriptor. */
+		 *  wide strings to a stringbuffer vs. filedescriptor. */
 		virtual	ssize_t	printf(const wchar_t *format, ...);
 
 		/** Writes "argp" using "format" which should comply with
@@ -489,14 +513,22 @@ class RUDIMENTS_DLLSPEC output : virtual public object {
 		 *  buffer counts as written.  An error that occurs when the
 		 *  buffer is flushed later is not reported by this method.
 		 *
+		 *  On a filedescriptor, this method formats the data in memory
+		 *  and then calls write(), whether the output is buffered or
+		 *  not.  So a socket layer and a lowLevelWrite() override
+		 *  apply to the data.
+		 *  A full non-blocking descriptor gives RESULT_ERROR with errno
+		 *  EAGAIN.  An interrupted write gives RESULT_ERROR with errno
+		 *  EINTR, unless setRetryInterruptedWrites(true) enables a
+		 *  retry.
+		 *
 		 *  NOTE: The various implemententations of this method
-		 *  use whatever underlying v(d/s/f)printf() functions are
+		 *  use whatever underlying v(as/s/f)printf() functions are
 		 *  available, which, as it turns out, yield fairly
 		 *  inconsistent results between each other, especially across
 		 *  platforms, when printing wide characters.  Don't be
 		 *  surprised if you get different results, when printf()ing
-		 *  wide strings to a stringbuffer vs. filedescriptor, or to a
-		 *  buffered vs. unbuffered file descriptor. */
+		 *  wide strings to a stringbuffer vs. filedescriptor. */
 		virtual	ssize_t	printf(const wchar_t *format, va_list *argp);
 
 		/** Writes "..." using "format" which should comply with
@@ -523,14 +555,22 @@ class RUDIMENTS_DLLSPEC output : virtual public object {
 		 *  supported on Windows.  On other platforms, nothing is
 		 *  written.
 		 *
+		 *  On a filedescriptor, this method formats the data in memory
+		 *  and then calls write(), whether the output is buffered or
+		 *  not.  So a socket layer and a lowLevelWrite() override
+		 *  apply to the data.
+		 *  A full non-blocking descriptor gives RESULT_ERROR with errno
+		 *  EAGAIN.  An interrupted write gives RESULT_ERROR with errno
+		 *  EINTR, unless setRetryInterruptedWrites(true) enables a
+		 *  retry.
+		 *
 		 *  NOTE: The various implemententations of this method
-		 *  use whatever underlying v(d/s/f)printf() functions are
+		 *  use whatever underlying v(as/s/f)printf() functions are
 		 *  available, which, as it turns out, yield fairly
 		 *  inconsistent results between each other, especially across
 		 *  platforms, when printing wide characters.  Don't be
 		 *  surprised if you get different results, when printf()ing
-		 *  wide strings to a stringbuffer vs. filedescriptor, or to a
-		 *  buffered vs. unbuffered file descriptor. */
+		 *  wide strings to a stringbuffer vs. filedescriptor. */
 		virtual	ssize_t	printfUcs2(const ucs2_t *format, ...);
 
 		/** Writes "argp" using "format" which should comply with
@@ -560,14 +600,22 @@ class RUDIMENTS_DLLSPEC output : virtual public object {
 		 *  supported on Windows.  On other platforms, nothing is
 		 *  written.
 		 *
+		 *  On a filedescriptor, this method formats the data in memory
+		 *  and then calls write(), whether the output is buffered or
+		 *  not.  So a socket layer and a lowLevelWrite() override
+		 *  apply to the data.
+		 *  A full non-blocking descriptor gives RESULT_ERROR with errno
+		 *  EAGAIN.  An interrupted write gives RESULT_ERROR with errno
+		 *  EINTR, unless setRetryInterruptedWrites(true) enables a
+		 *  retry.
+		 *
 		 *  NOTE: The various implemententations of this method
-		 *  use whatever underlying v(d/s/f)printf() functions are
+		 *  use whatever underlying v(as/s/f)printf() functions are
 		 *  available, which, as it turns out, yield fairly
 		 *  inconsistent results between each other, especially across
 		 *  platforms, when printing wide characters.  Don't be
 		 *  surprised if you get different results, when printf()ing
-		 *  wide strings to a stringbuffer vs. filedescriptor, or to a
-		 *  buffered vs. unbuffered file descriptor. */
+		 *  wide strings to a stringbuffer vs. filedescriptor. */
 		virtual	ssize_t	printfUcs2(const ucs2_t *format, va_list *argp);
 
 		/** Prints "c" to the output, however if "c" is non-printing

@@ -19,6 +19,10 @@
 #include <rudiments/bytestring.h>
 #include <rudiments/wcharstring.h>
 #include <rudiments/locale.h>
+#include <signal.h>
+#ifndef _WIN32
+	#include <unistd.h>
+#endif
 #include "test.cpp"
 
 #ifndef WIN32
@@ -234,17 +238,27 @@ class failfd : public filedescriptor {
 		void	setMode(ssize_t mode);
 		// the first count writes pass, the mode applies after them
 		void	setPassFirst(uint32_t count);
+		// errno that a failed write sets
+		void	setFailErrorNumber(int32_t errnum);
+		// bytes that lowLevelWrite() wrote
+		size_t	getWritten();
 	protected:
 		ssize_t	lowLevelWrite(const void *buf, size_t count);
 	private:
+		ssize_t	countWritten(ssize_t result);
+
 		// 0 is normal, 1 is a short write, anything else is returned
 		ssize_t		mode;
 		uint32_t	passfirst;
+		int32_t		failerrnum;
+		size_t		written;
 };
 
 failfd::failfd(ssize_t mode) : filedescriptor() {
 	this->mode=mode;
 	passfirst=0;
+	failerrnum=0;
+	written=0;
 }
 
 void failfd::setMode(ssize_t mode) {
@@ -255,21 +269,125 @@ void failfd::setPassFirst(uint32_t count) {
 	passfirst=count;
 }
 
+void failfd::setFailErrorNumber(int32_t errnum) {
+	failerrnum=errnum;
+}
+
+size_t failfd::getWritten() {
+	return written;
+}
+
 ssize_t failfd::lowLevelWrite(const void *buf, size_t count) {
 	if (passfirst) {
 		passfirst--;
-		return filedescriptor::lowLevelWrite(buf,count);
+		return countWritten(filedescriptor::lowLevelWrite(buf,count));
 	}
 	if (!mode) {
-		return filedescriptor::lowLevelWrite(buf,count);
+		return countWritten(filedescriptor::lowLevelWrite(buf,count));
 	}
 	if (mode==1) {
-		return filedescriptor::lowLevelWrite(buf,count/2);
+		return countWritten(filedescriptor::lowLevelWrite(buf,count/2));
+	}
+	if (mode<0 && failerrnum) {
+		error::setErrorNumber(failerrnum);
 	}
 	return mode;
 }
 
-static bool pipeHolds(filedescriptor *readfd, failfd *writefd,
+ssize_t failfd::countWritten(ssize_t result) {
+	if (result>0) {
+		written+=result;
+	}
+	return result;
+}
+
+// a socket layer that keeps the data written through it
+class stublayer : public socketlayer {
+	public:
+				stublayer(size_t sizemax);
+		void		setFileDescriptor(filedescriptor *fd);
+		filedescriptor	*getFileDescriptor();
+		bool		connect();
+		bool		accept();
+		ssize_t		read(void *buf, size_t size);
+		ssize_t		write(const void *buf, size_t size);
+		size_t		getPendingSize();
+		bool		close();
+		size_t		getSizeMax();
+		// data that write() was given
+		const char	*getData();
+		// count of write() calls and size of the largest one
+		uint32_t	getWrites();
+		size_t		getLargestWrite();
+	private:
+		filedescriptor	*fd;
+		size_t		sizemax;
+		stringbuffer	data;
+		uint32_t	writes;
+		size_t		largestwrite;
+};
+
+stublayer::stublayer(size_t sizemax) : socketlayer() {
+	fd=NULL;
+	this->sizemax=sizemax;
+	writes=0;
+	largestwrite=0;
+}
+
+void stublayer::setFileDescriptor(filedescriptor *fd) {
+	this->fd=fd;
+}
+
+filedescriptor *stublayer::getFileDescriptor() {
+	return fd;
+}
+
+bool stublayer::connect() {
+	return true;
+}
+
+bool stublayer::accept() {
+	return true;
+}
+
+ssize_t stublayer::read(void *buf, size_t size) {
+	return 0;
+}
+
+ssize_t stublayer::write(const void *buf, size_t size) {
+	data.append((const char *)buf,size);
+	writes++;
+	if (size>largestwrite) {
+		largestwrite=size;
+	}
+	return size;
+}
+
+size_t stublayer::getPendingSize() {
+	return 0;
+}
+
+bool stublayer::close() {
+	return true;
+}
+
+size_t stublayer::getSizeMax() {
+	return sizemax;
+}
+
+const char *stublayer::getData() {
+	return data.getString();
+}
+
+uint32_t stublayer::getWrites() {
+	return writes;
+}
+
+size_t stublayer::getLargestWrite() {
+	return largestwrite;
+}
+
+static bool pipeHolds(filedescriptor *readfd, filedescriptor *writefd,
 						const char *expected);
 
 // set a UTF-8 character type locale, if the host has one
@@ -357,8 +475,65 @@ static void printfErrorTests() {
 		locale::setCType("C");
 	}
 
+	// unbuffered, through the lowLevelWrite() override, for #10920
+	// filedescriptor - unbuffered printf() bypasses write(), the socket
+	// layer and lowLevelWrite()
+	ssize_t		umodes[]={0,1,-1,1};
+	bool		ushort[]={false,false,false,true};
+	const char	*unames[]={"clean","short write","failed write",
+					"short write allowed"};
+	ssize_t		uexpected[]={20,-1,-1,-1};
+	const char	*uheld[]={"01234567890123456789",
+					"0123456789012345678",
+					"",
+					"0123456789"};
+	for (uint16_t w=0; w<2; w++) {
+		if (w && !wcharstring::supportsPrintf()) {
+			break;
+		}
+		for (uint16_t i=0; i<sizeof(umodes)/sizeof(umodes[0]); i++) {
+			filedescriptor	readfd;
+			failfd		writefd(umodes[i]);
+			test("unbuffered, create pipe",
+				filedescriptor::createPipe(&readfd,&writefd));
+			writefd.setAllowShortWrites(ushort[i]);
+			ssize_t	result=(w)?
+				writefd.printf(L"%ls",L"01234567890123456789"):
+				writefd.printf("%s","01234567890123456789");
+			title.clear();
+			title.append((w)?"unbuffered wide printf(), ":
+						"unbuffered printf(), ");
+			title.append(unames[i]);
+			test(title.getString(),result==uexpected[i]);
+			size_t	length=title.getStringLength();
+			title.append(", override count");
+			test(title.getString(),writefd.getWritten()==
+					charstring::getLength(uheld[i]));
+			title.truncate(length);
+			title.append(", pipe holds it");
+			test(title.getString(),
+				pipeHolds(&readfd,&writefd,uheld[i]));
+		}
+	}
+
+	// unbuffered, the override fails and sets errno
+	{
+		filedescriptor	readfd;
+		failfd		writefd(-1);
+		test("unbuffered errno, create pipe",
+			filedescriptor::createPipe(&readfd,&writefd));
+		writefd.setFailErrorNumber(EIO);
+		error::clearError();
+		ssize_t	result=writefd.printf("%s","abc");
+		int32_t	errnum=error::getErrorNumber();
+		test("unbuffered printf(), EIO",result==-1);
+		test("unbuffered printf(), EIO, errno EIO",errnum==EIO);
+		test("unbuffered printf(), EIO, pipe empty",
+				pipeHolds(&readfd,&writefd,""));
+	}
+
 	// unbuffered, the read side of the pipe is closed
-	#ifndef WIN32
+	#ifndef _WIN32
 	signalset	sigpipe;
 	sigpipe.addSignal(SIGPIPE);
 	signalmanager::ignoreSignals(&sigpipe);
@@ -370,15 +545,6 @@ static void printfErrorTests() {
 		test("unbuffered, close read side",readfd.close());
 		ssize_t	result=writefd.printf("%s","01234567890123456789");
 		test("unbuffered printf(), closed pipe",result==-1);
-	}
-	if (wcharstring::supportsPrintf()) {
-		filedescriptor	readfd;
-		filedescriptor	writefd;
-		test("unbuffered, create pipe",
-			filedescriptor::createPipe(&readfd,&writefd));
-		test("unbuffered, close read side",readfd.close());
-		ssize_t	result=writefd.printf(L"%ls",L"01234567890123456789");
-		test("unbuffered wide printf(), closed pipe",result==-1);
 	}
 	#endif
 
@@ -413,15 +579,198 @@ static void printfErrorTests() {
 	signalmanager::alarm(0);
 }
 
+// unbuffered printf() through a socket layer, for #10920 filedescriptor -
+// unbuffered printf() bypasses write(), the socket layer and lowLevelWrite()
+static void printfSocketLayerTests() {
+
+	signalmanager::alarm(60);
+
+	// largest write the layer takes, data to print, writes expected
+	size_t		sizemaxes[]={1024,4};
+	const char	*data[]={"abc","0123456789"};
+	uint32_t	writes[]={1,3};
+	stringbuffer	title;
+
+	for (uint16_t w=0; w<2; w++) {
+		if (w && !wcharstring::supportsPrintf()) {
+			break;
+		}
+		for (uint16_t i=0; i<sizeof(sizemaxes)/sizeof(sizemaxes[0]);
+									i++) {
+			stublayer	layer(sizemaxes[i]);
+			filedescriptor	readfd;
+			filedescriptor	writefd;
+			test("socket layer, create pipe",
+				filedescriptor::createPipe(&readfd,&writefd));
+			writefd.setSocketLayer(&layer);
+			size_t	length=charstring::getLength(data[i]);
+			ssize_t	result;
+			if (w) {
+				wchar_t	*wdata=wcharstring::duplicate(data[i]);
+				result=writefd.printf(L"%ls",wdata);
+				delete[] wdata;
+			} else {
+				result=writefd.printf("%s",data[i]);
+			}
+			writefd.setSocketLayer(NULL);
+			title.clear();
+			title.append((w)?"wide printf() ":"printf() ");
+			title.append(data[i]);
+			size_t	titlelength=title.getStringLength();
+			title.append(", count");
+			test(title.getString(),result==(ssize_t)length);
+			title.truncate(titlelength);
+			title.append(", layer has it");
+			test(title.getString(),
+				!charstring::compare(layer.getData(),data[i]));
+			title.truncate(titlelength);
+			title.append(", layer writes");
+			test(title.getString(),layer.getWrites()==writes[i] &&
+				layer.getLargestWrite()<=sizemaxes[i]);
+			title.truncate(titlelength);
+			title.append(", pipe empty");
+			test(title.getString(),pipeHolds(&readfd,&writefd,""));
+		}
+	}
+	stdoutput.printf("\n");
+
+	signalmanager::alarm(0);
+}
+
+#ifndef _WIN32
+// fill a pipe until a write would block, and leave it in blocking mode
+static bool fillPipe(filedescriptor *writefd) {
+	if (!writefd->setNonBlockingMode(true)) {
+		return false;
+	}
+	char	filler[4096];
+	bytestring::set(filler,'x',sizeof(filler));
+	while (writefd->write(filler,sizeof(filler))==
+					(ssize_t)sizeof(filler)) {}
+	while (writefd->write(filler,1)==1) {}
+	return writefd->setNonBlockingMode(false);
+}
+
+// An alarm can come before write() starts, so the handler counts the alarms
+// and re-arms.  After five alarms, the test takes the write as retried.
+static volatile sig_atomic_t	alarms;
+static volatile sig_atomic_t	retried;
+static void alarmHandler(int32_t signum) {
+	alarms=alarms+1;
+	if (alarms>=6) {
+
+		// A retried write never returns on the full pipe.  test() is
+		// not async-signal-safe, so write a fixed message and exit.
+		const char	message[]=
+			"\tprintf(), interrupted, write not retried: failed\n";
+		if (::write(2,message,sizeof(message)-1)) {}
+		::_exit(1);
+	}
+	if (alarms>=5) {
+		retried=1;
+	}
+	signalmanager::alarm(1);
+}
+#endif
+
+// errno after an unbuffered printf(), for #11166 filedescriptor - an
+// unbuffered printf() through write() loses errno EAGAIN or EINTR
+static void printfErrnoTests() {
+
+	signalmanager::alarm(60);
+
+	// success leaves errno as it was
+	{
+		filedescriptor	readfd;
+		filedescriptor	writefd;
+		test("success, create pipe",
+			filedescriptor::createPipe(&readfd,&writefd));
+		error::setErrorNumber(ENOENT);
+		ssize_t	result=writefd.printf("%s","abc");
+		int32_t	errnum=error::getErrorNumber();
+		test("printf(), success",result==3);
+		test("printf(), success, errno unchanged",errnum==ENOENT);
+		error::clearError();
+		test("success, pipe holds abc",
+				pipeHolds(&readfd,&writefd,"abc"));
+	}
+
+	#ifndef _WIN32
+
+	// full non-blocking pipe
+	{
+		filedescriptor	readfd;
+		filedescriptor	writefd;
+		test("full, create pipe",
+			filedescriptor::createPipe(&readfd,&writefd));
+		test("full, fill pipe",fillPipe(&writefd));
+		test("full, set non-blocking",
+				writefd.setNonBlockingMode(true));
+		error::clearError();
+		ssize_t	result=writefd.printf("%s","abc");
+		int32_t	errnum=error::getErrorNumber();
+		test("printf(), full pipe",result==-1);
+		test("printf(), full pipe, errno EAGAIN",errnum==EAGAIN);
+		if (wcharstring::supportsPrintf()) {
+			error::clearError();
+			result=writefd.printf(L"%ls",L"abc");
+			errnum=error::getErrorNumber();
+			test("wide printf(), full pipe",result==-1);
+			test("wide printf(), full pipe, errno EAGAIN",
+							errnum==EAGAIN);
+		}
+		error::clearError();
+	}
+
+	// interrupted write on a full blocking pipe
+	{
+		filedescriptor	readfd;
+		filedescriptor	writefd;
+		test("interrupted, create pipe",
+			filedescriptor::createPipe(&readfd,&writefd));
+		test("interrupted, fill pipe",fillPipe(&writefd));
+
+		// catch SIGALRM without SA_RESTART
+		signalhandler	alarmhandler;
+		signalhandler	oldhandler;
+		alarmhandler.setHandler(alarmHandler);
+		test("interrupted, handle SIGALRM",
+			alarmhandler.handleSignal(SIGALRM,&oldhandler));
+
+		alarms=0;
+		retried=0;
+		signalmanager::alarm(1);
+		error::clearError();
+		ssize_t	result=writefd.printf("%s","abc");
+		int32_t	errnum=error::getErrorNumber();
+		signalmanager::alarm(0);
+
+		// restore the old handler and the time limit
+		test("interrupted, restore SIGALRM",
+				oldhandler.handleSignal(SIGALRM));
+		signalmanager::alarm(60);
+
+		test("printf(), interrupted, write not retried",!retried);
+		test("printf(), interrupted",result==-1);
+		test("printf(), interrupted, errno EINTR",errnum==EINTR);
+		error::clearError();
+	}
+
+	#endif
+	stdoutput.printf("\n");
+
+	signalmanager::alarm(0);
+}
+
 // close the write side of a pipe and check that the read side holds
 // exactly the expected data
-static bool pipeHolds(filedescriptor *readfd, failfd *writefd,
+static bool pipeHolds(filedescriptor *readfd, filedescriptor *writefd,
 						const char *expected) {
 	if (!writefd->close()) {
 		return false;
 	}
 	size_t	length=charstring::getLength(expected);
-	char	buf[16];
+	char	buf[64];
 	if (readfd->read(buf,sizeof(buf))!=(ssize_t)length ||
 			bytestring::compare(buf,expected,length)) {
 		return false;
@@ -1152,6 +1501,12 @@ int main(int argc, const char **argv) {
 
 		stdoutput.printf("\nprintf errors\n");
 		printfErrorTests();
+
+		stdoutput.printf("\nprintf socket layer\n");
+		printfSocketLayerTests();
+
+		stdoutput.printf("\nprintf errno\n");
+		printfErrnoTests();
 
 		stdoutput.printf("\nflush errors\n");
 		flushErrorTests();

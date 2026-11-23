@@ -135,8 +135,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - mvcresult writes indented json differently now - top-level keys are
   indented and a comma follows a nested closing bracket on its line, so
   output that a dependent project parses may change
-- filedescriptor wide printf() to an unbuffered descriptor returns bytes
-  written now, and fails on text that the locale cannot convert
+- filedescriptor printf() calls write() now, so a socket layer or
+  lowLevelWrite() override applies; wide printf() to an unbuffered
+  descriptor returns bytes written now, and fails on text that the locale
+  cannot convert
 
 ### Removed
 - removed csprng's static isSupported() - it was always unconditionally
