@@ -359,6 +359,13 @@ static void testOversized() {
 							RESULT_ERROR);
 		test("printfUcs2() at huge position, unchanged",
 				unchanged(&one,1,pos,1,'A'));
+	} else {
+		ucs2literal(format,"%hd");
+		test("unsupported printfUcs2() at huge position",
+				one.printfUcs2(format,(uint16_t)5)==
+							RESULT_ERROR);
+		test("unsupported printfUcs2() at huge position, unchanged",
+				unchanged(&one,1,pos,1,'A'));
 	}
 
 	// an append ignores the position
@@ -590,6 +597,12 @@ static void testPrintfPaths() {
 			bb.printfUcs2(bigformat,(uint16_t)1)==200);
 		test("printfUcs2(), large size",bb.getSize()==204*us);
 		bb.clear();
+	} else {
+		ucs2literal(format,"n=%hd");
+		test("unsupported printfUcs2(), return",
+			bb.printfUcs2(format,(uint16_t)12)==RESULT_ERROR);
+		test("unsupported printfUcs2(), size, position",
+			bb.getSize()==0 && bb.getPosition()==0);
 	}
 	stdoutput.printf("\n");
 }
@@ -709,6 +722,12 @@ static void testPrintfErrors() {
 			test(title.getString(),
 				result==expected[i] && fb.writes==1);
 		}
+	} else {
+		ucs2literal(format,"01234567890123456789");
+		failbytebuffer	fb(0);
+		test("unsupported printfUcs2()",
+			fb.printfUcs2(format)==RESULT_ERROR &&
+			fb.getSize()==0 && fb.writes==0);
 	}
 	stdoutput.printf("\n");
 }

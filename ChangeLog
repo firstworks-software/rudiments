@@ -338,6 +338,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   returning characters instead of bytes
 - fixed a memory leak in filedescriptor wide printf() to an unbuffered
   descriptor
+- fixed ucs2charstring::printf() and output::printfUcs2() returning success
+  off Windows
 
 ### Security
 - fixed buffer overflow when unix socket file name is too long

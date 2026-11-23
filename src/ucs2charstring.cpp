@@ -2806,13 +2806,9 @@ ssize_t ucs2charstring::printf(ucs2_t *buffer, size_t len,
 		return wcharstring::printf((wchar_t *)buffer,len,
 						(const wchar_t *)format,argp);
 	#else
-		// on non-windows, it's trickier...
-
-		// FIXME: implement this...
-		// make sure that %lc and %ls are interpreted as ucs2_t
-		// characters/strings rather than wide characters/strings
+		// ucs-2 formatting is not supported off windows
 		error::setErrorNumber(ENOSYS);
-		return 0;
+		return -1;
 	#endif
 }
 
@@ -2861,6 +2857,9 @@ ssize_t ucs2charstring::printf(ucs2_t **buffer,
 }
 
 bool ucs2charstring::supportsPrintf() {
-	// FIXME: set this true eventually
-	return false;
+	#ifdef _WIN32
+		return true;
+	#else
+		return false;
+	#endif
 }

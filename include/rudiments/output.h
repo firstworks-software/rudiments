@@ -551,9 +551,9 @@ class RUDIMENTS_DLLSPEC output : virtual public object {
 		 *  buffer counts as written.  An error that occurs when the
 		 *  buffer is flushed later is not reported by this method.
 		 *
-		 *  Note that formatting of UCS-2 data is currently only
-		 *  supported on Windows.  On other platforms, nothing is
-		 *  written.
+		 *  Note that formatting of UCS-2 data is only supported on
+		 *  Windows.  On other platforms, nothing is written, this
+		 *  method returns RESULT_ERROR, and errno is ENOSYS.
 		 *
 		 *  On a filedescriptor, this method formats the data in memory
 		 *  and then calls write(), whether the output is buffered or
@@ -596,9 +596,9 @@ class RUDIMENTS_DLLSPEC output : virtual public object {
 		 *  buffer counts as written.  An error that occurs when the
 		 *  buffer is flushed later is not reported by this method.
 		 *
-		 *  Note that formatting of UCS-2 data is currently only
-		 *  supported on Windows.  On other platforms, nothing is
-		 *  written.
+		 *  Note that formatting of UCS-2 data is only supported on
+		 *  Windows.  On other platforms, nothing is written, this
+		 *  method returns RESULT_ERROR, and errno is ENOSYS.
 		 *
 		 *  On a filedescriptor, this method formats the data in memory
 		 *  and then calls write(), whether the output is buffered or

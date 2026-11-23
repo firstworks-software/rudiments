@@ -1639,7 +1639,11 @@ class RUDIMENTS_DLLSPEC ucs2charstring {
 		 *  Returns -1 if an error occurred.
 		 *
 		 *  NOTE: wide character sequences will be converted to
-		 *  sequences of UCS-2 characters. */
+		 *  sequences of UCS-2 characters.
+		 *
+		 *  NOTE: This method is unsupported on platforms where
+		 *  supportsPrintf() returns false.  On those platforms this
+		 *  method returns -1 and sets ENOSYS. */
 		static ssize_t	printf(ucs2_t *buffer, size_t len,
 						const ucs2_t *format, ...);
 
@@ -1665,7 +1669,11 @@ class RUDIMENTS_DLLSPEC ucs2charstring {
 		 *  Returns -1 if an error occurred.
 		 *
 		 *  NOTE: wide character sequences will be converted to
-		 *  sequences of UCS-2 characters. */
+		 *  sequences of UCS-2 characters.
+		 *
+		 *  NOTE: This method is unsupported on platforms where
+		 *  supportsPrintf() returns false.  On those platforms this
+		 *  method returns -1 and sets ENOSYS. */
 		static ssize_t	printf(ucs2_t *buffer, size_t len,
 						const ucs2_t *format,
 						va_list *argp);
@@ -1683,7 +1691,11 @@ class RUDIMENTS_DLLSPEC ucs2charstring {
 		 *  Returns -1 if an error occurred.
 		 *
 		 *  NOTE: wide character sequences will be converted to
-		 *  sequences of UCS-2 characters. */
+		 *  sequences of UCS-2 characters.
+		 *
+		 *  NOTE: This method is unsupported on platforms where
+		 *  supportsPrintf() returns false.  On those platforms this
+		 *  method returns -1 and sets ENOSYS. */
 		static ssize_t	printf(ucs2_t **buffer,
 						const ucs2_t *format, ...);
 
@@ -1702,13 +1714,18 @@ class RUDIMENTS_DLLSPEC ucs2charstring {
 		 *  The caller must call va_end() on "argp" afterward.
 		 *
 		 *  NOTE: wide character sequences will be converted to
-		 *  sequences of UCS-2 characters. */
+		 *  sequences of UCS-2 characters.
+		 *
+		 *  NOTE: This method is unsupported on platforms where
+		 *  supportsPrintf() returns false.  On those platforms this
+		 *  method returns -1 and sets ENOSYS. */
 		static ssize_t	printf(ucs2_t **buffer,
 						const ucs2_t *format,
 						va_list *argp);
 
 		/** Returns true if the platform supports printf()ing UCS-2
-		 *  characters and false otherwise. */
+		 *  characters and false otherwise.  Currently true on Windows
+		 *  and false on all other platforms. */
 		static bool	supportsPrintf();
 
 	#include <rudiments/private/ucs2charstring.h>

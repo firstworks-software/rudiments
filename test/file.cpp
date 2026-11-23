@@ -18,6 +18,7 @@
 #include <rudiments/charstring.h>
 #include <rudiments/bytestring.h>
 #include <rudiments/wcharstring.h>
+#include <rudiments/ucs2charstring.h>
 #include <rudiments/locale.h>
 #include <signal.h>
 #ifndef _WIN32
@@ -573,6 +574,21 @@ static void printfErrorTests() {
 				"format converted without error, skipped\n");
 		}
 		locale::setCType("C");
+	}
+
+	// ucs2 printf is unsupported, fails and writes nothing
+	if (!ucs2charstring::supportsPrintf()) {
+		ucs2literal(format,"abc");
+		filedescriptor	readfd;
+		failfd		writefd(0);
+		test("unsupported printfUcs2(), create pipe",
+			filedescriptor::createPipe(&readfd,&writefd));
+		test("unsupported printfUcs2()",
+				writefd.printfUcs2(format)==-1);
+		test("unsupported printfUcs2(), nothing written",
+				writefd.getWritten()==0);
+		test("unsupported printfUcs2(), pipe empty",
+				pipeHolds(&readfd,&writefd,""));
 	}
 	stdoutput.printf("\n");
 

@@ -12,9 +12,22 @@
 #include <rudiments/sys.h>
 #include <rudiments/locale.h>
 #include <rudiments/stdio.h>
+#include <rudiments/error.h>
+#include <stdarg.h>
 #include <limits.h>
 #include <rudiments/signalclasses.h>
 #include "test.cpp"
+
+// printf() through the va_list forms, into buffer or, if bufp is set, bufp
+static ssize_t vaPrintf(ucs2_t *buffer, size_t len, ucs2_t **bufp,
+					const ucs2_t *format, ...) {
+	va_list	argp;
+	va_start(argp,format);
+	ssize_t	result=(bufp)?ucs2charstring::printf(bufp,format,&argp):
+			ucs2charstring::printf(buffer,len,format,&argp);
+	va_end(argp);
+	return result;
+}
 
 // returns an exact-size copy of the ASCII string "str"; NULL stays NULL
 static ucs2_t *emptyPatternCopy(const char *str) {
@@ -1117,6 +1130,34 @@ int main(int argc, const char **argv) {
 		delete[] buf;
 	} else {
 		stdoutput.printf("not supported\n");
+
+		// unsupported, fails with ENOSYS
+		ucs2literal(format,"%lc%d%ls");
+		error::clearError();
+		ssize_t	size=ucs2charstring::printf(
+					buffer,20,format,'a',123,hello);
+		test("unsupported, size",size==-1);
+		test("unsupported, errno",error::getErrorNumber()==ENOSYS);
+		ucs2_t	*buf=NULL;
+		error::clearError();
+		size=ucs2charstring::printf(&buf,format,'a',123,hello);
+		test("unsupported, allocating size",size==-1);
+		test("unsupported, allocating errno",
+				error::getErrorNumber()==ENOSYS);
+		test("unsupported, allocating buffer",buf==NULL);
+		delete[] buf;
+		error::clearError();
+		size=vaPrintf(buffer,20,NULL,format,'a',123,hello);
+		test("unsupported, va_list size",size==-1);
+		test("unsupported, va_list errno",
+				error::getErrorNumber()==ENOSYS);
+		error::clearError();
+		size=vaPrintf(NULL,0,&buf,format,'a',123,hello);
+		test("unsupported, va_list allocating size",size==-1);
+		test("unsupported, va_list allocating errno",
+				error::getErrorNumber()==ENOSYS);
+		test("unsupported, va_list allocating buffer",buf==NULL);
+		delete[] buf;
 	}
 	stdoutput.printf("\n");
 
