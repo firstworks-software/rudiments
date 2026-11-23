@@ -525,7 +525,7 @@ ssize_t jsondom::writeNode(domnode *dn, output *out,
 			break;
 		case 'a':
 			{
-			if (indent) {
+			if (indent && !inarray) {
 				if (*indentlevel) {
 					if (!incOrShort(&retval,
 							out->write('\n'),1)) {

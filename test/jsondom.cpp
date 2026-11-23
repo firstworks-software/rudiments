@@ -364,6 +364,81 @@ const struct test tests[]={
 	},
 
 	{
+	"array in array",
+	"[\n"
+	"  [\n"
+	"    1\n"
+	"  ],\n"
+	"  [\n"
+	"    2\n"
+	"  ]\n"
+	"]",
+	false
+	},
+
+	{
+	"array in array, unindented",
+	"[[1],[2]]",
+	true
+	},
+
+	{
+	"array in array in array",
+	"[\n"
+	"  [\n"
+	"    [\n"
+	"      1\n"
+	"    ]\n"
+	"  ],\n"
+	"  2\n"
+	"]",
+	false
+	},
+
+	{
+	"array in array in array, unindented",
+	"[[[1]],2]",
+	true
+	},
+
+	{
+	"empty array in array",
+	"[\n"
+	"  [\n"
+	"  ],\n"
+	"  1\n"
+	"]",
+	false
+	},
+
+	{
+	"empty array in array, unindented",
+	"[[],1]",
+	true
+	},
+
+	{
+	"array in array in object",
+	"{\n"
+	"  \"b\" : \n"
+	"  [\n"
+	"    [\n"
+	"      2,\n"
+	"      3\n"
+	"    ]\n"
+	"  ],\n"
+	"  \"e\" : 1\n"
+	"}",
+	false
+	},
+
+	{
+	"array in array in object, unindented",
+	"{\"b\":[[2,3]],\"e\":1}",
+	true
+	},
+
+	{
 	NULL,
 	NULL,
 	true
