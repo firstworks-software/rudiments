@@ -1963,7 +1963,9 @@ static void mmapDeleteTests() {
 
 // buffered read after a seek past the end of the file, for #11190
 // filedescriptor - a buffered read after a seek past the end of the file
-// returns a full read instead of 0
+// returns a full read instead of 0, and for #11195 filedescriptor - with
+// memory map buffering on, a read after a seek into a block wholly past the
+// end of the file crashes with SIGBUS
 static void seekPastEndReadTests() {
 
 	signalmanager::alarm(60);
@@ -1981,13 +1983,14 @@ static void seekPastEndReadTests() {
 	test("close",fl.close());
 
 	// a seek into the last block and into a block after it with map
-	// buffering off, and into the last block with map buffering on
-	off64_t		positions[]={22000,30000,22000};
-	bool		maps[]={false,false,true};
-	const char	*names[]={"last block","block after","last block, mmap"};
+	// buffering off and on
+	off64_t		positions[]={22000,30000,22000,30000};
+	bool		maps[]={false,false,true,true};
+	const char	*names[]={"last block","block after",
+				"last block, mmap","block after, mmap"};
 	char		buf[8192];
 	stringbuffer	title;
-	for (uint16_t i=0; i<3; i++) {
+	for (uint16_t i=0; i<4; i++) {
 
 		if (maps[i] && !memorymap::isSupported()) {
 			stdoutput.printf("memory maps not supported\n");
@@ -2016,6 +2019,12 @@ static void seekPastEndReadTests() {
 		title.clear();
 		title.append(names[i])->append(", position");
 		test(title.getString(),sfl.getPosition()==position);
+		if (maps[i]) {
+			title.clear();
+			title.append(names[i])->append(", block is not mapped");
+			test(title.getString(),
+				!sfl.isCurrentBlockMmapBuffered());
+		}
 		title.clear();
 		title.append(names[i])->append(", close");
 		test(title.getString(),sfl.close());
@@ -2064,33 +2073,127 @@ static void seekPastEndReadTests() {
 		test(title.getString(),sfl.close());
 	}
 
-	// a write after the seek and read lands at the seek position
-	file	wfl;
-	test("write after, open",wfl.open(seekfile,O_RDWR));
-	wfl.setMmapBufferingEnabled(false);
-	test("write after, set read buffer size",wfl.setReadBufferSize(8192));
-	test("write after, seek",
-		wfl.setPositionRelativeToBeginning(30000)==30000);
-	test("write after, read 8192",wfl.read(buf,sizeof(buf))==0);
-	test("write after, write 10",wfl.write("0123456789",10)==10);
-	test("write after, flush",wfl.flushWriteBuffer(-1,-1));
-	test("write after, close",wfl.close());
+	// a read of a block that is wholly inside the file with map buffering
+	// on still maps the block
+	if (memorymap::isSupported()) {
+		file	cfl;
+		test("inside, open",cfl.open(seekfile,O_RDWR));
+		cfl.setMmapBufferingEnabled(true);
+		test("inside, set read buffer size",cfl.setReadBufferSize(8192));
+		test("inside, seek",
+			cfl.setPositionRelativeToBeginning(8192)==8192);
+		test("inside, read 100",cfl.read(buf,100)==100);
+		test("inside, data",!bytestring::compare(buf,data+8192,100));
+		test("inside, block is mapped",cfl.isCurrentBlockMmapBuffered());
+		test("inside, close",cfl.close());
+	} else {
+		stdoutput.printf("memory maps not supported\n");
+	}
 
-	// the data is intact and the write is in place
-	// (the gap between them is not checked, because it holds old buffer
-	// bytes, which is #11196 filedescriptor - a buffered write after a
-	// seek past the end of the file fills the gap with old buffer bytes
-	// instead of zeros)
-	char	*contents=new char[30010];
-	file	rfl;
-	test("write after, open for read",rfl.open(seekfile,O_RDONLY));
-	test("write after, size",rfl.getSize()==30010);
-	test("write after, read file",
-		rfl.read(contents,30010)==30010);
-	test("write after, data",!bytestring::compare(contents,data,20480));
-	test("write after, bytes",
-		!bytestring::compare(contents+30000,"0123456789",10));
-	test("write after, close for read",rfl.close());
+	// the same with a file that ends on a block boundary
+	if (memorymap::isSupported()) {
+		file::remove(seekfile);
+		file	efl;
+		test("full last block, create",efl.create(seekfile,
+				permissions::parsePermString("rw-rw----")));
+		test("full last block, write",efl.write(data,16384)==16384);
+		test("full last block, close",efl.close());
+		file	cfl;
+		test("full last block, open",cfl.open(seekfile,O_RDWR));
+		cfl.setMmapBufferingEnabled(true);
+		test("full last block, set read buffer size",
+						cfl.setReadBufferSize(8192));
+		test("full last block, seek",
+			cfl.setPositionRelativeToBeginning(8192)==8192);
+		test("full last block, read 100",cfl.read(buf,100)==100);
+		test("full last block, data",
+				!bytestring::compare(buf,data+8192,100));
+		test("full last block, block is mapped",
+					cfl.isCurrentBlockMmapBuffered());
+		test("full last block, close",cfl.close());
+	} else {
+		stdoutput.printf("memory maps not supported\n");
+	}
+
+	// a write after the seek and read lands at the seek position, with
+	// map buffering off and on
+	bool		wmaps[]={false,true};
+	const char	*wnames[]={"write after","write after, mmap"};
+	char		*contents=new char[30010];
+	for (uint16_t i=0; i<2; i++) {
+
+		if (wmaps[i] && !memorymap::isSupported()) {
+			stdoutput.printf("memory maps not supported\n");
+			continue;
+		}
+
+		// start with the original file
+		file::remove(seekfile);
+		file	nfl;
+		title.clear();
+		title.append(wnames[i])->append(", create");
+		test(title.getString(),nfl.create(seekfile,
+				permissions::parsePermString("rw-rw----")));
+		title.clear();
+		title.append(wnames[i])->append(", write file");
+		test(title.getString(),
+			nfl.write(data,sizeof(data))==(ssize_t)sizeof(data));
+		title.clear();
+		title.append(wnames[i])->append(", close file");
+		test(title.getString(),nfl.close());
+
+		file	wfl;
+		title.clear();
+		title.append(wnames[i])->append(", open");
+		test(title.getString(),wfl.open(seekfile,O_RDWR));
+		wfl.setMmapBufferingEnabled(wmaps[i]);
+		title.clear();
+		title.append(wnames[i])->append(", set read buffer size");
+		test(title.getString(),wfl.setReadBufferSize(8192));
+		title.clear();
+		title.append(wnames[i])->append(", seek");
+		test(title.getString(),
+			wfl.setPositionRelativeToBeginning(30000)==30000);
+		title.clear();
+		title.append(wnames[i])->append(", read 8192");
+		test(title.getString(),wfl.read(buf,sizeof(buf))==0);
+		title.clear();
+		title.append(wnames[i])->append(", write 10");
+		test(title.getString(),wfl.write("0123456789",10)==10);
+		title.clear();
+		title.append(wnames[i])->append(", flush");
+		test(title.getString(),wfl.flushWriteBuffer(-1,-1));
+		title.clear();
+		title.append(wnames[i])->append(", close");
+		test(title.getString(),wfl.close());
+
+		// the data is intact and the write is in place
+		// (the gap between them is not checked, because it holds old
+		// buffer bytes, which is #11196 filedescriptor - a buffered
+		// write after a seek past the end of the file fills the gap
+		// with old buffer bytes instead of zeros)
+		file	rfl;
+		title.clear();
+		title.append(wnames[i])->append(", open for read");
+		test(title.getString(),rfl.open(seekfile,O_RDONLY));
+		title.clear();
+		title.append(wnames[i])->append(", size");
+		test(title.getString(),rfl.getSize()==30010);
+		title.clear();
+		title.append(wnames[i])->append(", read file");
+		test(title.getString(),rfl.read(contents,30010)==30010);
+		title.clear();
+		title.append(wnames[i])->append(", data");
+		test(title.getString(),
+			!bytestring::compare(contents,data,sizeof(data)));
+		title.clear();
+		title.append(wnames[i])->append(", bytes");
+		test(title.getString(),
+			!bytestring::compare(contents+30000,"0123456789",10));
+		title.clear();
+		title.append(wnames[i])->append(", close for read");
+		test(title.getString(),rfl.close());
+	}
 	delete[] contents;
 
 	file::remove(seekfile);

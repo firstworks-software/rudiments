@@ -374,6 +374,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - fixed filedescriptor buffered read() after a seek past the end of a file
 - fixed filedescriptor read() and write() running past the end of the map
   after a seek into a memory mapped block
+- fixed filedescriptor read() and write() crash after a seek into a
+  memory mapped block past the end of a file
 
 ### Security
 - fixed buffer overflow when unix socket file name is too long

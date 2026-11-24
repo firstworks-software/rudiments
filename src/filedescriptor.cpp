@@ -1080,21 +1080,24 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 	//
 	// We're ready to buffer that new block.
 	//
-	// We would like to just mmap it, which we can do if it's somewhere in
-	// the middle of the file.  If it's the last block in the file though,
-	// we can run into trouble if we map less than a full block or map
-	// a full block that runs off of the end of the file.
+	// We would like to just mmap it, but a read or write of a mapped page
+	// that lies past the end of the file raises SIGBUS.
 	//
-	// So we can only mmap it if it's not the last block, or if it is, but
-	// it's a full block (i.e. it's exactly pvt->_writeblocksize bytes),
-	// so...
+	// So we can only mmap the block if it lies wholly inside the file,
+	// i.e. if the file holds all pvt->_writeblocksize bytes of it.  A
+	// partial last block, an empty block at the end of the file, or a
+	// block past the end of the file gets a traditional buffer, so...
 
 	bool	canmmap=false;
 	if (pvt->_writebuffermmapenabled) {
 
-		// get the size of the file and
+		// get the type and size of the file and
 		// determine if we can mmap the block
-		off64_t	filesize=getSize();
+		file	f;
+		f.setFileDescriptor(pvt->_fd);
+		bool	success=f.getCurrentProperties();
+		f.setFileDescriptor(-1);
+		off64_t	filesize=(success)?f.getSize():-1;
 		if (filesize<0) {
 			#if defined(DEBUG_BUFFERING)
 			debugPrintf(",error getting file size)\n");
@@ -1106,31 +1109,40 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 			return RESULT_ERROR;
 		}
 
-		#if defined(DEBUG_BUFFERING)
-		if (filesize/pvt->_writeblocksize==
-				pvt->_writeblockoffset/pvt->_writeblocksize) {
-			debugPrintf(",is last block");
-			if (((size_t)filesize-pvt->_writeblockoffset)==
-						pvt->_writeblocksize) {
-				debugPrintf(",is full block,"
-						"can mmap");
-			} else {
-				debugPrintf(",is partial block,"
-						"can't mmap...\n");
-			}
+		if (f.isBlockDevice()) {
+
+			// A block device reports a size of 0, so its blocks
+			// can't be tested against the size.  Map any block but
+			// the first.
+			canmmap=(pvt->_writeblockoffset>=
+					(off64_t)pvt->_writeblocksize);
+
+			#if defined(DEBUG_BUFFERING)
+			debugPrintf(",block device");
+			#endif
+
 		} else {
+
+			// the whole block must lie inside the file
+			canmmap=(pvt->_writeblockoffset<=
+					filesize-(off64_t)pvt->_writeblocksize);
+
+			#if defined(DEBUG_BUFFERING)
+			if (canmmap) {
+				debugPrintf(",block inside file");
+			} else {
+				debugPrintf(",block not inside file");
+			}
+			#endif
+		}
+
+		#if defined(DEBUG_BUFFERING)
+		if (canmmap) {
 			debugPrintf(",can mmap");
+		} else {
+			debugPrintf(",can't mmap...\n");
 		}
 		#endif
-
-		canmmap=(
-			// not the last block
-			!(filesize/pvt->_writeblocksize==
-					pvt->_writeblockoffset/
-					pvt->_writeblocksize) ||
-			// is a full block
-			((size_t)(filesize-pvt->_writeblockoffset)==
-					pvt->_writeblocksize));
 
 	}
 	#if defined(DEBUG_BUFFERING)
@@ -1208,8 +1220,9 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 	}
 
 	// if we couldn't mmap the block, either because we're in the last
-	// block of the file and it's a partial block, or just because the
-	// attempt failed, then buffer this block traditionally...
+	// block of the file and it's a partial block, or past the end, or
+	// just because the attempt failed, then buffer this block
+	// traditionally...
 
 	// move to the beginning of the current block
 	if (lseek(pvt->_writeblockoffset,SEEK_SET)!=pvt->_writeblockoffset) {
