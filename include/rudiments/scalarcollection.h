@@ -69,6 +69,10 @@ class scalarcollection : public collection {
 		 *  character with that byte value.  A digit is written bare,
 		 *  and any other character as a JSON string.
 		 *
+		 *  A wide string key or value is written in the character
+		 *  set of the current locale.  An error is returned if a
+		 *  character cannot be converted.
+		 *
 		 *  Returns the number of bytes written, or -1 if an error
 		 *  occurred.  A short write returns -1.  Any other error from
 		 *  the output, such as a timeout or abort, is returned
@@ -89,6 +93,10 @@ class scalarcollection : public collection {
 		 *  character with that byte value.  A digit is written bare,
 		 *  and any other character as a JSON string.
 		 *
+		 *  A wide string key or value is written in the character
+		 *  set of the current locale.  An error is returned if a
+		 *  character cannot be converted.
+		 *
 		 *  Returns the number of bytes written, or -1 if an error
 		 *  occurred.  A short write returns -1.  Any other error from
 		 *  the output, such as a timeout or abort, is returned
@@ -104,6 +112,10 @@ class scalarcollection : public collection {
 		 *  the writers take signed char.  It is then written as the
 		 *  character with that byte value.  A digit is written bare,
 		 *  and any other character as a JSON string.
+		 *
+		 *  A wide string key or value is written in the character
+		 *  set of the current locale.  An error is returned if a
+		 *  character cannot be converted.
 		 *
 		 *  Returns the number of bytes written, or -1 if an error
 		 *  occurred.  A short write returns -1.  Any other error from
@@ -124,6 +136,10 @@ class scalarcollection : public collection {
 		 *  the writers take signed char.  It is then written as the
 		 *  character with that byte value.  A digit is written bare,
 		 *  and any other character as a JSON string.
+		 *
+		 *  A wide string key or value is written in the character
+		 *  set of the current locale.  An error is returned if a
+		 *  character cannot be converted.
 		 *
 		 *  Returns the number of bytes written, or -1 if an error
 		 *  occurred.  A short write returns -1.  Any other error from

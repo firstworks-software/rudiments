@@ -70,21 +70,18 @@
 					const wchar_t *value,
 					size_t length);
 
+		// This converts "value" to the character set of the locale
+		// and writes the bytes.  It writes nothing and returns -1 if
+		// "value" can not be converted, or if
+		// wcharstring::supportsPrintf() returns false.
+		ssize_t	writeJsonWideText(output *out, const wchar_t *value);
+
 		// JSON allows only a string as an object key, so these write
 		// "key" as a quoted json string, even where writeJsonValue()
 		// would write it bare, such as a number, a bool, or null.
 		// A floating point key is written as writeValue() writes it:
 		// %g, with enough digits to read back as the same number.
 		// So two different keys never get the same name.
-		bool	writeJsonKey(ssize_t *retval, output *out,
-					stringbuffer *buf,
-					const wchar_t *key);
-		bool	writeJsonKey(ssize_t *retval, output *out,
-					stringbuffer *buf,
-					wchar_t *key);
-		bool	writeJsonKey(ssize_t *retval, output *out,
-					stringbuffer *buf,
-					wchar_t key);
 		bool	writeJsonKey(ssize_t *retval, output *out,
 					stringbuffer *buf,
 					float key);
@@ -104,22 +101,14 @@
 		bool	writeJsonKeyBuffer(ssize_t *retval, output *out,
 					stringbuffer *buf);
 
-		// Each output converts wide characters in its own printf(), so
-		// the wide overloads write with printf() and count the bytes of
-		// the raw wide characters.
-		bool	writeJsonValue(ssize_t *retval, output *out,
-					stringbuffer *buf,
-					const wchar_t *value);
-		bool	writeJsonValue(ssize_t *retval, output *out,
-					stringbuffer *buf,
-					wchar_t *value);
-		bool	writeJsonValue(ssize_t *retval, output *out,
-					stringbuffer *buf,
-					wchar_t value);
 		template <class valuetype>
 		bool	writeJsonValue(ssize_t *retval, output *out,
 					stringbuffer *buf,
 					const valuetype &value);
+
+		// Each output converts wide characters in its own printf(), so
+		// the wide writeValue() overloads write with printf() and count
+		// the bytes of the raw wide characters.
 		bool	writeValue(ssize_t *retval, output *out,
 					stringbuffer *buf,
 					const wchar_t *value);

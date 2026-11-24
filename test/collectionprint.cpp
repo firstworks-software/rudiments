@@ -13,6 +13,9 @@
 #include <rudiments/bytestring.h>
 #include <rudiments/wcharstring.h>
 #include <rudiments/jsondom.h>
+#include <rudiments/file.h>
+#include <rudiments/permissions.h>
+#include <rudiments/locale.h>
 #include <float.h>
 #include "test.cpp"
 
@@ -81,7 +84,7 @@ ssize_t failbuffer::failWrite(const byte_t *data, size_t size) {
 	return stringbuffer::write(data,size);
 }
 
-// "wide" counts the output in bytes, as it can hold nulls
+// "wide" counts the output with getSize(), not getStringLength()
 template <class collectiontype>
 void testFailWrite(const char *name, collectiontype *c, bool wide=false) {
 
@@ -204,8 +207,9 @@ void testTreeFailWrite(const char *name, avltree<valuetype> *t,
 }
 
 // "expected" is the output of the tree method (write or writeJson) as raw
-// bytes, or NULL to skip checking it.  A wide value is written as raw
-// wchar_t bytes and counted in bytes.
+// bytes, or NULL to skip checking it.  write() writes a wide value as raw
+// wchar_t bytes, and writeJson() converts it to the character set of the
+// locale.  Both count the output in bytes.
 template <class valuetype>
 void testWideWrite(const char *name, avltree<valuetype> *t, uint16_t method,
 							bytebuffer *expected) {
@@ -255,20 +259,62 @@ void testWideWrite(const char *name, avltree<valuetype> *t, uint16_t method,
 	}
 }
 
+const char	*widefile="collectionprint.json";
+
+// writes writeJson() of "c" to widefile, reads the file back into "contents"
+// and "size", and returns the result of writeJson()
+template <class collectiontype>
+ssize_t writeJsonFile(collectiontype *c, byte_t **contents, size_t *size) {
+	*contents=NULL;
+	*size=0;
+	file::remove(widefile);
+	file	f;
+	ssize_t	result=RESULT_ERROR;
+	if (f.create(widefile,permissions::parsePermString("rw-------"))) {
+		result=c->writeJson(&f,false);
+		f.close();
+		f.getContents(widefile,contents,size);
+	}
+	file::remove(widefile);
+	return result;
+}
+
+// checks writeJson() of "c" to a file against "expected", and its return
+// value against the size of the file in bytes
+template <class collectiontype>
+void testWideFile(const char *name, collectiontype *c, const char *expected) {
+
+	stringbuffer	prefix;
+	prefix.append(name)->append(": writeJson");
+
+	byte_t	*contents;
+	size_t	size;
+	ssize_t	result=writeJsonFile(c,&contents,&size);
+	size_t	expectedsize=charstring::getLength(expected);
+	stringbuffer	title;
+	title.append(prefix.getString())->append(": file bytes");
+	test(title.getString(),
+		contents && size==expectedsize &&
+		!bytestring::compare(contents,expected,expectedsize));
+	title.clear();
+	title.append(prefix.getString())->append(": file count");
+	test(title.getString(),contents && result==(ssize_t)size);
+	delete[] contents;
+}
+
 // the expected bytes of write() and writeJson() of a tree that has one value:
 // "value" as write() writes it and "jsonvalue" as writeJson() writes it
 void testWideValue(const char *name, avltree<const wchar_t *> *t,
-				const wchar_t *value, const wchar_t *jsonvalue) {
+				const wchar_t *value, const char *jsonvalue) {
 	bytebuffer	w;
 	w.append("<t v=\"");
 	w.append(value);
 	w.append("\" lh=\"0\" rh=\"0\" bf=\"0\"/>\n");
 	testWideWrite(name,t,0,&w);
-	bytebuffer	j;
-	j.append("[");
-	j.append(jsonvalue);
-	j.append("]");
+	stringbuffer	j;
+	j.append("[")->append(jsonvalue)->append("]");
 	testWideWrite(name,t,1,&j);
+	testWideFile(name,t,j.getString());
 }
 
 // a quote, a backslash, and a newline, as a raw C string and as a JSON string
@@ -331,29 +377,82 @@ void testEscape(const char *name, collectiontype *c,
 	}
 }
 
-// checks writeJson() of "c" against "expected" as raw bytes, and its return
-// value against the size of the output in bytes.  A wide key is written as raw
-// wchar_t bytes.
+// checks writeJson() of "c" to a stringbuffer and to a file against
+// "expected", and its return value against the size of the output in bytes.
+// A wide key or value is converted to the character set of the locale.
 template <class collectiontype>
-void testWideDictionary(const char *name, collectiontype *c,
-					bytebuffer *expected) {
+void testWideJson(const char *name, collectiontype *c, const char *expected) {
 
 	stringbuffer	prefix;
 	prefix.append(name)->append(": writeJson");
 
 	stringbuffer	sb;
 	ssize_t	result=c->writeJson(&sb,false);
+	size_t	expectedsize=charstring::getLength(expected);
 	stringbuffer	title;
-	title.append(prefix.getString())->append(": bytes");
+	title.append(prefix.getString())->append(": stringbuffer bytes");
 	test(title.getString(),
-		sb.getSize()==expected->getSize() &&
-		!bytestring::compare(sb.getBuffer(),expected->getBuffer(),
-							expected->getSize()));
+		sb.getSize()==expectedsize &&
+		!bytestring::compare(sb.getBuffer(),expected,expectedsize));
 	title.clear();
-	title.append(prefix.getString())->append(": count");
+	title.append(prefix.getString())->append(": stringbuffer count");
 	test(title.getString(),result==(ssize_t)sb.getSize());
 
+	testWideFile(name,c,expected);
+
 	testFailWrite(name,c,true);
+}
+
+// checks that writeJson() of "c" to a stringbuffer and to a file fails on a
+// wide character that the locale cannot convert, and writes only "expected"
+template <class collectiontype>
+void testWideJsonError(const char *name, collectiontype *c,
+						const char *expected) {
+
+	stringbuffer	prefix;
+	prefix.append(name)->append(": writeJson");
+
+	stringbuffer	sb;
+	ssize_t	result=c->writeJson(&sb,false);
+	size_t	expectedsize=charstring::getLength(expected);
+	stringbuffer	title;
+	title.append(prefix.getString())->append(": stringbuffer bytes");
+	test(title.getString(),
+		sb.getSize()==expectedsize &&
+		!bytestring::compare(sb.getBuffer(),expected,expectedsize));
+	title.clear();
+	title.append(prefix.getString())->append(": stringbuffer error");
+	test(title.getString(),result==RESULT_ERROR);
+
+	byte_t	*contents;
+	size_t	size;
+	result=writeJsonFile(c,&contents,&size);
+	title.clear();
+	title.append(prefix.getString())->append(": file bytes");
+	test(title.getString(),
+		contents && size==expectedsize &&
+		!bytestring::compare(contents,expected,expectedsize));
+	title.clear();
+	title.append(prefix.getString())->append(": file error");
+	test(title.getString(),result==RESULT_ERROR);
+	delete[] contents;
+}
+
+// set a UTF-8 character type locale, if the host has one
+static bool setUtf8CType() {
+	const char	*names[]={
+		"C.UTF-8","C.utf8","en_US.UTF-8","en_US.utf8",
+	#ifdef _WIN32
+		".UTF8",
+	#endif
+		NULL
+	};
+	for (const char **name=names; *name; name++) {
+		if (locale::setCType(*name)) {
+			return true;
+		}
+	}
+	return false;
 }
 
 // strings that look like numbers: only a json number is written bare
@@ -363,9 +462,9 @@ const char *numstrs[]={
 const wchar_t *wnumstrs[]={
 	L"007",L"02134",L".5",L"-.5",L"0",L"-0",L"12",L"1.5",L"-1.5"
 };
-const wchar_t *wnumjson[]={
-	L"\"007\"",L"\"02134\"",L"\".5\"",L"\"-.5\"",
-	L"0",L"-0",L"12",L"1.5",L"-1.5"
+const char *numjson[]={
+	"\"007\"","\"02134\"","\".5\"","\"-.5\"",
+	"0","-0","12","1.5","-1.5"
 };
 #define NUMSTRJSON \
 	"[\"007\",\"02134\",\".5\",\"-.5\",0,-0,12,1.5,-1.5]"
@@ -1095,12 +1194,12 @@ int main(int argc, const char **argv) {
 		avltree<const wchar_t *>	atw;
 		atw.insert(L"hello");
 		testWideValue("avltree (const wchar_t *)",&atw,L"hello",
-							L"\"hello\"");
+							"\"hello\"");
 
 		avltree<const wchar_t *>	atwn;
 		atwn.insert(L"42");
 		testWideValue("avltree (const wchar_t * number)",&atwn,L"42",
-								L"42");
+								"42");
 
 		for (uint16_t i=0;
 				i<sizeof(wnumstrs)/sizeof(wnumstrs[0]); i++) {
@@ -1110,14 +1209,13 @@ int main(int argc, const char **argv) {
 			title.append("avltree (const wchar_t * ");
 			title.append(numstrs[i])->append(")");
 			testWideValue(title.getString(),&atwns,
-						wnumstrs[i],wnumjson[i]);
+						wnumstrs[i],numjson[i]);
 		}
 
 		avltree<const wchar_t *>	atwe;
 		atwe.insert(L"q\"b\\s\nl");
 		testWideValue("avltree (const wchar_t * escaped)",&atwe,
-						L"q\"b\\s\nl",
-						L"\"q\\\"b\\\\s\\u000al\"");
+						L"q\"b\\s\nl",ESCENC);
 
 		wchar_t	wstr[]={L'h',L'i',0};
 		avltree<wchar_t *>	atwm;
@@ -1127,44 +1225,36 @@ int main(int argc, const char **argv) {
 		wm.append(L"hi");
 		wm.append("\" lh=\"0\" rh=\"0\" bf=\"0\"/>\n");
 		testWideWrite("avltree (wchar_t *)",&atwm,0,&wm);
-		bytebuffer	wmj;
-		wmj.append("[");
-		wmj.append(L"\"hi\"");
-		wmj.append("]");
+		stringbuffer	wmj;
+		wmj.append("[\"hi\"]");
 		testWideWrite("avltree (wchar_t *)",&atwm,1,&wmj);
+		testWideFile("avltree (wchar_t *)",&atwm,wmj.getString());
 
 		wchar_t	wzip[]={L'0',L'2',L'1',L'3',L'4',0};
 		avltree<wchar_t *>	atwz;
 		atwz.insert(wzip);
-		bytebuffer	wzj;
-		wzj.append("[");
-		wzj.append(L"\"02134\"");
-		wzj.append("]");
+		stringbuffer	wzj;
+		wzj.append("[\"02134\"]");
 		testWideWrite("avltree (wchar_t * 02134)",&atwz,1,&wzj);
+		testWideFile("avltree (wchar_t * 02134)",&atwz,wzj.getString());
 
 		wchar_t	wneg[]={L'-',L'1',L'.',L'5',0};
 		avltree<wchar_t *>	atwng;
 		atwng.insert(wneg);
-		bytebuffer	wngj;
-		wngj.append("[");
-		wngj.append(L"-1.5");
-		wngj.append("]");
+		stringbuffer	wngj;
+		wngj.append("[-1.5]");
 		testWideWrite("avltree (wchar_t * -1.5)",&atwng,1,&wngj);
+		testWideFile("avltree (wchar_t * -1.5)",&atwng,
+							wngj.getString());
 
 		avltree<wchar_t>	atwc;
 		atwc.insert((wchar_t)0x263A);
 		wchar_t	smile[]={(wchar_t)0x263A,0};
-		wchar_t	jsmile[]={L'"',(wchar_t)0x263A,L'"',0};
 		bytebuffer	wc;
 		wc.append("<t v=\"");
 		wc.append(smile);
 		wc.append("\" lh=\"0\" rh=\"0\" bf=\"0\"/>\n");
 		testWideWrite("avltree (wchar_t)",&atwc,0,&wc);
-		bytebuffer	wcj;
-		wcj.append("[");
-		wcj.append(jsmile);
-		wcj.append("]");
-		testWideWrite("avltree (wchar_t)",&atwc,1,&wcj);
 
 		avltree<wchar_t>	atwd;
 		atwd.insert(L'7');
@@ -1173,11 +1263,10 @@ int main(int argc, const char **argv) {
 		wd.append(L"7");
 		wd.append("\" lh=\"0\" rh=\"0\" bf=\"0\"/>\n");
 		testWideWrite("avltree (wchar_t digit)",&atwd,0,&wd);
-		bytebuffer	wdj;
-		wdj.append("[");
-		wdj.append(L"7");
-		wdj.append("]");
+		stringbuffer	wdj;
+		wdj.append("[7]");
 		testWideWrite("avltree (wchar_t digit)",&atwd,1,&wdj);
+		testWideFile("avltree (wchar_t digit)",&atwd,wdj.getString());
 
 		// null values
 		avltree<const wchar_t *>	atwnull;
@@ -1195,12 +1284,116 @@ int main(int argc, const char **argv) {
 		// wide keys are always written as strings
 		dictionary<const wchar_t *,int32_t>	dw;
 		dw.setValue(L"42",1);
-		bytebuffer	dwj;
-		dwj.append("{");
-		dwj.append(L"\"42\"");
-		dwj.append(":1}");
-		testWideDictionary("dictionary (const wchar_t * number key)",
-								&dw,&dwj);
+		testWideJson("dictionary (const wchar_t * number key)",
+							&dw,"{\"42\":1}");
+
+		dictionary<const wchar_t *,int32_t>	dwk;
+		dwk.setValue(L"ab",1);
+		testWideJson("dictionary (const wchar_t * key)",
+							&dwk,"{\"ab\":1}");
+
+		dictionary<const wchar_t *,int32_t>	dwke;
+		dwke.setValue(L"q\"b\\s\nl",1);
+		testWideJson("dictionary (const wchar_t * escaped key)",
+							&dwke,"{" ESCENC ":1}");
+
+		dictionary<wchar_t *,int32_t>	dwmk;
+		dwmk.setValue(wstr,1);
+		testWideJson("dictionary (wchar_t * key)",&dwmk,"{\"hi\":1}");
+
+		dictionary<wchar_t,int32_t>	dwck;
+		dwck.setValue(L'a',1);
+		testWideJson("dictionary (wchar_t key)",&dwck,"{\"a\":1}");
+
+		dictionary<wchar_t,int32_t>	dwdk;
+		dwdk.setValue(L'7',1);
+		testWideJson("dictionary (wchar_t digit key)",&dwdk,"{\"7\":1}");
+
+		// wide values
+		dictionary<double,const wchar_t *>	dwv;
+		dwv.setValue(1.5,L"ab");
+		testWideJson("dictionary (const wchar_t * value)",
+							&dwv,"{\"1.5\":\"ab\"}");
+
+		dictionary<const wchar_t *,const wchar_t *>	dwnv;
+		dwnv.setValue(L"a",L"12");
+		testWideJson("dictionary (const wchar_t * number value)",
+							&dwnv,"{\"a\":12}");
+
+		dictionary<const wchar_t *,wchar_t *>	dwmv;
+		dwmv.setValue(L"a",wstr);
+		testWideJson("dictionary (wchar_t * value)",
+							&dwmv,"{\"a\":\"hi\"}");
+
+		dictionary<const wchar_t *,wchar_t>	dwcv;
+		dwcv.setValue(L"a",L'x');
+		testWideJson("dictionary (wchar_t value)",
+							&dwcv,"{\"a\":\"x\"}");
+
+		dictionary<const wchar_t *,wchar_t>	dwdv;
+		dwdv.setValue(L"a",L'7');
+		testWideJson("dictionary (wchar_t digit value)",
+							&dwdv,"{\"a\":7}");
+
+		linkedlist<const wchar_t *>	llw;
+		llw.append(L"ab");
+		llw.append(L"12");
+		llw.append(L"-1.5");
+		llw.append(L"007");
+		llw.append(L"q\"b\\s\nl");
+		testWideJson("linkedlist (const wchar_t *)",&llw,
+				"[\"ab\",12,-1.5,\"007\"," ESCENC "]");
+
+		linkedlist<wchar_t *>	llwm;
+		llwm.append(wstr);
+		llwm.append(wzip);
+		llwm.append(wneg);
+		testWideJson("linkedlist (wchar_t *)",&llwm,
+						"[\"hi\",\"02134\",-1.5]");
+
+		linkedlist<wchar_t>	llwc;
+		llwc.append(L'x');
+		llwc.append(L'7');
+		testWideJson("linkedlist (wchar_t)",&llwc,"[\"x\",7]");
+
+		// a character that the C locale cannot convert
+		locale::setCType("C");
+		char	*converted=NULL;
+		if (charstring::printf(&converted,"%ls",smile)<0) {
+			testWideJsonError("avltree (wchar_t unconvertible)",
+								&atwc,"[");
+			linkedlist<const wchar_t *>	llwu;
+			llwu.append(L"ab");
+			llwu.append(smile);
+			testWideJsonError("linkedlist (const wchar_t * "
+					"unconvertible)",&llwu,"[\"ab\",");
+			dictionary<const wchar_t *,int32_t>	dwu;
+			dwu.setValue(smile,1);
+			testWideJsonError("dictionary (const wchar_t * "
+					"unconvertible key)",&dwu,"{");
+		} else {
+			stdoutput.printf("the C locale converts U+263A, "
+					"unconvertible character skipped\n");
+		}
+		delete[] converted;
+
+		// non-ascii keys and values in a UTF-8 locale
+		if (setUtf8CType()) {
+			linkedlist<const wchar_t *>	llw8;
+			llw8.append(L"h\x00e9");
+			testWideJson("linkedlist (const wchar_t * utf-8)",
+						&llw8,"[\"h\xc3\xa9\"]");
+			dictionary<const wchar_t *,int32_t>	dw8;
+			dw8.setValue(L"h\x00e9",1);
+			testWideJson("dictionary (const wchar_t * utf-8 key)",
+						&dw8,"{\"h\xc3\xa9\":1}");
+			testWideJson("avltree (wchar_t utf-8)",
+						&atwc,"[\"\xe2\x98\xba\"]");
+		} else {
+			stdoutput.printf("no UTF-8 locale available, "
+					"utf-8 wide keys and values skipped\n");
+		}
+		locale::setCType("C");
 	}
 
 	stdoutput.printf("\n");

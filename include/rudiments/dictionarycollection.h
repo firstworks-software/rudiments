@@ -152,6 +152,10 @@ class dictionarycollection : public collection {
 		 *  digit is written bare and any other character as a JSON
 		 *  string.
 		 *
+		 *  A wide string key or value is written in the character
+		 *  set of the current locale.  An error is returned if a
+		 *  character cannot be converted.
+		 *
 		 *  Returns the number of bytes written, or -1 if an error
 		 *  occurred.  A short write returns -1.  Any other error from
 		 *  the output, such as a timeout or abort, is returned
@@ -185,6 +189,10 @@ class dictionarycollection : public collection {
 		 *  digit is written bare and any other character as a JSON
 		 *  string.
 		 *
+		 *  A wide string key or value is written in the character
+		 *  set of the current locale.  An error is returned if a
+		 *  character cannot be converted.
+		 *
 		 *  Returns the number of bytes written, or -1 if an error
 		 *  occurred.  A short write returns -1.  Any other error from
 		 *  the output, such as a timeout or abort, is returned
@@ -213,6 +221,10 @@ class dictionarycollection : public collection {
 		 *  as the character with that byte value.  As a value, a
 		 *  digit is written bare and any other character as a JSON
 		 *  string.
+		 *
+		 *  A wide string key or value is written in the character
+		 *  set of the current locale.  An error is returned if a
+		 *  character cannot be converted.
 		 *
 		 *  Returns the number of bytes written, or -1 if an error
 		 *  occurred.  A short write returns -1.  Any other error from
@@ -246,6 +258,10 @@ class dictionarycollection : public collection {
 		 *  as the character with that byte value.  As a value, a
 		 *  digit is written bare and any other character as a JSON
 		 *  string.
+		 *
+		 *  A wide string key or value is written in the character
+		 *  set of the current locale.  An error is returned if a
+		 *  character cannot be converted.
 		 *
 		 *  Returns the number of bytes written, or -1 if an error
 		 *  occurred.  A short write returns -1.  Any other error from
