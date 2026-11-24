@@ -36,6 +36,16 @@
 	#endif
 	#include <rudiments/dynamiclib.h>
 #endif
+// a fake block device needs fstat() to be a symbol of the C library (2.33+)
+#if defined(FILETEST_LSEEK_HOOK) && defined(RUDIMENTS_HAVE_BLKGETSIZE64) && \
+	defined(__GLIBC__) && \
+	(__GLIBC__>2 || (__GLIBC__==2 && __GLIBC_MINOR__>=33))
+	#define FILETEST_BLOCKDEV_HOOK
+	#include <sys/stat.h>
+	#include <sys/ioctl.h>
+	#include <linux/fs.h>
+	#include <stdarg.h>
+#endif
 #include "test.cpp"
 
 #ifndef WIN32
@@ -2532,6 +2542,28 @@ static void negativeSeekTests() {
 	signalmanager::alarm(0);
 }
 
+#ifdef FILETEST_BLOCKDEV_HOOK
+// the file descriptor that fstat(), ioctl() and lseek() fake a block device
+// on, and whether the fake device fails to report its size
+static int	fakeblkfd=-1;
+static bool	fakeblkfail=false;
+
+typedef int	(*fstatfunc_t)(int,struct stat *);
+
+// the C library's fstat()
+static int realFstat(int fd, struct stat *st) {
+	static fstatfunc_t	realfstat=NULL;
+	if (!realfstat) {
+		realfstat=(fstatfunc_t)dynamiclib::getNextSymbol("fstat");
+		if (!realfstat) {
+			error::setErrorNumber(ENOSYS);
+			return -1;
+		}
+	}
+	return realfstat(fd,st);
+}
+#endif
+
 #ifdef FILETEST_LSEEK_HOOK
 // This lseek() takes the place of the C library's, so the test can make a
 // seek fail on one file descriptor.  It passes every other call on to the
@@ -2545,6 +2577,16 @@ extern "C" off_t lseek(int fd, off_t offset, int whence) {
 		error::setErrorNumber(EINVAL);
 		return -1;
 	}
+	#ifdef FILETEST_BLOCKDEV_HOOK
+	// a seek past the end of a block device fails, like in the kernel
+	if (fd==fakeblkfd && whence==SEEK_SET) {
+		struct stat	st;
+		if (realFstat(fd,&st)==0 && offset>st.st_size) {
+			error::setErrorNumber(EINVAL);
+			return -1;
+		}
+	}
+	#endif
 	static lseekfunc_t	reallseek=NULL;
 	if (!reallseek) {
 		reallseek=(lseekfunc_t)dynamiclib::getNextSymbol("lseek");
@@ -2579,6 +2621,53 @@ extern "C" void *mmap(void *addr, size_t length, int prot,
 		}
 	}
 	return realmmap(addr,length,prot,flags,fd,offset);
+}
+#endif
+
+#ifdef FILETEST_BLOCKDEV_HOOK
+// This fstat() takes the place of the C library's, so the test can make one
+// file descriptor look like a block device of size 0, as a real one does.  It
+// passes every other call on to the next definition.
+extern "C" int fstat(int fd, struct stat *st) {
+	int	result=realFstat(fd,st);
+	if (result==0 && fd==fakeblkfd) {
+		st->st_mode=(st->st_mode&~S_IFMT)|S_IFBLK;
+		st->st_size=0;
+	}
+	return result;
+}
+
+// This ioctl() takes the place of the C library's, so the test can make the
+// fake block device report the size of its file, or fail to.  It passes every
+// other call on to the next definition.
+typedef int	(*ioctlfunc_t)(int,unsigned long,...);
+
+extern "C" int ioctl(int fd, unsigned long req, ...) {
+	va_list	ap;
+	va_start(ap,req);
+	void	*arg=va_arg(ap,void *);
+	va_end(ap);
+	if (fd==fakeblkfd && (unsigned int)req==(unsigned int)BLKGETSIZE64) {
+		if (fakeblkfail) {
+			error::setErrorNumber(ENOTTY);
+			return -1;
+		}
+		struct stat	st;
+		if (realFstat(fd,&st)!=0) {
+			return -1;
+		}
+		*((uint64_t *)arg)=(uint64_t)st.st_size;
+		return 0;
+	}
+	static ioctlfunc_t	realioctl=NULL;
+	if (!realioctl) {
+		realioctl=(ioctlfunc_t)dynamiclib::getNextSymbol("ioctl");
+		if (!realioctl) {
+			error::setErrorNumber(ENOSYS);
+			return -1;
+		}
+	}
+	return realioctl(fd,req,arg);
 }
 #endif
 
@@ -2783,6 +2872,155 @@ static void failedSeekWriteTests() {
 		stdoutput.printf("mmap() can not be replaced\n");
 		#endif
 	}
+	stdoutput.printf("\n");
+
+	signalmanager::alarm(0);
+}
+#endif
+
+#ifdef FILETEST_BLOCKDEV_HOOK
+// create a file of the pattern
+static void blockDeviceCreate(const char *name, char *data, size_t size) {
+	for (size_t i=0; i<size; i++) {
+		data[i]='a'+i%26;
+	}
+	file::remove(name);
+	file	fl;
+	test("create",fl.create(name,
+				permissions::parsePermString("rw-rw----")));
+	test("write",fl.write(data,size)==(ssize_t)size);
+	test("close",fl.close());
+}
+
+// open the file with map buffering on and fake a block device on it
+static void blockDeviceOpen(file *fl, const char *name) {
+	test("open",fl->open(name,O_RDWR));
+	fl->setMmapBufferingEnabled(true);
+	test("set read buffer size",fl->setReadBufferSize(8192));
+	fakeblkfd=fl->getFileDescriptor();
+}
+
+// seek and read 8192 bytes, in a block not wholly inside the device
+static void blockDeviceReadNone(const char *name, off64_t position) {
+	file	fl;
+	char	buf[8192];
+	blockDeviceOpen(&fl,name);
+	test("seek",fl.setPositionRelativeToBeginning(position)==position);
+	test("read 8192",fl.read(buf,sizeof(buf))==0);
+	test("position",fl.getPosition()==position);
+	test("block is not mapped",!fl.isCurrentBlockMmapBuffered());
+	bool	closed=fl.close();
+	fakeblkfd=-1;
+	test("close",closed);
+}
+
+// seek and read 100 bytes, in a block that may be mapped
+static void blockDeviceReadSome(const char *data, off64_t position,
+							bool mapped) {
+	file	fl;
+	char	buf[100];
+	blockDeviceOpen(&fl,mmapfile);
+	test("seek",fl.setPositionRelativeToBeginning(position)==position);
+	test("read 100",fl.read(buf,sizeof(buf))==(ssize_t)sizeof(buf));
+	test("data",!bytestring::compare(buf,data+position,sizeof(buf)));
+	test("position",fl.getPosition()==position+(off64_t)sizeof(buf));
+	test((mapped)?"block is mapped":"block is not mapped",
+				fl.isCurrentBlockMmapBuffered()==mapped);
+	bool	closed=fl.close();
+	fakeblkfd=-1;
+	test("close",closed);
+}
+
+// memory map buffering on a block device, for #11200 filedescriptor - with
+// memory map buffering on, a read after a seek past the end of a raw block
+// device can crash with SIGBUS
+static void blockDeviceTests() {
+
+	signalmanager::alarm(60);
+
+	if (!memorymap::isSupported()) {
+		stdoutput.printf("memory maps not supported\n");
+		signalmanager::alarm(0);
+		return;
+	}
+
+	// a file of two and a half 8k blocks
+	char	data[20480];
+	blockDeviceCreate(mmapfile,data,sizeof(data));
+
+	// skip if the fake block device doesn't work
+	file	sfl;
+	test("fake check, open",sfl.open(mmapfile,O_RDWR));
+	fakeblkfd=sfl.getFileDescriptor();
+	uint64_t	devsize=0;
+	bool		fake=(sfl.getCurrentProperties() &&
+				sfl.isBlockDevice() &&
+				sfl.ioCtl(BLKGETSIZE64,&devsize)==0 &&
+				devsize==sizeof(data));
+	bool		closed=sfl.close();
+	fakeblkfd=-1;
+	test("fake check, close",closed);
+	if (!fake) {
+		stdoutput.printf("block device can not be faked\n");
+		file::remove(mmapfile);
+		signalmanager::alarm(0);
+		return;
+	}
+
+	// a block wholly past the end of the device
+	stdoutput.printf("seek 30000, read:\n");
+	blockDeviceReadNone(mmapfile,30000);
+
+	// a block wholly past the end, when the size is a multiple of the
+	// block size
+	stdoutput.printf("seek 16484 in a file of 16384, read:\n");
+	char	smalldata[16384];
+	blockDeviceCreate(mmapfile2,smalldata,sizeof(smalldata));
+	blockDeviceReadNone(mmapfile2,16484);
+	file::remove(mmapfile2);
+
+	// The last block is partly past the end.  It gets a usual buffer and
+	// has the file's bytes up to the end, none from 22000.
+	stdoutput.printf("seek 22000, read:\n");
+	blockDeviceReadNone(mmapfile,22000);
+
+	// blocks wholly inside the device
+	stdoutput.printf("seek 8192, read 100:\n");
+	blockDeviceReadSome(data,8192,true);
+	stdoutput.printf("seek 0, read 100:\n");
+	blockDeviceReadSome(data,0,true);
+
+	// a write in a block past the end goes into the buffer, and the flush
+	// fails like it does on a device
+	stdoutput.printf("seek 30000, read, write 10:\n");
+	file	wfl;
+	char	buf[8192];
+	blockDeviceOpen(&wfl,mmapfile);
+	test("seek",wfl.setPositionRelativeToBeginning(30000)==30000);
+	test("read 8192",wfl.read(buf,sizeof(buf))==0);
+	test("write 10",wfl.write("0123456789",10)==10);
+	test("flush fails",!wfl.flushWriteBuffer(-1,-1));
+	test("close fails",!wfl.close());
+	fakeblkfd=-1;
+
+	// the file is as it was
+	char	*contents=new char[sizeof(data)+1];
+	file	vfl;
+	test("verify, open",vfl.open(mmapfile,O_RDONLY));
+	test("verify, size",vfl.getSize()==(off64_t)sizeof(data));
+	test("verify, read",
+		vfl.read(contents,sizeof(data))==(ssize_t)sizeof(data));
+	test("verify, data",!bytestring::compare(contents,data,sizeof(data)));
+	test("verify, close",vfl.close());
+	delete[] contents;
+
+	// a device that does not report its size gets no map
+	stdoutput.printf("no size, seek 8192, read 100:\n");
+	fakeblkfail=true;
+	blockDeviceReadSome(data,8192,false);
+	fakeblkfail=false;
+
+	file::remove(mmapfile);
 	stdoutput.printf("\n");
 
 	signalmanager::alarm(0);
@@ -3729,6 +3967,13 @@ int main(int argc, const char **argv) {
 		failedSeekWriteTests();
 		#else
 		stdoutput.printf("\nfailed seek to a new block, then write and flush\nlseek() can not be replaced\n");
+		#endif
+
+		stdoutput.printf("\nmemory map on a block device\n");
+		#ifdef FILETEST_BLOCKDEV_HOOK
+		blockDeviceTests();
+		#else
+		stdoutput.printf("block device can not be faked\n");
 		#endif
 
 		stdoutput.printf("\nturn buffering off after a seek\n");

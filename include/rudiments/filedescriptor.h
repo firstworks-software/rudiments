@@ -1144,6 +1144,8 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  * on file systems that don't support mmap
 		 *  * if "size" is not a multiple of the underlying file
 		 *    system's block size
+		 *  * a block of a raw block device, on platforms where the
+		 *    size of the device can't be found
 		 *  In these and other cases, the class will fall back to
 		 *  traditional buffering for any blocks that cannot be mmaped
 		 *  and return to mmap buffering when possible.
@@ -1243,6 +1245,8 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  * if the last block of a file is smaller than the block
 		 *    size of the underlying filesystem, and the file is opened
 		 *    read-only
+		 *  * a block of a raw block device, on platforms where the
+		 *    size of the device can't be found
 		 *  In these and other cases, the class will fall back to
 		 *  traditional buffering for any blocks that cannot be mmaped
 		 *  and return to mmap buffering when possible.

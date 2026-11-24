@@ -379,6 +379,9 @@
 /* Some systems dont have st_blocks in struct stat */
 /* #undef RUDIMENTS_HAVE_BLKCNT_T */
 
+/* Some systems have BLKGETSIZE64 */
+/* #undef RUDIMENTS_HAVE_BLKGETSIZE64 */
+
 /* Some systems dont have st_blksize in struct stat */
 /* #undef RUDIMENTS_HAVE_BLKSIZE_T */
 

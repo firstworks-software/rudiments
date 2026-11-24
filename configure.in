@@ -1937,6 +1937,20 @@ else
 	AC_MSG_RESULT(disabled (broken on SCO OSR5))
 fi
 
+AC_MSG_CHECKING(for BLKGETSIZE64)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_IOCTL_H
+	#include <sys/ioctl.h>
+#endif
+#include <linux/fs.h>
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif],
+unsigned long long s;
+ioctl(0,BLKGETSIZE64,&s);,AC_DEFINE(RUDIMENTS_HAVE_BLKGETSIZE64,1,Some systems have BLKGETSIZE64) AC_MSG_RESULT(yes),AC_MSG_RESULT(no))
+
 AC_MSG_CHECKING(for real-time-clock RTC_RD_TIME support)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_LINUX_RTC_H
 	#include <linux/rtc.h>

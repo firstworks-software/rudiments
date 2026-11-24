@@ -390,6 +390,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   failed seek to a new block
 - fixed filedescriptor setReadBufferSize(0) that lost the position when
   no block was loaded
+- fixed filedescriptor read() crash after a seek past the end of a block
+  device with memory map buffering
 
 ### Security
 - fixed buffer overflow when unix socket file name is too long

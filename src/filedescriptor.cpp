@@ -52,6 +52,9 @@
 #ifdef RUDIMENTS_HAVE_SYS_IOCTL_H
 	#include <sys/ioctl.h>
 #endif
+#ifdef RUDIMENTS_HAVE_BLKGETSIZE64
+	#include <linux/fs.h>
+#endif
 
 #include <stdio.h>
 #if defined(RUDIMENTS_HAVE_VASPRINTF) && defined(RUDIMENTS_HAVE_STDLIB_H)
@@ -1012,6 +1015,24 @@ void filedescriptor::invalidateWriteBuffer() {
 	pvt->_writebufferdirty=false;
 }
 
+// Returns the size of the block device that "fd" refers to, or -1 on an error
+// or if this platform can't tell.
+static off64_t blockDeviceSize(int32_t fd) {
+	#ifdef RUDIMENTS_HAVE_BLKGETSIZE64
+	uint64_t	size=0;
+	int		result;
+	do {
+		result=::ioctl(fd,BLKGETSIZE64,&size);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	if (result!=-1) {
+		return (off64_t)size;
+	}
+	// don't leak the errno into later results
+	error::setErrorNumber(0);
+	#endif
+	return -1;
+}
+
 ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 
 	// At this point...
@@ -1108,12 +1129,14 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 	// We would like to just mmap it, but a read or write of a mapped page
 	// that lies past the end of the file raises SIGBUS.
 	//
-	// So we can only mmap the block if it lies wholly inside the file,
-	// i.e. if the file holds all pvt->_writeblocksize bytes of it.  A
-	// partial last block, an empty block at the end of the file, or a
-	// block past the end of the file gets a traditional buffer, so...
+	// So we can only mmap the block if it lies wholly inside the file (or
+	// block device), i.e. if it holds all pvt->_writeblocksize bytes of
+	// the block.  A partial last block, an empty block at the end of the
+	// file, or a block past the end of the file gets a traditional buffer,
+	// so...
 
 	bool	canmmap=false;
+	bool	pastend=false;
 	if (pvt->_writebuffermmapenabled) {
 
 		// get the type and size of the file and
@@ -1136,14 +1159,28 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 
 		if (f.isBlockDevice()) {
 
-			// A block device reports a size of 0, so its blocks
-			// can't be tested against the size.  Map any block but
-			// the first.
-			canmmap=(pvt->_writeblockoffset>=
-					(off64_t)pvt->_writeblocksize);
+			// A block device reports a size of 0, so ask the
+			// device.  Without a size, never map.
+			off64_t	devsize=blockDeviceSize(pvt->_fd);
+			if (devsize<0) {
+				canmmap=false;
+			} else {
+				// the whole block must lie inside the device
+				canmmap=(pvt->_writeblockoffset<=
+					devsize-(off64_t)pvt->_writeblocksize);
+				pastend=(pvt->_writeblockoffset>=devsize);
+			}
 
 			#if defined(DEBUG_BUFFERING)
-			debugPrintf(",block device");
+			if (devsize<0) {
+				debugPrintf(",block device,no size");
+			} else if (pastend) {
+				debugPrintf(",block past end of device");
+			} else if (canmmap) {
+				debugPrintf(",block inside device");
+			} else {
+				debugPrintf(",block not inside device");
+			}
 			#endif
 
 		} else {
@@ -1254,8 +1291,10 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 	// just because the attempt failed, then buffer this block
 	// traditionally...
 
-	// move to the beginning of the current block
-	if (lseek(pvt->_writeblockoffset,SEEK_SET)!=pvt->_writeblockoffset) {
+	// move to the beginning of the current block, unless it's past the
+	// end of a block device, where the seek fails
+	if (!pastend && lseek(pvt->_writeblockoffset,SEEK_SET)!=
+						pvt->_writeblockoffset) {
 		#if defined(DEBUG_BUFFERING)
 		debugPrintf("...,error)\n");
 		#endif
@@ -1284,38 +1323,43 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 	pvt->_writebuffertail=pvt->_writebuffer;
 	pvt->_writebufferend=pvt->_writebuffer+pvt->_writeblocksize;
 
-	// attempt to fill the buffer
+	// attempt to fill the buffer, unless the block is past the end of a
+	// block device, where there is nothing to read
 	// (temporarily not allowing short reads)
-	bool	saveasr=pvt->_allowshortreads;
-	pvt->_allowshortreads=false;
-	ssize_t	result=unBufferedRead(pvt->_writebuffer,
+	ssize_t	result=0;
+	if (!pastend) {
+		bool	saveasr=pvt->_allowshortreads;
+		pvt->_allowshortreads=false;
+		result=unBufferedRead(pvt->_writebuffer,
 					pvt->_writeblocksize,sec,usec);
-	pvt->_allowshortreads=saveasr;
+		pvt->_allowshortreads=saveasr;
 
-	// if an error, timeout, abort, max-read, etc.
-	// occurred then return that
-	if (result<0) {
-		#if defined(DEBUG_BUFFERING)
-		debugPrintf("...error reading: %d)\n",result);
-		#endif
-		// FIXME: ??? graceful/retryable
-		return result;
-	}
-
-	// a short read that ended in an error is an error too,
-	// but a short read at the end of the data is not
-	if (result<(ssize_t)pvt->_writeblocksize &&
-			error::getErrorNumber() &&
-			error::getErrorNumber()!=EAGAIN) {
-		#if defined(DEBUG_BUFFERING)
-		debugPrintf("...error reading after %d bytes)\n",result);
-		#endif
-		#ifdef ETIMEDOUT
-		if (error::getErrorNumber()==ETIMEDOUT) {
-			return RESULT_TIMEOUT;
+		// if an error, timeout, abort, max-read, etc.
+		// occurred then return that
+		if (result<0) {
+			#if defined(DEBUG_BUFFERING)
+			debugPrintf("...error reading: %d)\n",result);
+			#endif
+			// FIXME: ??? graceful/retryable
+			return result;
 		}
-		#endif
-		return RESULT_ERROR;
+
+		// a short read that ended in an error is an error too,
+		// but a short read at the end of the data is not
+		if (result<(ssize_t)pvt->_writeblocksize &&
+				error::getErrorNumber() &&
+				error::getErrorNumber()!=EAGAIN) {
+			#if defined(DEBUG_BUFFERING)
+			debugPrintf("...error reading after %d bytes)\n",
+									result);
+			#endif
+			#ifdef ETIMEDOUT
+			if (error::getErrorNumber()==ETIMEDOUT) {
+				return RESULT_TIMEOUT;
+			}
+			#endif
+			return RESULT_ERROR;
+		}
 	}
 
 	#if defined(DEBUG_BUFFERING)
