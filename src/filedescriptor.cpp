@@ -1177,8 +1177,12 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 			pvt->_writebuffertail=
 					pvt->_writebuffer+pvt->_writeblocksize;
 			pvt->_writebufferend=pvt->_writebuffertail;
-			pvt->_writebufferreadavail=pvt->_writeblocksize;
-			pvt->_writebufferwriteavail=pvt->_writeblocksize;
+			pvt->_writebufferreadavail=
+					pvt->_writebuffertail-
+					pvt->_writebufferhead;
+			pvt->_writebufferwriteavail=
+					pvt->_writebufferend-
+					pvt->_writebufferhead;
 
 			#if defined(DEBUG_BUFFERING)
 			debugPrintf(",mapped %d bytes)",

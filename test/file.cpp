@@ -2099,6 +2099,83 @@ static void seekPastEndReadTests() {
 	signalmanager::alarm(0);
 }
 
+// buffered read and write from the middle of a mapped block, for #11191
+// filedescriptor - a storage read or write that starts in the middle of a
+// memory mapped block runs past the end of the map
+static void mmapMidBlockTests() {
+
+	signalmanager::alarm(60);
+
+	if (!memorymap::isSupported()) {
+		stdoutput.printf("memory maps not supported\n");
+		signalmanager::alarm(0);
+		return;
+	}
+
+	// create a file of three 8k blocks
+	char	data[24576];
+	for (uint16_t i=0; i<sizeof(data); i++) {
+		data[i]=(char)(i%251);
+	}
+	file::remove(mmapfile);
+	file	fl;
+	test("create",fl.create(mmapfile,
+				permissions::parsePermString("rw-rw----")));
+	test("write",fl.write(data,sizeof(data))==(ssize_t)sizeof(data));
+	test("close",fl.close());
+
+	// read a block's worth of data from the middle of a block
+	file	rfl;
+	test("read, open",rfl.open(mmapfile,O_RDWR));
+	rfl.setMmapBufferingEnabled(true);
+	test("read, set read buffer size",rfl.setReadBufferSize(8192));
+	test("read, seek",rfl.setPositionRelativeToBeginning(5000)==5000);
+	char	buf[8192];
+	test("read, read 8192",rfl.read(buf,sizeof(buf))==(ssize_t)sizeof(buf));
+	test("read, data",!bytestring::compare(buf,data+5000,sizeof(buf)));
+	test("read, position",rfl.getPosition()==13192);
+	test("read, block is mapped",rfl.isCurrentBlockMmapBuffered());
+	test("read, close",rfl.close());
+
+	// write a block's worth of data from the middle of a block
+	char	wdata[8192];
+	for (uint16_t i=0; i<sizeof(wdata); i++) {
+		wdata[i]=~data[5000+i];
+	}
+	file	wfl;
+	test("write, open",wfl.open(mmapfile,O_RDWR));
+	wfl.setMmapBufferingEnabled(true);
+	test("write, set write buffer size",wfl.setWriteBufferSize(8192));
+	test("write, seek",wfl.setPositionRelativeToBeginning(5000)==5000);
+	test("write, write 8192",
+		wfl.write(wdata,sizeof(wdata))==(ssize_t)sizeof(wdata));
+	test("write, position",wfl.getPosition()==13192);
+	test("write, block is mapped",wfl.isCurrentBlockMmapBuffered());
+	test("write, flush",wfl.flushWriteBuffer(-1,-1));
+	test("write, close",wfl.close());
+
+	// the write is in place and the data around it is intact
+	char	*contents=new char[sizeof(data)];
+	file	vfl;
+	test("verify, open",vfl.open(mmapfile,O_RDONLY));
+	test("verify, size",vfl.getSize()==(off64_t)sizeof(data));
+	test("verify, read file",
+		vfl.read(contents,sizeof(data))==(ssize_t)sizeof(data));
+	test("verify, before",!bytestring::compare(contents,data,5000));
+	test("verify, written",
+		!bytestring::compare(contents+5000,wdata,sizeof(wdata)));
+	test("verify, after",
+		!bytestring::compare(contents+13192,data+13192,
+						sizeof(data)-13192));
+	test("verify, close",vfl.close());
+	delete[] contents;
+
+	file::remove(mmapfile);
+	stdoutput.printf("\n");
+
+	signalmanager::alarm(0);
+}
+
 int main(int argc, const char **argv) {
 
 	char	*osname=sys::getOperatingSystemName();
@@ -2479,6 +2556,9 @@ int main(int argc, const char **argv) {
 
 		stdoutput.printf("\nbuffered reads after a seek past the end\n");
 		seekPastEndReadTests();
+
+		stdoutput.printf("\nmemory map reads and writes from the middle of a block\n");
+		mmapMidBlockTests();
 
 	} else {
 
