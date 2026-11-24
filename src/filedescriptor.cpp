@@ -911,8 +911,9 @@ off64_t filedescriptor::setPosition(off64_t offset, int32_t whence) {
 			// why the read/write avails are different)
 			pvt->_writebufferhead=pvt->_writebuffer+
 						(offset-pvt->_writeblockoffset);
-			pvt->_writebufferreadavail=pvt->_writebuffertail-
-						pvt->_writebufferhead;
+			pvt->_writebufferreadavail=
+				(pvt->_writebufferhead<pvt->_writebuffertail)?
+				pvt->_writebuffertail-pvt->_writebufferhead:0;
 			pvt->_writebufferwriteavail=pvt->_writebufferend-
 						pvt->_writebufferhead;
 
@@ -1284,8 +1285,12 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 
 	// update the number of bytes available in the buffer
 	// Note that these could be different for read/write, if this is the
-	// last block of the file and it's a partial block.
-	pvt->_writebufferreadavail=pvt->_writebuffertail-pvt->_writebufferhead;
+	// last block of the file and it's a partial block.  After a seek past
+	// the end of the file, the head is past the tail, and there is nothing
+	// to read.
+	pvt->_writebufferreadavail=
+			(pvt->_writebufferhead<pvt->_writebuffertail)?
+			pvt->_writebuffertail-pvt->_writebufferhead:0;
 	pvt->_writebufferwriteavail=pvt->_writebufferend-pvt->_writebufferhead;
 
 	#if defined(DEBUG_BUFFERING)

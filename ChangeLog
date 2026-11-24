@@ -371,6 +371,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - fixed singlylinkedlist detach() and moveAfter() of a node not in the list
 - fixed heap corruption in the filedescriptor destructor with memory map
   buffering
+- fixed filedescriptor buffered read() after a seek past the end of a file
 
 ### Security
 - fixed buffer overflow when unix socket file name is too long

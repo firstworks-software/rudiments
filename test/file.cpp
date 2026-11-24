@@ -58,6 +58,12 @@ const char	*mmapfile="/tmp/testfilemmap.txt";
 const char	*mmapfile="testfilemmap.txt";
 #endif
 
+#ifndef WIN32
+const char	*seekfile="/tmp/testfileseek.txt";
+#else
+const char	*seekfile="testfileseek.txt";
+#endif
+
 // getContents on files of known and unknown size and on read errors
 static void contentsTests() {
 
@@ -1955,6 +1961,144 @@ static void mmapDeleteTests() {
 	signalmanager::alarm(0);
 }
 
+// buffered read after a seek past the end of the file, for #11190
+// filedescriptor - a buffered read after a seek past the end of the file
+// returns a full read instead of 0
+static void seekPastEndReadTests() {
+
+	signalmanager::alarm(60);
+
+	// a file of two and a half 8k blocks
+	char	data[20480];
+	for (uint16_t i=0; i<sizeof(data); i++) {
+		data[i]='a'+i%26;
+	}
+	file::remove(seekfile);
+	file	fl;
+	test("create",fl.create(seekfile,
+				permissions::parsePermString("rw-rw----")));
+	test("write",fl.write(data,sizeof(data))==(ssize_t)sizeof(data));
+	test("close",fl.close());
+
+	// a seek into the last block and into a block after it with map
+	// buffering off, and into the last block with map buffering on
+	off64_t		positions[]={22000,30000,22000};
+	bool		maps[]={false,false,true};
+	const char	*names[]={"last block","block after","last block, mmap"};
+	char		buf[8192];
+	stringbuffer	title;
+	for (uint16_t i=0; i<3; i++) {
+
+		if (maps[i] && !memorymap::isSupported()) {
+			stdoutput.printf("memory maps not supported\n");
+			continue;
+		}
+
+		file	sfl;
+		title.clear();
+		title.append(names[i])->append(", open");
+		test(title.getString(),sfl.open(seekfile,O_RDWR));
+		sfl.setMmapBufferingEnabled(maps[i]);
+		title.clear();
+		title.append(names[i])->append(", set read buffer size");
+		test(title.getString(),sfl.setReadBufferSize(8192));
+		off64_t	position=positions[i];
+		title.clear();
+		title.append(names[i])->append(", seek");
+		test(title.getString(),
+			sfl.setPositionRelativeToBeginning(position)==
+								position);
+
+		// the read gets no data and the position does not move
+		title.clear();
+		title.append(names[i])->append(", read 8192");
+		test(title.getString(),sfl.read(buf,sizeof(buf))==0);
+		title.clear();
+		title.append(names[i])->append(", position");
+		test(title.getString(),sfl.getPosition()==position);
+		title.clear();
+		title.append(names[i])->append(", close");
+		test(title.getString(),sfl.close());
+	}
+
+	// a read in the last block, then a seek past the end inside that
+	// block, with map buffering off and on
+	bool		inmaps[]={false,true};
+	const char	*innames[]={"in block","in block, mmap"};
+	for (uint16_t i=0; i<2; i++) {
+
+		if (inmaps[i] && !memorymap::isSupported()) {
+			stdoutput.printf("memory maps not supported\n");
+			continue;
+		}
+
+		file	sfl;
+		title.clear();
+		title.append(innames[i])->append(", open");
+		test(title.getString(),sfl.open(seekfile,O_RDWR));
+		sfl.setMmapBufferingEnabled(inmaps[i]);
+		title.clear();
+		title.append(innames[i])->append(", set read buffer size");
+		test(title.getString(),sfl.setReadBufferSize(8192));
+		title.clear();
+		title.append(innames[i])->append(", seek to 20000");
+		test(title.getString(),
+			sfl.setPositionRelativeToBeginning(20000)==20000);
+		title.clear();
+		title.append(innames[i])->append(", read 1");
+		test(title.getString(),sfl.read(buf,1)==1);
+		title.clear();
+		title.append(innames[i])->append(", seek to 22000");
+		test(title.getString(),
+			sfl.setPositionRelativeToBeginning(22000)==22000);
+
+		// the read gets no data and the position does not move
+		title.clear();
+		title.append(innames[i])->append(", read 8192");
+		test(title.getString(),sfl.read(buf,sizeof(buf))==0);
+		title.clear();
+		title.append(innames[i])->append(", position");
+		test(title.getString(),sfl.getPosition()==22000);
+		title.clear();
+		title.append(innames[i])->append(", close");
+		test(title.getString(),sfl.close());
+	}
+
+	// a write after the seek and read lands at the seek position
+	file	wfl;
+	test("write after, open",wfl.open(seekfile,O_RDWR));
+	wfl.setMmapBufferingEnabled(false);
+	test("write after, set read buffer size",wfl.setReadBufferSize(8192));
+	test("write after, seek",
+		wfl.setPositionRelativeToBeginning(30000)==30000);
+	test("write after, read 8192",wfl.read(buf,sizeof(buf))==0);
+	test("write after, write 10",wfl.write("0123456789",10)==10);
+	test("write after, flush",wfl.flushWriteBuffer(-1,-1));
+	test("write after, close",wfl.close());
+
+	// the data is intact and the write is in place
+	// (the gap between them is not checked, because it holds old buffer
+	// bytes, which is #11196 filedescriptor - a buffered write after a
+	// seek past the end of the file fills the gap with old buffer bytes
+	// instead of zeros)
+	char	*contents=new char[30010];
+	file	rfl;
+	test("write after, open for read",rfl.open(seekfile,O_RDONLY));
+	test("write after, size",rfl.getSize()==30010);
+	test("write after, read file",
+		rfl.read(contents,30010)==30010);
+	test("write after, data",!bytestring::compare(contents,data,20480));
+	test("write after, bytes",
+		!bytestring::compare(contents+30000,"0123456789",10));
+	test("write after, close for read",rfl.close());
+	delete[] contents;
+
+	file::remove(seekfile);
+	stdoutput.printf("\n");
+
+	signalmanager::alarm(0);
+}
+
 int main(int argc, const char **argv) {
 
 	char	*osname=sys::getOperatingSystemName();
@@ -2332,6 +2476,9 @@ int main(int argc, const char **argv) {
 
 		stdoutput.printf("\nmemory map delete without close\n");
 		mmapDeleteTests();
+
+		stdoutput.printf("\nbuffered reads after a seek past the end\n");
+		seekPastEndReadTests();
 
 	} else {
 
