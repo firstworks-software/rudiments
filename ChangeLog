@@ -377,6 +377,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   after a seek into a memory mapped block
 - fixed filedescriptor read() and write() crash after a seek into a
   memory mapped block past the end of a file
+- fixed a filedescriptor write buffer leak after a failed seek with memory
+  map buffering
 
 ### Security
 - fixed buffer overflow when unix socket file name is too long

@@ -26,6 +26,10 @@
 #ifndef _WIN32
 	#include <unistd.h>
 #endif
+#if !defined(_WIN32) && \
+	defined(RUDIMENTS_HAVE_DLOPEN) && defined(RUDIMENTS_HAVE_RTLD_NEXT)
+	#include <rudiments/dynamiclib.h>
+#endif
 #include "test.cpp"
 
 #ifndef WIN32
@@ -2345,6 +2349,124 @@ static void seekPastEndWriteTests() {
 	signalmanager::alarm(0);
 }
 
+#if !defined(_WIN32) && \
+	defined(RUDIMENTS_HAVE_DLOPEN) && defined(RUDIMENTS_HAVE_RTLD_NEXT)
+// This lseek() takes the place of the C library's, so the test can make a
+// seek fail on one file descriptor.  It passes every other call on to the
+// next definition, so it is only built where getNextSymbol() can find that.
+static int	failseekfd=-1;
+
+typedef off_t	(*lseekfunc_t)(int,off_t,int);
+
+extern "C" off_t lseek(int fd, off_t offset, int whence) {
+	if (fd==failseekfd) {
+		error::setErrorNumber(EINVAL);
+		return -1;
+	}
+	static lseekfunc_t	reallseek=NULL;
+	if (!reallseek) {
+		reallseek=(lseekfunc_t)dynamiclib::getNextSymbol("lseek");
+		if (!reallseek) {
+			error::setErrorNumber(ENOSYS);
+			return -1;
+		}
+	}
+	return reallseek(fd,offset,whence);
+}
+
+// open the file read-only, so a map fails, read the first block into a usual
+// buffer, then fail the seek to the second block
+static void mmapFailedSeekOpen(file *fl, const char *data) {
+	test("open",fl->open(mmapfile,O_RDONLY));
+	fl->setMmapBufferingEnabled(true);
+	test("set read buffer size",fl->setReadBufferSize(8192));
+	char	buf[100];
+	test("read 100",fl->read(buf,sizeof(buf))==(ssize_t)sizeof(buf));
+	test("data",!bytestring::compare(buf,data,sizeof(buf)));
+	test("block is not mapped",!fl->isCurrentBlockMmapBuffered());
+	test("seek",fl->setPositionRelativeToBeginning(8192)==8192);
+	failseekfd=fl->getFileDescriptor();
+	test("read, failed seek",fl->read(buf,sizeof(buf))==-1);
+	failseekfd=-1;
+}
+
+// failed seek after a failed map, for #11193 filedescriptor - with memory
+// map buffering on, a failed seek after a failed map leaks the usual write
+// buffer
+static void mmapFailedSeekTests() {
+
+	signalmanager::alarm(60);
+
+	if (!memorymap::isSupported()) {
+		stdoutput.printf("memory maps not supported\n");
+		signalmanager::alarm(0);
+		return;
+	}
+
+	// create a file of three 8k blocks
+	char	data[24576];
+	for (uint16_t i=0; i<sizeof(data); i++) {
+		data[i]='a'+i%26;
+	}
+	file::remove(mmapfile);
+	file	fl;
+	test("create",fl.create(mmapfile,
+				permissions::parsePermString("rw-rw----")));
+	test("write",fl.write(data,sizeof(data))==(ssize_t)sizeof(data));
+	test("close",fl.close());
+
+	// skip if the lseek() above does not take the place of the real one
+	file	sfl;
+	test("seek check, open",sfl.open(mmapfile,O_RDONLY));
+	failseekfd=sfl.getFileDescriptor();
+	bool	failed=(sfl.getPosition()==-1);
+	failseekfd=-1;
+	test("seek check, close",sfl.close());
+	if (!failed) {
+		stdoutput.printf("lseek() can not be replaced\n");
+		file::remove(mmapfile);
+		signalmanager::alarm(0);
+		return;
+	}
+
+	char	buf[100];
+
+	// delete with no close() after the failed seek
+	stdoutput.printf("delete:\n");
+	file	*dfl=new file();
+	mmapFailedSeekOpen(dfl,data);
+	delete dfl;
+	test("delete",true);
+
+	// close() after the failed seek, then open and read again
+	stdoutput.printf("close and reopen:\n");
+	file	cfl;
+	mmapFailedSeekOpen(&cfl,data);
+	test("close",cfl.close());
+	test("reopen",cfl.open(mmapfile,O_RDONLY));
+	test("reopen, read 100",
+		cfl.read(buf,sizeof(buf))==(ssize_t)sizeof(buf));
+	test("reopen, data",!bytestring::compare(buf,data,sizeof(buf)));
+	test("reopen, close",cfl.close());
+
+	// read the next block after the failed seek
+	stdoutput.printf("read next block:\n");
+	file	rfl;
+	mmapFailedSeekOpen(&rfl,data);
+	test("block is not mapped after failed seek",
+					!rfl.isCurrentBlockMmapBuffered());
+	test("read 100",rfl.read(buf,sizeof(buf))==(ssize_t)sizeof(buf));
+	test("data",!bytestring::compare(buf,data+8192,sizeof(buf)));
+	test("position",rfl.getPosition()==8292);
+	test("close",rfl.close());
+
+	file::remove(mmapfile);
+	stdoutput.printf("\n");
+
+	signalmanager::alarm(0);
+}
+#endif
+
 // buffered read and write from the middle of a mapped block, for #11191
 // filedescriptor - a storage read or write that starts in the middle of a
 // memory mapped block runs past the end of the map
@@ -2808,6 +2930,13 @@ int main(int argc, const char **argv) {
 
 		stdoutput.printf("\nmemory map reads and writes from the middle of a block\n");
 		mmapMidBlockTests();
+
+		#if !defined(_WIN32) && \
+			defined(RUDIMENTS_HAVE_DLOPEN) && \
+			defined(RUDIMENTS_HAVE_RTLD_NEXT)
+		stdoutput.printf("\nmemory map failed seek after a failed map\n");
+		mmapFailedSeekTests();
+		#endif
 
 	} else {
 

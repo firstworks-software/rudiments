@@ -340,15 +340,12 @@ filedescriptor::~filedescriptor() {
 	delete[] tmpbuffer;
 
 	// clean up write buffer
-	if (pvt->_writebuffermap) {
-		memorymap	*tmpmap=pvt->_writebuffermap;
-		pvt->_writebuffermap=NULL;
-		delete tmpmap;
-	} else {
-		tmpbuffer=pvt->_writebufferunaligned;
-		pvt->_writebufferunaligned=NULL;
-		delete[] tmpbuffer;
-	}
+	memorymap	*tmpmap=pvt->_writebuffermap;
+	pvt->_writebuffermap=NULL;
+	delete tmpmap;
+	tmpbuffer=pvt->_writebufferunaligned;
+	pvt->_writebufferunaligned=NULL;
+	delete[] tmpbuffer;
 
 	// clean up listener
 	listener	*tmplstnr=pvt->_lstnr;
@@ -398,12 +395,9 @@ bool filedescriptor::setStreamWriteBufferSize(size_t size) {
 	pvt->_writeblocksize=size;
 
 	// clean up
-	if (pvt->_writebuffermap) {
-		delete pvt->_writebuffermap;
-		pvt->_writebuffermap=NULL;
-	} else {
-		delete[] pvt->_writebufferunaligned;
-	}
+	delete pvt->_writebuffermap;
+	pvt->_writebuffermap=NULL;
+	delete[] pvt->_writebufferunaligned;
 
 	// create a new buffer
 	allocateWriteBuffer(size);
@@ -459,13 +453,10 @@ bool filedescriptor::setStorageWriteBufferSize(size_t size) {
 	// clean up but don't create a new write buffer
 	// the new buffer will be created during the first call to
 	// realignWriteBuffer()
-	if (pvt->_writebuffermap) {
-		delete pvt->_writebuffermap;
-		pvt->_writebuffermap=NULL;
-	} else {
-		delete[] pvt->_writebufferunaligned;
-		pvt->_writebufferunaligned=NULL;
-	}
+	delete pvt->_writebuffermap;
+	pvt->_writebuffermap=NULL;
+	delete[] pvt->_writebufferunaligned;
+	pvt->_writebufferunaligned=NULL;
 
 	// update the write buffer pointers and counts
 	pvt->_writebuffer=NULL;
@@ -506,13 +497,10 @@ bool filedescriptor::unsetStreamWriteBuffer() {
 	pvt->_writeblocksize=0;
 
 	// clean up
-	if (pvt->_writebuffermap) {
-		delete pvt->_writebuffermap;
-		pvt->_writebuffermap=NULL;
-	} else {
-		delete[] pvt->_writebufferunaligned;
-		pvt->_writebufferunaligned=NULL;
-	}
+	delete pvt->_writebuffermap;
+	pvt->_writebuffermap=NULL;
+	delete[] pvt->_writebufferunaligned;
+	pvt->_writebufferunaligned=NULL;
 
 	// update the write buffer pointers and counts
 	pvt->_writebuffer=NULL;
@@ -557,13 +545,10 @@ bool filedescriptor::unsetStorageWriteBuffer() {
 	pvt->_writeblocksize=0;
 
 	// clean up
-	if (pvt->_writebuffermap) {
-		delete pvt->_writebuffermap;
-		pvt->_writebuffermap=NULL;
-	} else {
-		delete[] pvt->_writebufferunaligned;
-		pvt->_writebufferunaligned=NULL;
-	}
+	delete pvt->_writebuffermap;
+	pvt->_writebuffermap=NULL;
+	delete[] pvt->_writebufferunaligned;
+	pvt->_writebufferunaligned=NULL;
 
 	// update the write buffer pointers and counts
 	pvt->_writebuffer=NULL;
@@ -1205,6 +1190,11 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 			return 0;
 		}
 
+		// delete the failed memorymap now, so that a failed lseek()
+		// below can't leave both a memorymap and a traditional buffer
+		delete pvt->_writebuffermap;
+		pvt->_writebuffermap=NULL;
+
 		// if the previous buffer was mmapped then we need to set
 		// it NULL so a traditional buffer will be created below
 		if (previouslymmapped) {
@@ -1546,6 +1536,8 @@ bool filedescriptor::close() {
 		// figure out what to do the next time it's called
 		delete pvt->_writebuffermap;
 		pvt->_writebuffermap=NULL;
+		delete[] pvt->_writebufferunaligned;
+		pvt->_writebufferunaligned=NULL;
 		pvt->_writebuffer=NULL;
 		pvt->_writebufferhead=NULL;
 		pvt->_writebuffertail=NULL;
