@@ -343,7 +343,7 @@ filedescriptor::~filedescriptor() {
 	if (pvt->_writebuffermap) {
 		memorymap	*tmpmap=pvt->_writebuffermap;
 		pvt->_writebuffermap=NULL;
-		delete[] tmpmap;
+		delete tmpmap;
 	} else {
 		tmpbuffer=pvt->_writebufferunaligned;
 		pvt->_writebufferunaligned=NULL;

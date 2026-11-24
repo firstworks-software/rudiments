@@ -20,6 +20,7 @@
 #include <rudiments/wcharstring.h>
 #include <rudiments/ucs2charstring.h>
 #include <rudiments/locale.h>
+#include <rudiments/memorymap.h>
 #include <signal.h>
 #include <wchar.h>
 #ifndef _WIN32
@@ -49,6 +50,12 @@ const char	*flushfile="testfileflush.txt";
 const char	*readfile="/tmp/testfileread.txt";
 #else
 const char	*readfile="testfileread.txt";
+#endif
+
+#ifndef WIN32
+const char	*mmapfile="/tmp/testfilemmap.txt";
+#else
+const char	*mmapfile="testfilemmap.txt";
 #endif
 
 // getContents on files of known and unknown size and on read errors
@@ -1903,6 +1910,51 @@ static void bufferedEofReadTests() {
 	signalmanager::alarm(0);
 }
 
+// delete of a file with a mapped block and no close(), for #11194
+// filedescriptor - the destructor frees the memory map of the write buffer
+// with delete[] when the file was not closed
+static void mmapDeleteTests() {
+
+	signalmanager::alarm(60);
+
+	if (!memorymap::isSupported()) {
+		stdoutput.printf("memory maps not supported\n");
+		signalmanager::alarm(0);
+		return;
+	}
+
+	// create a file of three 8k blocks
+	char	data[24576];
+	for (uint16_t i=0; i<sizeof(data); i++) {
+		data[i]='a'+i%26;
+	}
+	file::remove(mmapfile);
+	file	fl;
+	test("create",fl.create(mmapfile,
+				permissions::parsePermString("rw-rw----")));
+	test("write",fl.write(data,sizeof(data))==(ssize_t)sizeof(data));
+	test("close",fl.close());
+
+	// map the first block with a read
+	file	*mfl=new file();
+	test("open",mfl->open(mmapfile,O_RDWR));
+	mfl->setMmapBufferingEnabled(true);
+	test("set read buffer size",mfl->setReadBufferSize(8192));
+	char	buf[100];
+	test("read 100",mfl->read(buf,sizeof(buf))==(ssize_t)sizeof(buf));
+	test("data",!bytestring::compare(buf,data,sizeof(buf)));
+	test("block is mapped",mfl->isCurrentBlockMmapBuffered());
+
+	// delete with no close()
+	delete mfl;
+	test("delete",true);
+
+	file::remove(mmapfile);
+	stdoutput.printf("\n");
+
+	signalmanager::alarm(0);
+}
+
 int main(int argc, const char **argv) {
 
 	char	*osname=sys::getOperatingSystemName();
@@ -2277,6 +2329,9 @@ int main(int argc, const char **argv) {
 
 		stdoutput.printf("\nbuffered reads after an end of data\n");
 		bufferedEofReadTests();
+
+		stdoutput.printf("\nmemory map delete without close\n");
+		mmapDeleteTests();
 
 	} else {
 
