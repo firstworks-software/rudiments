@@ -73,11 +73,9 @@
 		// JSON allows only a string as an object key, so these write
 		// "key" as a quoted json string, even where writeJsonValue()
 		// would write it bare, such as a number, a bool, or null.
-		// A floating point key is written with %g, with enough digits
-		// to read back as the same number: 2+MANT_DIG*log10(2).
+		// A floating point key is written as writeValue() writes it:
+		// %g, with enough digits to read back as the same number.
 		// So two different keys never get the same name.
-		// key-key is not 0 for a nan or inf key.  Such a key is
-		// written as writeValue() writes it, so it keeps its text.
 		bool	writeJsonKey(ssize_t *retval, output *out,
 					stringbuffer *buf,
 					const wchar_t *key);

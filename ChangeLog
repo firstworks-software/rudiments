@@ -141,6 +141,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   cannot convert
 - mvcresult and jsondom write a NULL data key or member name as "null" now,
   not an empty string
+- collection write() and writeJson() write a float, double or long double
+  value with round-trip %g text now
 
 ### Removed
 - removed csprng's static isSupported() - it was always unconditionally

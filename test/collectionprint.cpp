@@ -402,9 +402,9 @@ void testNonFinite(const char *name, const char *format) {
 	ll.append(-inf);
 	ll.append(1.5);
 	testEscape(title.getString(),&ll,
-			"[null,null,null,1.500000]",
-			"[\n\tnull,\n\tnull,\n\tnull,\n\t1.500000\n]\n",
-			"v","1.500000");
+			"[null,null,null,1.5]",
+			"[\n\tnull,\n\tnull,\n\tnull,\n\t1.5\n]\n",
+			"v","1.5");
 	testFailWrite(title.getString(),&ll);
 
 	title.clear();
@@ -414,10 +414,10 @@ void testNonFinite(const char *name, const char *format) {
 	at.insert(1.5);
 	at.insert(-inf);
 	testEscape(title.getString(),&at,
-			"[1.500000,[null],[null]]",
-			"[\n  1.500000,\n  [\n    null\n  ],\n"
+			"[1.5,[null],[null]]",
+			"[\n  1.5,\n  [\n    null\n  ],\n"
 			"  [\n    null\n  ]\n]\n",
-			"v","1.500000");
+			"v","1.5");
 	testTreeFailWrite(title.getString(),&at,NULL);
 
 	title.clear();
@@ -428,10 +428,10 @@ void testNonFinite(const char *name, const char *format) {
 	dv.setValue("m",-inf);
 	dv.setValue("x",1.5);
 	testEscape(title.getString(),&dv,
-			"{\"n\":null,\"i\":null,\"m\":null,\"x\":1.500000}",
+			"{\"n\":null,\"i\":null,\"m\":null,\"x\":1.5}",
 			"{\n\t\"n\":null,\n\t\"i\":null,\n\t\"m\":null,\n"
-			"\t\"x\":1.500000\n}\n",
-			"x","1.500000");
+			"\t\"x\":1.5\n}\n",
+			"x","1.5");
 	testFailWrite(title.getString(),&dv);
 
 	// keys are written with printf text, not as null
@@ -519,6 +519,33 @@ void testFloatKeys(const char *name, floattype a, floattype b,
 								btext,"2");
 	testWrite(name,&d,expectedindent.getString());
 	testFailWrite(name,&d);
+}
+
+// checks that "value" of "floattype" is written by write() and writeJson() as
+// the text that "format" gives it, and that the text reads back as "value"
+template <class floattype>
+void testFloatValue(const char *name, floattype value, const char *format) {
+
+	stringbuffer	text;
+	text.printf(format,value);
+
+	stringbuffer	title;
+	title.append(name)->append(": reads back");
+	test(title.getString(),
+		(floattype)charstring::convertToFloat(text.getString())==value);
+
+	stringbuffer	expected;
+	expected.append("[")->append(text.getString())->append("]");
+	stringbuffer	expectedindent;
+	expectedindent.append("[\n\t")->append(text.getString());
+	expectedindent.append("\n]\n");
+
+	linkedlist<floattype>	ll;
+	ll.append(value);
+	testEscape(name,&ll,expected.getString(),expectedindent.getString(),
+							"v",text.getString());
+	testWrite(name,&ll,expectedindent.getString());
+	testFailWrite(name,&ll);
 }
 
 int main(int argc, const char **argv) {
@@ -1045,6 +1072,20 @@ int main(int argc, const char **argv) {
 	testNonFinite<float>("float","%f");
 	testNonFinite<double>("double","%f");
 	testNonFinite<long double>("long double","%Lf");
+	stdoutput.printf("\n");
+
+	// float values are written with enough digits to read back as is
+	stdoutput.printf("float values...\n");
+	testFloatValue<float>("linkedlist (float 1e-7)",1e-7f,"%.9g");
+	testFloatValue<float>("linkedlist (float 1.0000001)",
+					1.0000001f,"%.9g");
+	testFloatValue<double>("linkedlist (double 1e-7)",1e-7,"%.17g");
+	testFloatValue<double>("linkedlist (double 1.0000001)",
+					1.0000001,"%.17g");
+	testFloatValue<long double>("linkedlist (long double 1e-7)",
+					1e-7L,ldfmt.getString());
+	testFloatValue<long double>("linkedlist (long double 1.0000001)",
+					1.0000001L,ldfmt.getString());
 	stdoutput.printf("\n");
 
 	if (wcharstring::supportsPrintf()) {

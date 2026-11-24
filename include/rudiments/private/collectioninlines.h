@@ -223,16 +223,28 @@ ssize_t collection::writeValue(output *out, uint64_t value) {
 
 inline
 ssize_t collection::writeValue(output *out, float value) {
+	// write a finite value with enough digits to read back as is
+	if (value-value==0) {
+		return out->printf("%.*g",2+FLT_MANT_DIG*30103/100000,value);
+	}
 	return out->printf("%f",value);
 }
 
 inline
 ssize_t collection::writeValue(output *out, double value) {
+	// write a finite value with enough digits to read back as is
+	if (value-value==0) {
+		return out->printf("%.*g",2+DBL_MANT_DIG*30103/100000,value);
+	}
 	return out->printf("%f",value);
 }
 
 inline
 ssize_t collection::writeValue(output *out, long double value) {
+	// write a finite value with enough digits to read back as is
+	if (value-value==0) {
+		return out->printf("%.*Lg",2+LDBL_MANT_DIG*30103/100000,value);
+	}
 	return out->printf("%Lf",value);
 }
 
@@ -478,7 +490,7 @@ ssize_t collection::writeJsonValue(output *out, float value) {
 	if (value!=value || value-value!=value-value) {
 		return out->write("null");
 	}
-	return out->printf("%f",value);
+	return writeValue(out,value);
 }
 
 inline
@@ -487,7 +499,7 @@ ssize_t collection::writeJsonValue(output *out, double value) {
 	if (value!=value || value-value!=value-value) {
 		return out->write("null");
 	}
-	return out->printf("%f",value);
+	return writeValue(out,value);
 }
 
 inline
@@ -496,7 +508,7 @@ ssize_t collection::writeJsonValue(output *out, long double value) {
 	if (value!=value || value-value!=value-value) {
 		return out->write("null");
 	}
-	return out->printf("%Lf",value);
+	return writeValue(out,value);
 }
 
 inline
@@ -666,9 +678,7 @@ bool collection::writeJsonKey(ssize_t *retval, output *out,
 
 	// format the key into the buffer
 	buf->clear();
-	ssize_t	result=(key-key==0)?
-			buf->printf("%.*g",2+FLT_MANT_DIG*30103/100000,key):
-			writeValue(buf,key);
+	ssize_t	result=writeValue(buf,key);
 	if (result<0) {
 		return incOrErr(retval,RESULT_ERROR);
 	}
@@ -682,9 +692,7 @@ bool collection::writeJsonKey(ssize_t *retval, output *out,
 
 	// format the key into the buffer
 	buf->clear();
-	ssize_t	result=(key-key==0)?
-			buf->printf("%.*g",2+DBL_MANT_DIG*30103/100000,key):
-			writeValue(buf,key);
+	ssize_t	result=writeValue(buf,key);
 	if (result<0) {
 		return incOrErr(retval,RESULT_ERROR);
 	}
@@ -698,9 +706,7 @@ bool collection::writeJsonKey(ssize_t *retval, output *out,
 
 	// format the key into the buffer
 	buf->clear();
-	ssize_t	result=(key-key==0)?
-			buf->printf("%.*Lg",2+LDBL_MANT_DIG*30103/100000,key):
-			writeValue(buf,key);
+	ssize_t	result=writeValue(buf,key);
 	if (result<0) {
 		return incOrErr(retval,RESULT_ERROR);
 	}
