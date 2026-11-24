@@ -986,6 +986,16 @@ off64_t filedescriptor::lseek(off64_t offset, int32_t whence) {
 	return result;
 }
 
+void filedescriptor::invalidateWriteBuffer() {
+	pvt->_writebuffer=NULL;
+	pvt->_writebufferhead=NULL;
+	pvt->_writebuffertail=NULL;
+	pvt->_writebufferend=NULL;
+	pvt->_writebufferreadavail=0;
+	pvt->_writebufferwriteavail=0;
+	pvt->_writebufferdirty=false;
+}
+
 ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 
 	// At this point...
@@ -1559,10 +1569,7 @@ bool filedescriptor::close() {
 		pvt->_writebuffermap=NULL;
 		delete[] pvt->_writebufferunaligned;
 		pvt->_writebufferunaligned=NULL;
-		pvt->_writebuffer=NULL;
-		pvt->_writebufferhead=NULL;
-		pvt->_writebuffertail=NULL;
-		pvt->_writebufferend=NULL;
+		invalidateWriteBuffer();
 
 	} else if (pvt->_writebuffer) {
 

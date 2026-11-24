@@ -25,6 +25,7 @@
 		off64_t	lseek(off64_t offset, int32_t whence);
 
 		ssize_t	realignWriteBuffer(int32_t sec, int32_t usec);
+		void	invalidateWriteBuffer();
 
 		ssize_t	highLevelRead(byte_t *buf, size_t count);
 		ssize_t	highLevelRead(byte_t *buf, size_t count,

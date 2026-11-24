@@ -382,6 +382,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - fixed data loss at file close() or delete with a write buffer
 - fixed memorymap detach() and the destructor unmapping with no map
   attached
+- fixed filedescriptor write after close() with a mapped block and a
+  new open() using the dropped map
 
 ### Security
 - fixed buffer overflow when unix socket file name is too long

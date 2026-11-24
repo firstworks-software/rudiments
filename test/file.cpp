@@ -64,6 +64,12 @@ const char	*mmapfile="testfilemmap.txt";
 #endif
 
 #ifndef WIN32
+const char	*mmapfile2="/tmp/testfilemmap2.txt";
+#else
+const char	*mmapfile2="testfilemmap2.txt";
+#endif
+
+#ifndef WIN32
 const char	*seekfile="/tmp/testfileseek.txt";
 #else
 const char	*seekfile="testfileseek.txt";
@@ -2727,6 +2733,119 @@ static void mmapMidBlockTests() {
 	signalmanager::alarm(0);
 }
 
+// create two files of three 8k blocks with different data
+static void mmapCloseReopenCreate(char *adata, char *bdata, size_t size) {
+
+	for (size_t i=0; i<size; i++) {
+		adata[i]='a'+i%26;
+		bdata[i]='A'+i%26;
+	}
+	file::remove(mmapfile);
+	file::remove(mmapfile2);
+	file	fl;
+	test("create a",fl.create(mmapfile,
+				permissions::parsePermString("rw-rw----")));
+	test("write a",fl.write(adata,size)==(ssize_t)size);
+	test("close a",fl.close());
+	test("create b",fl.create(mmapfile2,
+				permissions::parsePermString("rw-rw----")));
+	test("write b",fl.write(bdata,size)==(ssize_t)size);
+	test("close b",fl.close());
+}
+
+// map a block of the first file, close it, and open the second file
+static void mmapCloseReopenOpen(file *fl, const char *adata) {
+
+	test("open a",fl->open(mmapfile,O_RDWR));
+	fl->setMmapBufferingEnabled(true);
+	test("set read buffer size",fl->setReadBufferSize(8192));
+	char	buf[100];
+	test("read 100",fl->read(buf,sizeof(buf))==(ssize_t)sizeof(buf));
+	test("read data",!bytestring::compare(buf,adata,sizeof(buf)));
+	test("block is mapped",fl->isCurrentBlockMmapBuffered());
+	test("close a, mapped",fl->close());
+	test("open b",fl->open(mmapfile2,O_RDWR));
+}
+
+// check the contents of the second file with a fresh file object
+static void mmapCloseReopenVerify(const char *expected, size_t size) {
+
+	char	*contents=new char[size];
+	file	vfl;
+	test("verify, open",vfl.open(mmapfile2,O_RDONLY));
+	test("verify, size",vfl.getSize()==(off64_t)size);
+	test("verify, read file",
+		vfl.read(contents,size)==(ssize_t)size);
+	test("verify, contents",!bytestring::compare(contents,expected,size));
+	test("verify, close",vfl.close());
+	delete[] contents;
+}
+
+// read and write after a close with a mapped block and a new open, for #11197
+// filedescriptor - close() with a mapped block keeps stale available counts,
+// so a read or write after a new open() can use the dropped map
+static void mmapCloseReopenTests() {
+
+	signalmanager::alarm(60);
+
+	if (!memorymap::isSupported()) {
+		stdoutput.printf("memory maps not supported\n");
+		signalmanager::alarm(0);
+		return;
+	}
+
+	char	adata[24576];
+	char	bdata[24576];
+	char	expected[24576];
+	char	wdata[100];
+	for (uint16_t i=0; i<sizeof(wdata); i++) {
+		wdata[i]='0'+i%10;
+	}
+
+	// write from the beginning of the new file
+	stdoutput.printf("write at 0\n");
+	mmapCloseReopenCreate(adata,bdata,sizeof(bdata));
+	file	*fl=new file();
+	mmapCloseReopenOpen(fl,adata);
+	test("write 100",fl->write(wdata,sizeof(wdata))==(ssize_t)sizeof(wdata));
+	test("flush",fl->flushWriteBuffer(-1,-1));
+	test("close b",fl->close());
+	bytestring::copy(expected,bdata,sizeof(expected));
+	bytestring::copy(expected,wdata,sizeof(wdata));
+	mmapCloseReopenVerify(expected,sizeof(expected));
+	delete fl;
+
+	// write after a seek in the new file
+	stdoutput.printf("\nwrite after seek\n");
+	mmapCloseReopenCreate(adata,bdata,sizeof(bdata));
+	fl=new file();
+	mmapCloseReopenOpen(fl,adata);
+	test("seek",fl->setPositionRelativeToBeginning(50)==50);
+	test("write 10",fl->write(wdata,10)==10);
+	test("close b",fl->close());
+	bytestring::copy(expected,bdata,sizeof(expected));
+	bytestring::copy(expected+50,wdata,10);
+	mmapCloseReopenVerify(expected,sizeof(expected));
+	delete fl;
+
+	// read from the beginning of the new file
+	stdoutput.printf("\nread at 0\n");
+	mmapCloseReopenCreate(adata,bdata,sizeof(bdata));
+	fl=new file();
+	mmapCloseReopenOpen(fl,adata);
+	char	buf[100];
+	test("read 100",fl->read(buf,sizeof(buf))==(ssize_t)sizeof(buf));
+	test("read data",!bytestring::compare(buf,bdata,sizeof(buf)));
+	test("close b",fl->close());
+	delete fl;
+
+	file::remove(mmapfile);
+	file::remove(mmapfile2);
+	stdoutput.printf("\n");
+
+	signalmanager::alarm(0);
+}
+
 int main(int argc, const char **argv) {
 
 	char	*osname=sys::getOperatingSystemName();
@@ -3113,6 +3232,9 @@ int main(int argc, const char **argv) {
 
 		stdoutput.printf("\nmemory map reads and writes from the middle of a block\n");
 		mmapMidBlockTests();
+
+		stdoutput.printf("\nmemory map close and reopen\n");
+		mmapCloseReopenTests();
 
 		#if !defined(_WIN32) && \
 			defined(RUDIMENTS_HAVE_DLOPEN) && \
