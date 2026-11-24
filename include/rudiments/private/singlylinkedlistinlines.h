@@ -270,12 +270,10 @@ bool singlylinkedlist<valuetype>::removeAll(valuetype value) {
 	if (!first) {
 		return true;
 	}
-	bool	retval=false;
 	listnode<valuetype> *current=first;
 	bool	managevalues=this->getManageValues();
 	bool	managearrayvalues=this->getManageArrayValues();
 	while (!this->getComparator()->compare(current->getValue(),value)) {
-		retval=true;
 		if (first==last) {
 			first=NULL;
 			last=NULL;
@@ -298,7 +296,6 @@ bool singlylinkedlist<valuetype>::removeAll(valuetype value) {
 	while (current) {
 		if (!this->getComparator()->compare(
 					current->getValue(),value)) {
-			retval=true;
 			listnode<valuetype> *temp=current->getNext();
 			prev->setNext(temp);
 			if (last==current) {
@@ -314,7 +311,7 @@ bool singlylinkedlist<valuetype>::removeAll(valuetype value) {
 			current=current->getNext();
 		}
 	}
-	return retval;
+	return true;
 }
 
 template <class valuetype>

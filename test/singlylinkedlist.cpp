@@ -58,6 +58,16 @@ int main(int argc, char **argv) {
 						getNext()->getValue()==2);
 	test("remove(3)/walk backwards",intl.getLast()->getValue()==2);
 
+	// remove all, no match
+	test("removeAll(9)",intl.removeAll(9));
+	test("removeAll(9)/getCount()",intl.getCount()==3);
+	test("removeAll(9)/walk forwards",intl.getFirst()->getValue()==0);
+	test("removeAll(9)/walk forwards",intl.getFirst()->
+						getNext()->getValue()==1);
+	test("removeAll(9)/walk forwards",intl.getFirst()->getNext()->
+						getNext()->getValue()==2);
+	test("removeAll(9)/walk backwards",intl.getLast()->getValue()==2);
+
 	// clear
 	intl.clear();
 	test("clear()/getCount()",intl.getCount()==0);
