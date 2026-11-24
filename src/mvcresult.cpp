@@ -217,10 +217,10 @@ ssize_t mvcresult::writeJson(output *out, bool indent) {
 				pvt->_data.getKeys()->getFirst();
 				key && retval>-1; key=key->getNext()) {
 
-			// key, a NULL key as ""
+			// key, a NULL key as "null"
 			enc.clear();
 			charstring::jsonEncode((key->getValue())?
-						key->getValue():"",&enc);
+						key->getValue():"null",&enc);
 			if (!(((indent)?incOrErr(&retval,
 						out->write('\t'),1):true) &&
 				incOrErr(&retval,out->write(enc.getString(),

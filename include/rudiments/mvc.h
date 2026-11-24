@@ -465,7 +465,9 @@ class RUDIMENTS_DLLSPEC mvcresult : virtual public object {
 		 *  The message and each key are written as JSON strings.  A
 		 *  double quote, a backslash, and each byte below 0x20 are
 		 *  escaped, so a newline is written as \\u000a.  A NULL
-		 *  message or key is written as an empty string.
+		 *  message is written as an empty string.  A NULL key is
+		 *  written as "null", the same name as the key "null".  An
+		 *  empty key is written as "".
 		 *
 		 *  The representation is indented.  Each member of the object
 		 *  is on a line of its own, indented by one tab.  Each line of
@@ -485,7 +487,9 @@ class RUDIMENTS_DLLSPEC mvcresult : virtual public object {
 		 *  The message and each key are written as JSON strings.  A
 		 *  double quote, a backslash, and each byte below 0x20 are
 		 *  escaped, so a newline is written as \\u000a.  A NULL
-		 *  message or key is written as an empty string.
+		 *  message is written as an empty string.  A NULL key is
+		 *  written as "null", the same name as the key "null".  An
+		 *  empty key is written as "".
 		 *
 		 *  The representation is indented.  Each member of the object
 		 *  is on a line of its own, indented by one tab.  Each line of
@@ -505,7 +509,9 @@ class RUDIMENTS_DLLSPEC mvcresult : virtual public object {
 		 *  The message and each key are written as JSON strings.  A
 		 *  double quote, a backslash, and each byte below 0x20 are
 		 *  escaped, so a newline is written as \\u000a.  A NULL
-		 *  message or key is written as an empty string.
+		 *  message is written as an empty string.  A NULL key is
+		 *  written as "null", the same name as the key "null".  An
+		 *  empty key is written as "".
 		 *
 		 *  In the indented representation, each member of the object
 		 *  is on a line of its own, indented by one tab.  Each line of
@@ -528,7 +534,9 @@ class RUDIMENTS_DLLSPEC mvcresult : virtual public object {
 		 *  The message and each key are written as JSON strings.  A
 		 *  double quote, a backslash, and each byte below 0x20 are
 		 *  escaped, so a newline is written as \\u000a.  A NULL
-		 *  message or key is written as an empty string.
+		 *  message is written as an empty string.  A NULL key is
+		 *  written as "null", the same name as the key "null".  An
+		 *  empty key is written as "".
 		 *
 		 *  If indented, each member of the object is on a line of its
 		 *  own, indented by one tab.  Each line of a collection after
@@ -547,7 +555,9 @@ class RUDIMENTS_DLLSPEC mvcresult : virtual public object {
 		 *  The message and each key are written as JSON strings.  A
 		 *  double quote, a backslash, and each byte below 0x20 are
 		 *  escaped, so a newline is written as \\u000a.  A NULL
-		 *  message or key is written as an empty string.
+		 *  message is written as an empty string.  A NULL key is
+		 *  written as "null", the same name as the key "null".  An
+		 *  empty key is written as "".
 		 *
 		 *  In the indented representation, each member of the object
 		 *  is on a line of its own, indented by one tab.  Each line of
@@ -570,7 +580,9 @@ class RUDIMENTS_DLLSPEC mvcresult : virtual public object {
 		 *  The message and each key are written as JSON strings.  A
 		 *  double quote, a backslash, and each byte below 0x20 are
 		 *  escaped, so a newline is written as \\u000a.  A NULL
-		 *  message or key is written as an empty string.
+		 *  message is written as an empty string.  A NULL key is
+		 *  written as "null", the same name as the key "null".  An
+		 *  empty key is written as "".
 		 *
 		 *  If indented, each member of the object is on a line of its
 		 *  own, indented by one tab.  Each line of a collection after

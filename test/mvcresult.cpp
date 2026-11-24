@@ -624,6 +624,48 @@ int main() {
 	};
 	testResultFailWrite("escaped keys, list and null",&rekn,eknexpected);
 
+	// #11176 mvcresult - writeJson() writes a NULL data key and an empty
+	// data key as the same member name
+	mvcresult	rnk;
+	rnk.setSuccess();
+	rnk.setData(NULL,&list);
+	const char * const	nkexpected[]={
+		"{\"s\":true,\"c\":0,\"m\":\"\",\"null\":[1,2]}",
+		"{\n\t\"s\": true,\n\t\"c\": 0,\n\t\"m\": \"\",\n"
+		"\t\"null\": [\n\t\t1,\n\t\t2\n\t]\n}\n",
+		"{\n\t\"s\": true,\n\t\"c\": 0,\n\t\"m\": \"\",\n"
+		"\t\"null\": [\n\t\t1,\n\t\t2\n\t]\n}\n"
+	};
+	testResultFailWrite("null key",&rnk,nkexpected);
+
+	mvcresult	rek0;
+	rek0.setSuccess();
+	rek0.setData("",&list);
+	const char * const	ek0expected[]={
+		"{\"s\":true,\"c\":0,\"m\":\"\",\"\":[1,2]}",
+		"{\n\t\"s\": true,\n\t\"c\": 0,\n\t\"m\": \"\",\n"
+		"\t\"\": [\n\t\t1,\n\t\t2\n\t]\n}\n",
+		"{\n\t\"s\": true,\n\t\"c\": 0,\n\t\"m\": \"\",\n"
+		"\t\"\": [\n\t\t1,\n\t\t2\n\t]\n}\n"
+	};
+	testResultFailWrite("empty key",&rek0,ek0expected);
+
+	// a NULL key and an empty key are two entries
+	mvcresult	rnek;
+	rnek.setSuccess();
+	rnek.setData(NULL,&list);
+	rnek.setData("",NULL);
+	const char * const	nekexpected[]={
+		"{\"s\":true,\"c\":0,\"m\":\"\",\"null\":[1,2],\"\":null}",
+		"{\n\t\"s\": true,\n\t\"c\": 0,\n\t\"m\": \"\",\n"
+		"\t\"null\": [\n\t\t1,\n\t\t2\n\t],\n"
+		"\t\"\": null\n}\n",
+		"{\n\t\"s\": true,\n\t\"c\": 0,\n\t\"m\": \"\",\n"
+		"\t\"null\": [\n\t\t1,\n\t\t2\n\t],\n"
+		"\t\"\": null\n}\n"
+	};
+	testResultFailWrite("null key and empty key",&rnek,nekexpected);
+
 	mvcresult	remk;
 	remk.setSuccess(5,ESCRAW);
 	remk.setData(ESCKEYRAW,&list);
