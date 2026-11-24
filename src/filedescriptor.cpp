@@ -334,6 +334,11 @@ filedescriptor::~filedescriptor() {
 		return;
 	}
 
+	// flush the write buffer of a storage file
+	if (!pvt->_isstream && pvt->_fd!=-1 && pvt->_writebuffer) {
+		flushWriteBuffer(-1,-1);
+	}
+
 	// clean up read buffer
 	byte_t	*tmpbuffer=pvt->_readbuffer;
 	pvt->_readbuffer=NULL;
@@ -346,6 +351,12 @@ filedescriptor::~filedescriptor() {
 	tmpbuffer=pvt->_writebufferunaligned;
 	pvt->_writebufferunaligned=NULL;
 	delete[] tmpbuffer;
+
+	// keep close() from flushing the freed buffer
+	pvt->_writebuffer=NULL;
+	pvt->_writebufferhead=NULL;
+	pvt->_writebuffertail=NULL;
+	pvt->_writebufferend=NULL;
 
 	// clean up listener
 	listener	*tmplstnr=pvt->_lstnr;
@@ -1513,6 +1524,16 @@ ssize_t filedescriptor::read(int64_t *buffer,
 
 bool filedescriptor::close() {
 
+	// flush the write buffer of a storage file
+	bool	flushed=true;
+	int32_t	flusherr=0;
+	if (!pvt->_isstream && pvt->_fd!=-1 && pvt->_writebuffer) {
+		flushed=flushWriteBuffer(-1,-1);
+		if (!flushed) {
+			flusherr=error::getErrorNumber();
+		}
+	}
+
 	// reset offsets
 	pvt->_offset=0;
 	pvt->_writeblockoffset=0;
@@ -1577,6 +1598,12 @@ bool filedescriptor::close() {
 
 		// reset the file descriptor
 		setFileDescriptor(-1);
+	}
+
+	// report a failed flush
+	if (!flushed) {
+		error::setErrorNumber(flusherr);
+		return false;
 	}
 	return true;
 }

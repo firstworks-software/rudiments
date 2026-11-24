@@ -767,7 +767,7 @@ http://www.gnu.org/software/src-highlite -->
 
 <p>Reading is completely transparent.  The read buffer is filled during the first read, and filled again when all bytes have been read from it.</p>
 
-<p>Writing is nearly transparent.  Bytes are written to the buffer.  When the buffer is full, it is written to storage.  However, when the program is done writing, it should call flushWriteBuffer() to make sure that any data still in the buffer is written to storage.</p>
+<p>Writing is nearly transparent.  Bytes are written to the buffer.  When the buffer is full, it is written to storage.  The close() method and the destructor also write any data still in the buffer to storage.  To write it sooner, or to check that the write succeeded before the file is closed, call flushWriteBuffer().</p>
 
 <p>The example below illustrates buffered I/O.</p>
 

@@ -16,10 +16,26 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		filedescriptor();
 
 		/** Deletes this instance of the filedescriptor class.
-		 *  Calls close() if it hasn't already been called. */
+		 *  Calls close() if it hasn't already been called.
+		 *
+		 *  If the file descriptor is storage, such as a file, then
+		 *  any data still in the write buffer is written first.  The
+		 *  buffered data of a stream, such as a socket, is not
+		 *  written.  See close(). */
 		virtual	~filedescriptor();
 
 		/** Closes the file descriptor.
+		 *
+		 *  If the file descriptor is storage, such as a file, then
+		 *  any data still in the write buffer is written first.  The
+		 *  buffered data of a stream, such as a socket, is not
+		 *  written.  See setIsStream() and flushWriteBuffer().
+		 *
+		 *  If the write buffer cannot be written, then close() still
+		 *  tries to close the file descriptor and returns false.  The
+		 *  error number is that of the failed flush, unless the close
+		 *  itself also fails.
+		 *
 		 *  Returns true on success and false on failure. */
 		virtual	bool	close();
 
@@ -1085,7 +1101,9 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  system calls are only made when the buffer is full or when
 		 *  it's flushed manually.  Note that this also means that no
 		 *  data is actually written to the file descriptor until the
-		 *  buffer is full or until it's flushed manually.
+		 *  buffer is full or until it's flushed manually.  For
+		 *  storage, close() and the destructor also flush the buffer,
+		 *  but for a stream, they do not.
 		 *
 		 *  If the flush that a full buffer triggers is short or
 		 *  fails, then write() returns the number of bytes of the

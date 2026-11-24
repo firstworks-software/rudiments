@@ -242,7 +242,7 @@ flushWriteBuffer():: Makes sure that any data that is buffered but hasn't been w
 
 Reading is completely transparent.  The read buffer is filled during the first read, and filled again when all bytes have been read from it.
 
-Writing is nearly transparent.  Bytes are written to the buffer.  When the buffer is full, it is written to storage.  However, when the program is done writing, it should call flushWriteBuffer() to make sure that any data still in the buffer is written to storage.
+Writing is nearly transparent.  Bytes are written to the buffer.  When the buffer is full, it is written to storage.  The close() method and the destructor also write any data still in the buffer to storage.  To write it sooner, or to check that the write succeeded before the file is closed, call flushWriteBuffer().
 
 The example below illustrates buffered I/O.
 

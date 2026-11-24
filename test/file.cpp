@@ -25,6 +25,7 @@
 #include <wchar.h>
 #ifndef _WIN32
 	#include <unistd.h>
+	#include <fcntl.h>
 #endif
 #if !defined(_WIN32) && \
 	defined(RUDIMENTS_HAVE_DLOPEN) && defined(RUDIMENTS_HAVE_RTLD_NEXT)
@@ -2467,6 +2468,188 @@ static void mmapFailedSeekTests() {
 }
 #endif
 
+// the bytes that the close tests write
+static void closeFlushData(char *data, size_t length) {
+	for (size_t i=0; i<length; i++) {
+		data[i]=(char)((i*7+3)%251);
+	}
+}
+
+// open a new file with a write buffer
+static bool closeFlushOpen(file *fl, bool mmap, size_t buffersize) {
+	file::remove(mmapfile);
+	fl->setMmapBufferingEnabled(mmap);
+	return (fl->create(mmapfile,
+			permissions::parsePermString("rw-rw----")) &&
+		fl->setWriteBufferSize(buffersize));
+}
+
+// the file holds exactly the data
+static bool closeFlushHolds(const char *data, size_t length) {
+	file	vfl;
+	if (!vfl.open(mmapfile,O_RDONLY)) {
+		return false;
+	}
+	bool	ok=(vfl.getSize()==(off64_t)length);
+	char	*contents=new char[length+1];
+	ok=(ok && vfl.read(contents,length)==(ssize_t)length &&
+		!bytestring::compare(contents,data,length));
+	delete[] contents;
+	return (vfl.close() && ok);
+}
+
+#if !defined(_WIN32) && \
+	defined(RUDIMENTS_HAVE_DLOPEN) && defined(RUDIMENTS_HAVE_RTLD_NEXT)
+// a seek fails on the file descriptor of an open file
+static bool closeFlushSeekFails() {
+	file	cfl;
+	if (!closeFlushOpen(&cfl,false,7) || !cfl.close()) {
+		return false;
+	}
+	file	fl;
+	if (!fl.open(mmapfile,O_RDONLY)) {
+		return false;
+	}
+	failseekfd=fl.getFileDescriptor();
+	bool	failed=(fl.getPosition()==-1);
+	failseekfd=-1;
+	return (fl.close() && failed);
+}
+
+// close() and delete with a failed flush of the write buffer
+static void closeFlushFailedTests() {
+
+	char	data[33];
+	closeFlushData(data,sizeof(data));
+
+	// skip if the lseek() above does not take the place of the real one
+	bool	seekfails=closeFlushSeekFails();
+	file::remove(mmapfile);
+	if (!seekfails) {
+		stdoutput.printf("lseek() can not be replaced\n");
+		return;
+	}
+
+	// close() with a failed flush
+	stdoutput.printf("close, failed flush:\n");
+	file	fl;
+	test("create",closeFlushOpen(&fl,false,7));
+	test("write",fl.write(data,sizeof(data))==(ssize_t)sizeof(data));
+	failseekfd=fl.getFileDescriptor();
+	error::clearError();
+	bool	closed=fl.close();
+	int32_t	errnum=error::getErrorNumber();
+	failseekfd=-1;
+	test("close fails",!closed);
+	test("error number is set after close",errnum!=0);
+	test("descriptor is closed",fl.getFileDescriptor()==-1);
+	fl.close();
+	test("close again",true);
+	file::remove(mmapfile);
+
+	// delete with a failed flush
+	stdoutput.printf("delete, failed flush:\n");
+	file	*dfl=new file();
+	test("create",closeFlushOpen(dfl,false,7));
+	test("write",dfl->write(data,sizeof(data))==(ssize_t)sizeof(data));
+	int32_t	fd=dfl->getFileDescriptor();
+	failseekfd=fd;
+	delete dfl;
+	failseekfd=-1;
+	test("delete",true);
+	error::clearError();
+	test("descriptor is closed",fcntl(fd,F_GETFD)==-1 &&
+					error::getErrorNumber()==EBADF);
+	file::remove(mmapfile);
+}
+#endif
+
+// close() and delete of a file with data in the write buffer, for #11188
+// filedescriptor - close() discards data still in the write buffer
+static void closeFlushTests() {
+
+	signalmanager::alarm(60);
+
+	// buffer sizes and lengths, usual buffering then mmap buffering
+	char	data[20000];
+	closeFlushData(data,sizeof(data));
+	bool	mmaps[]={false,true};
+	size_t	sizes[]={7,8192};
+	size_t	lengths[]={33,20000};
+
+	for (uint16_t i=0; i<2; i++) {
+
+		if (mmaps[i] && !memorymap::isSupported()) {
+			stdoutput.printf("memory maps not supported\n");
+			continue;
+		}
+
+		stringbuffer	title;
+		title.append((mmaps[i])?"mmap":"usual");
+		title.append(", ");
+		const char	*t=title.getString();
+		stringbuffer	msg;
+
+		// close() with no flushWriteBuffer()
+		stdoutput.printf("%sclose:\n",t);
+		file	fl;
+		msg.clear();
+		msg.append(t)->append("create");
+		test(msg.getString(),closeFlushOpen(&fl,mmaps[i],sizes[i]));
+		msg.clear();
+		msg.append(t)->append("write");
+		test(msg.getString(),
+			fl.write(data,lengths[i])==(ssize_t)lengths[i]);
+		msg.clear();
+		msg.append(t)->append("close");
+		test(msg.getString(),fl.close());
+		msg.clear();
+		msg.append(t)->append("size and data");
+		test(msg.getString(),closeFlushHolds(data,lengths[i]));
+
+		// delete with no close()
+		stdoutput.printf("%sdelete:\n",t);
+		file	*dfl=new file();
+		msg.clear();
+		msg.append(t)->append("create");
+		test(msg.getString(),closeFlushOpen(dfl,mmaps[i],sizes[i]));
+		msg.clear();
+		msg.append(t)->append("write");
+		test(msg.getString(),
+			dfl->write(data,lengths[i])==(ssize_t)lengths[i]);
+		delete dfl;
+		msg.clear();
+		msg.append(t)->append("size and data");
+		test(msg.getString(),closeFlushHolds(data,lengths[i]));
+	}
+	file::remove(mmapfile);
+
+	// close() of a stream does not write the buffer
+	stdoutput.printf("stream close:\n");
+	{
+		filedescriptor	readfd;
+		filedescriptor	writefd;
+		test("create pipe",
+			filedescriptor::createPipe(&readfd,&writefd));
+		test("set write buffer size",writefd.setWriteBufferSize(64));
+		test("write",writefd.write("abc")==3);
+		test("close",writefd.close());
+		char	buf[10];
+		test("reader sees end of data with no data",
+					readfd.read(buf,sizeof(buf))==0);
+	}
+
+	#if !defined(_WIN32) && \
+		defined(RUDIMENTS_HAVE_DLOPEN) && defined(RUDIMENTS_HAVE_RTLD_NEXT)
+	closeFlushFailedTests();
+	#endif
+
+	file::remove(mmapfile);
+	stdoutput.printf("\n");
+
+	signalmanager::alarm(0);
+}
+
 // buffered read and write from the middle of a mapped block, for #11191
 // filedescriptor - a storage read or write that starts in the middle of a
 // memory mapped block runs past the end of the map
@@ -2937,6 +3120,9 @@ int main(int argc, const char **argv) {
 		stdoutput.printf("\nmemory map failed seek after a failed map\n");
 		mmapFailedSeekTests();
 		#endif
+
+		stdoutput.printf("\nclose and delete with data in the write buffer\n");
+		closeFlushTests();
 
 	} else {
 
