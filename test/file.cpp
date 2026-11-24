@@ -27,8 +27,10 @@
 	#include <unistd.h>
 	#include <fcntl.h>
 #endif
-#if !defined(_WIN32) && \
+// a fully static link has no next lseek() to find
+#if !defined(_WIN32) && !defined(TEST_ALLSTATIC) && \
 	defined(RUDIMENTS_HAVE_DLOPEN) && defined(RUDIMENTS_HAVE_RTLD_NEXT)
+	#define FILETEST_LSEEK_HOOK
 	#include <rudiments/dynamiclib.h>
 #endif
 #include "test.cpp"
@@ -2356,8 +2358,7 @@ static void seekPastEndWriteTests() {
 	signalmanager::alarm(0);
 }
 
-#if !defined(_WIN32) && \
-	defined(RUDIMENTS_HAVE_DLOPEN) && defined(RUDIMENTS_HAVE_RTLD_NEXT)
+#ifdef FILETEST_LSEEK_HOOK
 // This lseek() takes the place of the C library's, so the test can make a
 // seek fail on one file descriptor.  It passes every other call on to the
 // next definition, so it is only built where getNextSymbol() can find that.
@@ -2504,8 +2505,7 @@ static bool closeFlushHolds(const char *data, size_t length) {
 	return (vfl.close() && ok);
 }
 
-#if !defined(_WIN32) && \
-	defined(RUDIMENTS_HAVE_DLOPEN) && defined(RUDIMENTS_HAVE_RTLD_NEXT)
+#ifdef FILETEST_LSEEK_HOOK
 // a seek fails on the file descriptor of an open file
 static bool closeFlushSeekFails() {
 	file	cfl;
@@ -2645,8 +2645,7 @@ static void closeFlushTests() {
 					readfd.read(buf,sizeof(buf))==0);
 	}
 
-	#if !defined(_WIN32) && \
-		defined(RUDIMENTS_HAVE_DLOPEN) && defined(RUDIMENTS_HAVE_RTLD_NEXT)
+	#ifdef FILETEST_LSEEK_HOOK
 	closeFlushFailedTests();
 	#endif
 
@@ -3236,11 +3235,11 @@ int main(int argc, const char **argv) {
 		stdoutput.printf("\nmemory map close and reopen\n");
 		mmapCloseReopenTests();
 
-		#if !defined(_WIN32) && \
-			defined(RUDIMENTS_HAVE_DLOPEN) && \
-			defined(RUDIMENTS_HAVE_RTLD_NEXT)
+		#ifdef FILETEST_LSEEK_HOOK
 		stdoutput.printf("\nmemory map failed seek after a failed map\n");
 		mmapFailedSeekTests();
+		#else
+		stdoutput.printf("\nmemory map failed seek after a failed map\nlseek() can not be replaced\n");
 		#endif
 
 		stdoutput.printf("\nclose and delete with data in the write buffer\n");
