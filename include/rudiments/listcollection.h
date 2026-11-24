@@ -215,6 +215,13 @@ class listcollection : public nodecollection<valuetype> {
 		/** Writes a representation of the listcollection to standard
 		 *  output.
 		 *
+		 *  An int8_t value is written as its number where int8_t is
+		 *  signed char.  Where int8_t is char, such as on Solaris
+		 *  with _CHAR_IS_SIGNED, the char writer handles it, because
+		 *  the writers take signed char.  It is then written as the
+		 *  character with that byte value.  A digit is written bare,
+		 *  and any other character as a JSON string.
+		 *
 		 *  Returns the number of bytes written, or -1 if an error
 		 *  occurred.  A short write returns -1.  Any other error from
 		 *  the output, such as a timeout or abort, is returned
@@ -222,6 +229,13 @@ class listcollection : public nodecollection<valuetype> {
 		virtual	ssize_t	write();
 
 		/** Writes a representation of the listcollection to "out".
+		 *
+		 *  An int8_t value is written as its number where int8_t is
+		 *  signed char.  Where int8_t is char, such as on Solaris
+		 *  with _CHAR_IS_SIGNED, the char writer handles it, because
+		 *  the writers take signed char.  It is then written as the
+		 *  character with that byte value.  A digit is written bare,
+		 *  and any other character as a JSON string.
 		 *
 		 *  Returns the number of bytes written, or -1 if an error
 		 *  occurred.  A short write returns -1.  Any other error from
@@ -231,6 +245,13 @@ class listcollection : public nodecollection<valuetype> {
 
 		/** Writes a JSON representation of the listcollection to
 		 *  standard output.
+		 *
+		 *  An int8_t value is written as its number where int8_t is
+		 *  signed char.  Where int8_t is char, such as on Solaris
+		 *  with _CHAR_IS_SIGNED, the char writer handles it, because
+		 *  the writers take signed char.  It is then written as the
+		 *  character with that byte value.  A digit is written bare,
+		 *  and any other character as a JSON string.
 		 *
 		 *  Returns the number of bytes written, or -1 if an error
 		 *  occurred.  A short write returns -1.  Any other error from
@@ -245,6 +266,13 @@ class listcollection : public nodecollection<valuetype> {
 		 *  indented.  If "indent" is false, then the collection
 		 *  is written without indentation.
 		 *
+		 *  An int8_t value is written as its number where int8_t is
+		 *  signed char.  Where int8_t is char, such as on Solaris
+		 *  with _CHAR_IS_SIGNED, the char writer handles it, because
+		 *  the writers take signed char.  It is then written as the
+		 *  character with that byte value.  A digit is written bare,
+		 *  and any other character as a JSON string.
+		 *
 		 *  Returns the number of bytes written, or -1 if an error
 		 *  occurred.  A short write returns -1.  Any other error from
 		 *  the output, such as a timeout or abort, is returned
@@ -253,6 +281,13 @@ class listcollection : public nodecollection<valuetype> {
 
 		/** Writes a JSON representation of the listcollection to
 		 *  "out".
+		 *
+		 *  An int8_t value is written as its number where int8_t is
+		 *  signed char.  Where int8_t is char, such as on Solaris
+		 *  with _CHAR_IS_SIGNED, the char writer handles it, because
+		 *  the writers take signed char.  It is then written as the
+		 *  character with that byte value.  A digit is written bare,
+		 *  and any other character as a JSON string.
 		 *
 		 *  Returns the number of bytes written, or -1 if an error
 		 *  occurred.  A short write returns -1.  Any other error from
@@ -266,6 +301,13 @@ class listcollection : public nodecollection<valuetype> {
 		 *  If "indent" is true, then the output is automatically
 		 *  indented.  If "indent" is false, then the collection
 		 *  is written without indentation.
+		 *
+		 *  An int8_t value is written as its number where int8_t is
+		 *  signed char.  Where int8_t is char, such as on Solaris
+		 *  with _CHAR_IS_SIGNED, the char writer handles it, because
+		 *  the writers take signed char.  It is then written as the
+		 *  character with that byte value.  A digit is written bare,
+		 *  and any other character as a JSON string.
 		 *
 		 *  Returns the number of bytes written, or -1 if an error
 		 *  occurred.  A short write returns -1.  Any other error from

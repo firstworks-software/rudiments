@@ -164,6 +164,7 @@ ssize_t collection::writeValue(output *out, signed char value) {
 	// Why signed char and not int8_t?  Where int8_t is char, such as
 	// solaris with _CHAR_IS_SIGNED, an int8_t overload would duplicate
 	// the char overload.  signed char is always a distinct type.
+	// Where int8_t is char, the char overload writes it as a character.
 	return out->printf("%d",(int32_t)value);
 }
 
@@ -399,6 +400,7 @@ ssize_t collection::writeJsonValue(output *out, signed char value) {
 	// Why signed char and not int8_t?  Where int8_t is char, such as
 	// solaris with _CHAR_IS_SIGNED, an int8_t overload would duplicate
 	// the char overload.  signed char is always a distinct type.
+	// Where int8_t is char, the char overload writes it as a character.
 	return out->printf("%d",(int32_t)value);
 }
 

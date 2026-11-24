@@ -183,6 +183,13 @@ class tablecollection : public collection {
 		 *  If the table has zero columns, only the rows of the first
 		 *  block are written, as empty arrays.
 		 *
+		 *  An int8_t value is written as its number where int8_t is
+		 *  signed char.  Where int8_t is char, such as on Solaris
+		 *  with _CHAR_IS_SIGNED, the char writer handles it, because
+		 *  the writers take signed char.  It is then written as the
+		 *  character with that byte value.  A digit is written bare,
+		 *  and any other character as a JSON string.
+		 *
 		 *  Returns the number of bytes written, or -1 if an error
 		 *  occurred.  A short write returns -1.  Any other error from
 		 *  the output, such as a timeout or abort, is returned
@@ -198,6 +205,13 @@ class tablecollection : public collection {
 		 *
 		 *  If the table has zero columns, only the rows of the first
 		 *  block are written, as empty arrays.
+		 *
+		 *  An int8_t value is written as its number where int8_t is
+		 *  signed char.  Where int8_t is char, such as on Solaris
+		 *  with _CHAR_IS_SIGNED, the char writer handles it, because
+		 *  the writers take signed char.  It is then written as the
+		 *  character with that byte value.  A digit is written bare,
+		 *  and any other character as a JSON string.
 		 *
 		 *  Returns the number of bytes written, or -1 if an error
 		 *  occurred.  A short write returns -1.  Any other error from
@@ -215,6 +229,13 @@ class tablecollection : public collection {
 		 *
 		 *  If the table has zero columns, only the rows of the first
 		 *  block are written, as empty arrays.
+		 *
+		 *  An int8_t value is written as its number where int8_t is
+		 *  signed char.  Where int8_t is char, such as on Solaris
+		 *  with _CHAR_IS_SIGNED, the char writer handles it, because
+		 *  the writers take signed char.  It is then written as the
+		 *  character with that byte value.  A digit is written bare,
+		 *  and any other character as a JSON string.
 		 *
 		 *  Returns the number of bytes written, or -1 if an error
 		 *  occurred.  A short write returns -1.  Any other error from
@@ -237,6 +258,13 @@ class tablecollection : public collection {
 		 *  If the table has zero columns, only the rows of the first
 		 *  block are written, as empty arrays.
 		 *
+		 *  An int8_t value is written as its number where int8_t is
+		 *  signed char.  Where int8_t is char, such as on Solaris
+		 *  with _CHAR_IS_SIGNED, the char writer handles it, because
+		 *  the writers take signed char.  It is then written as the
+		 *  character with that byte value.  A digit is written bare,
+		 *  and any other character as a JSON string.
+		 *
 		 *  Returns the number of bytes written, or -1 if an error
 		 *  occurred.  A short write returns -1.  Any other error from
 		 *  the output, such as a timeout or abort, is returned
@@ -253,6 +281,13 @@ class tablecollection : public collection {
 		 *
 		 *  If the table has zero columns, only the rows of the first
 		 *  block are written, as empty arrays.
+		 *
+		 *  An int8_t value is written as its number where int8_t is
+		 *  signed char.  Where int8_t is char, such as on Solaris
+		 *  with _CHAR_IS_SIGNED, the char writer handles it, because
+		 *  the writers take signed char.  It is then written as the
+		 *  character with that byte value.  A digit is written bare,
+		 *  and any other character as a JSON string.
 		 *
 		 *  Returns the number of bytes written, or -1 if an error
 		 *  occurred.  A short write returns -1.  Any other error from
@@ -274,6 +309,13 @@ class tablecollection : public collection {
 		 *
 		 *  If the table has zero columns, only the rows of the first
 		 *  block are written, as empty arrays.
+		 *
+		 *  An int8_t value is written as its number where int8_t is
+		 *  signed char.  Where int8_t is char, such as on Solaris
+		 *  with _CHAR_IS_SIGNED, the char writer handles it, because
+		 *  the writers take signed char.  It is then written as the
+		 *  character with that byte value.  A digit is written bare,
+		 *  and any other character as a JSON string.
 		 *
 		 *  Returns the number of bytes written, or -1 if an error
 		 *  occurred.  A short write returns -1.  Any other error from

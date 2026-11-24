@@ -98,6 +98,14 @@ class dictionarycollection : public collection {
 		/** Writes a representation of the dictionarycollection to
 		 *  standard output.
 		 *
+		 *  An int8_t key or value is written as its number where
+		 *  int8_t is signed char.  Where int8_t is char, such as on
+		 *  Solaris with _CHAR_IS_SIGNED, the char writer handles it,
+		 *  because the writers take signed char.  It is then written
+		 *  as the character with that byte value.  As a value, a
+		 *  digit is written bare and any other character as a JSON
+		 *  string.
+		 *
 		 *  Returns the number of bytes written, or -1 if an error
 		 *  occurred.  A short write returns -1.  Any other error from
 		 *  the output, such as a timeout or abort, is returned
@@ -106,6 +114,14 @@ class dictionarycollection : public collection {
 
 		/** Writes a representation of the dictionarycollection to
 		 *  "out".
+		 *
+		 *  An int8_t key or value is written as its number where
+		 *  int8_t is signed char.  Where int8_t is char, such as on
+		 *  Solaris with _CHAR_IS_SIGNED, the char writer handles it,
+		 *  because the writers take signed char.  It is then written
+		 *  as the character with that byte value.  As a value, a
+		 *  digit is written bare and any other character as a JSON
+		 *  string.
 		 *
 		 *  Returns the number of bytes written, or -1 if an error
 		 *  occurred.  A short write returns -1.  Any other error from
@@ -127,6 +143,14 @@ class dictionarycollection : public collection {
 		 *  with only a conversion operator, is written as an address,
 		 *  so such keys can share a name.  Any other two different
 		 *  keys get different names.
+		 *
+		 *  An int8_t key or value is written as its number where
+		 *  int8_t is signed char.  Where int8_t is char, such as on
+		 *  Solaris with _CHAR_IS_SIGNED, the char writer handles it,
+		 *  because the writers take signed char.  It is then written
+		 *  as the character with that byte value.  As a value, a
+		 *  digit is written bare and any other character as a JSON
+		 *  string.
 		 *
 		 *  Returns the number of bytes written, or -1 if an error
 		 *  occurred.  A short write returns -1.  Any other error from
@@ -153,6 +177,14 @@ class dictionarycollection : public collection {
 		 *  so such keys can share a name.  Any other two different
 		 *  keys get different names.
 		 *
+		 *  An int8_t key or value is written as its number where
+		 *  int8_t is signed char.  Where int8_t is char, such as on
+		 *  Solaris with _CHAR_IS_SIGNED, the char writer handles it,
+		 *  because the writers take signed char.  It is then written
+		 *  as the character with that byte value.  As a value, a
+		 *  digit is written bare and any other character as a JSON
+		 *  string.
+		 *
 		 *  Returns the number of bytes written, or -1 if an error
 		 *  occurred.  A short write returns -1.  Any other error from
 		 *  the output, such as a timeout or abort, is returned
@@ -173,6 +205,14 @@ class dictionarycollection : public collection {
 		 *  with only a conversion operator, is written as an address,
 		 *  so such keys can share a name.  Any other two different
 		 *  keys get different names.
+		 *
+		 *  An int8_t key or value is written as its number where
+		 *  int8_t is signed char.  Where int8_t is char, such as on
+		 *  Solaris with _CHAR_IS_SIGNED, the char writer handles it,
+		 *  because the writers take signed char.  It is then written
+		 *  as the character with that byte value.  As a value, a
+		 *  digit is written bare and any other character as a JSON
+		 *  string.
 		 *
 		 *  Returns the number of bytes written, or -1 if an error
 		 *  occurred.  A short write returns -1.  Any other error from
@@ -198,6 +238,14 @@ class dictionarycollection : public collection {
 		 *  with only a conversion operator, is written as an address,
 		 *  so such keys can share a name.  Any other two different
 		 *  keys get different names.
+		 *
+		 *  An int8_t key or value is written as its number where
+		 *  int8_t is signed char.  Where int8_t is char, such as on
+		 *  Solaris with _CHAR_IS_SIGNED, the char writer handles it,
+		 *  because the writers take signed char.  It is then written
+		 *  as the character with that byte value.  As a value, a
+		 *  digit is written bare and any other character as a JSON
+		 *  string.
 		 *
 		 *  Returns the number of bytes written, or -1 if an error
 		 *  occurred.  A short write returns -1.  Any other error from
