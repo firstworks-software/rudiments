@@ -26,6 +26,7 @@
 
 		ssize_t	realignWriteBuffer(int32_t sec, int32_t usec);
 		void	invalidateWriteBuffer();
+		void	dropWriteBuffer();
 
 		ssize_t	highLevelRead(byte_t *buf, size_t count);
 		ssize_t	highLevelRead(byte_t *buf, size_t count,

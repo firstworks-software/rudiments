@@ -782,6 +782,15 @@ bool file::truncate() {
 }
 
 bool file::truncate(off64_t size) {
+
+	// flush the buffered block
+	if (!flushWriteBuffer(-1,-1)) {
+		return false;
+	}
+
+	// drop the buffered block
+	dropWriteBuffer();
+
 	int32_t	result;
 	do {
 		#if defined(RUDIMENTS_HAVE_FTRUNCATE) || \
@@ -790,10 +799,17 @@ bool file::truncate(off64_t size) {
 		#elif defined(RUDIMENTS_HAVE__CHSIZE_S)
 			result=_chsize_s(fd(),size);
 		#elif defined(RUDIMENTS_HAVE_SETENDOFFILE)
-			return (setPositionRelativeToBeginning(0)!=-1 &&
-				SetEndOfFile((HANDLE)
+			// cut the file at size, keep the position
+			off64_t	saved=lseek(0,SEEK_CUR);
+			result=-1;
+			if (saved!=-1 && lseek(size,SEEK_SET)!=-1) {
+				result=(SetEndOfFile((HANDLE)
 					getHandleFromFileDescriptor(fd()))==
-					TRUE);
+					TRUE)?0:-1;
+				if (lseek(saved,SEEK_SET)==-1) {
+					result=-1;
+				}
+			}
 		#else
 			#error no ftruncate or anything like it
 		#endif

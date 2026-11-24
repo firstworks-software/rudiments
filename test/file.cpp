@@ -2232,6 +2232,183 @@ static void seekPastEndReadTests() {
 	signalmanager::alarm(0);
 }
 
+// builds the title of one check from the case name and the check name
+static const char *truncateTitle(stringbuffer *title,
+					const char *name, const char *what) {
+	title->clear();
+	title->append(name)->append(", ")->append(what);
+	return title->getString();
+}
+
+// #11198 filedescriptor - a buffered read after file::truncate() cuts off the
+// buffered block crashes with SIGBUS (mmap) or returns old bytes
+static void truncateBufferTests() {
+
+	signalmanager::alarm(60);
+
+	// a file of two and a half 8k blocks
+	char	data[20480];
+	for (uint16_t i=0; i<sizeof(data); i++) {
+		data[i]='a'+i%26;
+	}
+
+	// cases: read below, read inside, dirty below, dirty inside, write
+	// after, each with map buffering off and on
+	bool		maps[]={false,true};
+	const char	*names[]={"read","read, mmap",
+				"inside","inside, mmap",
+				"dirty","dirty, mmap",
+				"dirty inside","dirty inside, mmap",
+				"write after","write after, mmap"};
+	char		buf[1000];
+	char		contents[20480];
+	char		zeros[8192];
+	bytestring::zero(zeros,sizeof(zeros));
+	stringbuffer	title;
+	const char	*wbytes="0123456789012345678901234567890123456789"
+				"0123456789012345678901234567890123456789"
+				"01234567890123456789";
+	for (uint16_t n=0; n<5; n++) {
+	for (uint16_t m=0; m<2; m++) {
+
+		if (maps[m] && !memorymap::isSupported()) {
+			stdoutput.printf("memory maps not supported\n");
+			continue;
+		}
+
+		const char	*name=names[n*2+m];
+
+		// start with the original file
+		file::remove(seekfile);
+		file	nfl;
+		test(truncateTitle(&title,name,"create"),
+			nfl.create(seekfile,
+				permissions::parsePermString("rw-rw----")));
+		test(truncateTitle(&title,name,"write file"),
+			nfl.write(data,sizeof(data))==(ssize_t)sizeof(data));
+		test(truncateTitle(&title,name,"close file"),nfl.close());
+
+		// buffer the block at 8192
+		file	tfl;
+		test(truncateTitle(&title,name,"open"),
+					tfl.open(seekfile,O_RDWR));
+		tfl.setMmapBufferingEnabled(maps[m]);
+		test(truncateTitle(&title,name,"set read buffer size"),
+					tfl.setReadBufferSize(8192));
+		test(truncateTitle(&title,name,"set write buffer size"),
+					tfl.setWriteBufferSize(8192));
+		test(truncateTitle(&title,name,"seek"),
+			tfl.setPositionRelativeToBeginning(8192)==8192);
+		if (n<2 || n==4) {
+			test(truncateTitle(&title,name,"read 100"),
+						tfl.read(buf,100)==100);
+			test(truncateTitle(&title,name,"read 100 data"),
+				!bytestring::compare(buf,data+8192,100));
+			if (maps[m]) {
+				test(truncateTitle(&title,name,
+							"block is mapped"),
+					tfl.isCurrentBlockMmapBuffered());
+			}
+		} else {
+			// dirty write, not flushed
+			test(truncateTitle(&title,name,"write 100"),
+				tfl.write(wbytes,100)==100);
+		}
+
+		// cut below the block or inside it
+		off64_t	size=(n==1 || n==3)?9000:4096;
+		test(truncateTitle(&title,name,"truncate"),tfl.truncate(size));
+
+		if (n==0) {
+
+			// read after the cut
+			test(truncateTitle(&title,name,"read after"),
+						tfl.read(buf,100)==0);
+			test(truncateTitle(&title,name,"close"),tfl.close());
+
+		} else if (n==1) {
+
+			// read the rest of the cut block
+			test(truncateTitle(&title,name,"read after"),
+						tfl.read(buf,1000)==708);
+			test(truncateTitle(&title,name,"read after data"),
+				!bytestring::compare(buf,data+8292,708));
+			test(truncateTitle(&title,name,"read at end"),
+						tfl.read(buf,1000)==0);
+			test(truncateTitle(&title,name,"close"),tfl.close());
+
+		} else if (n==3) {
+
+			// check the file
+			test(truncateTitle(&title,name,"close"),tfl.close());
+			file	rfl;
+			test(truncateTitle(&title,name,"open for read"),
+					rfl.open(seekfile,O_RDONLY));
+			test(truncateTitle(&title,name,"size"),
+						rfl.getSize()==9000);
+			test(truncateTitle(&title,name,"read file"),
+				rfl.read(contents,9000)==9000);
+			test(truncateTitle(&title,name,"data before"),
+				!bytestring::compare(contents,data,8192));
+			test(truncateTitle(&title,name,"bytes"),
+				!bytestring::compare(contents+8192,
+				wbytes,100));
+			test(truncateTitle(&title,name,"data after"),
+				!bytestring::compare(contents+8292,
+							data+8292,708));
+			test(truncateTitle(&title,name,"close for read"),
+							rfl.close());
+
+		} else if (n==2) {
+
+			// check the file
+			test(truncateTitle(&title,name,"close"),tfl.close());
+			file	rfl;
+			test(truncateTitle(&title,name,"open for read"),
+					rfl.open(seekfile,O_RDONLY));
+			test(truncateTitle(&title,name,"size"),
+						rfl.getSize()==4096);
+			test(truncateTitle(&title,name,"read file"),
+				rfl.read(contents,4096)==4096);
+			test(truncateTitle(&title,name,"data"),
+				!bytestring::compare(contents,data,4096));
+			test(truncateTitle(&title,name,"close for read"),
+							rfl.close());
+
+		} else {
+
+			// write after the cut
+			test(truncateTitle(&title,name,"seek after"),
+				tfl.setPositionRelativeToBeginning(8192)==8192);
+			test(truncateTitle(&title,name,"write after"),
+				tfl.write(wbytes,100)==100);
+			test(truncateTitle(&title,name,"close"),tfl.close());
+			file	rfl;
+			test(truncateTitle(&title,name,"open for read"),
+					rfl.open(seekfile,O_RDONLY));
+			test(truncateTitle(&title,name,"size"),
+						rfl.getSize()==8292);
+			test(truncateTitle(&title,name,"read file"),
+				rfl.read(contents,8292)==8292);
+			test(truncateTitle(&title,name,"data before"),
+				!bytestring::compare(contents,data,4096));
+			test(truncateTitle(&title,name,"gap"),
+				!bytestring::compare(contents+4096,zeros,4096));
+			test(truncateTitle(&title,name,"bytes"),
+				!bytestring::compare(contents+8192,
+				wbytes,100));
+			test(truncateTitle(&title,name,"close for read"),
+							rfl.close());
+		}
+	}
+	}
+
+	file::remove(seekfile);
+	stdoutput.printf("\n");
+
+	signalmanager::alarm(0);
+}
+
 // buffered write after a seek past the end of the file, for #11196
 // filedescriptor - a buffered write after a seek past the end of the file
 // fills the gap with old buffer bytes instead of zeros
@@ -3942,6 +4119,9 @@ int main(int argc, const char **argv) {
 
 		stdoutput.printf("\nbuffered reads after a seek past the end\n");
 		seekPastEndReadTests();
+
+		stdoutput.printf("\nbuffered reads and writes after a truncate\n");
+		truncateBufferTests();
 
 		stdoutput.printf("\nbuffered writes after a seek past the end\n");
 		seekPastEndWriteTests();

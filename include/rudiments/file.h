@@ -154,13 +154,23 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 							size_t *buffersize);
 
 		/** Truncates all data in the file, resulting in a file of
-		 * zero bytes.  Returns true on success and false on
-		 * failure. */
+		 *  zero bytes.  Returns true on success and false on
+		 *  failure.
+		 *
+		 *  If the file is buffered, then the buffered data is written
+		 *  to the file first, and the buffer is then discarded.  If
+		 *  that write fails, then the buffer is kept, the file is not
+		 *  truncated, and false is returned. */
 		virtual bool	truncate();
 
 		/** Truncates all data beyond the first "size" bytes,
 		 *  resulting in a file of "size" bytes.  Returns true on
-		 *  success and false on failure. */
+		 *  success and false on failure.
+		 *
+		 *  If the file is buffered, then the buffered data is written
+		 *  to the file first, and the buffer is then discarded.  If
+		 *  that write fails, then the buffer is kept, the file is not
+		 *  truncated, and false is returned. */
 		virtual bool	truncate(off64_t size);
 
 

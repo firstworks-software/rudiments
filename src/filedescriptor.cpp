@@ -1015,6 +1015,22 @@ void filedescriptor::invalidateWriteBuffer() {
 	pvt->_writebufferdirty=false;
 }
 
+void filedescriptor::dropWriteBuffer() {
+
+	// a stream buffer is not an image of a block
+	if (pvt->_isstream) {
+		return;
+	}
+
+	// Free a traditional buffer too.  If it was kept, then a seek inside
+	// the block would make it current again, with the old bytes in it.
+	delete pvt->_writebuffermap;
+	pvt->_writebuffermap=NULL;
+	delete[] pvt->_writebufferunaligned;
+	pvt->_writebufferunaligned=NULL;
+	invalidateWriteBuffer();
+}
+
 // Returns the size of the block device that "fd" refers to, or -1 on an error
 // or if this platform can't tell.
 static off64_t blockDeviceSize(int32_t fd) {
