@@ -245,6 +245,7 @@ class filedescriptorprivate {
 
 		bool		_isstream;
 		off64_t		_offset;
+		bool		_seekpending;
 		off64_t		_writeblockoffset;
 		size_t		_writeblocksize;
 		ssize_t 	(filedescriptor::*_readPtr)(
@@ -303,6 +304,7 @@ void filedescriptor::construct() {
 	pvt->_lstnr=NULL;
 	pvt->_isstream=true;
 	pvt->_offset=0;
+	pvt->_seekpending=false;
 	pvt->_writeblockoffset=0;
 	pvt->_writeblocksize=0;
 	pvt->_readPtr=&filedescriptor::unBufferedRead;
@@ -541,9 +543,12 @@ bool filedescriptor::unsetStorageWriteBuffer() {
 	#endif
 
 	// If we were buffering previously then the current file position is
-	// probably pvt->_writeblockoffset.  Go to pvt->_offset instead.
-	if (pvt->_writebuffer) {
-		if (lseek(pvt->_offset,SEEK_SET)!=pvt->_offset) {
+	// probably pvt->_writeblockoffset, or not at pvt->_offset yet if a
+	// seek is pending.  Go to pvt->_offset instead.
+	if (pvt->_writebuffer || pvt->_seekpending) {
+		// a descriptor that can not seek has no position to restore
+		if (lseek(pvt->_offset,SEEK_SET)!=pvt->_offset &&
+				error::getErrorNumber()!=ESPIPE) {
 			#if defined(DEBUG_BUFFERING)
 			debugPrintf("lseek failed)\n");
 			#endif
@@ -552,6 +557,7 @@ bool filedescriptor::unsetStorageWriteBuffer() {
 	}
 
 	// update write block offset and write block size
+	pvt->_seekpending=false;
 	pvt->_writeblockoffset=0;
 	pvt->_writeblocksize=0;
 
@@ -877,6 +883,9 @@ off64_t filedescriptor::setPosition(off64_t offset, int32_t whence) {
 
 	pvt->_offset=offset;
 
+	// the file moves there at the next read or write
+	pvt->_seekpending=true;
+
 	#if defined(DEBUG_BUFFERING)
 	debugPrintf("%d: setPosition(%d,offset=%08x,",
 		(int)process::getProcessId(),(int)pvt->_fd,offset);
@@ -1022,6 +1031,9 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 						(int)pvt->_fd,
 						pvt->_writeblockoffset);
 	#endif
+
+	// the file can leave pvt->_offset
+	pvt->_seekpending=true;
 
 	// un-buffer the current block...
 	if (pvt->_writebuffermap) {
@@ -1247,7 +1259,10 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 		#if defined(DEBUG_BUFFERING)
 		debugPrintf("...,error)\n");
 		#endif
-		// FIXME: ??? graceful/retryable
+		// drop the buffer, so a retry realigns it to the new block
+		delete[] pvt->_writebufferunaligned;
+		pvt->_writebufferunaligned=NULL;
+		invalidateWriteBuffer();
 		return RESULT_ERROR;
 	}
 
@@ -1553,6 +1568,7 @@ bool filedescriptor::close() {
 
 	// reset offsets
 	pvt->_offset=0;
+	pvt->_seekpending=false;
 	pvt->_writeblockoffset=0;
 
 	// empty the read buffer...

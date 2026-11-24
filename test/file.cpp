@@ -31,6 +31,9 @@
 #if !defined(_WIN32) && !defined(TEST_ALLSTATIC) && \
 	defined(RUDIMENTS_HAVE_DLOPEN) && defined(RUDIMENTS_HAVE_RTLD_NEXT)
 	#define FILETEST_LSEEK_HOOK
+	#if defined(RUDIMENTS_HAVE_MMAP)
+		#define FILETEST_MMAP_HOOK
+	#endif
 	#include <rudiments/dynamiclib.h>
 #endif
 #include "test.cpp"
@@ -2553,6 +2556,32 @@ extern "C" off_t lseek(int fd, off_t offset, int whence) {
 	return reallseek(fd,offset,whence);
 }
 
+#ifdef FILETEST_MMAP_HOOK
+// This mmap() takes the place of the C library's, so the test can make every
+// map fail on one file descriptor.  It passes every other call on to the next
+// definition.
+static int	failmapfd=-1;
+
+typedef void	*(*mmapfunc_t)(void *,size_t,int,int,int,off_t);
+
+extern "C" void *mmap(void *addr, size_t length, int prot,
+				int flags, int fd, off_t offset) {
+	if (failmapfd!=-1 && fd==failmapfd) {
+		error::setErrorNumber(ENODEV);
+		return MAP_FAILED;
+	}
+	static mmapfunc_t	realmmap=NULL;
+	if (!realmmap) {
+		realmmap=(mmapfunc_t)dynamiclib::getNextSymbol("mmap");
+		if (!realmmap) {
+			error::setErrorNumber(ENOSYS);
+			return MAP_FAILED;
+		}
+	}
+	return realmmap(addr,length,prot,flags,fd,offset);
+}
+#endif
+
 // open the file read-only, so a map fails, read the first block into a usual
 // buffer, then fail the seek to the second block
 static void mmapFailedSeekOpen(file *fl, const char *data) {
@@ -2644,7 +2673,286 @@ static void mmapFailedSeekTests() {
 
 	signalmanager::alarm(0);
 }
+
+// one run of failedSeekWriteTests(), false if lseek() can not be replaced
+static bool failedSeekWriteRun(bool usemmap) {
+
+	// create a file of three 8k blocks
+	char	data[24576];
+	for (uint16_t i=0; i<sizeof(data); i++) {
+		data[i]='a'+i%26;
+	}
+	file::remove(mmapfile);
+	file	fl;
+	test("create",fl.create(mmapfile,
+				permissions::parsePermString("rw-rw----")));
+	test("write",fl.write(data,sizeof(data))==(ssize_t)sizeof(data));
+	test("close",fl.close());
+
+	// skip if the lseek() above does not take the place of the real one
+	file	sfl;
+	test("seek check, open",sfl.open(mmapfile,O_RDONLY));
+	failseekfd=sfl.getFileDescriptor();
+	bool	failed=(sfl.getPosition()==-1);
+	failseekfd=-1;
+	test("seek check, close",sfl.close());
+	if (!failed) {
+		stdoutput.printf("lseek() can not be replaced\n");
+		file::remove(mmapfile);
+		return false;
+	}
+
+	// read the first block into a usual buffer, with every map failing
+	test("open",fl.open(mmapfile,O_RDWR));
+	fl.setMmapBufferingEnabled(usemmap);
+	test("set read buffer size",fl.setReadBufferSize(8192));
+	#ifdef FILETEST_MMAP_HOOK
+	if (usemmap) {
+		failmapfd=fl.getFileDescriptor();
+	}
+	#endif
+	char	buf[100];
+	test("read 100",fl.read(buf,sizeof(buf))==(ssize_t)sizeof(buf));
+	test("data",!bytestring::compare(buf,data,sizeof(buf)));
+
+	// skip if the mmap() above does not take the place of the real one
+	if (fl.isCurrentBlockMmapBuffered()) {
+		stdoutput.printf("mmap() can not be replaced\n");
+		test("close",fl.close());
+		#ifdef FILETEST_MMAP_HOOK
+		failmapfd=-1;
+		#endif
+		file::remove(mmapfile);
+		return true;
+	}
+	test("block is not mapped",!fl.isCurrentBlockMmapBuffered());
+
+	// fail the seek to the second block
+	test("seek",fl.setPositionRelativeToBeginning(8192)==8192);
+	failseekfd=fl.getFileDescriptor();
+	test("read, failed seek",fl.read(buf,sizeof(buf))==-1);
+	failseekfd=-1;
+
+	// write and flush inside the second block
+	test("seek 2",fl.setPositionRelativeToBeginning(8292)==8292);
+	test("write",fl.write("XYZ",3)==3);
+	test("flush",fl.flushWriteBuffer(-1,-1));
+	test("close",fl.close());
+	#ifdef FILETEST_MMAP_HOOK
+	failmapfd=-1;
+	#endif
+
+	// only the written bytes may differ in the file
+	bytestring::copy(data+8292,"XYZ",3);
+	char	*contents=new char[sizeof(data)+1];
+	file	vfl;
+	test("verify, open",vfl.open(mmapfile,O_RDONLY));
+	test("size",vfl.getSize()==(off64_t)sizeof(data));
+	test("verify, read",vfl.read(contents,sizeof(data))==
+						(ssize_t)sizeof(data));
+	test("start of block",!bytestring::compare(contents+8192,
+						"cdefghij",8));
+	test("data after",!bytestring::compare(contents,data,sizeof(data)));
+	test("verify, close",vfl.close());
+	delete[] contents;
+
+	file::remove(mmapfile);
+	return true;
+}
+
+// failed seek to a new block, then write and flush, for #11201 filedescriptor
+// - after a failed seek to a new block, the buffer keeps the old bytes, so a
+// later write and flush save them into the new block
+static void failedSeekWriteTests() {
+
+	signalmanager::alarm(60);
+
+	// memory map buffering off
+	stdoutput.printf("memory map buffering off:\n");
+	if (failedSeekWriteRun(false)) {
+
+		// memory map buffering on
+		stdoutput.printf("memory map buffering on:\n");
+		#ifdef FILETEST_MMAP_HOOK
+		if (memorymap::isSupported()) {
+			failedSeekWriteRun(true);
+		} else {
+			stdoutput.printf("memory maps not supported\n");
+		}
+		#else
+		stdoutput.printf("mmap() can not be replaced\n");
+		#endif
+	}
+	stdoutput.printf("\n");
+
+	signalmanager::alarm(0);
+}
 #endif
+
+// fill the data with letters and create a file that holds it
+static void unsetBufferingCreate(char *data, size_t size) {
+	for (size_t i=0; i<size; i++) {
+		data[i]='a'+i%26;
+	}
+	file::remove(mmapfile);
+	file	fl;
+	test("create",fl.create(mmapfile,
+				permissions::parsePermString("rw-rw----")));
+	test("write",fl.write(data,size)==(ssize_t)size);
+	test("close",fl.close());
+}
+
+// turn buffering off, write at the position that was set, and check that
+// only the written bytes changed in the file
+static void unsetBufferingWrite(file *fl, char *data, size_t size,
+							off64_t position) {
+	test("unset buffering",fl->setReadBufferSize(0));
+	test("position",fl->getPosition()==position);
+	test("write",fl->write("XYZ",3)==3);
+	test("position after write",fl->getPosition()==position+3);
+	test("close",fl->close());
+	bytestring::copy(data+position,"XYZ",3);
+	char	*contents=new char[size+1];
+	file	vfl;
+	test("verify, open",vfl.open(mmapfile,O_RDONLY));
+	test("size",vfl.getSize()==(off64_t)size);
+	test("verify, read",vfl.read(contents,size)==(ssize_t)size);
+	test("written bytes",!bytestring::compare(contents+position,"XYZ",3));
+	test("data",!bytestring::compare(contents,data,size));
+	test("verify, close",vfl.close());
+	delete[] contents;
+	file::remove(mmapfile);
+}
+
+#ifdef FILETEST_LSEEK_HOOK
+// failed seek to a new block, then turn buffering off and write, for #11201
+// filedescriptor - after a failed seek to a new block, the buffer keeps the
+// old bytes, so a later write and flush save them into the new block
+static void failedSeekUnsetTests() {
+
+	signalmanager::alarm(60);
+
+	char	data[24576];
+	unsetBufferingCreate(data,sizeof(data));
+
+	// skip if the lseek() above does not take the place of the real one
+	file	sfl;
+	test("seek check, open",sfl.open(mmapfile,O_RDONLY));
+	failseekfd=sfl.getFileDescriptor();
+	bool	failed=(sfl.getPosition()==-1);
+	failseekfd=-1;
+	test("seek check, close",sfl.close());
+	if (!failed) {
+		stdoutput.printf("lseek() can not be replaced\n");
+		file::remove(mmapfile);
+		signalmanager::alarm(0);
+		return;
+	}
+
+	// read the first block, then fail the seek to the second block
+	file	fl;
+	test("open",fl.open(mmapfile,O_RDWR));
+	fl.setMmapBufferingEnabled(false);
+	test("set read buffer size",fl.setReadBufferSize(8192));
+	char	buf[100];
+	test("read 100",fl.read(buf,sizeof(buf))==(ssize_t)sizeof(buf));
+	test("seek",fl.setPositionRelativeToBeginning(8292)==8292);
+	failseekfd=fl.getFileDescriptor();
+	test("read, failed seek",fl.read(buf,sizeof(buf))==-1);
+	failseekfd=-1;
+
+	unsetBufferingWrite(&fl,data,sizeof(data),8292);
+
+	signalmanager::alarm(0);
+}
+#endif
+
+// turn buffering on, seek, then turn buffering off before any read or write,
+// for #11207 filedescriptor - turning buffering off while no block is loaded
+// skips the seek to the recorded position, so the next write goes to the
+// wrong place
+static void unsetBufferingTests() {
+
+	signalmanager::alarm(60);
+
+	char	data[24576];
+	unsetBufferingCreate(data,sizeof(data));
+
+	file	fl;
+	test("open",fl.open(mmapfile,O_RDWR));
+	test("set read buffer size",fl.setReadBufferSize(8192));
+	test("seek",fl.setPositionRelativeToBeginning(8292)==8292);
+	unsetBufferingWrite(&fl,data,sizeof(data),8292);
+
+	signalmanager::alarm(0);
+}
+
+// turn buffering on, read, resize the buffer, then turn buffering off, with
+// memory map buffering off and on
+static void unsetBufferingResizeTests() {
+
+	signalmanager::alarm(60);
+
+	char	data[24576];
+	for (uint8_t usemmap=0; usemmap<2; usemmap++) {
+		stdoutput.printf("memory map buffering %s:\n",
+						(usemmap)?"on":"off");
+		unsetBufferingCreate(data,sizeof(data));
+		file	fl;
+		test("open",fl.open(mmapfile,O_RDWR));
+		fl.setMmapBufferingEnabled(usemmap);
+		test("set read buffer size",fl.setReadBufferSize(8192));
+		char	buf[100];
+		test("read 100",fl.read(buf,sizeof(buf))==
+						(ssize_t)sizeof(buf));
+		test("resize",fl.setReadBufferSize(4096));
+		unsetBufferingWrite(&fl,data,sizeof(data),100);
+	}
+
+	signalmanager::alarm(0);
+}
+
+// turn buffering on for a regular file and close it with no read or write,
+// then open a fifo, which can not seek, and turn buffering off
+static void unsetBufferingFifoTests() {
+
+	signalmanager::alarm(60);
+
+	#ifndef WIN32
+	const char	*fifofile="/tmp/testfilefifo";
+	#else
+	const char	*fifofile="testfilefifo";
+	#endif
+	char		data[100];
+	unsetBufferingCreate(data,sizeof(data));
+	file::remove(fifofile);
+	if (!file::createFifo(fifofile,
+			permissions::parsePermString("rw-rw----"))) {
+		stdoutput.printf("fifos not supported\n");
+		file::remove(mmapfile);
+		signalmanager::alarm(0);
+		return;
+	}
+
+	file	fl;
+	test("open",fl.open(mmapfile,O_RDWR));
+	test("set read buffer size",fl.setReadBufferSize(8192));
+	test("seek",fl.setPositionRelativeToBeginning(50)==50);
+	test("close",fl.close());
+	test("open fifo",fl.open(fifofile,O_RDWR));
+	test("buffered write fails",fl.write("XYZ",3)==-1);
+	test("unset buffering",fl.setReadBufferSize(0));
+	test("write",fl.write("XYZ",3)==3);
+	char	buf[4];
+	test("read",fl.read(buf,3)==3);
+	test("data",!bytestring::compare(buf,"XYZ",3));
+	test("close",fl.close());
+
+	file::remove(fifofile);
+	file::remove(mmapfile);
+
+	signalmanager::alarm(0);
+}
 
 // the bytes that the close tests write
 static void closeFlushData(char *data, size_t length) {
@@ -3415,6 +3723,27 @@ int main(int argc, const char **argv) {
 		#else
 		stdoutput.printf("\nmemory map failed seek after a failed map\nlseek() can not be replaced\n");
 		#endif
+
+		#ifdef FILETEST_LSEEK_HOOK
+		stdoutput.printf("\nfailed seek to a new block, then write and flush\n");
+		failedSeekWriteTests();
+		#else
+		stdoutput.printf("\nfailed seek to a new block, then write and flush\nlseek() can not be replaced\n");
+		#endif
+
+		stdoutput.printf("\nturn buffering off after a seek\n");
+		#ifdef FILETEST_LSEEK_HOOK
+		failedSeekUnsetTests();
+		#else
+		stdoutput.printf("lseek() can not be replaced\n");
+		#endif
+		unsetBufferingTests();
+
+		stdoutput.printf("\nturn buffering off after a resize\n");
+		unsetBufferingResizeTests();
+
+		stdoutput.printf("\nturn buffering off on a fifo\n");
+		unsetBufferingFifoTests();
 
 		stdoutput.printf("\nclose and delete with data in the write buffer\n");
 		closeFlushTests();
