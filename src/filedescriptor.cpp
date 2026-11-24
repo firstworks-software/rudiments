@@ -868,6 +868,13 @@ off64_t filedescriptor::setPosition(off64_t offset, int32_t whence) {
 		}
 		offset=size+offset;
 	}
+
+	// refuse a position before the start of the file
+	if (offset<0) {
+		error::setErrorNumber(EINVAL);
+		return -1;
+	}
+
 	pvt->_offset=offset;
 
 	#if defined(DEBUG_BUFFERING)

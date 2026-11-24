@@ -384,6 +384,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   attached
 - fixed filedescriptor write after close() with a mapped block and a
   new open() using the dropped map
+- fixed filedescriptor buffered seek to a position before the start of a
+  file
 
 ### Security
 - fixed buffer overflow when unix socket file name is too long

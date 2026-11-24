@@ -2358,6 +2358,177 @@ static void seekPastEndWriteTests() {
 	signalmanager::alarm(0);
 }
 
+// buffered seek before the start of the file, for #11199 filedescriptor - a
+// buffered seek to a position before the start of the file is not refused,
+// so a later read or write can touch memory before the buffer
+static void negativeSeekTests() {
+
+	signalmanager::alarm(60);
+
+	// a file of two and a half 8k blocks
+	char	data[20480];
+	for (uint16_t i=0; i<sizeof(data); i++) {
+		data[i]='a'+i%26;
+	}
+
+	// the expected file after the writes below
+	char	expected[20480];
+	bytestring::copy(expected,data,sizeof(data));
+	bytestring::copy(expected+15,"XYZ012345",9);
+
+	bool		maps[]={false,true};
+	const char	*names[]={"negative seek","negative seek, mmap"};
+	char		buf[64];
+	char		*contents=new char[sizeof(data)];
+	stringbuffer	title;
+	for (uint16_t i=0; i<2; i++) {
+
+		if (maps[i] && !memorymap::isSupported()) {
+			stdoutput.printf("memory maps not supported\n");
+			continue;
+		}
+
+		// start with the original file
+		file::remove(seekfile);
+		file	nfl;
+		title.clear();
+		title.append(names[i])->append(", create");
+		test(title.getString(),nfl.create(seekfile,
+				permissions::parsePermString("rw-rw----")));
+		title.clear();
+		title.append(names[i])->append(", write file");
+		test(title.getString(),
+			nfl.write(data,sizeof(data))==(ssize_t)sizeof(data));
+		title.clear();
+		title.append(names[i])->append(", close file");
+		test(title.getString(),nfl.close());
+
+		file	fl;
+		title.clear();
+		title.append(names[i])->append(", open");
+		test(title.getString(),fl.open(seekfile,O_RDWR));
+		fl.setMmapBufferingEnabled(maps[i]);
+		title.clear();
+		title.append(names[i])->append(", set write buffer size");
+		test(title.getString(),fl.setWriteBufferSize(8192));
+
+		// a seek before any buffer exists fails
+		title.clear();
+		title.append(names[i])->append(", seek -100 first");
+		error::clearError();
+		test(title.getString(),
+			fl.setPositionRelativeToBeginning(-100)==-1 &&
+			error::getErrorNumber()==EINVAL);
+		title.clear();
+		title.append(names[i])->append(", position 0");
+		test(title.getString(),fl.getPosition()==0);
+
+		// fill the buffer
+		title.clear();
+		title.append(names[i])->append(", read 10");
+		test(title.getString(),fl.read(buf,10)==10 &&
+					!bytestring::compare(buf,data,10));
+
+		// seeks from the beginning, the current position and the end
+		// fail and leave the position as it was
+		title.clear();
+		title.append(names[i])->append(", seek beginning -100");
+		error::clearError();
+		test(title.getString(),
+			fl.setPositionRelativeToBeginning(-100)==-1 &&
+			error::getErrorNumber()==EINVAL);
+		title.clear();
+		title.append(names[i])->append(", position 10");
+		test(title.getString(),fl.getPosition()==10);
+		title.clear();
+		title.append(names[i])->append(", seek current -11");
+		error::clearError();
+		test(title.getString(),
+			fl.setPositionRelativeToCurrent(-11)==-1 &&
+			error::getErrorNumber()==EINVAL);
+		title.clear();
+		title.append(names[i])->append(", position 10 again");
+		test(title.getString(),fl.getPosition()==10);
+		title.clear();
+		title.append(names[i])->append(", seek end -20481");
+		error::clearError();
+		test(title.getString(),
+			fl.setPositionRelativeToEnd(-20481)==-1 &&
+			error::getErrorNumber()==EINVAL);
+		title.clear();
+		title.append(names[i])->append(", position 10 once more");
+		test(title.getString(),fl.getPosition()==10);
+
+		// a read and a write work at the old position
+		title.clear();
+		title.append(names[i])->append(", read 5");
+		test(title.getString(),fl.read(buf,5)==5 &&
+					!bytestring::compare(buf,data+10,5));
+		title.clear();
+		title.append(names[i])->append(", write 3");
+		test(title.getString(),fl.write("XYZ",3)==3);
+
+		// a write after a failed seek to -100, then a failed seek to
+		// -50, lands at the old position
+		title.clear();
+		title.append(names[i])->append(", seek -100");
+		test(title.getString(),
+			fl.setPositionRelativeToBeginning(-100)==-1);
+		title.clear();
+		title.append(names[i])->append(", write after -100");
+		test(title.getString(),fl.write("012",3)==3);
+		title.clear();
+		title.append(names[i])->append(", seek -50");
+		test(title.getString(),
+			fl.setPositionRelativeToBeginning(-50)==-1);
+		title.clear();
+		title.append(names[i])->append(", write after -50");
+		test(title.getString(),fl.write("345",3)==3);
+		title.clear();
+		title.append(names[i])->append(", position 24");
+		test(title.getString(),fl.getPosition()==24);
+
+		// the descriptor still works
+		title.clear();
+		title.append(names[i])->append(", seek 0");
+		test(title.getString(),
+			fl.setPositionRelativeToBeginning(0)==0);
+		title.clear();
+		title.append(names[i])->append(", read 24");
+		test(title.getString(),fl.read(buf,24)==24 &&
+					!bytestring::compare(buf,expected,24));
+		title.clear();
+		title.append(names[i])->append(", close");
+		test(title.getString(),fl.close());
+
+		// the writes are in the file
+		file	rfl;
+		title.clear();
+		title.append(names[i])->append(", open for read");
+		test(title.getString(),rfl.open(seekfile,O_RDONLY));
+		title.clear();
+		title.append(names[i])->append(", size");
+		test(title.getString(),rfl.getSize()==(off64_t)sizeof(data));
+		title.clear();
+		title.append(names[i])->append(", read file");
+		test(title.getString(),
+			rfl.read(contents,sizeof(data))==(ssize_t)sizeof(data));
+		title.clear();
+		title.append(names[i])->append(", data");
+		test(title.getString(),
+			!bytestring::compare(contents,expected,sizeof(data)));
+		title.clear();
+		title.append(names[i])->append(", close for read");
+		test(title.getString(),rfl.close());
+	}
+	delete[] contents;
+
+	file::remove(seekfile);
+	stdoutput.printf("\n");
+
+	signalmanager::alarm(0);
+}
+
 #ifdef FILETEST_LSEEK_HOOK
 // This lseek() takes the place of the C library's, so the test can make a
 // seek fail on one file descriptor.  It passes every other call on to the
@@ -3228,6 +3399,9 @@ int main(int argc, const char **argv) {
 
 		stdoutput.printf("\nbuffered writes after a seek past the end\n");
 		seekPastEndWriteTests();
+
+		stdoutput.printf("\nbuffered seeks before the start of the file\n");
+		negativeSeekTests();
 
 		stdoutput.printf("\nmemory map reads and writes from the middle of a block\n");
 		mmapMidBlockTests();
