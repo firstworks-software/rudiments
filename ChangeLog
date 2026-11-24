@@ -139,7 +139,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   lowLevelWrite() override applies; wide printf() to an unbuffered
   descriptor returns bytes written now, and fails on text that the locale
   cannot convert
-- mvcresult writes a NULL data key as "null" now, not an empty string
+- mvcresult and jsondom write a NULL data key or member name as "null" now,
+  not an empty string
 
 ### Removed
 - removed csprng's static isSupported() - it was always unconditionally

@@ -730,6 +730,61 @@ int main() {
 		file::remove(filename.getString());
 	}
 
+	// #11181 jsondom - writeJson() writes a NULL object member name as an
+	// empty string, not null
+	{
+		stdoutput.printf("NULL and empty member names...\n");
+
+		struct nametest {
+			const char	*label;
+			const char	*names[3];
+			const char	*expected;
+		};
+		nametest	tests[]={
+			{"NULL member name",
+				{NULL,NULL,NULL},
+				"{\"null\":\"v0\"}"},
+			{"empty member name",
+				{"",NULL,NULL},
+				"{\"\":\"v0\"}"},
+			{"NULL and empty member names",
+				{NULL,"",NULL},
+				"{\"null\":\"v0\",\"\":\"v1\"}"},
+			{"NULL and null member names",
+				{NULL,"null",NULL},
+				"{\"null\":\"v0\",\"null\":\"v1\"}"}
+		};
+		const uint8_t	counts[]={1,1,2,2};
+
+		for (uint8_t i=0; i<4; i++) {
+			jsondom	built;
+			built.createRootNode();
+			domnode	*obj=built.getRootNode()->appendTag("r");
+			obj->setAttributeValue("t","o");
+			for (uint8_t j=0; j<counts[i]; j++) {
+				domnode	*field=
+					obj->appendTag(tests[i].names[j]);
+				field->setAttributeValue("t","s");
+				stringbuffer	v;
+				v.append("v")->append((uint64_t)j);
+				field->setAttributeValue("v",v.getString());
+			}
+
+			filename.clear();
+			filename.append("null names")->append(".json");
+			built.writeFile(filename.getString(),
+				permissions::parsePermString("rw-r--r--"),
+				false);
+			char	*contents=
+				file::getContents(filename.getString());
+			test(tests[i].label,
+				!charstring::compare(contents,
+						tests[i].expected));
+			delete[] contents;
+			file::remove(filename.getString());
+		}
+	}
+
 	// string escapes and number syntax
 	{
 		stdoutput.printf("escapes and numbers...\n");

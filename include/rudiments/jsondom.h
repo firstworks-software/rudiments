@@ -113,7 +113,9 @@ class RUDIMENTS_DLLSPEC jsondom : public jsonsax, public dom {
 		bool	parseString(const char *string);
 
 		/** Creates a new root node.  This is useful for building a
-		 *  tree from scratch. */
+		 *  tree from scratch.  A NULL member name is written as
+		 *  "null", the same name as a member named "null".  An empty
+		 *  member name is written as "". */
 		void	createRootNode();
 
 	protected:

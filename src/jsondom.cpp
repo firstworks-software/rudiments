@@ -313,7 +313,7 @@ ssize_t jsondom::writeNode(domnode *dn, output *out,
 		const char	*name=dn->getName();
 		char		*enc=NULL;
 		uint64_t	enclen=0;
-		charstring::jsonEncode((name)?name:"",&enc,&enclen);
+		charstring::jsonEncode((name)?name:"null",&enc,&enclen);
 		if (!enc) {
 			return RESULT_ERROR;
 		}
