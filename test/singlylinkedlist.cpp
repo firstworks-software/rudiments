@@ -65,6 +65,41 @@ int main(int argc, char **argv) {
 	test("clear()/getLast()",!intl.getLast());
 	stdoutput.printf("\n\n");
 
+	// empty list
+	stdoutput.printf("empty list:\n");
+	singlylinkedlist<int32_t>	emptyl;
+	singlylinkedlist<int32_t>	otherl;
+	otherl.append((int32_t)1);
+	otherl.append((int32_t)2);
+	test("empty remove(value)",!emptyl.remove(1));
+	test("empty remove(value)/getCount()",emptyl.getCount()==0);
+	test("empty removeAll(value)",emptyl.removeAll(1));
+	test("empty remove(node)",!emptyl.remove(otherl.getFirst()));
+	test("empty remove(node)/getCount()",emptyl.getCount()==0);
+	test("empty remove(NULL)",!emptyl.remove((listnode<int32_t> *)NULL));
+	emptyl.detach(NULL);
+	test("empty detach(NULL)/getCount()",emptyl.getCount()==0);
+	emptyl.detach(otherl.getFirst());
+	test("empty detach(node)/getCount()",emptyl.getCount()==0);
+	test("empty detach(node)/node",otherl.getFirst()->getNext()==
+							otherl.getLast());
+	emptyl.moveAfter(otherl.getFirst(),otherl.getLast());
+	test("empty moveAfter()/getCount()",emptyl.getCount()==0);
+	test("empty moveAfter()/getFirst()",!emptyl.getFirst());
+	test("empty moveAfter()/getLast()",!emptyl.getLast());
+	listnode<int32_t>	*newnode=new singlylinkedlistnode<int32_t>(5);
+	emptyl.insertAfter(otherl.getFirst(),newnode);
+	test("empty insertAfter(node)/getCount()",emptyl.getCount()==0);
+	test("empty insertAfter(node)/getFirst()",!emptyl.getFirst());
+	delete newnode;
+	emptyl.insertAfter(otherl.getFirst(),(int32_t)5);
+	test("empty insertAfter(value)/getCount()",emptyl.getCount()==0);
+	test("empty insertAfter(value)/getFirst()",!emptyl.getFirst());
+	test("other list intact",otherl.getCount()==2 &&
+				otherl.getFirst()->getValue()==1 &&
+				otherl.getLast()->getValue()==2);
+	stdoutput.printf("\n\n");
+
 
 	// strings
 	stdoutput.printf("strings:\n");

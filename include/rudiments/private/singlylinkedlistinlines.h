@@ -136,6 +136,9 @@ inline
 void singlylinkedlist<valuetype>::insertAfter(
 					listnode<valuetype> *node,
 					valuetype value) {
+	if (!first || !node) {
+		return;
+	}
 	insertAfter(node,new singlylinkedlistnode<valuetype>(value));
 }
 
@@ -144,7 +147,7 @@ inline
 void singlylinkedlist<valuetype>::insertAfter(
 					listnode<valuetype> *node,
 					listnode<valuetype> *newnode) {
-	if (!node) {
+	if (!first || !node) {
 		return;
 	} else if (node==last) {
 		append(newnode);
@@ -161,7 +164,7 @@ void singlylinkedlist<valuetype>::moveAfter(
 					listnode<valuetype> *node,
 					listnode<valuetype> *nodetomove) {
 
-	if (!node || !nodetomove || node==nodetomove) {
+	if (!first || !node || !nodetomove || node==nodetomove) {
 		return;
 	}
 
@@ -193,6 +196,10 @@ template <class valuetype>
 inline
 void singlylinkedlist<valuetype>::detach(listnode<valuetype> *node) {
 
+	if (!first || !node) {
+		return;
+	}
+
 	if (node==first && node==last) {
 		first=NULL;
 		last=NULL;
@@ -219,6 +226,9 @@ void singlylinkedlist<valuetype>::detach(listnode<valuetype> *node) {
 template <class valuetype>
 inline
 bool singlylinkedlist<valuetype>::remove(valuetype value) {
+	if (!first) {
+		return false;
+	}
 	listnode<valuetype> *current=first;
 	if (!this->getComparator()->compare(current->getValue(),value)) {
 		if (first==last) {
@@ -310,7 +320,7 @@ bool singlylinkedlist<valuetype>::removeAll(valuetype value) {
 template <class valuetype>
 inline
 bool singlylinkedlist<valuetype>::remove(listnode<valuetype> *node) {
-	if (!node) {
+	if (!first || !node) {
 		return false;
 	}
 	listnode<valuetype> *current=first;

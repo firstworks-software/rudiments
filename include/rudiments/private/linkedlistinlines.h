@@ -145,6 +145,9 @@ template <class valuetype>
 inline
 void linkedlist<valuetype>::insertBefore(listnode<valuetype> *node,
 							valuetype value) {
+	if (!first || !node) {
+		return;
+	}
 	insertBefore(node,new linkedlistnode<valuetype>(value));
 }
 
@@ -152,7 +155,7 @@ template <class valuetype>
 inline
 void linkedlist<valuetype>::insertBefore(listnode<valuetype> *node,
 						listnode<valuetype> *newnode) {
-	if (!node) {
+	if (!first || !node) {
 		return;
 	} else if (node==first) {
 		prepend(newnode);
@@ -169,6 +172,9 @@ template <class valuetype>
 inline
 void linkedlist<valuetype>::insertAfter(listnode<valuetype> *node,
 							valuetype value) {
+	if (!first || !node) {
+		return;
+	}
 	insertAfter(node,new linkedlistnode<valuetype>(value));
 }
 
@@ -176,7 +182,7 @@ template <class valuetype>
 inline
 void linkedlist<valuetype>::insertAfter(listnode<valuetype> *node,
 					listnode<valuetype> *newnode) {
-	if (!node) {
+	if (!first || !node) {
 		return;
 	} else if (node==last) {
 		append(newnode);
@@ -209,7 +215,7 @@ void linkedlist<valuetype>::move(listnode<valuetype> *node,
 					listnode<valuetype> *nodetomove,
 					bool before) {
 
-	if (!node || !nodetomove || node==nodetomove) {
+	if (!first || !node || !nodetomove || node==nodetomove) {
 		return;
 	}
 
@@ -224,6 +230,10 @@ void linkedlist<valuetype>::move(listnode<valuetype> *node,
 template <class valuetype>
 inline
 void linkedlist<valuetype>::detach(listnode<valuetype> *node) {
+
+	if (!first || !node) {
+		return;
+	}
 
 	if (node==first) {
 		first=node->getNext();
@@ -270,7 +280,7 @@ bool linkedlist<valuetype>::removeAll(valuetype value) {
 template <class valuetype>
 inline
 bool linkedlist<valuetype>::remove(listnode<valuetype> *node) {
-	if (!node) {
+	if (!first || !node) {
 		return false;
 	}
 	if (node->getNext()) {

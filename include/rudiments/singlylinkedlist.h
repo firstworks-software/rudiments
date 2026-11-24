@@ -157,7 +157,9 @@ class singlylinkedlist : public listcollection<valuetype> {
 		 *  in both execution time and code size.  Consider using the
 		 *  linkedlist class.
 		 * 
-		 *  Returns true on success and false on failure. */
+		 *  Returns true on success and false if no singlylinkedlistnode
+		 *  contains "value", including when the singlylinkedlist is
+		 *  empty. */
 		bool	remove(valuetype value);
 
 		/** Deletes all singlylinkedlistnodes containing "value".
@@ -184,7 +186,8 @@ class singlylinkedlist : public listcollection<valuetype> {
 		 *  in both execution time and code size.  Consider using the
 		 *  linkedlist class.
 		 *
-		 *  Returns true on success and false on failure. */
+		 *  Returns true on success and false if "node" is not in the
+		 *  singlylinkedlist, including when it is empty. */
 		bool	remove(listnode<valuetype> *node);
 
 		/** Returns the number of nodes in the singlylinkedlist. */
