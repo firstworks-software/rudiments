@@ -3661,9 +3661,13 @@ ssize_t filedescriptor::printfUcs2Delegate(const ucs2_t *format,
 	size=write(convertedbuffer);
 	delete[] convertedbuffer;
 	#else
-	// print the buffer to the filedescriptor
-	// (converting to the current locale during the process)
-	size=printf("%ls",buffer);
+	// convert the buffer to the current locale
+	// and write it to the file descriptor
+	// (ucs2 printf is only supported on windows, where wchar_t is ucs2)
+	char	*converted=NULL;
+	size=wideToLocale((const wchar_t *)buffer,size,&converted);
+	size=(size<0)?RESULT_ERROR:printfWrite(converted,size,olderr);
+	delete[] converted;
 	#endif
 
 	// clean up

@@ -731,6 +731,18 @@ static void printfErrorTests() {
 				writefd.getWritten()==0);
 		test("unsupported printfUcs2(), pipe empty",
 				pipeHolds(&readfd,&writefd,""));
+	} else {
+		// ucs2, a null in the data
+		wint_t	nul=0;
+		ucs2literal(nullformat,"a%lcb");
+		filedescriptor	readfd;
+		failfd		writefd(0);
+		test("ucs2 null, create pipe",
+			filedescriptor::createPipe(&readfd,&writefd));
+		test("unbuffered printfUcs2(), null",
+			writefd.printfUcs2(nullformat,nul)==3);
+		test("unbuffered printfUcs2(), null, pipe holds it",
+			pipeHolds(&readfd,&writefd,"a\0b",3));
 	}
 	stdoutput.printf("\n");
 

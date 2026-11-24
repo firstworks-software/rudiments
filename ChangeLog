@@ -358,7 +358,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   later pass fails, times out or is interrupted
 - fixed charstring::base64Decode() decoding white space inside a group as
   data
-- fixed wide printf() dropping the output after a null character
+- fixed wide and ucs2 printf() dropping the output after a null character
 - fixed nan values not being found or sorted correctly in a dictionary,
   avltree, linkedlist or singlylinkedlist
 - fixed crashes in singlylinkedlist and linkedlist methods on an empty list
