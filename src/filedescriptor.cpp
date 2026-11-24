@@ -1297,6 +1297,11 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 
 	// all went well enough...
 
+	// Zero the rest of the buffer.  A write past the end of the file
+	// then saves zeros in the gap.
+	bytestring::zero(pvt->_writebuffer+result,
+				pvt->_writeblocksize-result);
+
 	// update the write buffer tail
 	pvt->_writebuffertail=pvt->_writebuffer+result;
 
