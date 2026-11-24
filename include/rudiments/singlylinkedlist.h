@@ -134,6 +134,9 @@ class singlylinkedlist : public listcollection<valuetype> {
 		/** Moves node "nodetomove" to the position after "node" in
 		 *  the singlylinkedlist.
 		 *
+		 *  The singlylinkedlist is not changed if either "node" or
+		 *  "nodetomove" is not in the singlylinkedlist.
+		 *
 		 *  Note that this operation requires a search and is expensive
 		 *  in both execution time and code size.  Consider using the
 		 *  linkedlist class. */
@@ -141,6 +144,8 @@ class singlylinkedlist : public listcollection<valuetype> {
 					listnode<valuetype> *nodetomove);
 
 		/** Detaches "node" from the list.
+		 *
+		 *  The list is not changed if "node" is not in the list.
 		 *
 		 *  Note that this operation requires a search and is expensive
 		 *  in both execution time and code size.  Consider using the

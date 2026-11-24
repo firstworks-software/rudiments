@@ -8,6 +8,24 @@
 #include <rudiments/stdio.h>
 #include "test.cpp"
 
+// true if l has exactly the n values in v, in order, with a correct last
+static bool listis(singlylinkedlist<int32_t> *l,
+			const int32_t *v, uint64_t n) {
+	if (l->getCount()!=n) {
+		return false;
+	}
+	listnode<int32_t>	*node=l->getFirst();
+	listnode<int32_t>	*prev=NULL;
+	for (uint64_t i=0; i<n; i++) {
+		if (!node || node->getValue()!=v[i]) {
+			return false;
+		}
+		prev=node;
+		node=node->getNext();
+	}
+	return !node && l->getLast()==prev;
+}
+
 int main(int argc, char **argv) {
 
 	header("singlylinkedlist");
@@ -108,6 +126,52 @@ int main(int argc, char **argv) {
 	test("other list intact",otherl.getCount()==2 &&
 				otherl.getFirst()->getValue()==1 &&
 				otherl.getLast()->getValue()==2);
+	stdoutput.printf("\n\n");
+
+
+	// nodes of another list
+	stdoutput.printf("nodes of another list:\n");
+	const int32_t	mine[]={1,2,3};
+	const int32_t	theirs[]={10,20,30};
+	for (uint16_t i=0; i<3; i++) {
+	for (uint16_t j=0; j<3; j++) {
+		singlylinkedlist<int32_t>	mel;
+		singlylinkedlist<int32_t>	thl;
+		for (uint16_t k=0; k<3; k++) {
+			mel.append(mine[k]);
+			thl.append(theirs[k]);
+		}
+
+		// my node i, foreign node j
+		listnode<int32_t>	*mn=mel.getFirst();
+		listnode<int32_t>	*fn=thl.getFirst();
+		for (uint16_t k=0; k<i; k++) {
+			mn=mn->getNext();
+		}
+		for (uint16_t k=0; k<j; k++) {
+			fn=fn->getNext();
+		}
+
+		// detach
+		if (i==j) {
+			mel.detach(fn);
+			test("foreign detach(node)/list",
+					listis(&mel,mine,3));
+			test("foreign detach(node)/other",
+					listis(&thl,theirs,3));
+		}
+
+		// move a foreign node after my node
+		mel.moveAfter(mn,fn);
+		test("foreign moveAfter(node)/list",listis(&mel,mine,3));
+		test("foreign moveAfter(node)/other",listis(&thl,theirs,3));
+
+		// move my node after a foreign node
+		mel.moveAfter(fn,mn);
+		test("moveAfter(foreign)/list",listis(&mel,mine,3));
+		test("moveAfter(foreign)/other",listis(&thl,theirs,3));
+	}
+	}
 	stdoutput.printf("\n\n");
 
 

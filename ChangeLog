@@ -368,6 +368,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - fixed a read buffer overrun in filedescriptor buffered read() after an
   end of data
 - fixed collection writeJson() of a wide string key or value
+- fixed singlylinkedlist detach() and moveAfter() of a node not in the list
 
 ### Security
 - fixed buffer overflow when unix socket file name is too long

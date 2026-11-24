@@ -168,23 +168,43 @@ void singlylinkedlist<valuetype>::moveAfter(
 		return;
 	}
 
-	if (nodetomove==first) {
-		first=nodetomove->getNext();
-	} else if (nodetomove==last) {
-		listnode<valuetype> *secondtolast=first;
-		while (secondtolast->getNext()!=last) {
-			secondtolast=secondtolast->getNext();
+	// find node, nodetomove, and the node before nodetomove
+	bool			foundnode=false;
+	bool			foundnodetomove=false;
+	listnode<valuetype>	*previous=NULL;
+	listnode<valuetype>	*moveprevious=NULL;
+	listnode<valuetype>	*current=first;
+	while (current) {
+		if (current==node) {
+			foundnode=true;
 		}
-		last=secondtolast;
-		secondtolast->setNext(NULL);
-	} else {
-		listnode<valuetype> *previous=first;
-		while (previous->getNext()!=nodetomove) {
-			previous=previous->getNext();
+		if (current==nodetomove) {
+			foundnodetomove=true;
+			moveprevious=previous;
 		}
-		previous->setNext(nodetomove->getNext());
+		if (foundnode && foundnodetomove) {
+			break;
+		}
+		previous=current;
+		current=current->getNext();
 	}
 
+	// bail if either node isn't in the list
+	if (!foundnode || !foundnodetomove) {
+		return;
+	}
+
+	// unlink nodetomove
+	if (moveprevious) {
+		moveprevious->setNext(nodetomove->getNext());
+	} else {
+		first=nodetomove->getNext();
+	}
+	if (nodetomove==last) {
+		last=moveprevious;
+	}
+
+	// relink it after node
 	nodetomove->setNext(node->getNext());
 	node->setNext(nodetomove);
 	if (node==last) {
@@ -200,24 +220,27 @@ void singlylinkedlist<valuetype>::detach(listnode<valuetype> *node) {
 		return;
 	}
 
-	if (node==first && node==last) {
-		first=NULL;
-		last=NULL;
-	} else if (node==first) {
-		first=node->getNext();
-	} else if (node==last) {
-		listnode<valuetype> *secondtolast=first;
-		while (secondtolast->getNext()!=last) {
-			secondtolast=secondtolast->getNext();
-		}
-		last=secondtolast;
-		secondtolast->setNext(NULL);
-	} else {
-		listnode<valuetype> *previous=first;
-		while (previous->getNext()!=node) {
-			previous=previous->getNext();
-		}
+	// find the node and the node before it
+	listnode<valuetype>	*previous=NULL;
+	listnode<valuetype>	*current=first;
+	while (current && current!=node) {
+		previous=current;
+		current=current->getNext();
+	}
+
+	// bail if the node isn't in the list
+	if (!current) {
+		return;
+	}
+
+	// unlink the node
+	if (previous) {
 		previous->setNext(node->getNext());
+	} else {
+		first=node->getNext();
+	}
+	if (node==last) {
+		last=previous;
 	}
 	node->setNext(NULL);
 	count--;
