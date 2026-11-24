@@ -58,7 +58,8 @@ class RUDIMENTS_DLLSPEC memorymap : public object {
 
 		/** detaches the memory map from the file descriptor
 		 * 
-		 *  Returns true on success and false on failure. */
+		 *  Returns true on success and false on failure.
+		 *  Returns true and does nothing if no map is attached. */
 		bool	detach();
 
 		/** Returns a pointer to the region of memory that the

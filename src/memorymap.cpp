@@ -64,7 +64,6 @@ memorymap::~memorymap() {
 
 bool memorymap::attach(int32_t fd, off64_t offset, size_t size,
 					int32_t protection, int32_t flags) {
-	pvt->_size=size;
 	#if defined(RUDIMENTS_HAVE_MMAP)
 		error::clearError();
 		do {
@@ -72,7 +71,13 @@ bool memorymap::attach(int32_t fd, off64_t offset, size_t size,
 		} while (pvt->_data==(void *)MAP_FAILED &&
 				error::getErrorNumber()==EINTR &&
 				!process::getShutDownFlag());
-		return (pvt->_data!=(void *)MAP_FAILED);
+		if (pvt->_data==(void *)MAP_FAILED) {
+			pvt->_data=NULL;
+			pvt->_size=0;
+			return false;
+		}
+		pvt->_size=size;
+		return true;
 	#elif defined(RUDIMENTS_HAVE_CREATE_FILE_MAPPING)
 
 		// calculate max mapping size and offset
@@ -121,6 +126,8 @@ bool memorymap::attach(int32_t fd, off64_t offset, size_t size,
 						0,0,
 						NULL);
 		if (!pvt->_map) {
+			pvt->_data=NULL;
+			pvt->_size=0;
 			return false;
 		}
 
@@ -131,8 +138,12 @@ bool memorymap::attach(int32_t fd, off64_t offset, size_t size,
 						size);
 		if (!pvt->_data) {
 			CloseHandle(pvt->_map);
+			pvt->_map=NULL;
+			pvt->_data=NULL;
+			pvt->_size=0;
 			return false;
 		}
+		pvt->_size=size;
 		return true;
 	#else
 		RUDIMENTS_SET_ENOSYS
@@ -144,6 +155,12 @@ bool memorymap::detach() {
 	#if defined(RUDIMENTS_HAVE_MMAP) || \
 		defined(RUDIMENTS_HAVE_CREATE_FILE_MAPPING)
 		#if defined(RUDIMENTS_HAVE_MMAP)
+
+			// bail if no map is attached
+			if (!pvt->_data) {
+				return true;
+			}
+
 			int32_t	result;
 			error::clearError();
 			do {
@@ -154,8 +171,20 @@ bool memorymap::detach() {
 						!process::getShutDownFlag());
 			bool	retval=!result;
 		#elif defined(RUDIMENTS_HAVE_CREATE_FILE_MAPPING)
-			bool	retval=(UnmapViewOfFile(pvt->_data)==TRUE &&
-						CloseHandle(pvt->_map)==TRUE);
+
+			// bail if no map is attached
+			if (!pvt->_data && !pvt->_map) {
+				return true;
+			}
+
+			bool	retval=true;
+			if (pvt->_data && UnmapViewOfFile(pvt->_data)!=TRUE) {
+				retval=false;
+			}
+			if (pvt->_map && CloseHandle(pvt->_map)!=TRUE) {
+				retval=false;
+			}
+			pvt->_map=NULL;
 		#endif
 		pvt->_data=NULL;
 		pvt->_size=0;

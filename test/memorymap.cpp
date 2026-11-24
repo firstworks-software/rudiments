@@ -74,6 +74,62 @@ int main(int argc, const char **argv) {
 	}
 	stdoutput.printf("\n");
 
+	// detach an unattached map
+	memorymap	unattached;
+	error::clearError();
+	test("detach unattached",unattached.detach());
+	test("detach unattached error",(error::getErrorNumber()==0));
+
+	// detach twice
+	error::clearError();
+	test("detach twice",mm.detach());
+	test("detach twice error",(error::getErrorNumber()==0));
+
+	// failed attach, bad descriptor
+	memorymap	badfd;
+	error::clearError();
+	test("attach bad descriptor",
+		!badfd.attach(-1,0,allocgran,PROT_READ,MAP_PRIVATE));
+	test("bad descriptor data",(badfd.getData()==NULL));
+	test("bad descriptor size",(badfd.getSize()==0));
+	error::clearError();
+	test("detach after bad descriptor",badfd.detach());
+	test("detach after bad descriptor error",
+					(error::getErrorNumber()==0));
+
+	// failed attach, writable map of a read-only descriptor
+	file	rofd;
+	test("open read-only",rofd.open(filename,O_RDONLY));
+	memorymap	romm;
+	bool	roattached=romm.attach(rofd.getFileDescriptor(),
+					0,allocgran,
+					PROT_READ|PROT_WRITE,MAP_SHARED);
+	if (!roattached) {
+		test("read-only data",(romm.getData()==NULL));
+		test("read-only size",(romm.getSize()==0));
+	}
+	error::clearError();
+	test("detach after read-only",romm.detach());
+	test("detach after read-only error",(error::getErrorNumber()==0));
+	rofd.close();
+
+	// destructor after failed attach
+	memorymap	*dmm=new memorymap;
+	dmm->attach(-1,0,allocgran,PROT_READ,MAP_PRIVATE);
+	error::clearError();
+	delete dmm;
+	test("destructor error",(error::getErrorNumber()==0));
+
+	// view beyond the end of the file
+	memorymap	beyond;
+	beyond.attach(fd.getFileDescriptor(),
+			20*allocgran,allocgran,PROT_READ,MAP_PRIVATE);
+	error::clearError();
+	test("detach after view beyond end",beyond.detach());
+	test("detach after view beyond end error",
+					(error::getErrorNumber()==0));
+	stdoutput.printf("\n");
+
 	// close the file
 	fd.close();
 
