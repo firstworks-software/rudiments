@@ -362,6 +362,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - fixed nan values not being found or sorted correctly in a dictionary,
   avltree, linkedlist or singlylinkedlist
 - fixed crashes in singlylinkedlist and linkedlist methods on an empty list
+- fixed a read buffer overrun in filedescriptor buffered read() after an
+  end of data
 
 ### Security
 - fixed buffer overflow when unix socket file name is too long

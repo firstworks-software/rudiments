@@ -329,6 +329,8 @@ class failreader : public base {
 		void	setMode(ssize_t mode);
 		// the first count reads are short, then the mode applies
 		void	setShortFirst(uint32_t count);
+		// the first count reads meet an end of data, before any others
+		void	setEofFirst(uint32_t count);
 		// errno that a failed read sets
 		void	setFailErrorNumber(int32_t errnum);
 		// bytes that lowLevelRead() read
@@ -341,6 +343,7 @@ class failreader : public base {
 		// 0 is normal, anything else is returned
 		ssize_t		mode;
 		uint32_t	shortfirst;
+		uint32_t	eoffirst;
 		int32_t		failerrnum;
 		size_t		bytesread;
 };
@@ -349,6 +352,7 @@ template <class base>
 failreader<base>::failreader(ssize_t mode) : base() {
 	this->mode=mode;
 	shortfirst=0;
+	eoffirst=0;
 	failerrnum=0;
 	bytesread=0;
 }
@@ -364,6 +368,11 @@ void failreader<base>::setShortFirst(uint32_t count) {
 }
 
 template <class base>
+void failreader<base>::setEofFirst(uint32_t count) {
+	eoffirst=count;
+}
+
+template <class base>
 void failreader<base>::setFailErrorNumber(int32_t errnum) {
 	failerrnum=errnum;
 }
@@ -375,6 +384,10 @@ size_t failreader<base>::getRead() {
 
 template <class base>
 ssize_t failreader<base>::lowLevelRead(void *buf, size_t count) {
+	if (eoffirst) {
+		eoffirst--;
+		return 0;
+	}
 	if (shortfirst) {
 		shortfirst--;
 		return countRead(base::lowLevelRead(buf,count/2));
@@ -1826,6 +1839,70 @@ static void partialReadTests() {
 	signalmanager::alarm(0);
 }
 
+// stream buffered read() with short reads off, where filling the read buffer
+// meets an end of data and the data goes on after it
+static void bufferedEofReadTests() {
+
+	signalmanager::alarm(60);
+
+	char	data[64];
+	for (uint16_t i=0; i<sizeof(data); i++) {
+		data[i]='a'+i%26;
+	}
+
+	// the data after the end of data fills the request, is shorter than
+	// the request but longer than the read buffer, or fits the read buffer
+	size_t		sizes[]={64,40,8};
+	ssize_t		firsts[]={64,40,0};
+	ssize_t		seconds[]={0,0,8};
+	const char	*names[]={"fill","short","fits"};
+	stringbuffer	title;
+	for (uint16_t i=0; i<sizeof(sizes)/sizeof(sizes[0]); i++) {
+
+		failreader<filedescriptor>	readfd(0);
+		filedescriptor			writefd;
+		title.clear();
+		title.append(names[i])->append(", create pipe");
+		test(title.getString(),
+			filedescriptor::createPipe(&readfd,&writefd));
+		title.clear();
+		title.append(names[i])->append(", write");
+		test(title.getString(),
+			writefd.write(data,sizes[i])==(ssize_t)sizes[i]);
+		title.clear();
+		title.append(names[i])->append(", close");
+		test(title.getString(),writefd.close());
+		title.clear();
+		title.append(names[i])->append(", set read buffer size");
+		test(title.getString(),readfd.setReadBufferSize(16));
+		readfd.setAllowShortReads(false);
+		readfd.setEofFirst(1);
+
+		// the first read returns what it copied out before an end of
+		// data, the second returns the rest
+		char	buf[128];
+		bytestring::zero(buf,sizeof(buf));
+		ssize_t	result=readfd.read(buf,sizeof(data));
+		title.clear();
+		title.append(names[i])->append(", first read 64");
+		test(title.getString(),result==firsts[i]);
+		ssize_t	result2=readfd.read(buf+firsts[i],sizeof(data));
+		title.clear();
+		title.append(names[i])->append(", second read 64");
+		test(title.getString(),result2==seconds[i]);
+		title.clear();
+		title.append(names[i])->append(", data");
+		test(title.getString(),
+			!bytestring::compare(buf,data,sizes[i]));
+		title.clear();
+		title.append(names[i])->append(", read");
+		test(title.getString(),readfd.getRead()==sizes[i]);
+	}
+	stdoutput.printf("\n");
+
+	signalmanager::alarm(0);
+}
+
 int main(int argc, const char **argv) {
 
 	char	*osname=sys::getOperatingSystemName();
@@ -2197,6 +2274,9 @@ int main(int argc, const char **argv) {
 
 		stdoutput.printf("\npartial reads\n");
 		partialReadTests();
+
+		stdoutput.printf("\nbuffered reads after an end of data\n");
+		bufferedEofReadTests();
 
 	} else {
 

@@ -1771,18 +1771,25 @@ ssize_t filedescriptor::streamBufferedRead(byte_t *buf, size_t count,
 							(int)bytesunread);
 				#endif
 
+				// don't read more than the buffer can hold
+				size_t	bytestoread=pvt->_readbufferend-
+							pvt->_readbuffer;
+				if (bytestoread>bytesunread) {
+					bytestoread=bytesunread;
+				}
+
 				// if short reads are not allowed, then
 				// try again, this time not allowing further
 				// short reads
 				result=unBufferedRead(pvt->_readbuffer,
-							bytesunread,
+							bytestoread,
 							sec,usec);
 
 				// if we still got short read (I think in this
 				// case, it could only have been an EOF) then
 				// return the number of bytes that we were able
 				// to read prior to hitting the EOF
-				if (result>-1 && (size_t)result!=bytesunread) {
+				if (result>-1 && (size_t)result!=bytestoread) {
 					#if defined(DEBUG_READ) && \
 						defined(DEBUG_BUFFERING)
 					debugPrintf("EOF\n");
