@@ -3369,6 +3369,106 @@ static void unsetBufferingFifoTests() {
 	signalmanager::alarm(0);
 }
 
+// write with buffering on, then turn buffering off or resize the buffer, with
+// memory map buffering off and on, for #11208 filedescriptor - turning
+// buffering off throws away buffered writes that no flush saved yet
+static void unsetBufferingFlushTests() {
+
+	signalmanager::alarm(60);
+
+	char	data[24576];
+	for (uint8_t usemmap=0; usemmap<2; usemmap++) {
+		stdoutput.printf("memory map buffering %s:\n",
+						(usemmap)?"on":"off");
+
+		// turn buffering off
+		unsetBufferingCreate(data,sizeof(data));
+		file	fl;
+		test("open",fl.open(mmapfile,O_RDWR));
+		fl.setMmapBufferingEnabled(usemmap);
+		test("set read buffer size",fl.setReadBufferSize(8192));
+		test("seek",fl.setPositionRelativeToBeginning(200)==200);
+		test("buffered write",fl.write("ABC",3)==3);
+		bytestring::copy(data+200,"ABC",3);
+		unsetBufferingWrite(&fl,data,sizeof(data),203);
+
+		// resize the buffer, then turn buffering off
+		unsetBufferingCreate(data,sizeof(data));
+		test("open",fl.open(mmapfile,O_RDWR));
+		fl.setMmapBufferingEnabled(usemmap);
+		test("set read buffer size",fl.setReadBufferSize(8192));
+		test("seek",fl.setPositionRelativeToBeginning(200)==200);
+		test("buffered write",fl.write("ABC",3)==3);
+		bytestring::copy(data+200,"ABC",3);
+		test("resize",fl.setReadBufferSize(4096));
+		unsetBufferingWrite(&fl,data,sizeof(data),203);
+	}
+
+	signalmanager::alarm(0);
+}
+
+#ifdef FILETEST_LSEEK_HOOK
+// fail the flush when buffering is turned off or the buffer is resized, then
+// retry, for #11208 filedescriptor - turning buffering off throws away
+// buffered writes that no flush saved yet
+static void unsetBufferingFlushFailedTests() {
+
+	signalmanager::alarm(60);
+
+	char	data[24576];
+	unsetBufferingCreate(data,sizeof(data));
+
+	// skip if the lseek() above does not take the place of the real one
+	file	sfl;
+	test("seek check, open",sfl.open(mmapfile,O_RDONLY));
+	failseekfd=sfl.getFileDescriptor();
+	bool	failed=(sfl.getPosition()==-1);
+	failseekfd=-1;
+	test("seek check, close",sfl.close());
+	if (!failed) {
+		stdoutput.printf("lseek() can not be replaced\n");
+		file::remove(mmapfile);
+		signalmanager::alarm(0);
+		return;
+	}
+
+	// fail to turn buffering off, then retry
+	file	fl;
+	test("open",fl.open(mmapfile,O_RDWR));
+	fl.setMmapBufferingEnabled(false);
+	test("set read buffer size",fl.setReadBufferSize(8192));
+	test("seek",fl.setPositionRelativeToBeginning(200)==200);
+	test("buffered write",fl.write("ABC",3)==3);
+	failseekfd=fl.getFileDescriptor();
+	bool	unset=fl.setReadBufferSize(0);
+	failseekfd=-1;
+	test("unset fails",!unset);
+	test("read buffer size kept",fl.getReadBufferSize()==8192);
+	test("write buffer size kept",fl.getWriteBufferSize()==8192);
+	bytestring::copy(data+200,"ABC",3);
+	unsetBufferingWrite(&fl,data,sizeof(data),203);
+
+	// fail to resize, then retry
+	unsetBufferingCreate(data,sizeof(data));
+	test("open",fl.open(mmapfile,O_RDWR));
+	fl.setMmapBufferingEnabled(false);
+	test("set read buffer size",fl.setReadBufferSize(8192));
+	test("seek",fl.setPositionRelativeToBeginning(200)==200);
+	test("buffered write",fl.write("ABC",3)==3);
+	failseekfd=fl.getFileDescriptor();
+	bool	resized=fl.setReadBufferSize(4096);
+	failseekfd=-1;
+	test("resize fails",!resized);
+	test("read buffer size kept",fl.getReadBufferSize()==8192);
+	test("retry resize",fl.setReadBufferSize(4096));
+	test("read buffer size",fl.getReadBufferSize()==4096);
+	bytestring::copy(data+200,"ABC",3);
+	unsetBufferingWrite(&fl,data,sizeof(data),203);
+
+	signalmanager::alarm(0);
+}
+#endif
+
 // the bytes that the close tests write
 static void closeFlushData(char *data, size_t length) {
 	for (size_t i=0; i<length; i++) {
@@ -4169,6 +4269,14 @@ int main(int argc, const char **argv) {
 
 		stdoutput.printf("\nturn buffering off on a fifo\n");
 		unsetBufferingFifoTests();
+
+		stdoutput.printf("\nturn buffering off with data in the write buffer\n");
+		unsetBufferingFlushTests();
+		#ifdef FILETEST_LSEEK_HOOK
+		unsetBufferingFlushFailedTests();
+		#else
+		stdoutput.printf("lseek() can not be replaced\n");
+		#endif
 
 		stdoutput.printf("\nclose and delete with data in the write buffer\n");
 		closeFlushTests();

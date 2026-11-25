@@ -1080,6 +1080,12 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *
 		 *  This method sets the write buffer size to "size" bytes.
 		 *  A size of 0 (or less) means not to buffer writes at all.
+		 *  When the file descriptor is storage, such as a file, then a
+		 *  size of 0 or a change of size first writes any data still in
+		 *  the write buffer.  If that write fails, then the buffer and
+		 *  its size stay as they were and false is returned, so the
+		 *  call can be retried.  The buffered data of a stream, such as
+		 *  a socket, is not written.
 		 *
 		 *
 		 *  Traditional buffering is enabled by default, but mmap
@@ -1187,6 +1193,11 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *
 		 *  This method sets the read buffer size to "size" bytes.
 		 *  A size of 0 (or less) means not to buffer reads at all.
+		 *  When the file descriptor is storage, such as a file, then
+		 *  reads and writes share one buffer, and a size of 0 or a
+		 *  change of size first writes any data still in that buffer.
+		 *  If that write fails, then the buffer and its size stay as
+		 *  they were and false is returned, so the call can be retried.
 		 *
 		 *
 		 *  Traditional buffering is enabled by default, but mmap

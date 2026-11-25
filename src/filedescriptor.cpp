@@ -444,6 +444,14 @@ bool filedescriptor::setStorageWriteBufferSize(size_t size) {
 			(int)process::getProcessId(),(int)pvt->_fd,(int)size);
 	#endif
 
+	// flush the write buffer
+	if (pvt->_fd!=-1 && pvt->_writebuffer && !flushWriteBuffer(-1,-1)) {
+		#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
+		debugPrintf(",error: flush failed)\n");
+		#endif
+		return false;
+	}
+
 	// figure out the current offset...
 	//
 	// If we haven't been buffering then we need to set pvt->_offset from
@@ -544,6 +552,14 @@ bool filedescriptor::unsetStorageWriteBuffer() {
 	debugPrintf("%d: unsetStorageWriteBuffer(%d,",
 			(int)process::getProcessId(),(int)pvt->_fd);
 	#endif
+
+	// flush the write buffer
+	if (pvt->_fd!=-1 && pvt->_writebuffer && !flushWriteBuffer(-1,-1)) {
+		#if defined(DEBUG_BUFFERING)
+		debugPrintf("flush failed)\n");
+		#endif
+		return false;
+	}
 
 	// If we were buffering previously then the current file position is
 	// probably pvt->_writeblockoffset, or not at pvt->_offset yet if a

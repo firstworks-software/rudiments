@@ -379,7 +379,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   memory mapped block past the end of a file or block device
 - fixed a filedescriptor write buffer leak after a failed seek with memory
   map buffering
-- fixed data loss at file close() or delete with a write buffer
+- fixed data loss at file close(), delete, or a buffer size change with a
+  write buffer
 - fixed memorymap detach() and the destructor unmapping with no map
   attached
 - fixed filedescriptor write after close() with a mapped block and a
