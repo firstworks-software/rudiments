@@ -361,14 +361,18 @@ bool file::lowLevelOpen(const char *name, int32_t flags,
 }
 
 bool file::open(const char *name, int32_t flags) {
-	close();
+	if (!close()) {
+		return false;
+	}
 	return (lowLevelOpen(name,flags,0,false) &&
 		((pvt->_getcurrentpropertiesonopen)?
 				getCurrentProperties():true));
 }
 
 bool file::open(const char *name, int32_t flags, mode_t perms) {
-	close();
+	if (!close()) {
+		return false;
+	}
 	return (lowLevelOpen(name,flags,perms,true) &&
 		((pvt->_getcurrentpropertiesonopen)?
 				getCurrentProperties():true));

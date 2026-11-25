@@ -48,6 +48,11 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  to be set, attempts to open the file with the O_CREAT flag
 		 *  (which creates the file if it doesn't exist) will fail.
 		 *
+		 *  Note that if a file is already open, it is closed first.
+		 *  If that fails, for example because its write buffer can't
+		 *  be written, then this method fails without opening "name"
+		 *  and the error number of the failed close is kept.
+		 *
 		 *  Returns true on success and false on failure. */
 		virtual bool	open(const char *name, int32_t flags);
 
@@ -81,6 +86,11 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  exist, then it will be created with permissions "perms".
 		 *  Note that if "perms" is 0 then the method will fail.
 		 *
+		 *  Note that if a file is already open, it is closed first.
+		 *  If that fails, for example because its write buffer can't
+		 *  be written, then this method fails without opening "name"
+		 *  and the error number of the failed close is kept.
+		 *
 		 *  Returns true on success and false on failure. */
 		virtual bool	open(const char *name,
 						int32_t flags,
@@ -91,6 +101,11 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  success and false on failure.
 		 *
 		 *  Note that if "perms" is 0 then the method will fail.
+		 *
+		 *  Note that if a file is already open, it is closed first.
+		 *  If that fails, for example because its write buffer can't
+		 *  be written, then this method fails without creating "name"
+		 *  and the error number of the failed close is kept.
 		 *
 		 *  Equivalent to calling:
 		 *  open(name,O_CREAT|O_WRONLY|O_TRUNC|O_BINARY,perms) */

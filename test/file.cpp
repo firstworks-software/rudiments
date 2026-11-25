@@ -92,6 +92,12 @@ const char	*seekfile="/tmp/testfileseek.txt";
 const char	*seekfile="testfileseek.txt";
 #endif
 
+#ifndef WIN32
+const char	*openfile="/tmp/testfileopen.txt";
+#else
+const char	*openfile="testfileopen.txt";
+#endif
+
 // getContents on files of known and unknown size and on read errors
 static void contentsTests() {
 
@@ -4175,6 +4181,76 @@ static void closeFlushFailedTests() {
 					error::getErrorNumber()==EBADF);
 	file::remove(mmapfile);
 }
+
+// open() and create() with a failed flush on close() of the previous file,
+// for #11203 file - open() and create() ignore a failed close(), so a failed
+// flush of the previous file's write buffer is not reported
+static void openFailedCloseTests() {
+
+	signalmanager::alarm(60);
+
+	char	data[33];
+	closeFlushData(data,sizeof(data));
+	mode_t	perms=permissions::parsePermString("rw-rw----");
+
+	// skip if the lseek() above does not take the place of the real one
+	bool	seekfails=closeFlushSeekFails();
+	file::remove(mmapfile);
+	if (!seekfails) {
+		stdoutput.printf("lseek() can not be replaced\n");
+		signalmanager::alarm(0);
+		return;
+	}
+
+	// open() of an existing file, open() with O_CREAT, then create()
+	const char	*titles[]={"open","open with permissions","create"};
+	for (uint16_t i=0; i<3; i++) {
+
+		stdoutput.printf("%s, failed flush:\n",titles[i]);
+		file::remove(mmapfile2);
+		file::remove(openfile);
+		if (!i) {
+			test("create other",file::createFile(mmapfile2,perms));
+		}
+
+		// fill the write buffer of the previous file
+		file	fl;
+		test("create",closeFlushOpen(&fl,false,7));
+		test("write",
+			fl.write(data,sizeof(data))==(ssize_t)sizeof(data));
+
+		// open the new file with a failed flush of the previous one
+		failseekfd=fl.getFileDescriptor();
+		error::clearError();
+		bool	opened;
+		if (i==0) {
+			opened=fl.open(mmapfile2,O_RDWR);
+		} else if (i==1) {
+			opened=fl.open(openfile,O_RDWR|O_CREAT,perms);
+		} else {
+			opened=fl.create(openfile,perms);
+		}
+		int32_t	errnum=error::getErrorNumber();
+		failseekfd=-1;
+		test("fails",!opened);
+		test("error number of the flush",errnum==EINVAL);
+		test("new file is not open",fl.getFileDescriptor()==-1);
+		if (i) {
+			test("new file is not created",
+						!file::exists(openfile));
+		}
+
+		// the file object still works
+		test("close",fl.close());
+		test("open again",fl.open(mmapfile,O_RDWR));
+		test("close again",fl.close());
+	}
+	file::remove(mmapfile);
+	file::remove(mmapfile2);
+	file::remove(openfile);
+
+	signalmanager::alarm(0);
+}
 #endif
 
 // close() and delete of a file with data in the write buffer, for #11188
@@ -4979,6 +5055,13 @@ int main(int argc, const char **argv) {
 
 		stdoutput.printf("\nclose and delete with data in the write buffer\n");
 		closeFlushTests();
+
+		#ifdef FILETEST_LSEEK_HOOK
+		stdoutput.printf("\nopen and create with a failed flush on close\n");
+		openFailedCloseTests();
+		#else
+		stdoutput.printf("\nopen and create with a failed flush on close\nlseek() can not be replaced\n");
+		#endif
 
 	} else {
 
