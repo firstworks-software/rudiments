@@ -855,6 +855,24 @@ bool filedescriptor::getNonBlockingMode() {
 	#endif
 }
 
+// Returns the size of the block device that "fd" refers to, or -1 on an error
+// or if this platform can't tell.
+static off64_t blockDeviceSize(int32_t fd) {
+	#ifdef RUDIMENTS_HAVE_BLKGETSIZE64
+	uint64_t	size=0;
+	int		result;
+	do {
+		result=::ioctl(fd,BLKGETSIZE64,&size);
+	} while (result==-1 && error::getErrorNumber()==EINTR);
+	if (result!=-1) {
+		return (off64_t)size;
+	}
+	// don't leak the errno into later results
+	error::setErrorNumber(0);
+	#endif
+	return -1;
+}
+
 off64_t filedescriptor::setPositionRelativeToBeginning(off64_t offset) {
 	return setPosition(offset,SEEK_SET);
 }
@@ -887,9 +905,25 @@ off64_t filedescriptor::setPosition(off64_t offset, int32_t whence) {
 	if (whence==SEEK_CUR) {
 		offset=pvt->_offset+offset;
 	} else if (whence==SEEK_END) {
-		off64_t	size=getSize();
-		if (size<0) {
-			return size;
+
+		// get the type and size of the file
+		file	f;
+		f.setFileDescriptor(pvt->_fd);
+		bool	success=f.getCurrentProperties();
+		f.setFileDescriptor(-1);
+		if (!success) {
+			return -1;
+		}
+		off64_t	size=f.getSize();
+
+		// A block device reports a size of 0, so ask the device.
+		// Without a size, refuse the seek.
+		if (f.isBlockDevice()) {
+			size=blockDeviceSize(pvt->_fd);
+			if (size<0) {
+				error::setErrorNumber(EINVAL);
+				return -1;
+			}
 		}
 		offset=size+offset;
 	}
@@ -1045,24 +1079,6 @@ void filedescriptor::dropWriteBuffer() {
 	delete[] pvt->_writebufferunaligned;
 	pvt->_writebufferunaligned=NULL;
 	invalidateWriteBuffer();
-}
-
-// Returns the size of the block device that "fd" refers to, or -1 on an error
-// or if this platform can't tell.
-static off64_t blockDeviceSize(int32_t fd) {
-	#ifdef RUDIMENTS_HAVE_BLKGETSIZE64
-	uint64_t	size=0;
-	int		result;
-	do {
-		result=::ioctl(fd,BLKGETSIZE64,&size);
-	} while (result==-1 && error::getErrorNumber()==EINTR);
-	if (result!=-1) {
-		return (off64_t)size;
-	}
-	// don't leak the errno into later results
-	error::setErrorNumber(0);
-	#endif
-	return -1;
 }
 
 ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {

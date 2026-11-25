@@ -148,8 +148,10 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  Generally, "offset" will be negative though most filesystems
 		 *  allow the creation of files with holes in them and that can
 		 *  be accomplished by using a positive "offset" and then
-		 *  writing data at that position.  Returns the position on
-		 *  success or -1 on failure. */
+		 *  writing data at that position.  For a block device, the end
+		 *  is the size of the device, and if buffering is on and the
+		 *  size of the device can not be found, then the seek fails.
+		 *  Returns the position on success or -1 on failure. */
 		virtual off64_t	setPositionRelativeToEnd(off64_t offset);
 
 		/** Writes "number" to the file descriptor.  Returns the number

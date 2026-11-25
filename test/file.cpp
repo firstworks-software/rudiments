@@ -3429,6 +3429,144 @@ static void blockDeviceTests() {
 
 	signalmanager::alarm(0);
 }
+
+// open the file with buffering on, a map or not, and fake a block device on it
+static void blockDeviceEndOpen(file *fl, bool usemmap) {
+	test("open",fl->open(mmapfile,O_RDWR));
+	fl->setMmapBufferingEnabled(usemmap);
+	test("set read buffer size",fl->setReadBufferSize(8192));
+	fakeblkfd=fl->getFileDescriptor();
+}
+
+// check that the file holds the pattern with "len" bytes of "bytes" at "pos"
+static void blockDeviceEndVerify(const char *data, size_t size,
+					const char *bytes, size_t len,
+					off64_t pos) {
+	char	*expected=new char[size];
+	bytestring::copy(expected,data,size);
+	bytestring::copy(expected+pos,bytes,len);
+	char	*contents=new char[size];
+	file	vfl;
+	test("verify, open",vfl.open(mmapfile,O_RDONLY));
+	test("verify, size",vfl.getSize()==(off64_t)size);
+	test("verify, read",vfl.read(contents,size)==(ssize_t)size);
+	test("verify, data",!bytestring::compare(contents,expected,size));
+	test("verify, close",vfl.close());
+	delete[] contents;
+	delete[] expected;
+}
+
+// seek from the end, write, and check where the write lands, then refuse a
+// seek from the end on a device of no size and after a failed fstat()
+static void blockDeviceEndRun(bool usemmap, off64_t unbufend,
+					off64_t unbufback) {
+
+	char	data[20480];
+	off64_t	size=sizeof(data);
+
+	stdoutput.printf("%s, seek from end, write 10:\n",
+				(usemmap)?"map buffering":"buffering");
+	blockDeviceCreate(mmapfile,data,sizeof(data));
+	file	fl;
+	blockDeviceEndOpen(&fl,usemmap);
+	off64_t	end=fl.setPositionRelativeToEnd(0);
+	test("seek end",end==size);
+	test("same as unbuffered",end==unbufend);
+	test("position",fl.getPosition()==size);
+	off64_t	back=fl.setPositionRelativeToEnd(-100);
+	test("seek end-100",back==size-100);
+	test("same as unbuffered",back==unbufback);
+	test("position",fl.getPosition()==size-100);
+	test("write 10",fl.write("0123456789",10)==10);
+	bool	closed=fl.close();
+	fakeblkfd=-1;
+	test("close",closed);
+	blockDeviceEndVerify(data,sizeof(data),"0123456789",10,size-100);
+
+	stdoutput.printf("%s, no size, seek from end, write 10:\n",
+				(usemmap)?"map buffering":"buffering");
+	blockDeviceCreate(mmapfile,data,sizeof(data));
+	fakeblkfail=true;
+	file	nfl;
+	blockDeviceEndOpen(&nfl,usemmap);
+	test("seek 50",nfl.setPositionRelativeToBeginning(50)==50);
+	test("seek end-100 fails",nfl.setPositionRelativeToEnd(-100)==-1);
+	test("errno",error::getErrorNumber()==EINVAL);
+	test("position",nfl.getPosition()==50);
+	test("write 10",nfl.write("0123456789",10)==10);
+	closed=nfl.close();
+	fakeblkfd=-1;
+	fakeblkfail=false;
+	test("close",closed);
+	blockDeviceEndVerify(data,sizeof(data),"0123456789",10,50);
+
+	stdoutput.printf("%s, failed fstat, seek from end:\n",
+				(usemmap)?"map buffering":"buffering");
+	file	sfl;
+	blockDeviceEndOpen(&sfl,usemmap);
+	test("seek 50",sfl.setPositionRelativeToBeginning(50)==50);
+	failstatfd=sfl.getFileDescriptor();
+	test("seek end-100 fails",sfl.setPositionRelativeToEnd(-100)==-1);
+	test("errno",error::getErrorNumber()==EIO);
+	failstatfd=-1;
+	test("position",sfl.getPosition()==50);
+	closed=sfl.close();
+	fakeblkfd=-1;
+	test("close",closed);
+}
+
+// a buffered seek from the end of a block device, for #11209 filedescriptor -
+// with buffering on, a seek from the end of a raw block device uses a size of 0
+static void blockDeviceEndTests() {
+
+	signalmanager::alarm(60);
+
+	// a file of two and a half 8k blocks
+	char	data[20480];
+	blockDeviceCreate(mmapfile,data,sizeof(data));
+
+	// skip if the fake block device doesn't work
+	file	sfl;
+	test("fake check, open",sfl.open(mmapfile,O_RDWR));
+	fakeblkfd=sfl.getFileDescriptor();
+	uint64_t	devsize=0;
+	bool		fake=(sfl.getCurrentProperties() &&
+				sfl.isBlockDevice() &&
+				sfl.ioCtl(BLKGETSIZE64,&devsize)==0 &&
+				devsize==sizeof(data));
+
+	// with buffering off, the system seeks from the end
+	off64_t		unbufend=-1;
+	off64_t		unbufback=-1;
+	if (fake) {
+		unbufend=sfl.setPositionRelativeToEnd(0);
+		unbufback=sfl.setPositionRelativeToEnd(-100);
+	}
+	bool		closed=sfl.close();
+	fakeblkfd=-1;
+	test("fake check, close",closed);
+	if (!fake) {
+		stdoutput.printf("block device can not be faked\n");
+		file::remove(mmapfile);
+		signalmanager::alarm(0);
+		return;
+	}
+	stdoutput.printf("no buffering, seek from end:\n");
+	test("seek end",unbufend==(off64_t)sizeof(data));
+	test("seek end-100",unbufback==(off64_t)sizeof(data)-100);
+
+	if (memorymap::isSupported()) {
+		blockDeviceEndRun(true,unbufend,unbufback);
+	} else {
+		stdoutput.printf("memory maps not supported\n");
+	}
+	blockDeviceEndRun(false,unbufend,unbufback);
+
+	file::remove(mmapfile);
+	stdoutput.printf("\n");
+
+	signalmanager::alarm(0);
+}
 #endif
 
 // fill the data with letters and create a file that holds it
@@ -4554,6 +4692,13 @@ int main(int argc, const char **argv) {
 		stdoutput.printf("\nmemory map on a block device\n");
 		#ifdef FILETEST_BLOCKDEV_HOOK
 		blockDeviceTests();
+		#else
+		stdoutput.printf("block device can not be faked\n");
+		#endif
+
+		stdoutput.printf("\nbuffered seek from the end of a block device\n");
+		#ifdef FILETEST_BLOCKDEV_HOOK
+		blockDeviceEndTests();
 		#else
 		stdoutput.printf("block device can not be faked\n");
 		#endif
