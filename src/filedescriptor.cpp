@@ -1182,10 +1182,8 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 			#if defined(DEBUG_BUFFERING)
 			debugPrintf(",error getting file size)\n");
 			#endif
-			// It's safe to just return error here.  The operation
-			// will fail gracefully and all buffer pointers are set
-			// such that a retry will fall through safely to this
-			// point again.
+			// drop the buffer, so a retry realigns it to the new block
+			dropWriteBuffer();
 			return RESULT_ERROR;
 		}
 
@@ -1331,9 +1329,7 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 		debugPrintf("...,error)\n");
 		#endif
 		// drop the buffer, so a retry realigns it to the new block
-		delete[] pvt->_writebufferunaligned;
-		pvt->_writebufferunaligned=NULL;
-		invalidateWriteBuffer();
+		dropWriteBuffer();
 		return RESULT_ERROR;
 	}
 
@@ -1372,7 +1368,8 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 			#if defined(DEBUG_BUFFERING)
 			debugPrintf("...error reading: %d)\n",result);
 			#endif
-			// FIXME: ??? graceful/retryable
+			// drop the buffer, so a retry realigns it to the new block
+			dropWriteBuffer();
 			return result;
 		}
 
@@ -1385,11 +1382,14 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 			debugPrintf("...error reading after %d bytes)\n",
 									result);
 			#endif
+			// drop the buffer, so a retry realigns it to the new block
 			#ifdef ETIMEDOUT
 			if (error::getErrorNumber()==ETIMEDOUT) {
+				dropWriteBuffer();
 				return RESULT_TIMEOUT;
 			}
 			#endif
+			dropWriteBuffer();
 			return RESULT_ERROR;
 		}
 	}

@@ -36,12 +36,14 @@
 	#endif
 	#include <rudiments/dynamiclib.h>
 #endif
-// a fake block device needs fstat() to be a symbol of the C library (2.33+)
-#if defined(FILETEST_LSEEK_HOOK) && defined(RUDIMENTS_HAVE_BLKGETSIZE64) && \
-	defined(__GLIBC__) && \
+// an fstat() hook needs fstat() to be a symbol of the C library (2.33+)
+#if defined(FILETEST_LSEEK_HOOK) && defined(__GLIBC__) && \
 	(__GLIBC__>2 || (__GLIBC__==2 && __GLIBC_MINOR__>=33))
-	#define FILETEST_BLOCKDEV_HOOK
+	#define FILETEST_FSTAT_HOOK
 	#include <sys/stat.h>
+#endif
+#if defined(FILETEST_FSTAT_HOOK) && defined(RUDIMENTS_HAVE_BLKGETSIZE64)
+	#define FILETEST_BLOCKDEV_HOOK
 	#include <sys/ioctl.h>
 	#include <linux/fs.h>
 	#include <stdarg.h>
@@ -2724,6 +2726,11 @@ static void negativeSeekTests() {
 // on, and whether the fake device fails to report its size
 static int	fakeblkfd=-1;
 static bool	fakeblkfail=false;
+#endif
+
+#ifdef FILETEST_FSTAT_HOOK
+// the file descriptor that fstat() fails on once
+static int	failstatfd=-1;
 
 typedef int	(*fstatfunc_t)(int,struct stat *);
 
@@ -2775,6 +2782,38 @@ extern "C" off_t lseek(int fd, off_t offset, int whence) {
 	return reallseek(fd,offset,whence);
 }
 
+// This read() takes the place of the C library's, so the test can make a read
+// fail once on one file descriptor, or first return part of what it asked
+// for.  It passes every other call on to the next definition.
+static int	failreadfd=-1;
+static size_t	failreadshort=0;
+
+typedef ssize_t	(*readfunc_t)(int,void *,size_t);
+
+extern "C" ssize_t read(int fd, void *buf, size_t count) {
+	static readfunc_t	realread=NULL;
+	if (!realread) {
+		realread=(readfunc_t)dynamiclib::getNextSymbol("read");
+		if (!realread) {
+			error::setErrorNumber(ENOSYS);
+			return -1;
+		}
+	}
+	if (fd==failreadfd) {
+		if (failreadshort) {
+			if (count>failreadshort) {
+				count=failreadshort;
+			}
+			failreadshort=0;
+			return realread(fd,buf,count);
+		}
+		failreadfd=-1;
+		error::setErrorNumber(EIO);
+		return -1;
+	}
+	return realread(fd,buf,count);
+}
+
 #ifdef FILETEST_MMAP_HOOK
 // This mmap() takes the place of the C library's, so the test can make every
 // map fail on one file descriptor.  It passes every other call on to the next
@@ -2801,19 +2840,32 @@ extern "C" void *mmap(void *addr, size_t length, int prot,
 }
 #endif
 
-#ifdef FILETEST_BLOCKDEV_HOOK
-// This fstat() takes the place of the C library's, so the test can make one
-// file descriptor look like a block device of size 0, as a real one does.  It
-// passes every other call on to the next definition.
+#ifdef FILETEST_FSTAT_HOOK
+// This fstat() takes the place of the C library's, so the test can make it
+// fail once on one file descriptor, or make one file descriptor look like a
+// block device of size 0, as a real one does.  It passes every other call on
+// to the next definition.
 extern "C" int fstat(int fd, struct stat *st) {
-	int	result=realFstat(fd,st);
-	if (result==0 && fd==fakeblkfd) {
-		st->st_mode=(st->st_mode&~S_IFMT)|S_IFBLK;
-		st->st_size=0;
+	if (fd==failstatfd) {
+		failstatfd=-1;
+		error::setErrorNumber(EIO);
+		return -1;
 	}
-	return result;
+	#ifdef FILETEST_BLOCKDEV_HOOK
+	if (fd==fakeblkfd) {
+		int	result=realFstat(fd,st);
+		if (result==0) {
+			st->st_mode=(st->st_mode&~S_IFMT)|S_IFBLK;
+			st->st_size=0;
+		}
+		return result;
+	}
+	#endif
+	return realFstat(fd,st);
 }
+#endif
 
+#ifdef FILETEST_BLOCKDEV_HOOK
 // This ioctl() takes the place of the C library's, so the test can make the
 // fake block device report the size of its file, or fail to.  It passes every
 // other call on to the next definition.
@@ -3048,6 +3100,181 @@ static void failedSeekWriteTests() {
 		#else
 		stdoutput.printf("mmap() can not be replaced\n");
 		#endif
+	}
+	stdoutput.printf("\n");
+
+	signalmanager::alarm(0);
+}
+
+// how failedFillWriteRun() fails the fill of the second block
+enum fillfail {
+	FILLFAIL_STAT,
+	FILLFAIL_READ,
+	FILLFAIL_SHORTREAD
+};
+
+// one run of failedFillWriteTests(), false if the fstat() or read() that "how"
+// needs can not be replaced
+static bool failedFillWriteRun(fillfail how, bool usemmap, bool mapfirst) {
+
+	// create a file of three 8k blocks
+	char	data[24576];
+	for (uint16_t i=0; i<sizeof(data); i++) {
+		data[i]='a'+i%26;
+	}
+	file::remove(mmapfile);
+	file	fl;
+	test("create",fl.create(mmapfile,
+				permissions::parsePermString("rw-rw----")));
+	test("write",fl.write(data,sizeof(data))==(ssize_t)sizeof(data));
+	test("close",fl.close());
+
+	// skip if the fstat() or read() above does not take the place of the
+	// real one
+	file	sfl;
+	test("hook check, open",sfl.open(mmapfile,O_RDONLY));
+	bool	failed=false;
+	if (how==FILLFAIL_STAT) {
+		#ifdef FILETEST_FSTAT_HOOK
+		failstatfd=sfl.getFileDescriptor();
+		failed=!sfl.getCurrentProperties();
+		failstatfd=-1;
+		#endif
+	} else {
+		char	c;
+		failreadfd=sfl.getFileDescriptor();
+		failreadshort=0;
+		failed=(sfl.read(&c,1)==-1);
+		failreadfd=-1;
+	}
+	test("hook check, close",sfl.close());
+	if (!failed) {
+		stdoutput.printf("%s() can not be replaced\n",
+				(how==FILLFAIL_STAT)?"fstat":"read");
+		file::remove(mmapfile);
+		return false;
+	}
+
+	// read the first block, into a usual buffer unless "mapfirst" is set
+	test("open",fl.open(mmapfile,O_RDWR));
+	fl.setMmapBufferingEnabled(usemmap);
+	test("set read buffer size",fl.setReadBufferSize(8192));
+	#ifdef FILETEST_MMAP_HOOK
+	if (usemmap && !mapfirst) {
+		failmapfd=fl.getFileDescriptor();
+	}
+	#endif
+	char	buf[100];
+	test("read 100",fl.read(buf,sizeof(buf))==(ssize_t)sizeof(buf));
+	test("data",!bytestring::compare(buf,data,sizeof(buf)));
+	if (mapfirst) {
+		test("block is mapped",fl.isCurrentBlockMmapBuffered());
+	} else {
+
+		// skip if the mmap() above does not take the place of the
+		// real one
+		if (fl.isCurrentBlockMmapBuffered()) {
+			stdoutput.printf("mmap() can not be replaced\n");
+			test("close",fl.close());
+			#ifdef FILETEST_MMAP_HOOK
+			failmapfd=-1;
+			#endif
+			file::remove(mmapfile);
+			return true;
+		}
+		test("block is not mapped",!fl.isCurrentBlockMmapBuffered());
+	}
+
+	// fail the fill of the second block
+	test("seek",fl.setPositionRelativeToBeginning(8192)==8192);
+	if (how==FILLFAIL_STAT) {
+		#ifdef FILETEST_FSTAT_HOOK
+		failstatfd=fl.getFileDescriptor();
+		#endif
+	} else {
+		failreadfd=fl.getFileDescriptor();
+		failreadshort=(how==FILLFAIL_SHORTREAD)?50:0;
+	}
+	test("read, failed fill",fl.read(buf,sizeof(buf))==-1);
+	#ifdef FILETEST_FSTAT_HOOK
+	failstatfd=-1;
+	#endif
+	failreadfd=-1;
+	failreadshort=0;
+	if (mapfirst) {
+		test("block is not mapped after failed fill",
+					!fl.isCurrentBlockMmapBuffered());
+	}
+
+	// write and flush inside the second block
+	test("seek 2",fl.setPositionRelativeToBeginning(8292)==8292);
+	test("write",fl.write("XYZ",3)==3);
+	test("flush",fl.flushWriteBuffer(-1,-1));
+	test("close",fl.close());
+	#ifdef FILETEST_MMAP_HOOK
+	failmapfd=-1;
+	#endif
+
+	// only the written bytes may differ in the file
+	bytestring::copy(data+8292,"XYZ",3);
+	char	*contents=new char[sizeof(data)+1];
+	file	vfl;
+	test("verify, open",vfl.open(mmapfile,O_RDONLY));
+	test("size",vfl.getSize()==(off64_t)sizeof(data));
+	test("verify, read",vfl.read(contents,sizeof(data))==
+						(ssize_t)sizeof(data));
+	test("start of block",!bytestring::compare(contents+8192,
+						"cdefghij",8));
+	test("data after",!bytestring::compare(contents,data,sizeof(data)));
+	test("verify, close",vfl.close());
+	delete[] contents;
+
+	file::remove(mmapfile);
+	return true;
+}
+
+// failed size check or failed fill of a new block, then write and flush, for
+// #11206 filedescriptor - after a failed size check or a failed fill of a new
+// block, the buffer keeps stale bytes, so a later write and flush save them
+// into the new block
+static void failedFillWriteTests() {
+
+	signalmanager::alarm(60);
+
+	// failed size check, with memory map buffering on
+	stdoutput.printf("failed size check:\n");
+	#if !defined(FILETEST_FSTAT_HOOK)
+	stdoutput.printf("fstat() can not be replaced\n");
+	#elif !defined(FILETEST_MMAP_HOOK)
+	stdoutput.printf("mmap() can not be replaced\n");
+	#else
+	if (!memorymap::isSupported()) {
+		stdoutput.printf("memory maps not supported\n");
+	} else if (failedFillWriteRun(FILLFAIL_STAT,true,false)) {
+		stdoutput.printf("failed size check, first block mapped:\n");
+		failedFillWriteRun(FILLFAIL_STAT,true,true);
+	}
+	#endif
+
+	// failed read, memory map buffering off
+	stdoutput.printf("failed read, memory map buffering off:\n");
+	if (failedFillWriteRun(FILLFAIL_READ,false,false)) {
+
+		// failed read, memory map buffering on
+		stdoutput.printf("failed read, memory map buffering on:\n");
+		#ifdef FILETEST_MMAP_HOOK
+		if (memorymap::isSupported()) {
+			failedFillWriteRun(FILLFAIL_READ,true,false);
+		} else {
+			stdoutput.printf("memory maps not supported\n");
+		}
+		#else
+		stdoutput.printf("mmap() can not be replaced\n");
+		#endif
+
+		// failed read after 50 bytes
+		stdoutput.printf("failed read after 50 bytes:\n");
+		failedFillWriteRun(FILLFAIL_SHORTREAD,false,false);
 	}
 	stdoutput.printf("\n");
 
@@ -4315,6 +4542,13 @@ int main(int argc, const char **argv) {
 		failedSeekWriteTests();
 		#else
 		stdoutput.printf("\nfailed seek to a new block, then write and flush\nlseek() can not be replaced\n");
+		#endif
+
+		#ifdef FILETEST_LSEEK_HOOK
+		stdoutput.printf("\nfailed fill of a new block, then write and flush\n");
+		failedFillWriteTests();
+		#else
+		stdoutput.printf("\nfailed fill of a new block, then write and flush\nlseek() can not be replaced\n");
 		#endif
 
 		stdoutput.printf("\nmemory map on a block device\n");
