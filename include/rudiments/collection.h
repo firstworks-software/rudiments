@@ -414,6 +414,10 @@ class collection : virtual public object {
 		 *  as a character, in the form that the write() method of
 		 *  each class describes.
 		 *
+		 *  A wide key or value is written in the character set of the
+		 *  current locale.  An error is returned if a character cannot
+		 *  be converted.
+		 *
 		 *  Returns the number of bytes written, or -1 if an error
 		 *  occurred.  A short write returns -1.  Any other error from
 		 *  the output, such as a timeout or abort, is returned
@@ -428,6 +432,10 @@ class collection : virtual public object {
 		 *  because the writers take signed char.  It is then written
 		 *  as a character, in the form that the write() method of
 		 *  each class describes.
+		 *
+		 *  A wide key or value is written in the character set of the
+		 *  current locale.  An error is returned if a character cannot
+		 *  be converted.
 		 *
 		 *  Returns the number of bytes written, or -1 if an error
 		 *  occurred.  A short write returns -1.  Any other error from

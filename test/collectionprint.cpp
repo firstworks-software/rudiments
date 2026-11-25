@@ -206,10 +206,9 @@ void testTreeFailWrite(const char *name, avltree<valuetype> *t,
 	}
 }
 
-// "expected" is the output of the tree method (write or writeJson) as raw
-// bytes, or NULL to skip checking it.  write() writes a wide value as raw
-// wchar_t bytes, and writeJson() converts it to the character set of the
-// locale.  Both count the output in bytes.
+// "expected" is the output of treemethods[method] as raw bytes, or NULL to
+// skip checking it.  Each method converts a wide value to the character set
+// of the locale and counts the output in bytes.
 template <class valuetype>
 void testWideWrite(const char *name, avltree<valuetype> *t, uint16_t method,
 							bytebuffer *expected) {
@@ -261,17 +260,31 @@ void testWideWrite(const char *name, avltree<valuetype> *t, uint16_t method,
 
 const char	*widefile="collectionprint.json";
 
-// writes writeJson() of "c" to widefile, reads the file back into "contents"
-// and "size", and returns the result of writeJson()
+// writes "c" to "out" with treemethods[method], where "method" is 0 (write)
+// or 1 (writeJson)
 template <class collectiontype>
-ssize_t writeJsonFile(collectiontype *c, byte_t **contents, size_t *size) {
+ssize_t writeMethod(collectiontype *c, uint16_t method, output *out) {
+	return (method)?c->writeJson(out,false):c->write(out);
+}
+
+// writes "t" to "out" with treemethods[method]
+template <class valuetype>
+ssize_t writeMethod(avltree<valuetype> *t, uint16_t method, output *out) {
+	return writeTree(t,method,out);
+}
+
+// writes treemethods[method] of "c" to widefile, reads the file back into
+// "contents" and "size", and returns the result of the method
+template <class collectiontype>
+ssize_t writeFile(collectiontype *c, uint16_t method,
+					byte_t **contents, size_t *size) {
 	*contents=NULL;
 	*size=0;
 	file::remove(widefile);
 	file	f;
 	ssize_t	result=RESULT_ERROR;
 	if (f.create(widefile,permissions::parsePermString("rw-------"))) {
-		result=c->writeJson(&f,false);
+		result=writeMethod(c,method,&f);
 		f.close();
 		f.getContents(widefile,contents,size);
 	}
@@ -279,42 +292,79 @@ ssize_t writeJsonFile(collectiontype *c, byte_t **contents, size_t *size) {
 	return result;
 }
 
-// checks writeJson() of "c" to a file against "expected", and its return
-// value against the size of the file in bytes
+// checks treemethods[method] of "c" to a file against "expected", or NULL to
+// skip that check, and its return value against the size of the file in bytes
 template <class collectiontype>
-void testWideFile(const char *name, collectiontype *c, const char *expected) {
+void testWideFile(const char *name, collectiontype *c, uint16_t method,
+							bytebuffer *expected) {
 
 	stringbuffer	prefix;
-	prefix.append(name)->append(": writeJson");
+	prefix.append(name)->append(": ")->append(treemethods[method]);
 
 	byte_t	*contents;
 	size_t	size;
-	ssize_t	result=writeJsonFile(c,&contents,&size);
-	size_t	expectedsize=charstring::getLength(expected);
+	ssize_t	result=writeFile(c,method,&contents,&size);
 	stringbuffer	title;
-	title.append(prefix.getString())->append(": file bytes");
-	test(title.getString(),
-		contents && size==expectedsize &&
-		!bytestring::compare(contents,expected,expectedsize));
-	title.clear();
+	if (expected) {
+		title.append(prefix.getString())->append(": file bytes");
+		test(title.getString(),
+			contents && size==expected->getSize() &&
+			!bytestring::compare(contents,expected->getBuffer(),
+							expected->getSize()));
+		title.clear();
+	}
 	title.append(prefix.getString())->append(": file count");
 	test(title.getString(),contents && result==(ssize_t)size);
 	delete[] contents;
 }
 
-// the expected bytes of write() and writeJson() of a tree that has one value:
-// "value" as write() writes it and "jsonvalue" as writeJson() writes it
+// checks treemethods[method] of "t" to a stringbuffer and to a file
+template <class valuetype>
+void testWideTree(const char *name, avltree<valuetype> *t, uint16_t method,
+							bytebuffer *expected) {
+	testWideWrite(name,t,method,expected);
+	testWideFile(name,t,method,expected);
+}
+
+// sets "expected" to the output of treemethods[method], 0 (write) or 3
+// (writeXml), of a tree that has the one value "value" of "size" bytes
+void wideNode(bytebuffer *expected, uint16_t method,
+				const char *value, size_t size) {
+	expected->clear();
+	expected->append("<t v=\"");
+	expected->append(value,size);
+	expected->append((method)?"\"/>\n":
+				"\" lh=\"0\" rh=\"0\" bf=\"0\"/>\n");
+}
+
+// checks write(), writeJson(), and writeXml() of a tree that has one value:
+// "value", converted to the character set of the locale by write() and
+// writeXml(), and "jsonvalue" as writeJson() writes it
 void testWideValue(const char *name, avltree<const wchar_t *> *t,
 				const wchar_t *value, const char *jsonvalue) {
+
+	stringbuffer	title;
+	title.append(name)->append(": convert");
+	char	*converted=NULL;
+	ssize_t	length=charstring::printf(&converted,"%ls",value);
+	test(title.getString(),length>=0);
+	if (length<0) {
+		delete[] converted;
+		return;
+	}
+
 	bytebuffer	w;
-	w.append("<t v=\"");
-	w.append(value);
-	w.append("\" lh=\"0\" rh=\"0\" bf=\"0\"/>\n");
-	testWideWrite(name,t,0,&w);
+	wideNode(&w,0,converted,length);
+	testWideTree(name,t,0,&w);
+	bytebuffer	x;
+	wideNode(&x,3,converted,length);
+	testWideTree(name,t,3,&x);
+	delete[] converted;
+
 	stringbuffer	j;
 	j.append("[")->append(jsonvalue)->append("]");
 	testWideWrite(name,t,1,&j);
-	testWideFile(name,t,j.getString());
+	testWideFile(name,t,1,&j);
 }
 
 // a quote, a backslash, and a newline, as a raw C string and as a JSON string
@@ -398,22 +448,25 @@ void testWideJson(const char *name, collectiontype *c, const char *expected) {
 	title.append(prefix.getString())->append(": stringbuffer count");
 	test(title.getString(),result==(ssize_t)sb.getSize());
 
-	testWideFile(name,c,expected);
+	stringbuffer	e;
+	e.append(expected);
+	testWideFile(name,c,1,&e);
 
 	testFailWrite(name,c,true);
 }
 
-// checks that writeJson() of "c" to a stringbuffer and to a file fails on a
-// wide character that the locale cannot convert, and writes only "expected"
+// checks that treemethods[method] of "c" to a stringbuffer and to a file fails
+// on a wide character that the locale cannot convert, and writes only
+// "expected"
 template <class collectiontype>
-void testWideJsonError(const char *name, collectiontype *c,
+void testWideError(const char *name, collectiontype *c, uint16_t method,
 						const char *expected) {
 
 	stringbuffer	prefix;
-	prefix.append(name)->append(": writeJson");
+	prefix.append(name)->append(": ")->append(treemethods[method]);
 
 	stringbuffer	sb;
-	ssize_t	result=c->writeJson(&sb,false);
+	ssize_t	result=writeMethod(c,method,&sb);
 	size_t	expectedsize=charstring::getLength(expected);
 	stringbuffer	title;
 	title.append(prefix.getString())->append(": stringbuffer bytes");
@@ -426,7 +479,7 @@ void testWideJsonError(const char *name, collectiontype *c,
 
 	byte_t	*contents;
 	size_t	size;
-	result=writeJsonFile(c,&contents,&size);
+	result=writeFile(c,method,&contents,&size);
 	title.clear();
 	title.append(prefix.getString())->append(": file bytes");
 	test(title.getString(),
@@ -1221,65 +1274,66 @@ int main(int argc, const char **argv) {
 		avltree<wchar_t *>	atwm;
 		atwm.insert(wstr);
 		bytebuffer	wm;
-		wm.append("<t v=\"");
-		wm.append(L"hi");
-		wm.append("\" lh=\"0\" rh=\"0\" bf=\"0\"/>\n");
-		testWideWrite("avltree (wchar_t *)",&atwm,0,&wm);
+		wideNode(&wm,0,"hi",2);
+		testWideTree("avltree (wchar_t *)",&atwm,0,&wm);
+		wideNode(&wm,3,"hi",2);
+		testWideTree("avltree (wchar_t *)",&atwm,3,&wm);
 		stringbuffer	wmj;
 		wmj.append("[\"hi\"]");
-		testWideWrite("avltree (wchar_t *)",&atwm,1,&wmj);
-		testWideFile("avltree (wchar_t *)",&atwm,wmj.getString());
+		testWideTree("avltree (wchar_t *)",&atwm,1,&wmj);
 
 		wchar_t	wzip[]={L'0',L'2',L'1',L'3',L'4',0};
 		avltree<wchar_t *>	atwz;
 		atwz.insert(wzip);
 		stringbuffer	wzj;
 		wzj.append("[\"02134\"]");
-		testWideWrite("avltree (wchar_t * 02134)",&atwz,1,&wzj);
-		testWideFile("avltree (wchar_t * 02134)",&atwz,wzj.getString());
+		testWideTree("avltree (wchar_t * 02134)",&atwz,1,&wzj);
 
 		wchar_t	wneg[]={L'-',L'1',L'.',L'5',0};
 		avltree<wchar_t *>	atwng;
 		atwng.insert(wneg);
 		stringbuffer	wngj;
 		wngj.append("[-1.5]");
-		testWideWrite("avltree (wchar_t * -1.5)",&atwng,1,&wngj);
-		testWideFile("avltree (wchar_t * -1.5)",&atwng,
-							wngj.getString());
+		testWideTree("avltree (wchar_t * -1.5)",&atwng,1,&wngj);
 
 		avltree<wchar_t>	atwc;
 		atwc.insert((wchar_t)0x263A);
 		wchar_t	smile[]={(wchar_t)0x263A,0};
-		bytebuffer	wc;
-		wc.append("<t v=\"");
-		wc.append(smile);
-		wc.append("\" lh=\"0\" rh=\"0\" bf=\"0\"/>\n");
-		testWideWrite("avltree (wchar_t)",&atwc,0,&wc);
 
 		avltree<wchar_t>	atwd;
 		atwd.insert(L'7');
 		bytebuffer	wd;
-		wd.append("<t v=\"");
-		wd.append(L"7");
-		wd.append("\" lh=\"0\" rh=\"0\" bf=\"0\"/>\n");
-		testWideWrite("avltree (wchar_t digit)",&atwd,0,&wd);
+		wideNode(&wd,0,"7",1);
+		testWideTree("avltree (wchar_t digit)",&atwd,0,&wd);
+		wideNode(&wd,3,"7",1);
+		testWideTree("avltree (wchar_t digit)",&atwd,3,&wd);
 		stringbuffer	wdj;
 		wdj.append("[7]");
-		testWideWrite("avltree (wchar_t digit)",&atwd,1,&wdj);
-		testWideFile("avltree (wchar_t digit)",&atwd,wdj.getString());
+		testWideTree("avltree (wchar_t digit)",&atwd,1,&wdj);
+
+		// a null character is written as one null byte
+		avltree<wchar_t>	atwz0;
+		atwz0.insert(L'\0');
+		bytebuffer	wz0;
+		wideNode(&wz0,0,"",1);
+		testWideTree("avltree (wchar_t null character)",&atwz0,0,&wz0);
+		wideNode(&wz0,3,"",1);
+		testWideTree("avltree (wchar_t null character)",&atwz0,3,&wz0);
 
 		// null values
 		avltree<const wchar_t *>	atwnull;
 		atwnull.insert((const wchar_t *)NULL);
-		testWideWrite("avltree (const wchar_t * null)",&atwnull,0,NULL);
+		testWideTree("avltree (const wchar_t * null)",&atwnull,0,NULL);
+		testWideTree("avltree (const wchar_t * null)",&atwnull,3,NULL);
 		bytebuffer	nj;
 		nj.append("[null]");
-		testWideWrite("avltree (const wchar_t * null)",&atwnull,1,&nj);
+		testWideTree("avltree (const wchar_t * null)",&atwnull,1,&nj);
 
 		avltree<wchar_t *>	atwmnull;
 		atwmnull.insert((wchar_t *)NULL);
-		testWideWrite("avltree (wchar_t * null)",&atwmnull,0,NULL);
-		testWideWrite("avltree (wchar_t * null)",&atwmnull,1,&nj);
+		testWideTree("avltree (wchar_t * null)",&atwmnull,0,NULL);
+		testWideTree("avltree (wchar_t * null)",&atwmnull,3,NULL);
+		testWideTree("avltree (wchar_t * null)",&atwmnull,1,&nj);
 
 		// wide keys are always written as strings
 		dictionary<const wchar_t *,int32_t>	dw;
@@ -1360,17 +1414,21 @@ int main(int argc, const char **argv) {
 		locale::setCType("C");
 		char	*converted=NULL;
 		if (charstring::printf(&converted,"%ls",smile)<0) {
-			testWideJsonError("avltree (wchar_t unconvertible)",
-								&atwc,"[");
+			testWideError("avltree (wchar_t unconvertible)",
+							&atwc,0,"<t v=\"");
+			testWideError("avltree (wchar_t unconvertible)",
+							&atwc,1,"[");
+			testWideError("avltree (wchar_t unconvertible)",
+							&atwc,3,"<t v=\"");
 			linkedlist<const wchar_t *>	llwu;
 			llwu.append(L"ab");
 			llwu.append(smile);
-			testWideJsonError("linkedlist (const wchar_t * "
-					"unconvertible)",&llwu,"[\"ab\",");
+			testWideError("linkedlist (const wchar_t * "
+					"unconvertible)",&llwu,1,"[\"ab\",");
 			dictionary<const wchar_t *,int32_t>	dwu;
 			dwu.setValue(smile,1);
-			testWideJsonError("dictionary (const wchar_t * "
-					"unconvertible key)",&dwu,"{");
+			testWideError("dictionary (const wchar_t * "
+					"unconvertible key)",&dwu,1,"{");
 		} else {
 			stdoutput.printf("the C locale converts U+263A, "
 					"unconvertible character skipped\n");
@@ -1389,6 +1447,11 @@ int main(int argc, const char **argv) {
 						&dw8,"{\"h\xc3\xa9\":1}");
 			testWideJson("avltree (wchar_t utf-8)",
 						&atwc,"[\"\xe2\x98\xba\"]");
+			bytebuffer	wc8;
+			wideNode(&wc8,0,"\xe2\x98\xba",3);
+			testWideTree("avltree (wchar_t utf-8)",&atwc,0,&wc8);
+			wideNode(&wc8,3,"\xe2\x98\xba",3);
+			testWideTree("avltree (wchar_t utf-8)",&atwc,3,&wc8);
 		} else {
 			stdoutput.printf("no UTF-8 locale available, "
 					"utf-8 wide keys and values skipped\n");

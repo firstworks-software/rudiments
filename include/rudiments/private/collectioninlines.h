@@ -136,12 +136,12 @@ ssize_t collection::writeValue(output *out, char *value) {
 
 inline
 ssize_t collection::writeValue(output *out, const wchar_t *value) {
-	return out->printf(L"%ls",value);
+	return writeWideText(out,value);
 }
 
 inline
 ssize_t collection::writeValue(output *out, wchar_t *value) {
-	return out->printf(L"%ls",value);
+	return writeWideText(out,value);
 }
 
 inline
@@ -151,7 +151,18 @@ ssize_t collection::writeValue(output *out, char value) {
 
 inline
 ssize_t collection::writeValue(output *out, wchar_t value) {
-	return out->printf(L"%lc",value);
+
+	// The converted text of a null character is empty, so write the
+	// one null byte that the char overload writes.
+	if (value==L'\0') {
+		return out->write('\0');
+	}
+
+	// convert and write the character
+	wchar_t	str[2];
+	str[0]=value;
+	str[1]=L'\0';
+	return writeWideText(out,str);
 }
 
 inline
@@ -371,7 +382,7 @@ ssize_t collection::writeJsonValue(output *out, const wchar_t *value) {
 	if (!value) {
 		return out->write("null");
 	} else if (isJsonNumber(value)) {
-		return writeJsonWideText(out,value);
+		return writeWideText(out,value);
 	}
 	return writeJsonWideString(out,value,wcharstring::getLength(value));
 }
@@ -381,7 +392,7 @@ ssize_t collection::writeJsonValue(output *out, wchar_t *value) {
 	if (!value) {
 		return out->write("null");
 	} else if (isJsonNumber(value)) {
-		return writeJsonWideText(out,value);
+		return writeWideText(out,value);
 	}
 	return writeJsonWideString(out,value,wcharstring::getLength(value));
 }
@@ -400,7 +411,7 @@ ssize_t collection::writeJsonValue(output *out, wchar_t value) {
 		wchar_t	digit[2];
 		digit[0]=value;
 		digit[1]=L'\0';
-		return writeJsonWideText(out,digit);
+		return writeWideText(out,digit);
 	}
 	return writeJsonWideString(out,&value,1);
 }
@@ -624,13 +635,13 @@ ssize_t collection::writeJsonWideString(output *out,
 	*e=L'\0';
 
 	// write the encoded value
-	ssize_t	result=writeJsonWideText(out,encoded);
+	ssize_t	result=writeWideText(out,encoded);
 	delete[] encoded;
 	return result;
 }
 
 inline
-ssize_t collection::writeJsonWideText(output *out, const wchar_t *value) {
+ssize_t collection::writeWideText(output *out, const wchar_t *value) {
 
 	// Where wide printf is unsupported, the other wide writers fail, so
 	// fail here too, rather than rely on %ls in the narrow printf.
@@ -745,54 +756,6 @@ bool collection::writeJsonValue(ssize_t *retval, output *out,
 	}
 	return incOrErr(retval,out->write(buf->getBuffer(),buf->getSize()),
 							buf->getSize());
-}
-
-inline
-bool collection::writeValue(ssize_t *retval, output *out,
-						stringbuffer *buf,
-						const wchar_t *value) {
-
-	// format the value into the buffer to get its size in bytes
-	buf->clear();
-	if (writeValue(buf,value)<0) {
-		return incOrErr(retval,RESULT_ERROR);
-	}
-
-	// write the value
-	ssize_t	result=writeValue(out,value);
-	return incOrErr(retval,(result<0)?result:(ssize_t)buf->getSize());
-}
-
-inline
-bool collection::writeValue(ssize_t *retval, output *out,
-						stringbuffer *buf,
-						wchar_t *value) {
-
-	// format the value into the buffer to get its size in bytes
-	buf->clear();
-	if (writeValue(buf,value)<0) {
-		return incOrErr(retval,RESULT_ERROR);
-	}
-
-	// write the value
-	ssize_t	result=writeValue(out,value);
-	return incOrErr(retval,(result<0)?result:(ssize_t)buf->getSize());
-}
-
-inline
-bool collection::writeValue(ssize_t *retval, output *out,
-						stringbuffer *buf,
-						wchar_t value) {
-
-	// format the value into the buffer to get its size in bytes
-	buf->clear();
-	if (writeValue(buf,value)<0) {
-		return incOrErr(retval,RESULT_ERROR);
-	}
-
-	// write the value
-	ssize_t	result=writeValue(out,value);
-	return incOrErr(retval,(result<0)?result:(ssize_t)buf->getSize());
 }
 
 template <class valuetype>

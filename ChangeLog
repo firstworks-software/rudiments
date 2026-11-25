@@ -143,6 +143,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   not an empty string
 - collection write() and writeJson() write a float, double or long double
   value with round-trip %g text now
+- avltree write() and writeXml() write a wide value to a memory buffer in
+  the locale character set now, not raw wide characters
 - singlylinkedlist removeAll(value) returns true when no node matches now
 - scalar, table, and dictionary setValue() delete the old managed value now
 
@@ -368,7 +370,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - fixed crashes in singlylinkedlist and linkedlist methods on an empty list
 - fixed a read buffer overrun in filedescriptor buffered read() after an
   end of data
-- fixed collection writeJson() of a wide string key or value
+- fixed avltree write() and writeXml() byte count of a wide value on a
+  file, and collection writeJson() of a wide string key or value
 - fixed singlylinkedlist detach() and moveAfter() of a node not in the list
 - fixed heap corruption in the filedescriptor destructor with memory map
   buffering

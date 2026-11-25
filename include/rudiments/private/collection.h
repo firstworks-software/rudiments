@@ -74,7 +74,7 @@
 		// and writes the bytes.  It writes nothing and returns -1 if
 		// "value" can not be converted, or if
 		// wcharstring::supportsPrintf() returns false.
-		ssize_t	writeJsonWideText(output *out, const wchar_t *value);
+		ssize_t	writeWideText(output *out, const wchar_t *value);
 
 		// JSON allows only a string as an object key, so these write
 		// "key" as a quoted json string, even where writeJsonValue()
@@ -106,18 +106,6 @@
 					stringbuffer *buf,
 					const valuetype &value);
 
-		// Each output converts wide characters in its own printf(), so
-		// the wide writeValue() overloads write with printf() and count
-		// the bytes of the raw wide characters.
-		bool	writeValue(ssize_t *retval, output *out,
-					stringbuffer *buf,
-					const wchar_t *value);
-		bool	writeValue(ssize_t *retval, output *out,
-					stringbuffer *buf,
-					wchar_t *value);
-		bool	writeValue(ssize_t *retval, output *out,
-					stringbuffer *buf,
-					wchar_t value);
 		template <class valuetype>
 		bool	writeValue(ssize_t *retval, output *out,
 					stringbuffer *buf,
