@@ -222,7 +222,7 @@ http://www.gnu.org/software/src-highlite -->
 
 <p>Note that the write() method works for primitive types and strings, but for more complex types, it only prints the address of the object.</p>
 
-<p>Note also that, by default, the linkedlist class does not manage the data stored in it.  If you store a list of dynamically allocated strings or objects, they will not be deleted automatically when a node is removed or when the list is cleared.  However, if setManageValues(true) is called, then values will be deleted (using delete) when a node is removed or the list is cleared or destroyed.  If setManageArrayValues(true) is called, then values will be deleted using delete[] instead, which is appropriate for dynamically allocated strings and arrays.</p>
+<p>Note also that, by default, the linkedlist class does not manage the data stored in it.  If you store a list of dynamically allocated strings or objects, they will not be deleted automatically when a node is removed or when the list is cleared.  However, if setManageValues(true) is called, then values will be deleted (using delete) when a node is removed or the list is cleared or destroyed.  If setManageArrayValues(true) is called, then values will be deleted using delete[] instead, which is appropriate for dynamically allocated strings and arrays.  The setValue() method of a node never deletes the previous value, though, because a node does not know whether its list manages values.</p>
 
 <blockquote>
 <!-- Generator: GNU source-highlight 3.1.9

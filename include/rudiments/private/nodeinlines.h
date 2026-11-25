@@ -12,8 +12,8 @@
 // compilers don't support it and this isn't any less efficient.
 
 
-// Why do the node_delete_value() and node_duplicate_value() functions take
-// pointers, just to dereference them?
+// Why do the node_delete_value(), node_same_value(), and node_duplicate_value()
+// functions take pointers, just to dereference them?
 //
 // Older compilers (SCO CC on uw-7.0.1, gcc 2.95.3 on solaris 9 x86, probably
 // others...) seem to have trouble determining which function to call when
@@ -151,6 +151,25 @@ void node_delete_value(valuetype **value, bool managed, bool managedarray) {
 template <class valuetype>
 inline
 void node_delete_value(valuetype *value, bool managed, bool managedarray) {
+}
+
+
+
+
+
+// same-value methods...
+
+template <class valuetype>
+inline
+bool node_same_value(valuetype **a, valuetype **b) {
+	return *a==*b;
+}
+
+template <class valuetype>
+inline
+bool node_same_value(valuetype *a, valuetype *b) {
+	// node_delete_value() never deletes a value that isn't a pointer.
+	return false;
 }
 
 

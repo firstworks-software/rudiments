@@ -216,6 +216,13 @@ void dictionary<keytype,valuetype>::setValue(keytype key, valuetype value) {
 			node_delete_value(&key,this->getManageKeys(),
 						this->getManageArrayKeys());
 		}
+
+		// free the old value
+		valuetype	&oldvalue=dnode->getValueRef();
+		if (!node_same_value(&oldvalue,&value)) {
+			node_delete_value(&oldvalue,this->getManageValues(),
+						this->getManageArrayValues());
+		}
 		dnode->setValue(value);
 	} else {
 		dnode=new dictionarypair<keytype,valuetype>(key,value);
@@ -290,7 +297,7 @@ template <class keytype, class valuetype>
 inline
 void dictionary<keytype,valuetype>::setValues(
 					dictionary<keytype,valuetype> *dict) {
-	if (dict) {
+	if (dict && dict!=this) {
 
 		// copy keys and values per our manage flags
 		bool	managekeys=this->getManageKeys();

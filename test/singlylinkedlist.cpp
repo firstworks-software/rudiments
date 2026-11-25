@@ -8,6 +8,20 @@
 #include <rudiments/stdio.h>
 #include "test.cpp"
 
+// value that counts its deletions
+class countedvalue {
+	public:
+		countedvalue(int32_t value) : value(value) {
+		}
+		~countedvalue() {
+			deleted++;
+		}
+		int32_t		value;
+		static uint32_t	deleted;
+};
+
+uint32_t	countedvalue::deleted=0;
+
 // true if l has exactly the n values in v, in order, with a correct last
 static bool listis(singlylinkedlist<int32_t> *l,
 			const int32_t *v, uint64_t n) {
@@ -673,6 +687,28 @@ int main(int argc, char **argv) {
 		test("find(nan)",nl.find(nan)!=NULL);
 		test("remove(nan)",nl.remove(nan));
 		test("remove(nan): getCount",nl.getCount()==4);
+	}
+	stdoutput.printf("\n");
+
+	// 10835 container setters should free the old value when manage
+	// values is set
+	// The node can't see the list's manage flags, so it never frees.
+	stdoutput.printf("node setValue() and the old value...\n");
+	{
+		singlylinkedlist<countedvalue *>	cvl;
+		cvl.setManageValues(true);
+		countedvalue	*old=new countedvalue(1);
+		cvl.append(old);
+		uint32_t	before=countedvalue::deleted;
+		cvl.getFirst()->setValue(new countedvalue(2));
+		test("managed, node setValue(): old value not freed",
+					countedvalue::deleted==before);
+		test("managed, node setValue(): new value stored",
+					cvl.getFirst()->getValue()->value==2);
+		delete old;
+		cvl.clear();
+		test("managed, clear(): new value freed",
+					countedvalue::deleted==before+2);
 	}
 	stdoutput.printf("\n");
 	return 0;

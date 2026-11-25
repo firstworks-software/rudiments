@@ -18,14 +18,23 @@ class scalarcollection : public collection {
 		/** Returns 1. */
 		virtual uint64_t	getCount();
 
-		/** Sets the value stored in this instance to "v". */
+		/** Sets the value stored in this instance to "v".
+		 *
+		 *  If setManageValues(true) or setManageArrayValues(true) has
+		 *  been called, the previous value is deleted first, unless it
+		 *  is the same pointer as "v". */
 		virtual	void		setValue(valuetype v)=0;
 
 		/** Returns the value stored in this instance.  Returns NULL or
 		 *  0 if no value has been stored. */
 		virtual	valuetype	getValue()=0;
 
-		/** Returns a reference to the value stored in this instance. */
+		/** Returns a reference to the value stored in this instance.
+		 *
+		 *  Note that a value assigned through the reference doesn't
+		 *  delete the previous value, even if setManageValues(true) or
+		 *  setManageArrayValues(true) has been called.  The caller must
+		 *  delete it, if necessary. */
 		virtual	valuetype	&getReference()=0;
 
 		/** Writes a representation of the scalarcollection to

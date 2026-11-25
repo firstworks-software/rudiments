@@ -260,5 +260,54 @@ int main(int argc, char **argv) {
 		counted::ctors+counted::copies==counted::dtors);
 	stdoutput.printf("\n");
 
+	// 10835 container setters should free the old value when manage
+	// values is set
+	stdoutput.printf("setValue() and the old value...\n");
+	{
+		// unmanaged
+		counted	*u1=new counted(1);
+		counted	*u2=new counted(2);
+		int32_t	before=counted::dtors;
+		{
+			scalar<counted *>	us(u1);
+			us.setValue(u2);
+			test("unmanaged: old value not freed",
+						counted::dtors==before);
+		}
+		test("unmanaged: values not freed on delete",
+						counted::dtors==before);
+		delete u1;
+		delete u2;
+
+		// same pointer
+		scalar<counted *>	ms(new counted(1),true,false);
+		before=counted::dtors;
+		ms.setValue(ms.getValue());
+		test("managed, same pointer: nothing freed",
+						counted::dtors==before);
+		test("managed, same pointer: value kept",
+						ms.getValue()->value==1);
+
+		// replace
+		ms.setValue(new counted(2));
+		test("managed, replace: old value freed",
+						counted::dtors==before+1);
+		test("managed, replace: new value stored",
+						ms.getValue()->value==2);
+
+		// array values
+		scalar<counted *>	mas(new counted[2],false,true);
+		before=counted::dtors;
+		mas.setValue(mas.getValue());
+		test("managed array, same pointer: nothing freed",
+						counted::dtors==before);
+		mas.setValue(new counted[3]);
+		test("managed array, replace: old array freed",
+						counted::dtors==before+2);
+	}
+	test("setValue(): no leaked values",
+		counted::ctors+counted::copies==counted::dtors);
+	stdoutput.printf("\n");
+
 	return 0;
 }

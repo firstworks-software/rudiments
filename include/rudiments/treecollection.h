@@ -23,13 +23,25 @@ class treenode : public nodecollectionnode<valuetype> {
 		 *  on the node, then call insert(valuetype) with the new
 		 *  value.  If setManageValues(true) or
 		 *  setManageArrayValues(true) has been called, remove() frees
-		 *  the old value, so the new value must not point into it. */
+		 *  the old value, so the new value must not point into it.
+		 *
+		 *  Note that this method only stores "value". It never deletes
+		 *  the previous value, even if setManageValues(true) or
+		 *  setManageArrayValues(true) has been called on the
+		 *  container, because a node does not know whether its
+		 *  container manages values. The caller must delete the
+		 *  previous value, if necessary. */
 		virtual void	setValue(valuetype value)=0;
 
 		/** Returns the value stored in the node. */
 		virtual valuetype	getValue()=0;
 
-		/** Returns a reference to the value stored in the node. */
+		/** Returns a reference to the value stored in the node.
+		 *
+		 *  Note that a value assigned through the reference doesn't
+		 *  delete the previous value, even if setManageValues(true) or
+		 *  setManageArrayValues(true) has been called on the
+		 *  container.  The caller must delete it, if necessary. */
 		virtual valuetype	&getReference()=0;
 
 		/** Returns the parent node in the tree or NULL

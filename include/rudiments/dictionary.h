@@ -120,6 +120,11 @@ class dictionary : public dictionarycollection<keytype,valuetype> {
 		 *  If "key" already exists, the value currently
 		 *  accociated with it is replaced with "value".
 		 *
+		 *  If "key" already exists and setManageValues(true) or
+		 *  setManageArrayValues(true) has been called, the value
+		 *  currently associated with it is deleted first, unless it is
+		 *  the same pointer as "value".
+		 *
 		 *  If "key" is new, the dictionary stores it and, if
 		 *  setManageKeys(true) or setManageArrayKeys(true) has been
 		 *  called, deletes it later.
@@ -136,7 +141,7 @@ class dictionary : public dictionarycollection<keytype,valuetype> {
 		 *  If "key" already exists, the value currently
 		 *  accociated with it is replaced with "value".
 		 *  Each pair is set as setValue() sets it, so the same rules
-		 *  about the ownership of each key apply. */
+		 *  about the ownership of each key and value apply. */
 		void	setValues(keytype *keys, valuetype *values);
 
 		/** Sets the value associated with each key in the "keys"
@@ -145,7 +150,7 @@ class dictionary : public dictionarycollection<keytype,valuetype> {
 		 *  If "key" already exists, the value currently
 		 *  accociated with it is replaced with "value".
 		 *  Each pair is set as setValue() sets it, so the same rules
-		 *  about the ownership of each key apply. */
+		 *  about the ownership of each key and value apply. */
 		void	setValues(keytype const *keys, valuetype const *values);
 
 		/** Sets the value associated with each of "count" keys
@@ -154,7 +159,7 @@ class dictionary : public dictionarycollection<keytype,valuetype> {
 		 *  If "key" already exists, the value currently
 		 *  accociated with it is replaced with "value".
 		 *  Each pair is set as setValue() sets it, so the same rules
-		 *  about the ownership of each key apply. */
+		 *  about the ownership of each key and value apply. */
 		void	setValues(keytype *keys, valuetype *values,
 							uint64_t count);
 
@@ -164,7 +169,7 @@ class dictionary : public dictionarycollection<keytype,valuetype> {
 		 *  If "key" already exists, the value currently
 		 *  accociated with it is replaced with "value".
 		 *  Each pair is set as setValue() sets it, so the same rules
-		 *  about the ownership of each key apply. */
+		 *  about the ownership of each key and value apply. */
 		void	setValues(keytype const *keys, valuetype const *values,
 								uint64_t count);
 
@@ -177,7 +182,9 @@ class dictionary : public dictionarycollection<keytype,valuetype> {
 		 *  data that they delete.  Keys and values that this
 		 *  dictionary does not manage share the pointers of "dict".
 		 *  Each pair is set as setValue() sets it, so the same rules
-		 *  about the ownership of each key apply. */
+		 *  about the ownership of each key and value apply.
+		 *
+		 *  If "dict" is this dictionary, then nothing is changed. */
 		void	setValues(dictionary<keytype,valuetype> *dict);
 
 		/** Sets "value" to the value associated with "key".

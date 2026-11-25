@@ -46,11 +46,11 @@
  *  - setCopyColumnNames(true) makes the table duplicate the column names.
  *
  *  On a table source, these flags also make the source delete its own values
- *  or column names on clear() and destruction.  If the source does not own
- *  its values, then set the manage flag just before the copy, and set it back
- *  to false just after the copy.  But setCopyColumnNames() is unsafe on a
- *  table after its column names are set.  So set it before the names are
- *  set, and do not change it after.
+ *  or column names when they are replaced, on clear(), and on destruction.
+ *  If the source does not own its values, then set the manage flag just
+ *  before the copy, and set it back to false just after the copy.  But
+ *  setCopyColumnNames() is unsafe on a table after its column names are set.
+ *  So set it before the names are set, and do not change it after.
  *
  *  The table takes these flags from the source.  Flags that are set on the
  *  table before an assignment have no effect. */
@@ -128,7 +128,10 @@ class tablecollection : public collection {
 		virtual	uint64_t	getColumnCount()=0;
 		
 		/** In a read-write implementation, sets the value at "row",
-		 *  "col" to "value".
+		 *  "col" to "value".  If setManageValues(true) or
+		 *  setManageArrayValues(true) has been called, the value
+		 *  previously stored at "row", "col" is deleted first, unless
+		 *  it is the same pointer as "value".
 		 *
 		 *  In a read-only implementation, has no effect. */
 		virtual	void		setValue(uint64_t row,
@@ -140,7 +143,12 @@ class tablecollection : public collection {
 		virtual	valuetype	getValue(uint64_t row,
 						uint64_t col)=0;
 
-		/** Returns a reference to the value at "row", "col". */
+		/** Returns a reference to the value at "row", "col".
+		 *
+		 *  Note that a value assigned through the reference doesn't
+		 *  delete the previous value, even if setManageValues(true) or
+		 *  setManageArrayValues(true) has been called.  The caller must
+		 *  delete it, if necessary. */
 		virtual	valuetype	&getReference(uint64_t row,
 							uint64_t col)=0;
 

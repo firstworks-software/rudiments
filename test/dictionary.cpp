@@ -6,6 +6,29 @@
 #include <rudiments/stdio.h>
 #include "test.cpp"
 
+// value that counts its creations and deletions
+class countedvalue {
+	public:
+		countedvalue(int32_t value) : value(value) {
+			created++;
+		}
+		countedvalue() : value(0) {
+			created++;
+		}
+		countedvalue(const countedvalue &c) : value(c.value) {
+			created++;
+		}
+		~countedvalue() {
+			deleted++;
+		}
+		int32_t		value;
+		static uint32_t	created;
+		static uint32_t	deleted;
+};
+
+uint32_t	countedvalue::created=0;
+uint32_t	countedvalue::deleted=0;
+
 // 11172 dictionary - a nan key cannot be found
 template <class floattype>
 void testNanKey(const char *name) {
@@ -703,6 +726,202 @@ int main(int argc, const char **argv) {
 
 	testNanKey<float>("float");
 	testNanKey<double>("double");
+
+	// 10835 container setters should free the old value when manage
+	// values is set
+	stdoutput.printf("setValue() and the old value:\n");
+	{
+		typedef dictionary<const char *, countedvalue *>	cvdict;
+
+		// unmanaged
+		countedvalue	*u1=new countedvalue(1);
+		countedvalue	*u2=new countedvalue(2);
+		uint32_t	before=countedvalue::deleted;
+		{
+			cvdict	ud;
+			ud.setValue("a",u1);
+			ud.setValue("a",u2);
+			test("unmanaged: old value not freed",
+					countedvalue::deleted==before);
+		}
+		test("unmanaged: values not freed on delete",
+					countedvalue::deleted==before);
+		delete u1;
+		delete u2;
+
+		// new keys
+		cvdict	md;
+		md.setManageValues(true);
+		before=countedvalue::deleted;
+		md.setValue("a",new countedvalue(1));
+		md.setValue("b",new countedvalue(2));
+		test("managed, new key: nothing freed",
+					countedvalue::deleted==before);
+
+		// same pointer
+		md.setValue("a",md.getValue("a"));
+		test("managed, same pointer: nothing freed",
+					countedvalue::deleted==before);
+		test("managed, same pointer: value kept",
+					md.getValue("a")->value==1);
+
+		// existing key
+		md.setValue("a",new countedvalue(3));
+		test("managed, existing key: new value stored",
+					md.getValue("a")->value==3 &&
+					md.getValue("b")->value==2 &&
+					md.getCount()==2);
+		test("managed, existing key: old value freed",
+					countedvalue::deleted==before+1);
+
+		// array values
+		cvdict	mad;
+		mad.setManageArrayValues(true);
+		mad.setValue("a",new countedvalue[2]);
+		before=countedvalue::deleted;
+		mad.setValue("a",mad.getValue("a"));
+		test("managed array, same pointer: nothing freed",
+					countedvalue::deleted==before);
+		mad.setValue("a",new countedvalue[3]);
+		test("managed array, existing key: old array freed",
+					countedvalue::deleted==before+2);
+
+		// setValues() from arrays, one existing key and one new key
+		const char	*svtitles[]={
+			"managed, setValues(keys,values)",
+			"managed, setValues(const keys,const values)",
+			"managed, setValues(keys,values,count)",
+			"managed, setValues(const keys,const values,count)"
+		};
+		const char	*keys[]={"a","c",NULL};
+		for (uint16_t i=0; i<4; i++) {
+			cvdict	sd;
+			sd.setManageValues(true);
+			sd.setValue("a",new countedvalue(1));
+			countedvalue	*values[]={
+				new countedvalue(2),
+				new countedvalue(3),
+				NULL
+			};
+			before=countedvalue::deleted;
+			switch (i) {
+				case 0:
+					sd.setValues(keys,values);
+					break;
+				case 1:
+					sd.setValues((const char * const *)keys,
+						(countedvalue * const *)values);
+					break;
+				case 2:
+					sd.setValues(keys,values,2);
+					break;
+				default:
+					sd.setValues((const char * const *)keys,
+						(countedvalue * const *)values,
+						2);
+					break;
+			}
+			stringbuffer	title;
+			title.append(svtitles[i]);
+			title.append(": new values stored");
+			test(title.getString(),
+					sd.getValue("a")->value==2 &&
+					sd.getValue("c")->value==3 &&
+					sd.getCount()==2);
+			title.clear();
+			title.append(svtitles[i])->append(": old value freed");
+			test(title.getString(),
+					countedvalue::deleted==before+1);
+		}
+
+		// setValues() from an unmanaged dictionary
+		countedvalue	*s1=new countedvalue(4);
+		countedvalue	*s2=new countedvalue(5);
+		{
+			cvdict	src;
+			src.setValue("a",s1);
+			src.setValue("d",s2);
+			cvdict	dst;
+			dst.setManageValues(true);
+			dst.setValue("a",new countedvalue(1));
+			before=countedvalue::deleted;
+			dst.setValues(&src);
+			test("managed, setValues(dict): values copied",
+					dst.getValue("a")!=s1 &&
+					dst.getValue("a")->value==4 &&
+					dst.getValue("d")!=s2 &&
+					dst.getValue("d")->value==5 &&
+					dst.getCount()==2);
+			test("managed, setValues(dict): old value freed",
+					countedvalue::deleted==before+1);
+		}
+		delete s1;
+		delete s2;
+
+		// setValues() from itself
+		// A copy of each value and no copy at all are both correct,
+		// so check only that no value leaks and no live value is freed.
+		for (uint16_t i=0; i<2; i++) {
+			cvdict	self;
+			self.setTrackInsertionOrder(i==1);
+			self.setManageValues(true);
+			self.setValue("a",new countedvalue(1));
+			self.setValue("b",new countedvalue(2));
+			uint32_t	live=countedvalue::created-
+						countedvalue::deleted;
+			self.setValues(&self);
+			test((!i)?"managed, setValues(self): values kept":
+				"managed, setValues(self) "
+				"(insertion order): values kept",
+					self.getValue("a")->value==1 &&
+					self.getValue("b")->value==2 &&
+					self.getCount()==2);
+			test((!i)?"managed, setValues(self): no leaked values":
+				"managed, setValues(self) "
+				"(insertion order): no leaked values",
+					countedvalue::created-
+					countedvalue::deleted==live);
+		}
+
+		// setValues() from itself, array values
+		dictionary<const char *, char *>	sad;
+		sad.setManageArrayValues(true);
+		sad.setValue("a",charstring::duplicate("one"));
+		sad.setValue("b",charstring::duplicate("two"));
+		sad.setValues(&sad);
+		test("managed array, setValues(self): values kept",
+				!charstring::compare(sad.getValue("a"),"one") &&
+				!charstring::compare(sad.getValue("b"),"two") &&
+				sad.getCount()==2);
+
+		// setValues() from itself, array values that can't be copied
+		for (uint16_t i=0; i<2; i++) {
+			cvdict	selfa;
+			selfa.setTrackInsertionOrder(i==1);
+			selfa.setManageArrayValues(true);
+			countedvalue	*a=new countedvalue[2];
+			countedvalue	*b=new countedvalue[2];
+			selfa.setValue("a",a);
+			selfa.setValue("b",b);
+			before=countedvalue::deleted;
+			selfa.setValues(&selfa);
+			test((!i)?"managed array, setValues(self): "
+					"uncopyable values kept":
+				"managed array, setValues(self) "
+				"(insertion order): uncopyable values kept",
+					selfa.getValue("a")==a &&
+					selfa.getValue("b")==b &&
+					selfa.getCount()==2);
+			test((!i)?"managed array, setValues(self): "
+					"nothing freed":
+				"managed array, setValues(self) "
+				"(insertion order): nothing freed",
+					countedvalue::deleted==before);
+		}
+	}
+	test("setValue(): no leaked values",
+			countedvalue::created==countedvalue::deleted);
+	stdoutput.printf("\n");
 
 	return 0;
 }

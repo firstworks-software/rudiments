@@ -670,5 +670,29 @@ int main(int argc, char **argv) {
 		test("remove(nan): getCount",nl.getCount()==4);
 	}
 	stdoutput.printf("\n");
+
+	// 10835 container setters should free the old value when manage
+	// values is set
+	// The node can't see the tree's manage flags, so it never frees.
+	stdoutput.printf("node setValue() and the old value...\n");
+	{
+		avltree<countedvalue *>	cvst;
+		cvst.setComparator(&countedcomp);
+		cvst.setManageValues(true);
+		countedvalue	*old=new countedvalue(1);
+		cvst.insert(old);
+		uint16_t	before=countedvalue::deleted;
+		cvst.getFirst()->setValue(new countedvalue(1));
+		test("managed, node setValue(): old value not freed",
+					countedvalue::deleted==before);
+		test("managed, node setValue(): new value stored",
+					cvst.getFirst()->getValue()!=old &&
+					cvst.getFirst()->getValue()->key==1);
+		delete old;
+		cvst.clear();
+		test("managed, clear(): new value freed",
+					countedvalue::deleted==before+2);
+	}
+	stdoutput.printf("\n");
 	return 0;
 }

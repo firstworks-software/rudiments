@@ -26,8 +26,9 @@ class scalar : public scalarcollection<valuetype> {
 		 *
 		 *  The value is not copied.  If "managevalues" or
 		 *  "managearrayvalues" is true, then this instance takes
-		 *  ownership of the value, and deletes it when the value is
-		 *  cleared or this instance is deleted.
+		 *  ownership of the value, and deletes it when setValue()
+		 *  replaces it, when the value is cleared, or when this
+		 *  instance is deleted.
 		 *
 		 *  If both are true, then "managearrayvalues" overrides
 		 *  "managevalues".
@@ -103,14 +104,23 @@ class scalar : public scalarcollection<valuetype> {
 		/** Deletes this instance of the scalar class. */
 		~scalar();
 
-		/** Sets the value stored in this instance to "v". */
+		/** Sets the value stored in this instance to "v".
+		 *
+		 *  If setManageValues(true) or setManageArrayValues(true) has
+		 *  been called, the previous value is deleted first, unless it
+		 *  is the same pointer as "v". */
 		void		setValue(valuetype v);
 
 		/** Returns the value stored in this instance. Returns NULL or
 		 *  0 if no value has been stored. */
 		valuetype	getValue();
 
-		/** Returns a reference to the value stored in this instance. */
+		/** Returns a reference to the value stored in this instance.
+		 *
+		 *  Note that a value assigned through the reference doesn't
+		 *  delete the previous value, even if setManageValues(true) or
+		 *  setManageArrayValues(true) has been called.  The caller must
+		 *  delete it, if necessary. */
 		valuetype	&getReference();
 
 		/** Removes the value currently stored in this instance, such

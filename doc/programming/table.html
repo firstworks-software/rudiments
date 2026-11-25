@@ -42,7 +42,7 @@
 
 <p>The table grows automatically as values are set.  Columns can be given names using the setColumnName() method, and values can be accessed by row and column index, or by row index and column name.</p>
 
-<p>By default, the table class does not manage the data stored in it.  If you store dynamically allocated strings or objects, they will not be deleted automatically when the table is cleared.  However, if setManageValues(true) is called, then values will be deleted (using delete) when the table is cleared or destroyed.  If setManageArrayValues(true) is called, then values will be deleted using delete[] instead, which is appropriate for dynamically allocated strings and arrays.</p>
+<p>By default, the table class does not manage the data stored in it.  If you store dynamically allocated strings or objects, they will not be deleted automatically when the table is cleared.  However, if setManageValues(true) is called, then values will be deleted (using delete) when setValue() replaces them with a different value, or when the table is cleared or destroyed.  If setManageArrayValues(true) is called, then values will be deleted using delete[] instead, which is appropriate for dynamically allocated strings and arrays.</p>
 
 <p>The following example creates a table of animals with named columns, prints the table by index and by column name, and clears it.</p>
 

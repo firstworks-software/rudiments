@@ -31,7 +31,8 @@
  *
  *  So, to give the copy its own copies of the values, set the correct flag
  *  on the source before the copy.  The flag also makes the source delete its
- *  own values on remove(), clear(), and destruction.  If the source does not
+ *  own values on remove(), clear(), and destruction, and when the setValue()
+ *  of a scalar, dictionary, or table replaces them.  If the source does not
  *  own its values, then set the flag just before the copy, and set it back
  *  to false just after the copy.  Values that are not pointers are always
  *  copied. */
@@ -120,6 +121,12 @@ class collection : virtual public object {
 		 *    at that location in the collection will be deleted.
 		 *  * When clear() is called, the object stored as the value at
 		 *    each location in the collection will be deleted.
+		 *  * When the setValue() method of a scalar, dictionary, or
+		 *    table replaces a value, the object stored as the old value
+		 *    will be deleted, unless it is the same pointer as the new
+		 *    value.  The setValue() method of a list or tree node, and
+		 *    an assignment through a reference, such as one returned by
+		 *    the [] operator or getReference(), do not delete it.
 		 *  * When the = operator is called, the lvalue instance will
 		 *    attempt to create a copy of the object stored as the value
 		 *    in each location of the rvalue instance.  Note that this
@@ -138,6 +145,8 @@ class collection : virtual public object {
 		 *    at that location in the collection will not be deleted.
 		 *  * When clear() is called, the object stored as the value at
 		 *    each location in the collection will not be deleted.
+		 *  * When setValue() replaces a value, the object stored as the
+		 *    old value will not be deleted.
 		 *  * When the = operator is called, the lvalue instance will
 		 *    not attempt to create a copy of the object stored as the
 		 *    value in each location of the rvalue instance, rather it
@@ -177,6 +186,13 @@ class collection : virtual public object {
 		 *    that location in the collection will be array-deleted.
 		 *  * When clear() is called, the array stored as the value at
 		 *    each location in the collection will be array-deleted.
+		 *  * When the setValue() method of a scalar, dictionary, or
+		 *    table replaces a value, the array stored as the old value
+		 *    will be array-deleted, unless it is the same pointer as
+		 *    the new value.  The setValue() method of a list or tree
+		 *    node, and an assignment through a reference, such as one
+		 *    returned by the [] operator or getReference(), do not
+		 *    array-delete it.
 		 *  * When the = operator is called, the lvalue instance will
 		 *    attempt to create a copy of the array stored as the value
 		 *    in each location of the rvalue instance.
@@ -195,6 +211,8 @@ class collection : virtual public object {
 		 *    that location in the collection will not be array-deleted.
 		 *  * When clear() is called, the array stored as the value at
 		 *    each location in the collection will not be array-deleted.
+		 *  * When setValue() replaces a value, the array stored as the
+		 *    old value will not be array-deleted.
 		 *  * When the = operator is called, the lvalue instance will
 		 *    not attempt to create a copy of the array stored as the
 		 *    value in each location of the rvalue instance, rather it

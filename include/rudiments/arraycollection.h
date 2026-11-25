@@ -16,7 +16,12 @@ class arraycollection : public collection {
 		virtual const char	*getType();
 
 		/** Provides read/write access ot the "index"th element of the
-		 *  array. */
+		 *  array.
+		 *
+		 *  Note that a value assigned through the returned reference
+		 *  doesn't delete the previous value, even if
+		 *  setManageValues(true) or setManageArrayValues(true) has been
+		 *  called.  The caller must delete it, if necessary. */
 		virtual	valuetype	&operator[](uint64_t index)=0;
 
 		/** Writes a representation of the arraycollection to standard

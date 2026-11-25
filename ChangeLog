@@ -144,6 +144,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - collection write() and writeJson() write a float, double or long double
   value with round-trip %g text now
 - singlylinkedlist removeAll(value) returns true when no node matches now
+- scalar, table, and dictionary setValue() delete the old managed value now
 
 ### Removed
 - removed csprng's static isSupported() - it was always unconditionally

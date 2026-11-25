@@ -97,11 +97,21 @@ class staticarray : public arraycollection<valuetype> {
 		/** Deletes this instance of the staticarray class. */
 		~staticarray();
 
-		/** Sets all bytes of all elements of the staticarray to 0. */
+		/** Sets all bytes of all elements of the staticarray to 0.
+		 *
+		 *  Note that this doesn't delete the values that it overwrites,
+		 *  even if setManageValues(true) or setManageArrayValues(true)
+		 *  has been called.  The caller must delete them, if
+		 *  necessary. */
 		void	zero();
 
 		/** Sets all bytes of the first "zerocount" elements of the
-		 *  staticarray to 0. */
+		 *  staticarray to 0.
+		 *
+		 *  Note that this doesn't delete the values that it overwrites,
+		 *  even if setManageValues(true) or setManageArrayValues(true)
+		 *  has been called.  The caller must delete them, if
+		 *  necessary. */
 		void	zero(uint64_t zerocount);
 
 		/** Sets all bytes of "zerocount" elements of the staticarray,
@@ -109,15 +119,30 @@ class staticarray : public arraycollection<valuetype> {
 		 *
 		 *  "start" and "zerocount" are in elements.  The range must
 		 *  lie within the array: "start" + "zerocount" must not be
-		 *  greater than the number of elements of the array. */
+		 *  greater than the number of elements of the array.
+		 *
+		 *  Note that this doesn't delete the values that it overwrites,
+		 *  even if setManageValues(true) or setManageArrayValues(true)
+		 *  has been called.  The caller must delete them, if
+		 *  necessary. */
 		void	zero(uint64_t start, uint64_t zerocount);
 
 		/** Sets all bytes of all elements of the staticarray to
-		 *  "value". */
+		 *  "value".
+		 *
+		 *  Note that this doesn't delete the values that it overwrites,
+		 *  even if setManageValues(true) or setManageArrayValues(true)
+		 *  has been called.  The caller must delete them, if
+		 *  necessary. */
 		void	set(byte_t value);
 
 		/** Sets all bytes of the first "setcount" elements of the
-		 *  staticarray to "value". */
+		 *  staticarray to "value".
+		 *
+		 *  Note that this doesn't delete the values that it overwrites,
+		 *  even if setManageValues(true) or setManageArrayValues(true)
+		 *  has been called.  The caller must delete them, if
+		 *  necessary. */
 		void	set(byte_t value, uint64_t setcount);
 
 		/** Sets all bytes of "setcount" elements of the staticarray,
@@ -125,11 +150,21 @@ class staticarray : public arraycollection<valuetype> {
 		 *
 		 *  "start" and "setcount" are in elements.  The range must
 		 *  lie within the array: "start" + "setcount" must not be
-		 *  greater than the number of elements of the array. */
+		 *  greater than the number of elements of the array.
+		 *
+		 *  Note that this doesn't delete the values that it overwrites,
+		 *  even if setManageValues(true) or setManageArrayValues(true)
+		 *  has been called.  The caller must delete them, if
+		 *  necessary. */
 		void	set(byte_t value, uint64_t start, uint64_t setcount);
 
 		/** Provides read/write access to the "index"th element of the
-		 *  staticarray. */
+		 *  staticarray.
+		 *
+		 *  Note that a value assigned through the returned reference
+		 *  doesn't delete the previous value, even if
+		 *  setManageValues(true) or setManageArrayValues(true) has been
+		 *  called.  The caller must delete it, if necessary. */
 		valuetype	&operator[](uint64_t index);
 
 		/** Returns the number of elements in the array. */

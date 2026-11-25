@@ -180,7 +180,11 @@ bool table<valuetype>::getManageArrayValues() {
 template <class valuetype>
 inline
 void table<valuetype>::setValue(uint64_t row, uint64_t col, valuetype value) {
-	find(row,col)=value;
+	valuetype	&v=find(row,col);
+	if (!node_same_value(&v,&value)) {
+		node_delete_value(&v,getManageValues(),getManageArrayValues());
+	}
+	v=value;
 	if (row>=rows) {
 		rows=row+1;
 	}

@@ -86,6 +86,10 @@ scalar<valuetype>::~scalar() {
 template <class valuetype>
 inline
 void scalar<valuetype>::setValue(valuetype v) {
+	if (!node_same_value(&(this->v),&v)) {
+		node_delete_value(&(this->v),this->getManageValues(),
+						this->getManageArrayValues());
+	}
 	this->v=v;
 }
 

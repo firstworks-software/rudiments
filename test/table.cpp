@@ -29,6 +29,29 @@ bool hasValue(domnode *n, const char *value) {
 	return false;
 }
 
+// value that counts its creations and deletions
+class countedvalue {
+	public:
+		countedvalue() : value(0) {
+			created++;
+		}
+		countedvalue(int32_t value) : value(value) {
+			created++;
+		}
+		countedvalue(const countedvalue &c) : value(c.value) {
+			created++;
+		}
+		~countedvalue() {
+			deleted++;
+		}
+		int32_t		value;
+		static uint32_t	created;
+		static uint32_t	deleted;
+};
+
+uint32_t	countedvalue::created=0;
+uint32_t	countedvalue::deleted=0;
+
 char	cn[2];
 const char	*colname(uint64_t col) {
 	cn[0]='A'+(col%26);
@@ -1004,6 +1027,74 @@ int main(int argc, char **argv) {
 		}
 	}
 	signalmanager::alarm(0);
+	stdoutput.printf("\n");
+
+	// 10835 container setters should free the old value when manage
+	// values is set
+	stdoutput.printf("setValue() and the old value...\n");
+	{
+		// unmanaged
+		countedvalue	*u1=new countedvalue(1);
+		countedvalue	*u2=new countedvalue(2);
+		uint32_t	before=countedvalue::deleted;
+		{
+			table<countedvalue *>	ut;
+			ut.setValue(0,0,u1);
+			ut.setValue(0,0,u2);
+			test("unmanaged: old value not freed",
+					countedvalue::deleted==before);
+		}
+		test("unmanaged: values not freed on delete",
+					countedvalue::deleted==before);
+		delete u1;
+		delete u2;
+
+		// fresh cells, past the end of a row and in a new row
+		table<countedvalue *>	mt;
+		mt.setManageValues(true);
+		mt.setValue(0,0,new countedvalue(1));
+		before=countedvalue::deleted;
+		mt.setValue(0,3,new countedvalue(2));
+		mt.setValue(2,1,new countedvalue(3));
+		test("managed, fresh cells: nothing freed",
+					countedvalue::deleted==before);
+		test("managed, fresh cells: skipped cells zeroed",
+					!mt.getValue(0,1) &&
+					!mt.getValue(0,2) &&
+					!mt.getValue(1,(uint64_t)0) &&
+					!mt.getValue(2,(uint64_t)0));
+
+		// same pointer
+		mt.setValue(0,0,mt.getValue(0,(uint64_t)0));
+		test("managed, same pointer: nothing freed",
+					countedvalue::deleted==before);
+		test("managed, same pointer: value kept",
+					mt.getValue(0,(uint64_t)0)->value==1);
+
+		// replace
+		mt.setValue(0,0,new countedvalue(4));
+		test("managed, replace: old value freed",
+					countedvalue::deleted==before+1);
+		test("managed, replace: new value stored",
+					mt.getValue(0,(uint64_t)0)->value==4);
+		test("managed, replace: other cells kept",
+					mt.getValue(0,3)->value==2 &&
+					mt.getValue(2,1)->value==3);
+
+		// array values
+		table<countedvalue *>	mat;
+		mat.setManageArrayValues(true);
+		mat.setValue(0,0,new countedvalue[2]);
+		before=countedvalue::deleted;
+		mat.setValue(0,0,mat.getValue(0,(uint64_t)0));
+		test("managed array, same pointer: nothing freed",
+					countedvalue::deleted==before);
+		mat.setValue(0,0,new countedvalue[3]);
+		test("managed array, replace: old array freed",
+					countedvalue::deleted==before+2);
+	}
+	test("setValue(): no leaked values",
+			countedvalue::created==countedvalue::deleted);
 	stdoutput.printf("\n");
 
 	return 0;

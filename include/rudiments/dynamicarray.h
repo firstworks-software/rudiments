@@ -107,23 +107,48 @@ class dynamicarray : public arraycollection<valuetype> {
 		~dynamicarray();
 
 		/** Sets all bytes of the first "count" elements of the
-		 *  dynamicarray to 0. */
+		 *  dynamicarray to 0.
+		 *
+		 *  Note that this doesn't delete the values that it overwrites,
+		 *  even if setManageValues(true) or setManageArrayValues(true)
+		 *  has been called.  The caller must delete them, if
+		 *  necessary. */
 		void	zero(uint64_t count);
 
 		/** Sets all bytes of "count" elements of the dynamicarray,
-		 *  starting at "start", to 0. */
+		 *  starting at "start", to 0.
+		 *
+		 *  Note that this doesn't delete the values that it overwrites,
+		 *  even if setManageValues(true) or setManageArrayValues(true)
+		 *  has been called.  The caller must delete them, if
+		 *  necessary. */
 		void	zero(uint64_t start, uint64_t count);
 
 		/** Sets all bytes of the first "count" elements of the
- 		 *  dynamicarray to "value". */
+ 		 *  dynamicarray to "value".
+		 *
+		 *  Note that this doesn't delete the values that it overwrites,
+		 *  even if setManageValues(true) or setManageArrayValues(true)
+		 *  has been called.  The caller must delete them, if
+		 *  necessary. */
 		void	set(byte_t value, uint64_t count);
 
 		/** Sets all bytes of "count" elements of the dynamicarray,
-		 *  starting at "start", to "value". */
+		 *  starting at "start", to "value".
+		 *
+		 *  Note that this doesn't delete the values that it overwrites,
+		 *  even if setManageValues(true) or setManageArrayValues(true)
+		 *  has been called.  The caller must delete them, if
+		 *  necessary. */
 		void	set(byte_t value, uint64_t start, uint64_t count);
 
 		/** Provides read/write access to the "index"th element of the
-		 *  dynamicarray. */
+		 *  dynamicarray.
+		 *
+		 *  Note that a value assigned through the returned reference
+		 *  doesn't delete the previous value, even if
+		 *  setManageValues(true) or setManageArrayValues(true) has been
+		 *  called.  The caller must delete it, if necessary. */
 		valuetype	&operator[](uint64_t index);
 
 		/*  Returns the number of elements in the initial extent. */

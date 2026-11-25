@@ -42,7 +42,7 @@
 
 <p>The setValue() method sets the value and getValue() retrieves it.  The clear() method removes the value, causing getValue() to return NULL or 0.</p>
 
-<p>By default, the scalar class does not manage the data stored in it.  If you store a dynamically allocated string or object, it will not be deleted automatically when the scalar is cleared.  However, if setManageValues(true) is called, then the value will be deleted (using delete) when the scalar is cleared or destroyed.  If setManageArrayValues(true) is called, then the value will be deleted using delete[] instead, which is appropriate for dynamically allocated strings and arrays.</p>
+<p>By default, the scalar class does not manage the data stored in it.  If you store a dynamically allocated string or object, it will not be deleted automatically when the scalar is cleared.  However, if setManageValues(true) is called, then the value will be deleted (using delete) when setValue() replaces it with a different value, or when the scalar is cleared or destroyed.  If setManageArrayValues(true) is called, then the value will be deleted using delete[] instead, which is appropriate for dynamically allocated strings and arrays.</p>
 
 <p>The following example stores and updates integer and string values, and demonstrates copying a scalar.</p>
 
@@ -52,6 +52,7 @@ by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
 <pre><tt><b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/scalar.h&gt;</font>
+<b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/charstring.h&gt;</font>
 <b><font color="#000080">#include</font></b> <font color="#FF0000">&lt;rudiments/stdio.h&gt;</font>
 
 <font color="#009900">int</font> <b><font color="#000000">main</font></b><font color="#990000">(</font><font color="#009900">int</font> argc<font color="#990000">,</font> <b><font color="#0000FF">const</font></b> <font color="#009900">char</font> <font color="#990000">**</font>argv<font color="#990000">)</font> <font color="#FF0000">{</font>
@@ -76,6 +77,10 @@ http://www.gnu.org/software/src-highlite -->
 
 	s<font color="#990000">.</font><b><font color="#000000">setValue</font></b><font color="#990000">(</font><font color="#FF0000">"eagle"</font><font color="#990000">);</font>
 	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"updated value: %s</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>s<font color="#990000">.</font><b><font color="#000000">getValue</font></b><font color="#990000">());</font>
+
+	<i><font color="#9A1900">// store a string that the scalar owns</font></i>
+	<font color="#008080">scalar&lt;char *&gt;</font>	<b><font color="#000000">o</font></b><font color="#990000">(</font>charstring<font color="#990000">::</font><b><font color="#000000">duplicate</font></b><font color="#990000">(</font><font color="#FF0000">"dog"</font><font color="#990000">),</font><b><font color="#0000FF">false</font></b><font color="#990000">,</font><b><font color="#0000FF">true</font></b><font color="#990000">);</font>
+	stdoutput<font color="#990000">.</font><b><font color="#000000">printf</font></b><font color="#990000">(</font><font color="#FF0000">"managed value: %s</font><font color="#CC33CC">\n\n</font><font color="#FF0000">"</font><font color="#990000">,</font>o<font color="#990000">.</font><b><font color="#000000">getValue</font></b><font color="#990000">());</font>
 
 	<i><font color="#9A1900">// copy a scalar</font></i>
 	<font color="#008080">scalar&lt;int64_t&gt;</font>	a<font color="#990000">;</font>

@@ -138,16 +138,18 @@ class table : public tablecollection<valuetype> {
 
 		/** Indicates whether or not this instance of the table
 		 *  class should delete the values that are stored at each
-		 *  location in the table when clear() is called.
+		 *  location in the table when setValue() replaces them and
+		 *  when clear() is called.
 		 *
 		 *  Setting "manage" to true causes the instance to delete the
 		 *  values that are stored at each location in the table
-		 *  when clear() is called and when the instance is deleted.
+		 *  when setValue() replaces them, when clear() is called, and
+		 *  when the instance is deleted.
 		 *
 		 *  Setting "manage" to false causes the instance not to delete
 		 *  the values that are stored at each location in the
-		 *  table when clear() is called or when the instance is
-		 *  deleted.
+		 *  table when setValue() replaces them, when clear() is
+		 *  called, or when the instance is deleted.
 		 *
 		 *  Defaults to "false".
 		 *
@@ -157,25 +159,26 @@ class table : public tablecollection<valuetype> {
 
 		/** Returns whether or not this instance of the table class
 		 *  is configured to delete the values that are stored at each
-		 *  location in the table when clear() is called and when the
-		 *  instance is deleted.
+		 *  location in the table when setValue() replaces them, when
+		 *  clear() is called, and when the instance is deleted.
 		 *
 		 *  Returns true if it is and false if it is not. */
 		bool	getManageValues();
 
 		/** Indicates whether or not this instance of the table
 		 *  class should array-delete the values that are stored at each
-		 *  location in the table when clear() is called.
+		 *  location in the table when setValue() replaces them and
+		 *  when clear() is called.
 		 *
 		 *  Setting "manage" to true causes the instance to
 		 *  array-delete the values that are stored at each location in
-		 *  the table when clear() is called and when the instance is
-		 *  deleted.
+		 *  the table when setValue() replaces them, when clear() is
+		 *  called, and when the instance is deleted.
 		 *
 		 *  Setting "manage" to false causes the instance not to
 		 *  array-delete the values that are stored at each location in
-		 *  the table when clear() is called or when the instance is
-		 *  deleted.
+		 *  the table when setValue() replaces them, when clear() is
+		 *  called, or when the instance is deleted.
 		 *
 		 *  Defaults to "false".
 		 *
@@ -191,18 +194,17 @@ class table : public tablecollection<valuetype> {
 
 		/** Returns whether or not this instance of the table class
 		 *  is configured to array-delete the values that are stored at
-		 *  each location in the table when clear() is called and when
-		 *  the instance is deleted.
+		 *  each location in the table when setValue() replaces them,
+		 *  when clear() is called, and when the instance is deleted.
 		 *
 		 *  Returns true if it is and false if it is not. */
 		bool	getManageArrayValues();
 
 		/** Sets the value at "row", "col" to "value".
 		 *
-		 *  Note that this doesn't delete the value that was previously
-		 *  stored at "row", "col", even if setManageValues(true) or
-		 *  setManageArrayValues(true) was called.  The caller must
-		 *  delete it, if necessary. */
+		 *  If setManageValues(true) or setManageArrayValues(true) has
+		 *  been called, the value previously stored at "row", "col" is
+		 *  deleted first, unless it is the same pointer as "value". */
 		void		setValue(uint64_t row, uint64_t col,
 							valuetype value);
 
@@ -211,7 +213,12 @@ class table : public tablecollection<valuetype> {
 		valuetype	getValue(uint64_t row,
 						uint64_t col);
 
-		/** Returns a reference to the value at "row", "col". */
+		/** Returns a reference to the value at "row", "col".
+		 *
+		 *  Note that a value assigned through the reference doesn't
+		 *  delete the previous value, even if setManageValues(true) or
+		 *  setManageArrayValues(true) has been called.  The caller must
+		 *  delete it, if necessary. */
 		valuetype	&getReference(uint64_t row,
 						uint64_t col);
 
