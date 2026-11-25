@@ -17,13 +17,13 @@ class dictionary : public dictionarycollection<keytype,valuetype> {
 		/** Creates an empty instance of the dictionary class.
 		 *  
 		 *  If "trackinsertionorder" is true then the order of key
-		 *  insertion is tracked and getKeys() and getList() below
-		 *  return a list of key-value pairs in the order that they
+		 *  insertion is tracked and getKeys() below returns
+		 *  a list of keys in the order that they
 		 *  were inserted.
 		 *  
 		 *  If "trackinsertionorder" is false then the order of key
-		 *  insertion is not tracked and getList() and getList()
-		 *  below return alist of key-value pairs in ascending order. */
+		 *  insertion is not tracked and getKeys() below returns
+		 *  a list of keys in ascending order. */
 		dictionary(bool trackinsertionorder);
 
 		/** Creates an instance of the dictionary class

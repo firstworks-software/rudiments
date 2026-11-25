@@ -56,6 +56,25 @@ dictionary<keytype,valuetype>::dictionary() :
 
 template <class keytype, class valuetype>
 inline
+dictionary<keytype,valuetype>::dictionary(bool trackinsertionorder) :
+	dictionarycollection<keytype,valuetype>(),
+	trackinsertionorder(trackinsertionorder),
+	keylist(NULL) {
+
+	comp=new dictionarypaircomparator<keytype,valuetype>();
+	tree.setComparator(comp);
+
+#ifdef DARWIN_GCC_2952_HACKS
+	return;
+
+	// see note above
+	keylist=getKeys();
+	setValues(NULL);
+#endif
+}
+
+template <class keytype, class valuetype>
+inline
 dictionary<keytype,valuetype>::dictionary(
 			dictionary<keytype,valuetype> &a) :
 			dictionarycollection<keytype,valuetype>(a),

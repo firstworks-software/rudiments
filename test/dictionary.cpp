@@ -727,6 +727,32 @@ int main(int argc, const char **argv) {
 	testNanKey<float>("float");
 	testNanKey<double>("double");
 
+	// constructor with insertion order argument
+	for (uint16_t i=0; i<2; i++) {
+
+		stdoutput.printf("dictionary(bool)%s:\n",
+					(i)?" (insertion order)":"");
+
+		dictionary<const char *, const char *>	tod(i==1);
+		test("getTrackInsertionOrder()",
+			tod.getTrackInsertionOrder()==(i==1));
+		tod.setValue("b","2");
+		tod.setValue("a","1");
+		tod.setValue("c","3");
+		listnode<const char *>	*node=tod.getKeys()->getFirst();
+		const char	*first=(i)?"b":"a";
+		const char	*second=(i)?"a":"b";
+		test("key 1",node &&
+			!charstring::compare(node->getValue(),first));
+		node=(node)?node->getNext():NULL;
+		test("key 2",node &&
+			!charstring::compare(node->getValue(),second));
+		node=(node)?node->getNext():NULL;
+		test("key 3",node &&
+			!charstring::compare(node->getValue(),"c"));
+		stdoutput.printf("\n");
+	}
+
 	// 10835 container setters should free the old value when manage
 	// values is set
 	stdoutput.printf("setValue() and the old value:\n");
