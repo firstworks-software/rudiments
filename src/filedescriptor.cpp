@@ -402,6 +402,14 @@ bool filedescriptor::setStreamWriteBufferSize(size_t size) {
 			(int)process::getProcessId(),(int)pvt->_fd,(int)size);
 	#endif
 
+	// flush the write buffer
+	if (pvt->_fd!=-1 && pvt->_writebuffer && !flushWriteBuffer(-1,-1)) {
+		#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
+		debugPrintf(",error: flush failed)\n");
+		#endif
+		return false;
+	}
+
 	// invalidate stuff that's only used
 	// when buffering storage
 	pvt->_offset=0;
@@ -511,6 +519,14 @@ bool filedescriptor::unsetStreamWriteBuffer() {
 	debugPrintf("%d: unsetStreamWriteBuffer(%d,",
 			(int)process::getProcessId(),(int)pvt->_fd);
 	#endif
+
+	// flush the write buffer
+	if (pvt->_fd!=-1 && pvt->_writebuffer && !flushWriteBuffer(-1,-1)) {
+		#if defined(DEBUG_WRITE) && defined(DEBUG_BUFFERING)
+		debugPrintf("flush failed)\n");
+		#endif
+		return false;
+	}
 
 	// invalidate stuff that's only used
 	// when buffering storage

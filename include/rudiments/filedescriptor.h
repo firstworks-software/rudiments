@@ -1082,12 +1082,17 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *
 		 *  This method sets the write buffer size to "size" bytes.
 		 *  A size of 0 (or less) means not to buffer writes at all.
-		 *  When the file descriptor is storage, such as a file, then a
-		 *  size of 0 or a change of size first writes any data still in
-		 *  the write buffer.  If that write fails, then the buffer and
-		 *  its size stay as they were and false is returned, so the
-		 *  call can be retried.  The buffered data of a stream, such as
-		 *  a socket, is not written.
+		 *  A size of 0 or a change of size first writes any data still
+		 *  in the write buffer, for storage, such as a file, and for a
+		 *  stream, such as a socket.  If that write fails, then
+		 *  buffering stays on, the buffer and its size stay as they
+		 *  were, and false is returned, so the call can be retried.
+		 *  For a stream, only the bytes that were not sent stay in the
+		 *  buffer, so a retry sends only them.
+		 *
+		 *  For a stream, that write has no timeout, so it can block if
+		 *  the peer stops reading.  To limit the wait, call
+		 *  flushWriteBuffer() with a timeout first.
 		 *
 		 *
 		 *  Traditional buffering is enabled by default, but mmap

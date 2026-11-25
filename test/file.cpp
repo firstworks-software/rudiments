@@ -3834,6 +3834,131 @@ static void unsetBufferingFlushFailedTests() {
 }
 #endif
 
+// a failed or short send on a stream, then a retry of the resize
+static void unsetBufferingStreamFailedTest(const char *label, ssize_t mode,
+							size_t newsize) {
+	stringbuffer	title;
+	filedescriptor	readfd;
+	failfd		writefd(0);
+	title.append(label);
+	size_t	titlelength=title.getStringLength();
+	title.append(", create pipe");
+	test(title.getString(),filedescriptor::createPipe(&readfd,&writefd));
+	title.truncate(titlelength);
+	title.append(", set buffer size");
+	test(title.getString(),writefd.setWriteBufferSize(64));
+	title.truncate(titlelength);
+	title.append(", write");
+	test(title.getString(),writefd.write("abc")==3);
+
+	// fail the send
+	writefd.setMode(mode);
+	bool	result=writefd.setWriteBufferSize(newsize);
+	writefd.setMode(0);
+	title.truncate(titlelength);
+	title.append(", resize fails");
+	test(title.getString(),!result);
+	title.truncate(titlelength);
+	title.append(", buffer size kept");
+	test(title.getString(),writefd.getWriteBufferSize()==64);
+
+	// retry
+	title.truncate(titlelength);
+	title.append(", retry resize");
+	test(title.getString(),writefd.setWriteBufferSize(newsize));
+	title.truncate(titlelength);
+	title.append(", buffer size");
+	test(title.getString(),writefd.getWriteBufferSize()==newsize);
+	title.truncate(titlelength);
+	title.append(", pipe holds abc");
+	test(title.getString(),pipeHolds(&readfd,&writefd,"abc"));
+}
+
+// stream write buffer turned off or resized with data in it
+static void unsetBufferingStreamFlushTests() {
+
+	signalmanager::alarm(60);
+
+	// resize or turn off, then write more
+	{
+		filedescriptor	readfd;
+		filedescriptor	writefd;
+		test("stream off, create pipe",
+			filedescriptor::createPipe(&readfd,&writefd));
+		test("stream off, set buffer size",
+					writefd.setWriteBufferSize(64));
+		test("stream off, write",writefd.write("abc")==3);
+		test("stream off, turn off",writefd.setWriteBufferSize(0));
+		test("stream off, write d",writefd.write("d")==1);
+		test("stream off, pipe holds abcd",
+				pipeHolds(&readfd,&writefd,"abcd"));
+	}
+	{
+		filedescriptor	readfd;
+		filedescriptor	writefd;
+		test("stream smaller, create pipe",
+			filedescriptor::createPipe(&readfd,&writefd));
+		test("stream smaller, set buffer size",
+					writefd.setWriteBufferSize(64));
+		test("stream smaller, write",writefd.write("abc")==3);
+		test("stream smaller, resize",writefd.setWriteBufferSize(32));
+		test("stream smaller, write d",writefd.write("d")==1);
+		test("stream smaller, flush",writefd.flushWriteBuffer(-1,-1));
+		test("stream smaller, pipe holds abcd",
+				pipeHolds(&readfd,&writefd,"abcd"));
+	}
+	{
+		filedescriptor	readfd;
+		filedescriptor	writefd;
+		test("stream same, create pipe",
+			filedescriptor::createPipe(&readfd,&writefd));
+		test("stream same, set buffer size",
+					writefd.setWriteBufferSize(64));
+		test("stream same, write",writefd.write("abc")==3);
+		test("stream same, resize",writefd.setWriteBufferSize(64));
+		test("stream same, write d",writefd.write("d")==1);
+		test("stream same, flush",writefd.flushWriteBuffer(-1,-1));
+		test("stream same, pipe holds abcd",
+				pipeHolds(&readfd,&writefd,"abcd"));
+	}
+
+	// failed write, then retry
+	unsetBufferingStreamFailedTest("stream failed off",-1,0);
+	unsetBufferingStreamFailedTest("stream failed smaller",-1,32);
+
+	// short write, then retry
+	unsetBufferingStreamFailedTest("stream short off",1,0);
+	unsetBufferingStreamFailedTest("stream short smaller",1,32);
+
+	// full nonblocking pipe
+	#ifndef _WIN32
+	{
+		filedescriptor	readfd;
+		filedescriptor	writefd;
+		test("stream full, create pipe",
+			filedescriptor::createPipe(&readfd,&writefd));
+		test("stream full, fill pipe",fillPipe(&writefd));
+		test("stream full, set buffer size",
+					writefd.setWriteBufferSize(64));
+		test("stream full, write",writefd.write("abc")==3);
+
+		// fillPipe leaves the pipe blocking
+		test("stream full, nonblocking",
+					writefd.setNonBlockingMode(true));
+		test("stream full, turn off fails",
+					!writefd.setWriteBufferSize(0));
+		test("stream full, buffer size kept",
+					writefd.getWriteBufferSize()==64);
+		test("stream full, resize fails",
+					!writefd.setWriteBufferSize(32));
+		test("stream full, buffer size kept again",
+					writefd.getWriteBufferSize()==64);
+	}
+	#endif
+
+	signalmanager::alarm(0);
+}
+
 // the bytes that the close tests write
 static void closeFlushData(char *data, size_t length) {
 	for (size_t i=0; i<length; i++) {
@@ -4724,6 +4849,7 @@ int main(int argc, const char **argv) {
 		#else
 		stdoutput.printf("lseek() can not be replaced\n");
 		#endif
+		unsetBufferingStreamFlushTests();
 
 		stdoutput.printf("\nclose and delete with data in the write buffer\n");
 		closeFlushTests();
