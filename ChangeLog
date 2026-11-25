@@ -383,8 +383,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   write buffer
 - fixed memorymap detach() and the destructor unmapping with no map
   attached
-- fixed filedescriptor write after close() with a mapped block and a
-  new open() using the dropped map
+- fixed filedescriptor write after close() and a new open() using the
+  buffer of the closed file
 - fixed filedescriptor buffered seek to a position before the start of a
   file
 - fixed filedescriptor write that saved the old block's bytes after a

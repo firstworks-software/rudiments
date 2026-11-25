@@ -3839,6 +3839,71 @@ static void mmapCloseReopenTests() {
 	signalmanager::alarm(0);
 }
 
+// buffer a block of the first file without a map, close it, and open the
+// second file
+static void bufferCloseReopenOpen(file *fl, const char *adata) {
+
+	test("open a",fl->open(mmapfile,O_RDWR));
+	fl->setMmapBufferingEnabled(false);
+	test("set read buffer size",fl->setReadBufferSize(8192));
+	char	buf[100];
+	test("read 100",fl->read(buf,sizeof(buf))==(ssize_t)sizeof(buf));
+	test("read data",!bytestring::compare(buf,adata,sizeof(buf)));
+	test("block is not mapped",!fl->isCurrentBlockMmapBuffered());
+	test("close a, not mapped",fl->close());
+	test("open b",fl->open(mmapfile2,O_RDWR));
+}
+
+// write after a close without a map and a new open, for #11204
+// filedescriptor - with memory map buffering off, a write after close() and a
+// new open() can save bytes of the old file into the new file
+static void bufferCloseReopenTests() {
+
+	signalmanager::alarm(60);
+
+	char	adata[24576];
+	char	bdata[24576];
+	char	expected[24576];
+	char	wdata[10];
+	for (uint16_t i=0; i<sizeof(wdata); i++) {
+		wdata[i]='0'+i%10;
+	}
+
+	// write at 0, seek forward in the block, and write again
+	stdoutput.printf("write at 0, then after seek\n");
+	mmapCloseReopenCreate(adata,bdata,sizeof(bdata));
+	file	*fl=new file();
+	bufferCloseReopenOpen(fl,adata);
+	test("write 10",fl->write(wdata,sizeof(wdata))==(ssize_t)sizeof(wdata));
+	test("seek",fl->setPositionRelativeToBeginning(50)==50);
+	test("write 10",fl->write(wdata,sizeof(wdata))==(ssize_t)sizeof(wdata));
+	test("close b",fl->close());
+	bytestring::copy(expected,bdata,sizeof(expected));
+	bytestring::copy(expected,wdata,sizeof(wdata));
+	bytestring::copy(expected+50,wdata,sizeof(wdata));
+	mmapCloseReopenVerify(expected,sizeof(expected));
+	delete fl;
+
+	// seek forward in the block before the first write
+	stdoutput.printf("\nwrite after seek\n");
+	mmapCloseReopenCreate(adata,bdata,sizeof(bdata));
+	fl=new file();
+	bufferCloseReopenOpen(fl,adata);
+	test("seek",fl->setPositionRelativeToBeginning(50)==50);
+	test("write 10",fl->write(wdata,sizeof(wdata))==(ssize_t)sizeof(wdata));
+	test("close b",fl->close());
+	bytestring::copy(expected,bdata,sizeof(expected));
+	bytestring::copy(expected+50,wdata,sizeof(wdata));
+	mmapCloseReopenVerify(expected,sizeof(expected));
+	delete fl;
+
+	file::remove(mmapfile);
+	file::remove(mmapfile2);
+	stdoutput.printf("\n");
+
+	signalmanager::alarm(0);
+}
+
 int main(int argc, const char **argv) {
 
 	char	*osname=sys::getOperatingSystemName();
@@ -4234,6 +4299,9 @@ int main(int argc, const char **argv) {
 
 		stdoutput.printf("\nmemory map close and reopen\n");
 		mmapCloseReopenTests();
+
+		stdoutput.printf("\nbuffer close and reopen\n");
+		bufferCloseReopenTests();
 
 		#ifdef FILETEST_LSEEK_HOOK
 		stdoutput.printf("\nmemory map failed seek after a failed map\n");

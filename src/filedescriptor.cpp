@@ -1658,28 +1658,20 @@ bool filedescriptor::close() {
 	}
 
 	// empty the write buffer...
-	if (pvt->_writebuffermap) {
+	if (pvt->_isstream) {
 
-		// if we've been mmapping...
+		// preserve a stream buffer so it can be reused if we open
+		// another file, but mark it empty
+		if (pvt->_writebuffer) {
+			pvt->_writebufferhead=pvt->_writebuffer;
+			pvt->_writebuffertail=pvt->_writebuffer;
+			pvt->_writebufferreadavail=0;
+		}
 
-		// don't preserve the buffer, we'll let realignWriteBuffer()
-		// figure out what to do the next time it's called
-		delete pvt->_writebuffermap;
-		pvt->_writebuffermap=NULL;
-		delete[] pvt->_writebufferunaligned;
-		pvt->_writebufferunaligned=NULL;
-		invalidateWriteBuffer();
+	} else {
 
-	} else if (pvt->_writebuffer) {
-
-		// if we haven't been mmapping...
-
-		// preserve the buffer so it can be reused if we open another
-		// file, but mark it empty by setting the head and tail to the
-		// beginning
-		pvt->_writebufferhead=pvt->_writebuffer;
-		pvt->_writebuffertail=pvt->_writebuffer;
-		pvt->_writebufferreadavail=0;
+		// drop a storage buffer, it holds bytes of the closed file
+		dropWriteBuffer();
 	}
 
 	// mark the write buffer not dirty
