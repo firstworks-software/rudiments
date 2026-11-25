@@ -3959,6 +3959,129 @@ static void unsetBufferingStreamFlushTests() {
 	signalmanager::alarm(0);
 }
 
+// read "length" bytes, looping over short reads, and compare them
+static bool readExact(filedescriptor *fd, const char *expected,
+							size_t length) {
+	char	buf[64];
+	size_t	total=0;
+	while (total<length) {
+		ssize_t	result=fd->read(buf+total,length-total);
+		if (result<=0) {
+			return false;
+		}
+		total+=result;
+	}
+	return !bytestring::compare(buf,expected,length);
+}
+
+// a pipe with "abcdef" written and "ab" read through a read buffer, so
+// that "cdef" is unread in the buffer
+static void readBufferStreamUnreadSetup(const char *label,
+						filedescriptor *readfd,
+						filedescriptor *writefd) {
+	stringbuffer	title;
+	title.append(label);
+	size_t	titlelength=title.getStringLength();
+	title.append(", create pipe");
+	test(title.getString(),filedescriptor::createPipe(readfd,writefd));
+	title.truncate(titlelength);
+	title.append(", write unbuffered");
+	test(title.getString(),writefd->setWriteBufferSize(0));
+	title.truncate(titlelength);
+	title.append(", set read buffer size");
+	test(title.getString(),readfd->setReadBufferSize(64));
+	title.truncate(titlelength);
+	title.append(", write");
+	test(title.getString(),writefd->write("abcdef")==6);
+	title.truncate(titlelength);
+	title.append(", read ab");
+	test(title.getString(),readExact(readfd,"ab",2));
+}
+
+// resize the read buffer with "cdef" unread, then read it
+static void readBufferStreamUnreadResizeTest(const char *label,
+						size_t newsize,
+						bool expectedresult,
+						size_t expectedsize) {
+	stringbuffer	title;
+	filedescriptor	readfd;
+	filedescriptor	writefd;
+	readBufferStreamUnreadSetup(label,&readfd,&writefd);
+	title.append(label);
+	size_t	titlelength=title.getStringLength();
+
+	// store results in order
+	bool	result=readfd.setReadBufferSize(newsize);
+	size_t	size=readfd.getReadBufferSize();
+	title.append(", resize result");
+	test(title.getString(),result==expectedresult);
+	title.truncate(titlelength);
+	title.append(", read buffer size");
+	test(title.getString(),size==expectedsize);
+	title.truncate(titlelength);
+	title.append(", read cdef");
+	test(title.getString(),readExact(&readfd,"cdef",4));
+}
+
+// stream read buffer turned off or resized with unread bytes in it
+static void readBufferStreamUnreadTests() {
+
+	signalmanager::alarm(60);
+
+	// turn off or shrink below the unread bytes, refused
+	readBufferStreamUnreadResizeTest("stream read off",0,false,64);
+	readBufferStreamUnreadResizeTest("stream read too small",2,false,64);
+
+	// sizes that hold the unread bytes
+	readBufferStreamUnreadResizeTest("stream read smaller",32,true,32);
+	readBufferStreamUnreadResizeTest("stream read exact",4,true,4);
+	readBufferStreamUnreadResizeTest("stream read larger",128,true,128);
+	readBufferStreamUnreadResizeTest("stream read same",64,true,64);
+
+	// turn off after the unread bytes are read, then read unbuffered
+	{
+		filedescriptor	readfd;
+		filedescriptor	writefd;
+		readBufferStreamUnreadSetup("stream read drained",
+							&readfd,&writefd);
+		test("stream read drained, read cdef",
+					readExact(&readfd,"cdef",4));
+		bool	result=readfd.setReadBufferSize(0);
+		size_t	size=readfd.getReadBufferSize();
+		test("stream read drained, turn off",result);
+		test("stream read drained, read buffer size",size==0);
+		test("stream read drained, write xy",
+					writefd.write("xy")==2);
+		test("stream read drained, read xy",
+					readExact(&readfd,"xy",2));
+	}
+
+	// no unread bytes at all
+	{
+		filedescriptor	readfd;
+		filedescriptor	writefd;
+		test("stream read empty, create pipe",
+			filedescriptor::createPipe(&readfd,&writefd));
+		test("stream read empty, write unbuffered",
+					writefd.setWriteBufferSize(0));
+		test("stream read empty, set read buffer size",
+					readfd.setReadBufferSize(64));
+		bool	result=readfd.setReadBufferSize(32);
+		size_t	size=readfd.getReadBufferSize();
+		test("stream read empty, resize",result);
+		test("stream read empty, read buffer size",size==32);
+		result=readfd.setReadBufferSize(0);
+		size=readfd.getReadBufferSize();
+		test("stream read empty, turn off",result);
+		test("stream read empty, read buffer size off",size==0);
+		test("stream read empty, write xy",writefd.write("xy")==2);
+		test("stream read empty, read xy",
+					readExact(&readfd,"xy",2));
+	}
+
+	signalmanager::alarm(0);
+}
+
 // the bytes that the close tests write
 static void closeFlushData(char *data, size_t length) {
 	for (size_t i=0; i<length; i++) {
@@ -4850,6 +4973,9 @@ int main(int argc, const char **argv) {
 		stdoutput.printf("lseek() can not be replaced\n");
 		#endif
 		unsetBufferingStreamFlushTests();
+
+		stdoutput.printf("\nturn read buffering off or resize it with unread bytes\n");
+		readBufferStreamUnreadTests();
 
 		stdoutput.printf("\nclose and delete with data in the write buffer\n");
 		closeFlushTests();

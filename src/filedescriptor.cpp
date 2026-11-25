@@ -673,13 +673,31 @@ bool filedescriptor::setStreamReadBufferSize(size_t size) {
 			(int)process::getProcessId(),(int)pvt->_fd,(int)size);
 	#endif
 
-	// clean up and create a new buffer
+	// count bytes read into the buffer but not yet returned
+	size_t	unread=(pvt->_readbuffer)?
+			(size_t)(pvt->_readbuffertail-pvt->_readbufferhead):0;
+
+	// refuse a size that can't hold them
+	if (unread>size) {
+		#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
+		debugPrintf(",error: %d unread bytes)\n",(int)unread);
+		#endif
+		return false;
+	}
+
+	// create a new buffer and keep the unread bytes
+	byte_t	*newbuffer=new byte_t[size];
+	if (unread) {
+		bytestring::copy(newbuffer,pvt->_readbufferhead,unread);
+	}
+
+	// clean up the old buffer
 	delete[] pvt->_readbuffer;
-	pvt->_readbuffer=new byte_t[size];
+	pvt->_readbuffer=newbuffer;
 
 	// update the read buffer pointers
 	pvt->_readbufferhead=pvt->_readbuffer;
-	pvt->_readbuffertail=pvt->_readbuffer;
+	pvt->_readbuffertail=pvt->_readbuffer+unread;
 	pvt->_readbufferend=pvt->_readbuffer+size;
 
 	// set the read method to use
@@ -715,6 +733,15 @@ bool filedescriptor::unsetStreamReadBuffer() {
 	debugPrintf("%d: unsetStreamReadBufferSize(%d,",
 			(int)process::getProcessId(),(int)pvt->_fd);
 	#endif
+
+	// refuse if bytes read into the buffer are not yet returned
+	if (pvt->_readbuffer && pvt->_readbuffertail>pvt->_readbufferhead) {
+		#if defined(DEBUG_READ) && defined(DEBUG_BUFFERING)
+		debugPrintf("error: %d unread bytes)\n",
+			(int)(pvt->_readbuffertail-pvt->_readbufferhead));
+		#endif
+		return false;
+	}
 
 	// clean up but don't create a new read buffer
 	delete[] pvt->_readbuffer;

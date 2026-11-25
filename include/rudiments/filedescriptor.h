@@ -1206,6 +1206,14 @@ class RUDIMENTS_DLLSPEC filedescriptor : public input, public output {
 		 *  If that write fails, then the buffer and its size stay as
 		 *  they were and false is returned, so the call can be retried.
 		 *
+		 *  When the file descriptor is a stream, such as a pipe or a
+		 *  socket, a change of size keeps the bytes that were read
+		 *  into the buffer but not yet returned by a read.  A size of
+		 *  0, or a size smaller than the number of those bytes,
+		 *  returns false.  Buffering stays on, and the buffer and its
+		 *  size stay as they were.  To retry, read() the bytes out
+		 *  first.
+		 *
 		 *
 		 *  Traditional buffering is enabled by default, but mmap
 		 *  buffering can be enabled by calling:

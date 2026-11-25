@@ -393,6 +393,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   no block was loaded
 - fixed filedescriptor buffered read() and write() after file::truncate()
 - fixed file::truncate(size) on Visual Studio 5 and 6 builds
+- fixed filedescriptor read buffer data loss at a read buffer size change
 
 ### Security
 - fixed buffer overflow when unix socket file name is too long
