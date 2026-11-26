@@ -115,14 +115,56 @@
 extern "C" int fsync(int);
 #endif
 
+// without a prototype, the large file macro cannot redirect ftruncate(), so
+// it takes the platform's native offset, which is long
 #ifdef RUDIMENTS_HAVE_UNDEFINED_FTRUNCATE
-extern "C" int ftruncate(int,int);
+typedef long ftruncatesize_t;
+extern "C" int ftruncate(int,ftruncatesize_t);
+#else
+typedef off_t ftruncatesize_t;
+#endif
+
+// A system call that takes an off_t or a long cuts an off64_t to fit it, which
+// moves a position or a size, unless the value is refused here.
+template <class type>
+static bool offsetFits(off64_t value) {
+	if ((off64_t)(type)value==value) {
+		return true;
+	}
+	#ifdef EOVERFLOW
+		error::setErrorNumber(EOVERFLOW);
+	#else
+		error::setErrorNumber(EINVAL);
+	#endif
+	return false;
+}
+
+// stat with a 64-bit size, where the platform has one
+#if defined(RUDIMENTS_HAVE__STATI64) && defined(RUDIMENTS_HAVE__FSTATI64)
+	typedef struct _stati64	filestat;
+	#define RUDIMENTS_FILE_STAT	_stati64
+	#define RUDIMENTS_FILE_FSTAT	_fstati64
+#else
+	typedef struct stat	filestat;
+	#define RUDIMENTS_FILE_STAT	stat
+	#define RUDIMENTS_FILE_FSTAT	fstat
+#endif
+
+#ifdef RUDIMENTS_HAVE_LOCKFILEEX
+// A length of 0 means to the end of the file, however large the file is.
+// The range may not wrap past 2^64-1, so take the length from start.
+static LONGLONG lockLength(LONGLONG start, off64_t len) {
+	if (len) {
+		return len;
+	}
+	return (LONGLONG)(~(ULONGLONG)0-(ULONGLONG)start);
+}
 #endif
 
 class fileprivate {
 	friend class file;
 	private:
-		struct	stat	_st;
+		filestat	_st;
 		#if defined(RUDIMENTS_HAVE_GETFILETYPE)
 			DWORD		_filetype;
 		#endif
@@ -696,7 +738,7 @@ bool file::checkLockRemainderFromEnd(int16_t type, off64_t start,
 				conftype,confwhence,confstart,conflen);
 }
 
-bool file::adviseSequentialAccess(off64_t start, size_t len) {
+bool file::adviseSequentialAccess(off64_t start, off64_t len) {
 	#if defined(RUDIMENTS_HAVE_POSIX_FADVISE) && \
 			defined(POSIX_FADV_SEQUENTIAL)
 		return posixFadvise(start,len,POSIX_FADV_SEQUENTIAL);
@@ -705,7 +747,7 @@ bool file::adviseSequentialAccess(off64_t start, size_t len) {
 	#endif
 }
 
-bool file::adviseRandomAccess(off64_t start, size_t len) {
+bool file::adviseRandomAccess(off64_t start, off64_t len) {
 	#if defined(RUDIMENTS_HAVE_POSIX_FADVISE) && \
 			defined(POSIX_FADV_RANDOM)
 		return posixFadvise(start,len,POSIX_FADV_RANDOM);
@@ -714,7 +756,7 @@ bool file::adviseRandomAccess(off64_t start, size_t len) {
 	#endif
 }
 
-bool file::adviseOnlyOnce(off64_t start, size_t len) {
+bool file::adviseOnlyOnce(off64_t start, off64_t len) {
 	#if defined(RUDIMENTS_HAVE_POSIX_FADVISE) && \
 			defined(POSIX_FADV_NOREUSE)
 		return posixFadvise(start,len,POSIX_FADV_NOREUSE);
@@ -723,7 +765,7 @@ bool file::adviseOnlyOnce(off64_t start, size_t len) {
 	#endif
 }
 
-bool file::adviseWillNeed(off64_t start, size_t len) {
+bool file::adviseWillNeed(off64_t start, off64_t len) {
 	#if defined(RUDIMENTS_HAVE_POSIX_FADVISE) && \
 			defined(POSIX_FADV_WILLNEED)
 		return posixFadvise(start,len,POSIX_FADV_WILLNEED);
@@ -732,7 +774,7 @@ bool file::adviseWillNeed(off64_t start, size_t len) {
 	#endif
 }
 
-bool file::adviseWontNeed(off64_t start, size_t len) {
+bool file::adviseWontNeed(off64_t start, off64_t len) {
 	#if defined(RUDIMENTS_HAVE_POSIX_FADVISE) && \
 			defined(POSIX_FADV_DONTNEED)
 		return posixFadvise(start,len,POSIX_FADV_DONTNEED);
@@ -741,7 +783,7 @@ bool file::adviseWontNeed(off64_t start, size_t len) {
 	#endif
 }
 
-bool file::adviseNormalAccess(off64_t start, size_t len) {
+bool file::adviseNormalAccess(off64_t start, off64_t len) {
 	#if defined(RUDIMENTS_HAVE_POSIX_FADVISE) && \
 			defined(POSIX_FADV_NORMAL)
 		return posixFadvise(start,len,POSIX_FADV_NORMAL);
@@ -750,8 +792,11 @@ bool file::adviseNormalAccess(off64_t start, size_t len) {
 	#endif
 }
 
-bool file::reserve(off64_t start, size_t len) {
+bool file::reserve(off64_t start, off64_t len) {
 	#ifdef RUDIMENTS_HAVE_POSIX_FALLOCATE
+		if (!offsetFits<off_t>(start) || !offsetFits<off_t>(len)) {
+			return false;
+		}
 		int32_t	result;
 		error::clearError();
 		do {
@@ -770,6 +815,9 @@ bool file::truncate(const char *filename) {
 
 bool file::truncate(const char *filename, off64_t size) {
 	#ifdef RUDIMENTS_HAVE_TRUNCATE
+		if (!offsetFits<off_t>(size)) {
+			return false;
+		}
 		int32_t	result;
 		do {
 			result=::truncate(filename,size);
@@ -786,6 +834,14 @@ bool file::truncate() {
 }
 
 bool file::truncate(off64_t size) {
+
+	// refuse a size that ftruncate() would cut
+	#if defined(RUDIMENTS_HAVE_FTRUNCATE) || \
+		defined(RUDIMENTS_HAVE_UNDEFINED_FTRUNCATE)
+		if (!offsetFits<ftruncatesize_t>(size)) {
+			return false;
+		}
+	#endif
 
 	// flush the buffered block
 	if (!flushWriteBuffer(-1,-1)) {
@@ -866,7 +922,7 @@ bool file::getCurrentProperties() {
 	int32_t	result;
 	error::clearError();
 	do {
-		result=fstat(fd(),&pvt->_st);
+		result=RUDIMENTS_FILE_FSTAT(fd(),&pvt->_st);
 	} while (result==-1 && error::getErrorNumber()==EINTR &&
 					!process::getShutDownFlag());
 	if (result) {
@@ -926,7 +982,7 @@ bool file::stat(const char *filename, void *st) {
 	int32_t	result;
 	error::clearError();
 	do {
-		result=::stat(filename,(struct stat *)st);
+		result=::RUDIMENTS_FILE_STAT(filename,(filestat *)st);
 	} while (result==-1 && error::getErrorNumber()==EINTR &&
 					!process::getShutDownFlag());
 	return (result!=-1);
@@ -956,7 +1012,7 @@ blksize_t file::getBlockSize() {
 	#endif
 }
 
-blkcnt_t file::getBlockCount() {
+int64_t file::getBlockCount() {
 	#ifdef RUDIMENTS_HAVE_BLKCNT_T
 		return pvt->_st.st_blocks;
 	#else
@@ -1095,6 +1151,9 @@ void file::setGetCurrentPropertiesOnOpen(bool getcurrentpropertiesonopen) {
 bool file::lock(int32_t method, int16_t type,
 			int16_t whence, off64_t start, off64_t len) {
 	#if defined(RUDIMENTS_HAVE_FCNTL)
+		if (!offsetFits<off_t>(start) || !offsetFits<off_t>(len)) {
+			return false;
+		}
 		struct flock	lck;
 		lck.l_type=type;
 		lck.l_whence=whence;
@@ -1119,7 +1178,7 @@ bool file::lock(int32_t method, int16_t type,
 		ol.Offset=lockstart.LowPart;
 		ol.OffsetHigh=lockstart.HighPart;
 		LARGE_INTEGER	locklength;
-		locklength.QuadPart=(len)?len:MAXDWORD;
+		locklength.QuadPart=lockLength(lockstart.QuadPart,len);
 		DWORD	flags=
 			((type&F_WRLCK)?LOCKFILE_EXCLUSIVE_LOCK:0)|
 			((method==F_SETLK)?LOCKFILE_FAIL_IMMEDIATELY:0);
@@ -1139,6 +1198,9 @@ bool file::checkLock(int16_t type, int16_t whence,
 			int16_t *conftype, int16_t *confwhence,
 			off64_t *confstart, off64_t *conflen) {
 	#if defined(RUDIMENTS_HAVE_FCNTL)
+		if (!offsetFits<off_t>(start) || !offsetFits<off_t>(len)) {
+			return false;
+		}
 		struct flock	lck;
 		lck.l_type=type;
 		lck.l_whence=whence;
@@ -1161,6 +1223,9 @@ bool file::checkLock(int16_t type, int16_t whence,
 
 bool file::unlock(int16_t whence, off64_t start, off64_t len) {
 	#if defined(RUDIMENTS_HAVE_FCNTL)
+		if (!offsetFits<off_t>(start) || !offsetFits<off_t>(len)) {
+			return false;
+		}
 		struct flock	lck;
 		lck.l_type=F_UNLCK;
 		lck.l_whence=whence;
@@ -1181,7 +1246,7 @@ bool file::unlock(int16_t whence, off64_t start, off64_t len) {
 			return false;
 		}
 		LARGE_INTEGER	locklength;
-		locklength.QuadPart=(len)?len:MAXDWORD;
+		locklength.QuadPart=lockLength(lockstart.QuadPart,len);
 		return UnlockFile((HANDLE)getHandleFromFileDescriptor(fd()),
 					lockstart.LowPart,
 					lockstart.HighPart,
@@ -1522,7 +1587,7 @@ bool file::syncData() {
 
 bool file::setLastAccessTime(const char *filename,
 					time_t lastaccesstime) {
-	struct stat	st;
+	filestat	st;
 	if (!stat(filename,&st)) {
 		return false;
 	}
@@ -1533,7 +1598,7 @@ bool file::setLastAccessTime(const char *filename,
 
 bool file::setLastModificationTime(const char *filename,
 					time_t lastmodtime) {
-	struct stat	st;
+	filestat	st;
 	if (!stat(filename,&st)) {
 		return false;
 	}
@@ -1949,6 +2014,9 @@ int64_t file::getMaxLinks() {
 
 bool file::posixFadvise(off64_t offset, off64_t len, int32_t advice) {
 	#ifdef RUDIMENTS_HAVE_POSIX_FADVISE
+		if (!offsetFits<off_t>(offset) || !offsetFits<off_t>(len)) {
+			return false;
+		}
 		int32_t	result;
 		error::clearError();
 		do {
@@ -2040,11 +2108,12 @@ static void getMatchingFileNames(const char *root,
 			fpn.append(root)->append(f);
 
 			// is this a directory?
-			struct	stat	st;
+			filestat	st;
 			int32_t		result;
 			error::clearError();
 			do {
-				result=::stat(fpn.getString(),&st);
+				result=::RUDIMENTS_FILE_STAT(
+							fpn.getString(),&st);
 			} while (result==-1 &&
 					error::getErrorNumber()==EINTR &&
 					!process::getShutDownFlag());

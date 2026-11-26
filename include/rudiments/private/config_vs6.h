@@ -1838,8 +1838,14 @@
 /* Some systems have _dupenv_s */
 /* #undef RUDIMENTS_HAVE__DUPENV_S */
 
+/* Some systems have _fstati64 and struct _stati64 */
+#define RUDIMENTS_HAVE__FSTATI64 1
+
 /* Some systems have _lseek */
 #define RUDIMENTS_HAVE__LSEEK 1
+
+/* Some systems have _lseeki64 */
+#define RUDIMENTS_HAVE__LSEEKI64 1
 
 /* Some systems have _memccpy */
 #define RUDIMENTS_HAVE__MEMCCPY 1
@@ -1855,6 +1861,9 @@
 
 /* Some systems have _read */
 #define RUDIMENTS_HAVE__READ 1
+
+/* Some systems have _stati64 and struct _stati64 */
+#define RUDIMENTS_HAVE__STATI64 1
 
 /* Some systems have _swab */
 #define RUDIMENTS_HAVE__SWAB 1
@@ -1919,6 +1928,9 @@
 /* Darwin */
 /* #undef _DARWIN */
 
+/* Number of bits in a file offset, on hosts where this is settable. */
+/* #undef _FILE_OFFSET_BITS */
+
 /* Haiku OS */
 /* #undef _HAIKU */
 
@@ -1930,6 +1942,9 @@
 
 /* Irix OS */
 /* #undef _IRIX */
+
+/* Define for large files, on AIX-style hosts. */
+/* #undef _LARGE_FILES */
 
 /* Minix */
 /* #undef _MINIX */

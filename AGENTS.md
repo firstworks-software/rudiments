@@ -44,9 +44,17 @@ the Apache http server API module is enabled.
 
 Common `./configure` toggles (see `configure.in`): `--enable-debug`,
 `--enable-fortify`, `--enable-profiling`, `--enable-small-code`, and
-`--disable-{ssl,gss,pcre,libcurl,libedit,libiconv,wall,werror}`. Each optional
-dependency also takes `--with-<dep>-includes` and `--with-<dep>-libs`; otherwise
-the dependency is auto-probed.
+`--disable-{ssl,gss,pcre,libcurl,libedit,libiconv,largefile,wall,werror}`. Each
+optional dependency also takes `--with-<dep>-includes` and `--with-<dep>-libs`;
+otherwise the dependency is auto-probed.
+
+On a 32-bit platform that needs it, configure turns on 64-bit file offsets.
+`configure.in` runs `AC_SYS_LARGEFILE`, reads the defines it makes back from
+`confdefs.h`, and adds them to `CPPFLAGS` as `LARGEFILECPPFLAGS`: usually
+`-D_FILE_OFFSET_BITS=64`, or `-D_LARGE_FILES=1` on AIX. The setting changes
+the size of `off_t` and of system structs, so a program that uses the library
+must compile with `rudiments-config --cflags` (or `pkg-config --cflags
+rudiments`) to get the same setting.
 
 ## Code layout
 

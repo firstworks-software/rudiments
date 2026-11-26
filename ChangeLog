@@ -147,6 +147,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   the locale character set now, not raw wide characters
 - singlylinkedlist removeAll(value) returns true when no node matches now
 - scalar, table, and dictionary setValue() delete the old managed value now
+- file reserve() and advise methods take an off64_t length now, and
+  getBlockCount() returns int64_t
+- 32-bit builds use 64-bit file offsets now where supported, an ABI change,
+  unless configured with --disable-largefile
+- file getInternalFileStatisticsStructure() returns a struct _stati64 on
+  Windows now
 
 ### Removed
 - removed csprng's static isSupported() - it was always unconditionally
@@ -400,6 +406,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - fixed filedescriptor read buffer data loss at a read buffer size change
 - fixed the dictionary(bool trackinsertionorder) constructor, declared but
   never defined
+- fixed filedescriptor buffered read() and write() past 2 GiB
+- fixed templateengine parse() of a file longer than size_t, 32-bit builds
+- fixed file, filedescriptor, and memorymap offsets cut to 32 bits, 32-bit
+  builds without large file support
+- fixed Windows file seek, size, and lock to end of file past 2 GiB
 
 ### Security
 - fixed buffer overflow when unix socket file name is too long

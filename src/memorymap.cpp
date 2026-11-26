@@ -66,6 +66,17 @@ bool memorymap::attach(int32_t fd, off64_t offset, size_t size,
 					int32_t protection, int32_t flags) {
 	#if defined(RUDIMENTS_HAVE_MMAP)
 		error::clearError();
+
+		// refuse an offset that mmap() would cut
+		if ((off64_t)(off_t)offset!=offset) {
+			#ifdef EOVERFLOW
+				error::setErrorNumber(EOVERFLOW);
+			#else
+				error::setErrorNumber(EINVAL);
+			#endif
+			return false;
+		}
+
 		do {
 			pvt->_data=mmap(NULL,size,protection,flags,fd,offset);
 		} while (pvt->_data==(void *)MAP_FAILED &&

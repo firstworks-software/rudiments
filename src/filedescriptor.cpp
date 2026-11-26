@@ -983,8 +983,9 @@ off64_t filedescriptor::setPosition(off64_t offset, int32_t whence) {
 	pvt->_seekpending=true;
 
 	#if defined(DEBUG_BUFFERING)
-	debugPrintf("%d: setPosition(%d,offset=%08x,",
-		(int)process::getProcessId(),(int)pvt->_fd,offset);
+	debugPrintf("%d: setPosition(%d,offset=%08llx,",
+		(int)process::getProcessId(),(int)pvt->_fd,
+		(unsigned long long)offset);
 	#endif
 
 	// If we have an existing pvt->_writebuffer (eg. we didn't just open the
@@ -1083,11 +1084,31 @@ off64_t filedescriptor::getPosition() {
 }
 
 off64_t filedescriptor::lseek(off64_t offset, int32_t whence) {
-	int32_t	result;
+	off64_t	result;
 	error::clearError();
-	do {
+
+	// refuse an offset that the seek call would cut
+	#if !defined(RUDIMENTS_HAVE__LSEEKI64)
 		#if defined(RUDIMENTS_HAVE__LSEEK)
-			result=_lseek(fd(),offset,whence);
+			typedef long	seekoffset_t;
+		#else
+			typedef off_t	seekoffset_t;
+		#endif
+		if ((off64_t)(seekoffset_t)offset!=offset) {
+			#ifdef EOVERFLOW
+				error::setErrorNumber(EOVERFLOW);
+			#else
+				error::setErrorNumber(EINVAL);
+			#endif
+			return -1;
+		}
+	#endif
+
+	do {
+		#if defined(RUDIMENTS_HAVE__LSEEKI64)
+			result=_lseeki64(fd(),offset,whence);
+		#elif defined(RUDIMENTS_HAVE__LSEEK)
+			result=_lseek(fd(),(long)offset,whence);
 		#elif defined(RUDIMENTS_HAVE_LSEEK)
 			result=::lseek(fd(),offset,whence);
 		#else
@@ -1138,10 +1159,10 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 	// There's a lot to figure out...
 
 	#if defined(DEBUG_BUFFERING)
-	debugPrintf("%d: realignWriteBuffer(%d,current blockoffset=%08x",
-						(int)process::getProcessId(),
-						(int)pvt->_fd,
-						pvt->_writeblockoffset);
+	debugPrintf("%d: realignWriteBuffer(%d,current blockoffset=%08llx",
+				(int)process::getProcessId(),
+				(int)pvt->_fd,
+				(unsigned long long)pvt->_writeblockoffset);
 	#endif
 
 	// the file can leave pvt->_offset
@@ -1208,8 +1229,9 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 		pvt->_offset/pvt->_writeblocksize*pvt->_writeblocksize;
 
 	#if defined(DEBUG_BUFFERING)
-	debugPrintf(",new blockoffset=%08x,blocksize=%lld",
-				pvt->_writeblockoffset,pvt->_writeblocksize);
+	debugPrintf(",new blockoffset=%08llx,blocksize=%llu",
+			(unsigned long long)pvt->_writeblockoffset,
+			(unsigned long long)pvt->_writeblocksize);
 	#endif
 
 	// If we're here, then any data that was previously buffered has been
@@ -1425,7 +1447,7 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 		// occurred then return that
 		if (result<0) {
 			#if defined(DEBUG_BUFFERING)
-			debugPrintf("...error reading: %d)\n",result);
+			debugPrintf("...error reading: %d)\n",(int)result);
 			#endif
 			// drop the buffer, so a retry realigns it to the new block
 			dropWriteBuffer();
@@ -1439,7 +1461,7 @@ ssize_t filedescriptor::realignWriteBuffer(int32_t sec, int32_t usec) {
 				error::getErrorNumber()!=EAGAIN) {
 			#if defined(DEBUG_BUFFERING)
 			debugPrintf("...error reading after %d bytes)\n",
-									result);
+							(int)result);
 			#endif
 			// drop the buffer, so a retry realigns it to the new block
 			#ifdef ETIMEDOUT
@@ -2008,7 +2030,8 @@ ssize_t filedescriptor::streamBufferedRead(byte_t *buf, size_t count,
 			if (result<0) {
 				#if defined(DEBUG_READ) && \
 					defined(DEBUG_BUFFERING)
-				debugPrintf("error reading: %d...\n",result);
+				debugPrintf("error reading: %d...\n",
+								(int)result);
 				#endif
 				return result;
 			}
@@ -2047,7 +2070,7 @@ ssize_t filedescriptor::storageBufferedRead(byte_t *buf, size_t count,
 				// etc. occurred then return that
 				#if defined(DEBUG_READ) && \
 						defined(DEBUG_BUFFERING)
-				debugPrintf("...,error: %d)\n",result);
+				debugPrintf("...,error: %d)\n",(int)result);
 				#endif
 				return result;
 			}
@@ -2437,7 +2460,7 @@ ssize_t filedescriptor::storageBufferedWrite(
 				// offset.
 				#if defined(DEBUG_WRITE) && \
 						defined(DEBUG_BUFFERING)
-				debugPrintf("...,error: %d)\n",result);
+				debugPrintf("...,error: %d)\n",(int)result);
 				#endif
 				return (byteswritten)?
 					(ssize_t)byteswritten:result;
@@ -2565,9 +2588,9 @@ bool filedescriptor::flushWriteBuffer(int32_t sec, int32_t usec) {
 	// we may be able to avoid doing this sometimes
 	if (!pvt->_isstream) {
 		#if defined(DEBUG_BUFFERING)
-		debugPrintf(",current pos=%08x,seeking to %08x",
-						lseek(0,SEEK_CUR),
-						pvt->_writeblockoffset);
+		debugPrintf(",current pos=%08llx,seeking to %08llx",
+				(unsigned long long)lseek(0,SEEK_CUR),
+				(unsigned long long)pvt->_writeblockoffset);
 		#endif
 		if (lseek(pvt->_writeblockoffset,SEEK_SET)!=
 						pvt->_writeblockoffset) {
@@ -2648,7 +2671,7 @@ ssize_t filedescriptor::unBufferedWrite(
 
 	#ifdef DEBUG_WRITE
 	debugPrintf("%d: unBufferedWrite(%d,attempting %d bytes,sec=%d,usec=%d",
-		(int)process::getProcessId(),(int)pvt->_fd,count,sec,usec);
+		(int)process::getProcessId(),(int)pvt->_fd,(int)count,sec,usec);
 	#endif
 
 	// write to the file descriptor:

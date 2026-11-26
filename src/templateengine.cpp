@@ -267,13 +267,21 @@ bool templateengine::parse(
 	file	templatefile;
 	if (templatefile.open(filename,O_RDONLY)) {
 
+		// fail if the file is too long to map or read
+		uint64_t	filelength=templatefile.getSize();
+		if ((uint64_t)(size_t)filelength!=filelength) {
+			pvt->_err.printf("parse(%s) failed: file too large\n",
+								filename);
+			templatefile.close();
+			return false;
+		}
+
 		// get the contents of the file
 		char		*filecontents;
-		uint64_t	filelength=templatefile.getSize();
 		bool		deleteflag=false;
 		memorymap	mm;
 		if (mm.attach(templatefile.getFileDescriptor(),
-					0,filelength,
+					0,(size_t)filelength,
 					PROT_READ,MAP_PRIVATE)) {
 			filecontents=(char *)mm.getData();
 		} else {
@@ -282,8 +290,13 @@ bool templateengine::parse(
 		}
 		
 		// parse the contents of the file
-		retval=parse(false,out,filecontents,
+		if (filecontents) {
+			retval=parse(false,out,filecontents,
 					filelength,blockparsers,vars);
+		} else {
+			pvt->_err.printf("parse(%s) failed: "
+					"file could not be read\n",filename);
+		}
 
 		// clean up
 		templatefile.close();

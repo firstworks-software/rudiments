@@ -487,7 +487,50 @@ AC_PROG_MAKE_SET
 AC_LANG(C++)
 echo "******************************"
 
-CPPFLAGS="-D_REENTRANT -D_THREAD_SAFE -D__EXTENSIONS__ $SLOWSYSTEM $CPPFLAGS"
+dnl Checks for large file support.
+echo
+echo "***** Large Files ************"
+dnl In autoconf 2.72 and later, AC_SYS_LARGEFILE tries each option in $CC
+dnl only, so under AC_LANG(C++) it finds none.
+rud_lfsavecc="$CC"
+AC_LANG_PUSH(C)
+AC_SYS_LARGEFILE
+AC_LANG_POP(C)
+
+dnl Where AC_SYS_LARGEFILE needs a compiler option, such as -n32 on IRIX, it
+dnl appends it to $CC only, so append the same option to $CXX.
+if ( test "$CC" != "$rud_lfsavecc" )
+then
+	rud_lfccstart=`echo "$rud_lfsavecc" | wc -c | sed "s/ //g"`
+	rud_lfccopt=`echo "$CC" | cut -c$rud_lfccstart-`
+	CXX="$CXX$rud_lfccopt"
+	AC_MSG_NOTICE(appended$rud_lfccopt to CXX for large files)
+fi
+
+dnl AC_SYS_LARGEFILE only puts its defines in config.h, and its cache
+dnl variables differ between autoconf versions, so read the defines back
+dnl from confdefs.h.  Programs that include system headers before rudiments
+dnl headers need them as flags, via rudiments-config and rudiments.pc.
+LARGEFILECPPFLAGS=""
+for rud_lfmacro in _FILE_OFFSET_BITS _LARGE_FILES _TIME_BITS __MINGW_USE_VC2005_COMPAT
+do
+	rud_lfvalue=`sed -n "s/^#define $rud_lfmacro //p" confdefs.h`
+	if ( test -n "$rud_lfvalue" )
+	then
+		LARGEFILECPPFLAGS=`echo $LARGEFILECPPFLAGS -D$rud_lfmacro=$rud_lfvalue`
+	fi
+done
+AC_MSG_CHECKING(for large file flags)
+if ( test -n "$LARGEFILECPPFLAGS" )
+then
+	AC_MSG_RESULT($LARGEFILECPPFLAGS)
+else
+	AC_MSG_RESULT(none)
+fi
+AC_SUBST(LARGEFILECPPFLAGS)
+echo "******************************"
+
+CPPFLAGS="-D_REENTRANT -D_THREAD_SAFE -D__EXTENSIONS__ $LARGEFILECPPFLAGS $SLOWSYSTEM $CPPFLAGS"
 CXXFLAGS="$SMALLCODE $CXXFLAGS"
 EXTRALIBS=""
 
@@ -3975,6 +4018,36 @@ AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
 	#include <io.h>
 #endif],
 _lseek(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE__LSEEK,1,Some systems have _lseek) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for _lseeki64)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_UNISTD_H
+	#include <unistd.h>
+#endif
+#ifdef RUDIMENTS_HAVE_IO_H
+	#include <io.h>
+#endif],
+_lseeki64(0,0,0);,AC_DEFINE(RUDIMENTS_HAVE__LSEEKI64,1,Some systems have _lseeki64) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for _stati64)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_STAT_H
+	#include <sys/stat.h>
+#endif],
+struct _stati64 st; _stati64("",&st);,AC_DEFINE(RUDIMENTS_HAVE__STATI64,1,Some systems have _stati64 and struct _stati64) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
+
+AC_MSG_CHECKING(for _fstati64)
+AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_SYS_TYPES_H
+	#include <sys/types.h>
+#endif
+#ifdef RUDIMENTS_HAVE_SYS_STAT_H
+	#include <sys/stat.h>
+#endif],
+struct _stati64 st; _fstati64(0,&st);,AC_DEFINE(RUDIMENTS_HAVE__FSTATI64,1,Some systems have _fstati64 and struct _stati64) AC_MSG_RESULT(yes), AC_MSG_RESULT(no))
 
 AC_MSG_CHECKING(for dup)
 AC_TRY_COMPILE([#ifdef RUDIMENTS_HAVE_UNISTD_H

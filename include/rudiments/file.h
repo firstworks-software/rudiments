@@ -665,7 +665,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *  On operating systems don't support this method, it
 		 *  returns true but don't actually do anything. */
 		virtual bool	adviseSequentialAccess(off64_t start,
-							size_t len);
+							off64_t len);
 
 		/** Advises the kernel that you are going to access the region
 		 *  of the currently open file begining at byte "start", for
@@ -676,7 +676,8 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *
 		 *  On operating systems don't support this method, it
 		 *  returns true but don't actually do anything. */
-		virtual bool	adviseRandomAccess(off64_t start, size_t len);
+		virtual bool	adviseRandomAccess(off64_t start,
+							off64_t len);
 
 		/** Advises the kernel that you are going to access the region
 		 *  of the currently open file begining at byte "start", for
@@ -687,7 +688,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *
 		 *  On operating systems don't support this method, it
 		 *  returns true but don't actually do anything. */
-		virtual bool	adviseOnlyOnce(off64_t start, size_t len);
+		virtual bool	adviseOnlyOnce(off64_t start, off64_t len);
 
 		/** Advises the kernel that you are going to access the region
 		 *  of the currently open file begining at byte "start", for
@@ -698,7 +699,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *
 		 *  On operating systems don't support this method, it
 		 *  returns true but don't actually do anything. */
-		virtual bool	adviseWillNeed(off64_t start, size_t len);
+		virtual bool	adviseWillNeed(off64_t start, off64_t len);
 
 		/** Advises the kernel that you are not going to access the
 		 *  region of the currently open file begining at byte "start",
@@ -709,7 +710,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *
 		 *  On operating systems don't support this method, it
 		 *  returns true but don't actually do anything. */
-		virtual bool	adviseWontNeed(off64_t start, size_t len);
+		virtual bool	adviseWontNeed(off64_t start, off64_t len);
 
 		/** Advises the kernel that you are going to access the
 		 *  region of the currently open file begining at byte "start",
@@ -720,7 +721,8 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 *
 		 *  On operating systems don't support this method, it
 		 *  returns true but don't actually do anything. */
-		virtual bool	adviseNormalAccess(off64_t start, size_t len);
+		virtual bool	adviseNormalAccess(off64_t start,
+							off64_t len);
 
 
 		/** Reserves space on the storage medium such that a
@@ -730,7 +732,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 		 * 
 		 *  Returns true if the region can be reserved and
 		 *  false otherwise. */
-		virtual bool	reserve(off64_t start, size_t len);
+		virtual bool	reserve(off64_t start, off64_t len);
 
 
 		/** On most filesystems, changes to files are often cached in
@@ -807,7 +809,7 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 
 		/** Returns the number of blocks allocated for
 		 *  the file or -1 for systems don't support this. */
-		virtual blkcnt_t	getBlockCount();
+		virtual int64_t		getBlockCount();
 
 		/** Returns 1 if the file is a socket,
 		 *  0 if it's not or -1 on error. */
@@ -890,7 +892,8 @@ class RUDIMENTS_DLLSPEC file : public filedescriptor {
 
 
 		/** Returns a pointer to the file stats structure
-		 *  used internally.  (struct stat * on unix) */
+		 *  used internally.  (struct stat * on unix, and
+		 *  struct _stati64 * on Windows where it is available) */
 		virtual void 	*getInternalFileStatisticsStructure();
 
 

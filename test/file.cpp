@@ -98,6 +98,12 @@ const char	*openfile="/tmp/testfileopen.txt";
 const char	*openfile="testfileopen.txt";
 #endif
 
+#ifndef WIN32
+const char	*largefile="/tmp/testfilelarge.txt";
+#else
+const char	*largefile="testfilelarge.txt";
+#endif
+
 // getContents on files of known and unknown size and on read errors
 static void contentsTests() {
 
@@ -2734,6 +2740,26 @@ static int	fakeblkfd=-1;
 static bool	fakeblkfail=false;
 #endif
 
+#ifdef FILETEST_LSEEK_HOOK
+// With 64-bit file offsets on a 32-bit platform, off_t is wider than long, and
+// the system headers can rename lseek(), fstat() and mmap() to lseek64(),
+// fstat64() and mmap64(), both in the library and in the hooks below.  So the
+// hooks look for the next definition of the 64-bit form first.  A platform
+// where off_t is always 64 bits may have no 64-bit form, so fall back to the
+// plain one.  With 64-bit time_t too, glibc renames fstat() to
+// __fstat64_time64() instead, since fstat64() fills in 32-bit times.
+static void *nextFileSymbol(const char *name, const char *name64) {
+	void	*sym=NULL;
+	if (sizeof(off_t)>sizeof(long)) {
+		sym=dynamiclib::getNextSymbol(name64);
+	}
+	if (!sym) {
+		sym=dynamiclib::getNextSymbol(name);
+	}
+	return sym;
+}
+#endif
+
 #ifdef FILETEST_FSTAT_HOOK
 // the file descriptor that fstat() fails on once
 static int	failstatfd=-1;
@@ -2744,7 +2770,14 @@ typedef int	(*fstatfunc_t)(int,struct stat *);
 static int realFstat(int fd, struct stat *st) {
 	static fstatfunc_t	realfstat=NULL;
 	if (!realfstat) {
-		realfstat=(fstatfunc_t)dynamiclib::getNextSymbol("fstat");
+		if (sizeof(time_t)>sizeof(long)) {
+			realfstat=(fstatfunc_t)
+				dynamiclib::getNextSymbol("__fstat64_time64");
+		}
+		if (!realfstat) {
+			realfstat=(fstatfunc_t)
+				nextFileSymbol("fstat","fstat64");
+		}
 		if (!realfstat) {
 			error::setErrorNumber(ENOSYS);
 			return -1;
@@ -2779,7 +2812,7 @@ extern "C" off_t lseek(int fd, off_t offset, int whence) {
 	#endif
 	static lseekfunc_t	reallseek=NULL;
 	if (!reallseek) {
-		reallseek=(lseekfunc_t)dynamiclib::getNextSymbol("lseek");
+		reallseek=(lseekfunc_t)nextFileSymbol("lseek","lseek64");
 		if (!reallseek) {
 			error::setErrorNumber(ENOSYS);
 			return -1;
@@ -2836,7 +2869,7 @@ extern "C" void *mmap(void *addr, size_t length, int prot,
 	}
 	static mmapfunc_t	realmmap=NULL;
 	if (!realmmap) {
-		realmmap=(mmapfunc_t)dynamiclib::getNextSymbol("mmap");
+		realmmap=(mmapfunc_t)nextFileSymbol("mmap","mmap64");
 		if (!realmmap) {
 			error::setErrorNumber(ENOSYS);
 			return MAP_FAILED;
@@ -4593,6 +4626,310 @@ static void bufferCloseReopenTests() {
 	signalmanager::alarm(0);
 }
 
+static stringbuffer	largetitle;
+
+static const char *largeTitle(const char *name, const char *check) {
+	largetitle.clear();
+	largetitle.append(name)->append(", ")->append(check);
+	return largetitle.getString();
+}
+
+// open the large file read-write, with a read or write buffer of
+// "buffersize" bytes, or none if 0
+static void largeOpen(file *fl, const char *name, bool readbuffer,
+				size_t buffersize, bool usemmap) {
+	test(largeTitle(name,"open"),fl->open(largefile,O_RDWR));
+	fl->setMmapBufferingEnabled(usemmap);
+	if (buffersize) {
+		test(largeTitle(name,"set buffer size"),
+			(readbuffer)?
+				fl->setReadBufferSize(buffersize):
+				fl->setWriteBufferSize(buffersize));
+	}
+}
+
+// check that the current block is mapped, where maps are supported
+static void largeMapped(file *fl, const char *name, bool usemmap) {
+	if (usemmap && memorymap::isSupported()) {
+		test(largeTitle(name,"block is mapped"),
+				fl->isCurrentBlockMmapBuffered());
+	}
+}
+
+// read "len" bytes at "pos" and check them against "expected"
+static void largeRead(const char *name, size_t buffersize, bool usemmap,
+			int64_t pos, const char *expected, size_t len) {
+	char	buf[100];
+	file	fl;
+	largeOpen(&fl,name,true,buffersize,usemmap);
+	test(largeTitle(name,"seek"),
+			fl.setPositionRelativeToBeginning(pos)==pos);
+	test(largeTitle(name,"read"),fl.read(buf,len)==(ssize_t)len);
+	test(largeTitle(name,"data"),!bytestring::compare(buf,expected,len));
+	test(largeTitle(name,"position"),fl.getPosition()==pos+(int64_t)len);
+	largeMapped(&fl,name,usemmap);
+	test(largeTitle(name,"close"),fl.close());
+}
+
+// write "len" bytes of "data" at "pos", then read them back
+static void largeWrite(const char *name, size_t buffersize, bool usemmap,
+			int64_t pos, const char *data, size_t len) {
+	file	fl;
+	largeOpen(&fl,name,false,buffersize,usemmap);
+	test(largeTitle(name,"seek"),
+			fl.setPositionRelativeToBeginning(pos)==pos);
+	test(largeTitle(name,"write"),fl.write(data,len)==(ssize_t)len);
+	test(largeTitle(name,"position"),fl.getPosition()==pos+(int64_t)len);
+	largeMapped(&fl,name,usemmap);
+	test(largeTitle(name,"close"),fl.close());
+	stringbuffer	readname;
+	readname.append(name)->append(", read back");
+	largeRead(readname.getString(),0,false,pos,data,len);
+}
+
+// Where off_t is smaller than 64 bits, as on a 32-bit build without large file
+// support, an offset or length past 4 GiB must fail with EOVERFLOW, rather
+// than be cut to fit.
+static void largeOffsetGuardTests() {
+
+	#ifdef _WIN32
+	stdoutput.printf("the Windows file calls take no off_t\n\n");
+	#else
+	if (sizeof(off_t)>=8) {
+		stdoutput.printf("off_t holds 64 bits\n\n");
+		return;
+	}
+
+	signalmanager::alarm(60);
+
+	#ifdef EOVERFLOW
+	int32_t	overflow=EOVERFLOW;
+	#else
+	int32_t	overflow=EINVAL;
+	#endif
+
+	// A local rather than a constant, so a build with a 32-bit off64_t
+	// compiles.
+	int64_t	past=1073741824;
+	past=past*4+4096;
+
+	file::remove(largefile);
+	file	fl;
+	test("create",fl.create(largefile,
+				permissions::parsePermString("rw-rw----")));
+
+	error::clearError();
+	test("truncate",!fl.truncate(past) &&
+				error::getErrorNumber()==overflow);
+	error::clearError();
+	test("truncate by name",!file::truncate(largefile,past) &&
+				error::getErrorNumber()==overflow);
+	test("size",fl.getCurrentProperties() && fl.getSize()==0);
+	#ifdef RUDIMENTS_HAVE_POSIX_FALLOCATE
+	error::clearError();
+	test("reserve start",!fl.reserve(past,100) &&
+				error::getErrorNumber()==overflow);
+	error::clearError();
+	test("reserve length",!fl.reserve(0,past) &&
+				error::getErrorNumber()==overflow);
+	#endif
+	#ifdef RUDIMENTS_HAVE_POSIX_FADVISE
+	error::clearError();
+	test("advise",!fl.adviseWillNeed(past,100) &&
+				error::getErrorNumber()==overflow);
+	#endif
+	#if defined(F_WRLCK)
+	error::clearError();
+	test("lock region start",!fl.lockRegion(F_WRLCK,past,100) &&
+				error::getErrorNumber()==overflow);
+	error::clearError();
+	test("lock region length",!fl.lockRegion(F_WRLCK,0,past) &&
+				error::getErrorNumber()==overflow);
+	int16_t	conftype;
+	int16_t	confwhence;
+	off64_t	confstart;
+	off64_t	conflen;
+	error::clearError();
+	test("check lock region",!fl.checkLockRegion(F_WRLCK,past,100,
+					&conftype,&confwhence,
+					&confstart,&conflen) &&
+				error::getErrorNumber()==overflow);
+	error::clearError();
+	test("unlock region",!fl.unlockRegion(past,100) &&
+				error::getErrorNumber()==overflow);
+	#endif
+	error::clearError();
+	test("seek",fl.setPositionRelativeToBeginning(past)==-1 &&
+				error::getErrorNumber()==overflow);
+	test("position",fl.getPosition()==0);
+	if (memorymap::isSupported()) {
+		memorymap	mm;
+		error::clearError();
+		test("map",!mm.attach(fl.getFileDescriptor(),past,4096,
+						PROT_READ,MAP_SHARED) &&
+				error::getErrorNumber()==overflow);
+	}
+
+	// an offset that fits still works
+	test("truncate that fits",fl.truncate(8192));
+	test("seek that fits",fl.setPositionRelativeToBeginning(4096)==4096);
+	test("close",fl.close());
+
+	file::remove(largefile);
+	stdoutput.printf("\n");
+
+	signalmanager::alarm(0);
+	#endif
+}
+
+// #11192 filedescriptor - a buffered read or write at a position past 2 GiB
+// fails, because lseek() keeps its result in 32 bits
+static void largeFileTests() {
+
+	signalmanager::alarm(60);
+
+	// Locals rather than constants, so a build with a 32-bit off64_t
+	// compiles, and fails the size check below.
+	int64_t	gib=1073741824;
+	int64_t	size=gib*3;
+	int64_t	pos=gib*2+10;
+
+	test("off64_t holds 3 GiB",sizeof(off64_t)>=8);
+	if (sizeof(off64_t)<8) {
+		signalmanager::alarm(0);
+		return;
+	}
+
+	file::remove(largefile);
+	file	fl;
+	test("create",fl.create(largefile,
+				permissions::parsePermString("rw-rw----")));
+
+	// skip where there is no room for the sparse file probe below,
+	// using the free count since getAvailableBlocks() has no Windows form
+	int64_t		probesize=64*1024*1024;
+	filesystem	fs;
+	if (!fs.open(largefile) ||
+		fs.getFreeBlocks()*fs.getBlockSize()<probesize*3) {
+		stdoutput.printf("filesystem has too little free space\n");
+		fl.close();
+		file::remove(largefile);
+		signalmanager::alarm(0);
+		return;
+	}
+
+	// Skip where a truncate allocates the space it adds, as it does on a
+	// filesystem with no sparse files.  The block count of a sparse file
+	// does not grow when the file grows, whatever the unit of the count.
+	// Where the count is computed from the size, it grows, and the test
+	// skips.
+	test("truncate probe",fl.truncate(probesize));
+	test("get probe properties",fl.getCurrentProperties());
+	int64_t	probeblocks=fl.getBlockCount();
+	test("truncate probe again",fl.truncate(probesize*2));
+	test("get probe properties again",fl.getCurrentProperties());
+	if (fl.getBlockCount()>probeblocks) {
+		stdoutput.printf("filesystem can not hold a sparse file\n");
+		fl.close();
+		file::remove(largefile);
+		signalmanager::alarm(0);
+		return;
+	}
+
+	// grow to 3 GiB, skipped where the filesystem limits the file size
+	error::clearError();
+	bool	truncated=fl.truncate(size);
+	if (!truncated && error::getErrorNumber()==EFBIG) {
+		stdoutput.printf("filesystem can not hold a 3 GiB file\n");
+		fl.close();
+		file::remove(largefile);
+		signalmanager::alarm(0);
+		return;
+	}
+
+	// The library refuses an offset that off_t can not hold, as on a
+	// build configured with --disable-largefile.  The guard tests above
+	// check that refusal.
+	#ifdef EOVERFLOW
+	if (!truncated && error::getErrorNumber()==EOVERFLOW &&
+						sizeof(off_t)<8) {
+		stdoutput.printf("off_t can not hold 3 GiB, "
+				"large file support is off\n");
+		fl.close();
+		file::remove(largefile);
+		signalmanager::alarm(0);
+		return;
+	}
+	#endif
+	test("truncate to 3 GiB",truncated);
+	test("get properties",fl.getCurrentProperties());
+	test("size",fl.getSize()==size);
+	test("close",fl.close());
+
+	char	adata[100];
+	char	bdata[100];
+	for (uint16_t i=0; i<sizeof(adata); i++) {
+		adata[i]='a'+i%26;
+		bdata[i]='A'+i%26;
+	}
+
+	// unbuffered write, then reads past 2 GiB with each kind of buffer
+	stdoutput.printf("reads\n");
+	largeWrite("unbuffered write",0,false,pos,adata,sizeof(adata));
+	largeRead("unbuffered read",0,false,pos,adata,sizeof(adata));
+	largeRead("buffered read",8192,false,pos,adata,sizeof(adata));
+	largeRead("buffered read, mmap",8192,true,pos,adata,sizeof(adata));
+
+	// buffered writes past 2 GiB, each in a block of its own
+	stdoutput.printf("\nwrites\n");
+	largeWrite("buffered write",8192,false,
+				pos+8192*2,bdata,sizeof(bdata));
+	largeWrite("buffered write, mmap",8192,true,
+				pos+8192*4,bdata,sizeof(bdata));
+
+	// a buffered write at the end of the file, past 2 GiB
+	largeWrite("buffered write at end",8192,false,
+				size-50,bdata,sizeof(bdata));
+	file	sfl;
+	test("size after write at end",sfl.open(largefile,O_RDONLY) &&
+					sfl.getSize()==size+50);
+	sfl.close();
+
+	// lock, reserve, and truncate past 2 GiB
+	stdoutput.printf("\nlock, reserve, and truncate\n");
+	file	lfl;
+	largeOpen(&lfl,"buffered",false,8192,false);
+	#if defined(F_WRLCK)
+	test("lock region",lfl.lockRegion(F_WRLCK,pos,100));
+	int16_t	conftype;
+	int16_t	confwhence;
+	off64_t	confstart;
+	off64_t	conflen;
+	test("check lock region",lfl.checkLockRegion(F_WRLCK,pos,100,
+					&conftype,&confwhence,
+					&confstart,&conflen));
+	test("unlock region",lfl.unlockRegion(pos,100));
+	#endif
+	#ifdef RUDIMENTS_HAVE_POSIX_FALLOCATE
+	test("reserve",lfl.reserve(pos+8192*8,8192));
+	#endif
+
+	// a truncate flushes a dirty buffered block past 2 GiB first
+	test("seek",lfl.setPositionRelativeToBeginning(pos+8192*6)==
+								pos+8192*6);
+	test("write",lfl.write(bdata,sizeof(bdata))==(ssize_t)sizeof(bdata));
+	test("truncate",lfl.truncate(pos+8192*6+50));
+	test("size after truncate",lfl.getCurrentProperties() &&
+					lfl.getSize()==pos+8192*6+50);
+	test("close",lfl.close());
+	largeRead("after truncate",0,false,pos+8192*6,bdata,50);
+
+	file::remove(largefile);
+	stdoutput.printf("\n");
+
+	signalmanager::alarm(0);
+}
+
 int main(int argc, const char **argv) {
 
 	char	*osname=sys::getOperatingSystemName();
@@ -4991,6 +5328,12 @@ int main(int argc, const char **argv) {
 
 		stdoutput.printf("\nbuffer close and reopen\n");
 		bufferCloseReopenTests();
+
+		stdoutput.printf("\noffsets past 4 GiB with a 32-bit off_t\n");
+		largeOffsetGuardTests();
+
+		stdoutput.printf("\nreads and writes past 2 GiB\n");
+		largeFileTests();
 
 		#ifdef FILETEST_LSEEK_HOOK
 		stdoutput.printf("\nmemory map failed seek after a failed map\n");
