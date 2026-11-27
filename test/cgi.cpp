@@ -53,8 +53,9 @@ static bool httpModuleMain(httpserverapi *sapi) {
 	// file ouptut
 	stdoutput.printf("File Output:\n");
 	file	f;
-	f.open("../../ChangeLog",O_RDONLY);
-	resp.write(&f);
+	if (f.open("../../ChangeLog",O_RDONLY)) {
+		resp.write(&f);
+	}
 
 
 
