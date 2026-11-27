@@ -427,6 +427,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   not seed CryptGenRandom
 - fixed the file test memory map checks on Windows
 - fixed the filesystem test mount point case on Windows
+- fixed the Windows library to build sha512, aes192, aes256, singledes and tripledes
 
 ### Security
 - fixed buffer overflow when unix socket file name is too long

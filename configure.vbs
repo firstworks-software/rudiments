@@ -26,9 +26,14 @@ srcs="winsock.cpp "+_
 	"hash.cpp "+_
 	"sha1.cpp "+_
 	"sha256.cpp "+_
+	"sha512.cpp "+_
 	"md5.cpp "+_
 	"encryption.cpp "+_
 	"aes128.cpp "+_
+	"aes192.cpp "+_
+	"aes256.cpp "+_
+	"singledes.cpp "+_
+	"tripledes.cpp "+_
 	"pbkdf2.cpp "+_
 	"arc4.cpp "+_
 	"bignumber.cpp "+_
@@ -135,9 +140,14 @@ lobjs="winsock.obj "+_
 	"hash.obj "+_
 	"sha1.obj "+_
 	"sha256.obj "+_
+	"sha512.obj "+_
 	"md5.obj "+_
 	"encryption.obj "+_
 	"aes128.obj "+_
+	"aes192.obj "+_
+	"aes256.obj "+_
+	"singledes.obj "+_
+	"tripledes.obj "+_
 	"pbkdf2.obj "+_
 	"arc4.obj "+_
 	"bignumber.obj "+_
@@ -297,9 +307,14 @@ headers2="dictionary.h "+_
 	"hash.h "+_
 	"sha1.h "+_
 	"sha256.h "+_
+	"sha512.h "+_
 	"md5.h "+_
 	"encryption.h "+_
 	"aes128.h "+_
+	"aes192.h "+_
+	"aes256.h "+_
+	"singledes.h "+_
+	"tripledes.h "+_
 	"pbkdf2.h "+_
 	"arc4.h "+_
 	"bignumber.h "+_
@@ -516,10 +531,20 @@ privateheaders5="dictionary.h "+_
 	"sha1includes.h "+_
 	"sha256.h "+_
 	"sha256includes.h "+_
+	"sha512.h "+_
+	"sha512includes.h "+_
 	"md5.h "+_
 	"md5includes.h "+_
 	"aes128.h "+_
 	"aes128includes.h "+_
+	"aes192.h "+_
+	"aes192includes.h "+_
+	"aes256.h "+_
+	"aes256includes.h "+_
+	"singledes.h "+_
+	"singledesincludes.h "+_
+	"tripledes.h "+_
+	"tripledesincludes.h "+_
 	"pbkdf2.h "+_
 	"pbkdf2includes.h "+_
 	"arc4.h "+_
