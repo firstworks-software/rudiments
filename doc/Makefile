@@ -2,8 +2,6 @@ top_builddir = ..
 
 include ../config.mk
 
-.SUFFIXES: .wt .html.in .html
-
 SRCS = betterc.wt \
 	compatibility.wt \
 	datastructures.wt \
@@ -82,12 +80,6 @@ FRAGMENTS = cards.html.in \
 	tracker.html
 
 .PRECIOUS: $(INS)
-
-.wt.html.in:
-	wt -i $< -o $@
-
-.html.in.html:
-	$(SSI) $<
 
 all: $(OBJS)
 	$(CHMOD) 644 $(OBJS)

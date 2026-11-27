@@ -137,3 +137,14 @@ RUDIMENTSLIB = -L$(top_builddir)/src -lrudiments
 
 # Microsoft-specific stuff
 EXE = @EXE@
+
+# doc suffix rules, .wt to .html.in to .html
+# nmake allows only one extension on each side of an inference rule, so
+# config_windows.mk leaves these out
+.SUFFIXES: .wt .html.in .html
+
+.wt.html.in:
+	wt -i $< -o $@
+
+.html.in.html:
+	$(SSI) $<

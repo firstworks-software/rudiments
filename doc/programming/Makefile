@@ -2,8 +2,6 @@ top_builddir = ../..
 
 include ../../config.mk
 
-.SUFFIXES: .wt .html.in .html
-
 SRCS = aes128.wt \
 	arc4.wt \
 	avltree.wt \
@@ -369,12 +367,6 @@ FRAGMENTS = contentend.html \
 	tracker.html
 
 .PRECIOUS: $(INS)
-
-.wt.html.in:
-	wt -i $< -o $@
-
-.html.in.html:
-	$(SSI) $<
 
 all: $(OBJS)
 	$(CHMOD) 644 $(OBJS)
