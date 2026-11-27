@@ -129,7 +129,7 @@ clean:
 	$(RM) $(PROGS1)
 	$(RM) $(PROGS2)
 	$(RM) $(PROGS3)
-	$(RM) *.exe *.ilk *.idb *.pdb *.manifest *.lo *.o *.obj test.log testfile *.pem *.pfx *.xml *.sck *.ii *.csv *.json *.ini .prop handofffile *.cgi app1/app2/*.cgi semout semkey urlhttprequest.vg
+	$(RM) *.exe *.ilk *.idb *.pdb *.manifest *.lo *.o *.obj test.log testfile *.pem *.pfx *.xml *.sck *.ii *.csv *.json *.ini .prop handofffile *.cgi app1/app2/*.cgi$(EXE) semout semkey urlhttprequest.vg
 	$(RMTREE) .libs
 	cd certificates $(AND) $(MAKE) clean
 
@@ -438,7 +438,7 @@ multipart.cgi: multipart.cpp multipart.$(OBJ)
 
 pr.cgi: pr.cpp pr.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) pr.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
-	$(CP) -f $@ app1/app2
+	$(CP) $@$(EXE) app1/app2
 
 inidom: inidom.cpp inidom.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) inidom.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
