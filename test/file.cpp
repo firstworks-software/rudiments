@@ -5116,18 +5116,22 @@ int main(int argc, const char **argv) {
 		matches.sortQuickly();
 		listnode<char *>	*node=matches.getFirst();
 		test("getMatchingFileNames: match 1",
+			node &&
 			charstring::endsWith(node->getValue(),
 						"dynamicarray.cpp"));
-		node=node->getNext();
+		node=(node)?node->getNext():NULL;
 		test("getMatchingFileNames: match 2",
+			node &&
 			charstring::endsWith(node->getValue(),
 						"file.cpp"));
-		node=node->getNext();
+		node=(node)?node->getNext():NULL;
 		test("getMatchingFileNames: match 3",
+			node &&
 			charstring::endsWith(node->getValue(),
 						"filesystem.cpp"));
-		node=node->getNext();
+		node=(node)?node->getNext():NULL;
 		test("getMatchingFileNames: match 4",
+			node &&
 			charstring::endsWith(node->getValue(),
 						"staticarray.cpp"));
 
