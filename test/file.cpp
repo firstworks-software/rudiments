@@ -274,6 +274,7 @@ static void contentsTests() {
 	}
 	#endif
 
+	#ifndef _WIN32
 	// file larger than the limit on the size of a buffer
 	if (sizeof(size_t)>=8 && file::truncate(contentsfile,
 					(((off64_t)1<<62)-1)*2+1)) {
@@ -286,6 +287,11 @@ static void contentsTests() {
 		test("huge by name, char *",!str);
 		delete[] str;
 	}
+	#else
+	// On Windows truncate fills the file with zeros, so it can not grow
+	// this far.
+	stdoutput.printf("truncate can not grow a file this far\n");
+	#endif
 
 	file::remove(contentsfile);
 
