@@ -67,6 +67,16 @@
 	#undef RUDIMENTS_HAVE_ICONV
 #endif
 
+// true if wchar_t character "c" converts to and from UCS-2 without iconv()
+static bool directUcs2(uint32_t c) {
+	#ifdef _WIN32
+		// on windows, wchar_t's are encoded as UCS-2
+		return (c<65536);
+	#else
+		return (c<128);
+	#endif
+}
+
 class iconvertprivate {
 	friend class iconvert;
 	private:
@@ -341,11 +351,11 @@ fallback:
 		const char	*ucsnot=(sys::isBigEndian())?
 						"UCS-2LE":"UCS-2BE";
 		if (!charstring::compare(fromenc,"UCS-2",5) &&
-				!charstring::compare(fromenc,ucsnot,7)) {
+				charstring::compare(fromenc,ucsnot,7)) {
 			fromenc="WCHAR_T";
 		}
 		if (!charstring::compare(toenc,"UCS-2",5) &&
-				!charstring::compare(toenc,ucsnot,7)) {
+				charstring::compare(toenc,ucsnot,7)) {
 			toenc="WCHAR_T";
 		}
 	#endif
@@ -526,9 +536,10 @@ fallback:
 			// FIXME: the code below only works for C/POSIX,
 			// not UTF-8
 
-			// set up "from"
+			// set up "from", in host byte order
 			fromsize=sizeof(ucs2_t);
-			ucs2_t	from=*((const ucs2_t *)pvt->_frombufferptr);
+			ucs2_t	from=byteswap(fromenc,
+					*((const ucs2_t *)pvt->_frombufferptr));
 
 			// set up "to"
 			tosize=sizeof(char);
@@ -539,7 +550,7 @@ fallback:
 			if (from<128) {
 				debugPrintf("success\n");
 				if (to) {
-					*to=(char)byteswap(fromenc,from);
+					*to=(char)from;
 				}
 			} else {
 				debugPrintf("failed - invalid sequence\n");
@@ -607,9 +618,10 @@ fallback:
 				return false;
 			}
 
-			// set up "from"
+			// set up "from", in host byte order
 			fromsize=sizeof(ucs2_t);
-			ucs2_t	from=*((const ucs2_t *)pvt->_frombufferptr);
+			ucs2_t	from=byteswap(fromenc,
+					*((const ucs2_t *)pvt->_frombufferptr));
 
 			// set up "to"
 			tosize=sizeof(wchar_t);
@@ -618,14 +630,14 @@ fallback:
 			// FIXME: use mbrtoc16/mbtoc16 if available
 
 			// convert
-			// FIXME: this doesn't support chars >= 128 and doesn't
-			// work on platforms where the wchar_t format is not
-			// the same as UCS-2 (Solaris 9-)
+			// FIXME: off windows, this doesn't support chars >= 128
+			// and doesn't work on platforms where the wchar_t format
+			// is not the same as UCS-2 (Solaris 9-)
 			debugPrintf("direct conversion... ");
-			if (from<128) {
+			if (directUcs2(from)) {
 				debugPrintf("success\n");
 				if (to) {
-					*to=(wchar_t)byteswap(fromenc,from);
+					*to=(wchar_t)from;
 				}
 			} else {
 				debugPrintf("failed - invalid sequence\n");
@@ -667,11 +679,11 @@ fallback:
 			// FIXME: use c16rtomb/c16tomb if available
 
 			// convert
-			// FIXME: this doesn't support chars >= 128 and doesn't
-			// work on platforms where the wchar_t format is not
-			// the same as UCS-2 (Solaris 9-)
+			// FIXME: off windows, this doesn't support chars >= 128
+			// and doesn't work on platforms where the wchar_t format
+			// is not the same as UCS-2 (Solaris 9-)
 			debugPrintf("direct conversion... ");
-			if (from<128) {
+			if (directUcs2((uint32_t)from)) {
 				debugPrintf("success\n");
 				if (to) {
 					*to=byteswap(toenc,(ucs2_t)from);

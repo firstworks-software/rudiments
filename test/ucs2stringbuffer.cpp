@@ -343,7 +343,7 @@ static void numberOutput() {
 	sb.clear();
 	checkWrite("write float scale",&sb,sb.write(2.5f,2),"2.50");
 	sb.clear();
-	checkWrite("write float scale 0",&sb,sb.write(2.5f,0),"2");
+	checkWrite("write float scale 0",&sb,sb.write(2.25f,0),"2");
 	sb.clear();
 	checkWrite("write float precision",&sb,
 			sb.write(3.25f,(uint16_t)8,(uint16_t)2),"    3.25");
@@ -360,13 +360,22 @@ static void numberOutput() {
 	sb.clear();
 	checkWrite("write double negative",&sb,
 			sb.write(-0.5,(uint16_t)0,(uint16_t)3),"-0.500");
+
+	// Digits past the 17th differ by C library, so compare large
+	// values with stringbuffer.
+	stringbuffer	e30;
+	e30.write(1e30);
+	stringbuffer	e30precision;
+	e30precision.write(1e30,(uint16_t)40,(uint16_t)2);
+	test("double 1e30 length",
+		charstring::getLength(e30.getString())==36 &&
+		charstring::getLength(e30precision.getString())==40);
 	sb.clear();
-	checkWrite("write double 1e30",&sb,sb.write(1e30),
-			"1000000000000000019884624838656.0000");
+	checkWrite("write double 1e30",&sb,sb.write(1e30),e30.getString());
 	sb.clear();
 	checkWrite("write double 1e30 precision",&sb,
 			sb.write(1e30,(uint16_t)40,(uint16_t)2),
-			"      1000000000000000019884624838656.00");
+			e30precision.getString());
 
 	// append
 	sb.clear();
@@ -389,8 +398,7 @@ static void numberOutput() {
 	checkAppend("append double precision",&sb,"    3.25");
 	sb.clear();
 	sb.append(1e30);
-	checkAppend("append double 1e30",&sb,
-			"1000000000000000019884624838656.0000");
+	checkAppend("append double 1e30",&sb,e30.getString());
 	sb.clear();
 	sb.append(max64);
 	checkAppend("append uint64",&sb,"18446744073709551615");
@@ -528,7 +536,7 @@ int main(int argc, const char **argv) {
 
 			// integers
 			for (uint64_t k=1; k<10000; k*=10) {
-				strb->appendUcs2((uint16_t)k);
+				strb->append((uint16_t)k);
 				ucs2literal(format,"%hd");
 				ucs2charstring::printf(buf,
 						sizeof(buf)/sizeof(ucs2_t),
@@ -536,7 +544,7 @@ int main(int argc, const char **argv) {
 				ucs2charstring::append(str,buf);
 			}
 			for (uint64_t k=1; k<1000000000; k*=10) {
-				strb->appendUcs2((uint32_t)k);
+				strb->append((uint32_t)k);
 				ucs2literal(format,"%ld");
 				ucs2charstring::printf(buf,
 						sizeof(buf)/sizeof(ucs2_t),
@@ -545,7 +553,7 @@ int main(int argc, const char **argv) {
 			}
 			#ifdef RUDIMENTS_HAVE_LONG_LONG
 			for (uint64_t k=1; k<1000000000000000000ULL; k*=10) {
-				strb->appendUcs2((uint64_t)k);
+				strb->append((uint64_t)k);
 				ucs2literal(format,"%lld");
 				ucs2charstring::printf(buf,
 						sizeof(buf)/sizeof(ucs2_t),

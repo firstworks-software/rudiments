@@ -1126,7 +1126,7 @@ int main(int argc, const char **argv) {
 		ucs2_t	*buf=NULL;
 		size=ucs2charstring::printf(&buf,format,'a',123,hello);
 		test("size",size==9);
-		test("contents",!ucs2charstring::compare(buffer,a123hello));
+		test("contents",!ucs2charstring::compare(buf,a123hello));
 		delete[] buf;
 	} else {
 		stdoutput.printf("not supported\n");
@@ -2091,21 +2091,23 @@ int main(int argc, const char **argv) {
 	floatNumberTest("parseNumber long double 1e30 plain",
 		ucs2charstring::parseNumber(1e30L),
 		"10000000000000000",22,NULL);
+	// Digits past the 17th differ by C library.  glibc prints the exact
+	// value and the Visual Studio 2013 runtime prints zeros.
 	floatNumberTest("parseNumber double 1e30 plain",
 		ucs2charstring::parseNumber(1e30),
-		"1000000000000000019884624838656.",22,NULL);
+		"10000000000000000",32,NULL);
 	floatNumberTest("parseNumber double 1e30 scale 4",
 		ucs2charstring::parseNumber(1e30,(uint16_t)4),
-		"1000000000000000019884624838656.0000",36,NULL);
+		"10000000000000000",36,NULL);
 	floatNumberTest("parseNumber double 1234.5 precision 3 scale 2",
 		ucs2charstring::parseNumber(1234.5,(uint16_t)3,(uint16_t)2),
 		"1234.50",7,"1234.50");
 	floatNumberTest("parseNumber float 1e30 plain",
 		ucs2charstring::parseNumber(1e30f),
-		"1000000015047466219876688855040.",22,NULL);
+		"10000000150474662",32,NULL);
 	floatNumberTest("parseNumber float 1e30 scale 4",
 		ucs2charstring::parseNumber(1e30f,(uint16_t)4),
-		"1000000015047466219876688855040.0000",36,NULL);
+		"10000000150474662",36,NULL);
 	floatNumberTest("parseNumber float 1234.5 precision 3 scale 2",
 		ucs2charstring::parseNumber(1234.5f,(uint16_t)3,(uint16_t)2),
 		"1234.50",7,"1234.50");

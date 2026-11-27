@@ -2746,6 +2746,11 @@ static bool vswprintfBufferTooSmall(int32_t err, size_t buflen) {
 		return true;
 	}
 	#endif
+	#if defined(_WIN32) && defined(ERANGE)
+	if (err==ERANGE) {
+		return true;
+	}
+	#endif
 	return false;
 }
 
@@ -2780,12 +2785,12 @@ ssize_t wcharstring::printf(wchar_t *buffer, size_t length,
 
 		// Unlike vsnprintf(), vswprintf() does not return the length
 		// of a result that does not fit in the buffer.  It returns -1
-		// instead.  By platform, errno stays unset or is E2BIG or
-		// EOVERFLOW, or EINVAL for a buffer of zero length.  Solaris 7
-		// returns the buffer length instead.  EOVERFLOW also means a
-		// result of more than INT_MAX characters.  An encoding error
-		// returns -1 and sets errno to EILSEQ, but musl sets EOVERFLOW
-		// instead.
+		// instead.  By platform, errno stays unset or is E2BIG,
+		// EOVERFLOW, or ERANGE on Windows, or EINVAL for a buffer of
+		// zero length.  Solaris 7 returns the buffer length instead.
+		// EOVERFLOW also means a result of more than INT_MAX
+		// characters.  An encoding error returns -1 and sets errno to
+		// EILSEQ, but musl sets EOVERFLOW instead.
 		//
 		// So, format into larger and larger scratch buffers.  Copy
 		// what fits to "buffer", and return the full length, as
@@ -2806,6 +2811,14 @@ ssize_t wcharstring::printf(wchar_t *buffer, size_t length,
 		}
 
 		size_t	buflen=(length>maxbuflen)?maxbuflen:length;
+
+		// The Visual Studio 2013 vswprintf() writes a null one
+		// character before a buffer of zero length, so never pass it
+		// one.  A buffer that is too short grows to 16 anyway.
+		if (!buflen) {
+			buflen=16;
+		}
+
 		size_t	growthlimit=maxbuflen;
 		#ifdef RUDIMENTS_MEASURE_VSWPRINTF
 		bool	measured=false;

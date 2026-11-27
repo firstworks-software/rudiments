@@ -359,6 +359,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   descriptor
 - fixed ucs2charstring::printf() and output::printfUcs2() returning success
   off Windows
+- fixed a heap corruption in wcharstring and ucs2charstring allocating
+  printf() on Windows
+- fixed iconvert UCS-2 conversions in the non-native byte order without
+  iconv(), such as UCS-2BE on Windows
 - fixed jsondom parsing of a value after an array nested in an array
 - fixed filedescriptor wide printf() clearing errno on success
 - fixed dom writeFile() error reports on a failed write or final flush
