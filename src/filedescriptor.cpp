@@ -2243,7 +2243,7 @@ ssize_t filedescriptor::unBufferedRead(byte_t *buf, size_t count,
 						totalread+=actualread;
 					}
 					return (totalread || actualread>=0)?
-						totalread:RESULT_ERROR;
+						(ssize_t)totalread:RESULT_ERROR;
 				}
 			} else if (actualread==0 &&
 					error::getErrorNumber()==0) {
@@ -2781,7 +2781,7 @@ ssize_t filedescriptor::unBufferedWrite(
 					pvt->_writeerrno=EINTR;
 					error::setErrorNumber(olderrno);
 					return (totalwrite || actualwrite>=0)?
-						totalwrite:RESULT_ERROR;
+						(ssize_t)totalwrite:RESULT_ERROR;
 				}
 			} else if (actualwrite==0 &&
 					error::getErrorNumber()==0) {
