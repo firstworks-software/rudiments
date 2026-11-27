@@ -420,8 +420,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - fixed file, filedescriptor, and memorymap offsets cut to 32 bits, 32-bit
   builds without large file support
 - fixed Windows file seek, size, and lock to end of file past 2 GiB
-- fixed test/testall.vbs to find librudiments.dll and to fail on a test
-  that fails to start or exits non-zero
+- fixed test/testall.vbs to find librudiments.dll, to run aes192, aes256,
+  sha512, singledes and tripledes, and to fail on a test that fails to
+  start or exits non-zero
 - fixed the sensitivevalue file tests on Windows
 - fixed the prng test same seed cases failing on Windows, where setSeed() does
   not seed CryptGenRandom

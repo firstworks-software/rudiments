@@ -6,6 +6,8 @@ end if
 
 tests=Array(_
 	"aes128",_
+	"aes192",_
+	"aes256",_
 	"avltree",_
 	"bytebuffer",_
 	"bytestring",_
@@ -56,8 +58,10 @@ tests=Array(_
 	"serviceentry",_
 	"sha1",_
 	"sha256",_
+	"sha512",_
 	"sharedmemory",_
 	"signal",_
+	"singledes",_
 	"singlylinkedlist",_
 	"snooze",_
 	"staticarray",_
@@ -66,6 +70,7 @@ tests=Array(_
 	"table",_
 	"thread",_
 	"threadmutex",_
+	"tripledes",_
 	"ucs2character",_
 	"ucs2charstring",_
 	"ucs2stringbuffer",_
