@@ -16,6 +16,7 @@ for program in \
 	bytestring \
 	character \
 	charstring \
+	collectionprint \
 	commandline \
 	csprng \
 	csvdom \
