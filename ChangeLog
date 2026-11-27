@@ -423,6 +423,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - fixed test/testall.vbs to find librudiments.dll and to fail on a test
   that fails to start or exits non-zero
 - fixed the sensitivevalue file tests on Windows
+- fixed the prng test same seed cases failing on Windows, where setSeed() does
+  not seed CryptGenRandom
 
 ### Security
 - fixed buffer overflow when unix socket file name is too long

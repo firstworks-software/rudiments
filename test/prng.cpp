@@ -146,15 +146,16 @@ int main(int argc, const char **argv) {
 	// static generateBytes(seed,size) - allocates and fills a new
 	// buffer.  On backends where setSeed() actually seeds the
 	// generator, this is reproducible for the same seed.  (On
-	// backends like arc4random, setSeed() is a no-op by design - see
-	// prng::setSeed() - so reproducibility can't be assumed
-	// there.)
+	// backends like arc4random and CryptGenRandom, setSeed() is a no-op
+	// by design - see prng::setSeed() - so reproducibility can't be
+	// assumed there.)
 	byte_t	*sbytes1=prng::generateBytes(byteseed,bytesize);
 	test("static generateBytes(seed,size) - non-NULL",sbytes1!=NULL);
 	byte_t	*sbytes2=prng::generateBytes(byteseed,bytesize);
 	test("static generateBytes(seed,size) - non-NULL again",
 							sbytes2!=NULL);
-	#ifndef RUDIMENTS_HAVE_ARC4RANDOM
+	#if !defined(RUDIMENTS_HAVE_ARC4RANDOM) && \
+		!defined(RUDIMENTS_HAVE_CRYPTGENRANDOM)
 		test("static generateBytes(seed,size) - "
 				"same seed produces same bytes",
 				!bytestring::compare(sbytes1,sbytes2,
@@ -192,7 +193,8 @@ int main(int argc, const char **argv) {
 	}
 	test("static generateBytes(seed,buffer,buffersize,size) - "
 			"bytes past size untouched",suntouched);
-	#ifndef RUDIMENTS_HAVE_ARC4RANDOM
+	#if !defined(RUDIMENTS_HAVE_ARC4RANDOM) && \
+		!defined(RUDIMENTS_HAVE_CRYPTGENRANDOM)
 		byte_t	*sbuffer2=new byte_t[buffersize];
 		bytestring::set(sbuffer2,0xFF,buffersize);
 		prng::generateBytes(byteseed,sbuffer2,
