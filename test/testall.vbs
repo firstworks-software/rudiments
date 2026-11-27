@@ -8,19 +8,24 @@ tests=Array(_
 	"aes128",_
 	"aes192",_
 	"aes256",_
+	"arc4",_
 	"avltree",_
+	"bignumber",_
 	"bytebuffer",_
 	"bytestring",_
 	"character",_
 	"charstring",_
+	"collectionprint",_
 	"commandline",_
 	"csvdom",_
+	"csvsax",_
 	"datetime",_
 	"des",_
 	"dh",_
 	"dictionary",_
 	"directory",_
 	"domevents",_
+	"domnode",_
 	"dynamicarray",_
 	"dynamiclib",_
 	"environment",_
@@ -75,6 +80,7 @@ tests=Array(_
 	"ucs2charstring",_
 	"ucs2stringbuffer",_
 	"url",_
+	"urlhttprequest",_
 	"userentry",_
 	"wastebasket",_
 	"wcharacter",_

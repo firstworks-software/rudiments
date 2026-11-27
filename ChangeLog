@@ -421,8 +421,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   builds without large file support
 - fixed Windows file seek, size, and lock to end of file past 2 GiB
 - fixed test/testall.vbs to find librudiments.dll, to run aes192, aes256,
-  sha512, singledes and tripledes, and to fail on a test that fails to
-  start or exits non-zero
+  arc4, bignumber, collectionprint, csvsax, domnode, sha512, singledes,
+  tripledes and urlhttprequest, and to fail on a test that fails to start
+  or exits non-zero
 - fixed the sensitivevalue file tests on Windows
 - fixed the prng test same seed cases failing on Windows, where setSeed() does
   not seed CryptGenRandom
