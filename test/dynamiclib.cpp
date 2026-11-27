@@ -43,9 +43,18 @@ int main(int argc, const char **argv) {
 		libs.getComparator()->setNatural(true);
 		const char	*dirs[]={
 			"/lib64","/usr/lib64","/lib","/usr/lib",
+			// multiarch dirs for this build's architecture
 			// FIXME: other architectures
+			#if defined(__x86_64__)
 			"/lib/x86_64-linux-gnu",
 			"/usr/lib/x86_64-linux-gnu",
+			#elif defined(__i386__)
+			"/lib/i386-linux-gnu",
+			"/usr/lib/i386-linux-gnu",
+			#elif defined(__aarch64__)
+			"/lib/aarch64-linux-gnu",
+			"/usr/lib/aarch64-linux-gnu",
+			#endif
 			NULL
 		};
 		for (const char * const *dir=dirs; *dir; dir++) {
