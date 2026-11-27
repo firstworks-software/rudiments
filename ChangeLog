@@ -363,6 +363,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   printf() on Windows
 - fixed iconvert UCS-2 conversions in the non-native byte order without
   iconv(), such as UCS-2BE on Windows
+- fixed the charstring and wcharstring parseNumber() float and double 1e30
+  tests failing on Windows, where the C library prints zeros after the 17th
+  digit
 - fixed jsondom parsing of a value after an array nested in an array
 - fixed filedescriptor wide printf() clearing errno on success
 - fixed dom writeFile() error reports on a failed write or final flush
