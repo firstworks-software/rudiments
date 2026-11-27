@@ -1172,7 +1172,7 @@ bool process::wait(pid_t pid) {
 
 bool process::wait(pid_t pid, int32_t *exitstatus) {
 #ifdef _WIN32
-	HANDLE	h=OpenProcess(SYNCHRONIZE,TRUE,pid);
+	HANDLE	h=OpenProcess(SYNCHRONIZE|PROCESS_QUERY_INFORMATION,TRUE,pid);
 	if (!h) {
 		return false;
 	}
