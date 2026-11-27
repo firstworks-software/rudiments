@@ -196,9 +196,18 @@ int main(int argc, const char **argv) {
 		test("type name",
 			!charstring::compare(fs1.getTypeName(),
 						fs2.getTypeName()));
-		test("mount point",
-			!charstring::compare(fs1.getMountPoint(),
+		// On Windows, the drive letter's case can differ by
+		// open method, and drive letters are case-insensitive.
+		#ifdef _WIN32
+			test("mount point",
+				!charstring::compareIgnoringCase(
+						fs1.getMountPoint(),
 						fs2.getMountPoint()));
+		#else
+			test("mount point",
+				!charstring::compare(fs1.getMountPoint(),
+							fs2.getMountPoint()));
+		#endif
 		test("device name",
 			!charstring::compare(fs1.getDeviceName(),
 						fs2.getDeviceName()));
