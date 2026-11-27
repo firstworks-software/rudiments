@@ -110,8 +110,12 @@ static void setPositionLimits() {
 
 	// the largest and smallest offsets whose byte count fits an off64_t
 	const off64_t	max=(((off64_t)1<<(sizeof(off64_t)*8-2))-1)*2+1;
-	const off64_t	maxchars=max/(off64_t)sizeof(wchar_t);
+	const off64_t	offsetchars=max/(off64_t)sizeof(wchar_t);
 	const off64_t	minchars=(-max-1)/(off64_t)sizeof(wchar_t);
+
+	// the largest position whose byte count also fits a size_t
+	const off64_t	maxchars=(sizeof(size_t)<sizeof(off64_t))?
+			(off64_t)((size_t)-1/sizeof(wchar_t)):offsetchars;
 
 	// return values are in characters
 	wstringbuffer	*sb=new wstringbuffer();
@@ -126,12 +130,12 @@ static void setPositionLimits() {
 	delete sb;
 
 	// an offset whose byte count does not fit is refused
-	const off64_t	bad[]={maxchars+1,minchars-1,max,-max-1};
+	const off64_t	bad[]={maxchars+1,offsetchars+1,minchars-1,max,-max-1};
 	for (uint16_t method=0; method<3; method++) {
 		bool	ok=true;
 		sb=new wstringbuffer();
 		sb->append(L"abcdef");
-		for (uint16_t i=0; i<4; i++) {
+		for (uint16_t i=0; i<5; i++) {
 			sb->setPositionRelativeToBeginning(2);
 			off64_t	result=(method==0)?
 				sb->setPositionRelativeToBeginning(bad[i]):
