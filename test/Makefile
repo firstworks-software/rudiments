@@ -424,7 +424,7 @@ csvdom: csvdom.cpp csvdom.$(OBJ)
 jsondom: jsondom.cpp jsondom.$(OBJ)
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) jsondom.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
-urlhttprequest: urlhttprequest.cpp urlhttprequest.$(OBJ)
+urlhttprequest: urlhttprequest.cpp urlhttprequest.$(OBJ) cgi.cgi
 	$(LTLINK) $(LINK) $(OUT)$@$(EXE) urlhttprequest.$(OBJ) $(ALLSTATIC) $(LDFLAGS) $(LIBS)
 
 cgi.cgi: cgi.cpp cgi.$(OBJ)
