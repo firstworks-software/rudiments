@@ -96,6 +96,12 @@ int main(int argc, const char **argv) {
 		test("decimal \"-0\": not negative",!b.isNegative());
 	}
 	{
+		bignumber	b("-0",16);
+		test("hex \"-0\": is zero",b.isZero());
+		test("hex \"-0\": no negative zero",decis(&b,"0"));
+		test("hex \"-0\": not negative",!b.isNegative());
+	}
+	{
 		bignumber	b(bigdec);
 		test("decimal 30 digits: round trip",decis(&b,bigdec));
 		test("decimal 30 digits: bit count",b.getBitCount()==97);

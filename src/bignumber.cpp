@@ -60,6 +60,9 @@ void bignumberprivate::zero() {
 
 // zero is never negative
 void bignumberprivate::setNegative(bool negative) {
+	if (negative && isZero()) {
+		negative=false;
+	}
 	#if defined(RUDIMENTS_HAS_SSL)
 		BN_set_negative(_bn,(negative)?1:0);
 	#else
@@ -245,6 +248,10 @@ bool bignumber::setValue(const char *value, uint16_t base) {
 		return false;
 	}
 
+	// the conversion can keep the sign of "-0"
+	if (pvt->isZero()) {
+		pvt->setNegative(false);
+	}
 	return true;
 }
 
