@@ -4843,10 +4843,15 @@ static void largeFileTests() {
 	// does not grow when the file grows, whatever the unit of the count.
 	// Where the count is computed from the size, it grows, and the test
 	// skips.
+	// Each count is read from a reopened file, since a Windows network
+	// drive reports a stale size and block count for a few seconds after
+	// a truncate, on the handle that made it.
 	test("truncate probe",fl.truncate(probesize));
+	test("reopen probe",fl.close() && fl.open(largefile,O_RDWR));
 	test("get probe properties",fl.getCurrentProperties());
 	int64_t	probeblocks=fl.getBlockCount();
 	test("truncate probe again",fl.truncate(probesize*2));
+	test("reopen probe again",fl.close() && fl.open(largefile,O_RDWR));
 	test("get probe properties again",fl.getCurrentProperties());
 	if (fl.getBlockCount()>probeblocks) {
 		stdoutput.printf("filesystem can not hold a sparse file\n");

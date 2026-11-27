@@ -426,7 +426,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - fixed the sensitivevalue file tests on Windows
 - fixed the prng test same seed cases failing on Windows, where setSeed() does
   not seed CryptGenRandom
-- fixed the file test memory map and lock checks on Windows
+- fixed the file test memory map, lock and sparse file probe checks on
+  Windows
 - fixed the filesystem test mount point case on Windows
 - fixed the Windows library to build sha512, aes192, aes256, singledes and tripledes
 - fixed the Windows test Makefile to copy pr.cgi.exe to app1/app2
