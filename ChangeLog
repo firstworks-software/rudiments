@@ -285,7 +285,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   setPosition*() size limit and end behavior
 - added a wstringbuffer initialsize overflow check
 - fixed file::getContents() ignoring a read error or an unopened
-  file, failing on a short read, and mishandling an oversized file
+  file, failing on a short read, and mishandling an oversized file,
+  and its error return on 32-bit builds
 - defined the missing ucs2charstring::duplicate(const wchar_t *) forms
   and fixed the bigendian ones ignoring the byte order, also
   ucs2character::duplicate(wchar_t,bool)
@@ -421,6 +422,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - fixed Windows file seek, size, and lock to end of file past 2 GiB
 - fixed test/testall.vbs to find librudiments.dll and to fail on a test
   that fails to start or exits non-zero
+- fixed the sensitivevalue file tests on Windows
 
 ### Security
 - fixed buffer overflow when unix socket file name is too long

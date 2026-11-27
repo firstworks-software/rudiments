@@ -526,7 +526,7 @@ ssize_t file::getContents(byte_t **buffer, size_t *buffersize,
 	if (buffersize) {
 		*buffersize=intbuffersize;
 	}
-	return (failed)?-1:intbuffersize;
+	return (failed)?(ssize_t)-1:(ssize_t)intbuffersize;
 }
 
 ssize_t file::getContents(const char *name, byte_t **buffer,

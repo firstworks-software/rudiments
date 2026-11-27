@@ -11,14 +11,22 @@
 #include <rudiments/stdio.h>
 #include "test.cpp"
 
+// the "in" names are bracketed parse() inputs for the names above them
+// svtestpath holds svtestdir
 #ifndef WIN32
 const char	*svtestfile="/tmp/svtestfile";
+const char	*svtestfilein="[/tmp/svtestfile]";
 const char	*svtestdir="/tmp/svtestdir";
+const char	*svtestdirin="[/tmp/svtestdir]";
 const char	*svtestdirfile="/tmp/svtestdir.txt";
+const char	*svtestpath="/tmp";
 #else
 const char	*svtestfile="svtestfile";
+const char	*svtestfilein="[svtestfile]";
 const char	*svtestdir="svtestdir";
+const char	*svtestdirin="[svtestdir]";
 const char	*svtestdirfile="svtestdir.txt";
+const char	*svtestpath=".";
 #endif
 
 static void writeFile(const char *name, const char *data, size_t size) {
@@ -67,15 +75,15 @@ static void fileTests() {
 	sensitivevalue	nv;
 	nv.setTextExtension("txt");
 	test("text extension after a directory",
-			parsesTo(&nv,"[/tmp/svtestdir]","next",4));
+			parsesTo(&nv,svtestdirin,"next",4));
 	sensitivevalue	hv;
 	hv.setFileFormat(FORMAT_HEX);
 	hv.setHexExtension("txt");
 	writeFile(svtestdirfile,"4e657874",8);
 	test("hex extension after a directory",
-			parsesTo(&hv,"[/tmp/svtestdir]","Next",4));
+			parsesTo(&hv,svtestdirin,"Next",4));
 	sensitivevalue	pv;
-	pv.setPath("/tmp");
+	pv.setPath(svtestpath);
 	test("path after a directory",
 			parsesTo(&pv,"[svtestdir]","[svtestdir]",11));
 	file::remove(svtestdirfile);
@@ -85,28 +93,28 @@ static void fileTests() {
 	stdoutput.printf("file - sizes\n");
 	sensitivevalue	sv;
 	writeFile(svtestfile,"",0);
-	test("empty",parsesTo(&sv,"[/tmp/svtestfile]","",0));
+	test("empty",parsesTo(&sv,svtestfilein,"",0));
 	writeFile(svtestfile,"\n",1);
-	test("1 byte, newline",parsesTo(&sv,"[/tmp/svtestfile]","",0));
+	test("1 byte, newline",parsesTo(&sv,svtestfilein,"",0));
 	writeFile(svtestfile,"x",1);
-	test("1 byte",parsesTo(&sv,"[/tmp/svtestfile]","x",1));
+	test("1 byte",parsesTo(&sv,svtestfilein,"x",1));
 	writeFile(svtestfile,"ab\r\n",4);
-	test("crlf",parsesTo(&sv,"[/tmp/svtestfile]","ab",2));
+	test("crlf",parsesTo(&sv,svtestfilein,"ab",2));
 	writeFile(svtestfile,"ab\n\r",4);
-	test("lfcr",parsesTo(&sv,"[/tmp/svtestfile]","ab",2));
+	test("lfcr",parsesTo(&sv,svtestfilein,"ab",2));
 	writeFile(svtestfile,"ab\r",3);
-	test("cr",parsesTo(&sv,"[/tmp/svtestfile]","ab",2));
+	test("cr",parsesTo(&sv,svtestfilein,"ab",2));
 	writeFile(svtestfile,"a\nb",3);
-	test("inner newline",parsesTo(&sv,"[/tmp/svtestfile]","a\nb",3));
+	test("inner newline",parsesTo(&sv,svtestfilein,"a\nb",3));
 	writeFile(svtestfile,"a\0b\n",4);
-	test("binary",parsesTo(&sv,"[/tmp/svtestfile]","a\0b",3));
+	test("binary",parsesTo(&sv,svtestfilein,"a\0b",3));
 	sv.setFileFormat(FORMAT_HEX);
 	writeFile(svtestfile,"",0);
-	test("hex, empty",parsesTo(&sv,"[/tmp/svtestfile]","",0));
+	test("hex, empty",parsesTo(&sv,svtestfilein,"",0));
 	writeFile(svtestfile,"4142\n",5);
-	test("hex, trailing newline",parsesTo(&sv,"[/tmp/svtestfile]","AB",2));
+	test("hex, trailing newline",parsesTo(&sv,svtestfilein,"AB",2));
 	writeFile(svtestfile,"41424344",8);
-	test("hex",parsesTo(&sv,"[/tmp/svtestfile]","ABCD",4));
+	test("hex",parsesTo(&sv,svtestfilein,"ABCD",4));
 	file::remove(svtestfile);
 	stdoutput.printf("\n\n");
 
