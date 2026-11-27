@@ -281,7 +281,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   and the minimum integer values
 - fixed wstringbuffer and ucs2stringbuffer getString() removing the
   wrong amount, setPosition*() and truncate() units and range checks,
-  and ucs2stringbuffer::getPosition() units
+  and ucs2stringbuffer::getPosition() units, and documented the
+  setPosition*() size limit and end behavior
 - added a wstringbuffer initialsize overflow check
 - fixed file::getContents() ignoring a read error or an unopened
   file, failing on a short read, and mishandling an oversized file
