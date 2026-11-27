@@ -104,6 +104,12 @@ const char	*largefile="/tmp/testfilelarge.txt";
 const char	*largefile="testfilelarge.txt";
 #endif
 
+// A view maps only at a multiple of the allocation granularity, 64 KB on
+// Windows, so a block at another offset gets a normal buffer instead.
+static bool blockMappable(off64_t blockoffset) {
+	return !(blockoffset%sys::getAllocationGranularity());
+}
+
 // getContents on files of known and unknown size and on read errors
 static void contentsTests() {
 
@@ -2120,7 +2126,7 @@ static void seekPastEndReadTests() {
 	}
 
 	// a read of a block that is wholly inside the file with map buffering
-	// on still maps the block
+	// on still maps the block, where its offset allows
 	if (memorymap::isSupported()) {
 		file	cfl;
 		test("inside, open",cfl.open(seekfile,O_RDWR));
@@ -2130,7 +2136,8 @@ static void seekPastEndReadTests() {
 			cfl.setPositionRelativeToBeginning(8192)==8192);
 		test("inside, read 100",cfl.read(buf,100)==100);
 		test("inside, data",!bytestring::compare(buf,data+8192,100));
-		test("inside, block is mapped",cfl.isCurrentBlockMmapBuffered());
+		test("inside, block is mapped",
+			cfl.isCurrentBlockMmapBuffered()==blockMappable(8192));
 		test("inside, close",cfl.close());
 	} else {
 		stdoutput.printf("memory maps not supported\n");
@@ -2155,7 +2162,8 @@ static void seekPastEndReadTests() {
 		test("full last block, data",
 				!bytestring::compare(buf,data+8192,100));
 		test("full last block, block is mapped",
-					cfl.isCurrentBlockMmapBuffered());
+					cfl.isCurrentBlockMmapBuffered()==
+							blockMappable(8192));
 		test("full last block, close",cfl.close());
 	} else {
 		stdoutput.printf("memory maps not supported\n");
@@ -2327,7 +2335,8 @@ static void truncateBufferTests() {
 			if (maps[m]) {
 				test(truncateTitle(&title,name,
 							"block is mapped"),
-					tfl.isCurrentBlockMmapBuffered());
+					tfl.isCurrentBlockMmapBuffered()==
+							blockMappable(8192));
 			}
 		} else {
 			// dirty write, not flushed
@@ -4412,7 +4421,8 @@ static void mmapMidBlockTests() {
 	test("read, read 8192",rfl.read(buf,sizeof(buf))==(ssize_t)sizeof(buf));
 	test("read, data",!bytestring::compare(buf,data+5000,sizeof(buf)));
 	test("read, position",rfl.getPosition()==13192);
-	test("read, block is mapped",rfl.isCurrentBlockMmapBuffered());
+	test("read, block is mapped",
+			rfl.isCurrentBlockMmapBuffered()==blockMappable(8192));
 	test("read, close",rfl.close());
 
 	// write a block's worth of data from the middle of a block
@@ -4428,7 +4438,8 @@ static void mmapMidBlockTests() {
 	test("write, write 8192",
 		wfl.write(wdata,sizeof(wdata))==(ssize_t)sizeof(wdata));
 	test("write, position",wfl.getPosition()==13192);
-	test("write, block is mapped",wfl.isCurrentBlockMmapBuffered());
+	test("write, block is mapped",
+			wfl.isCurrentBlockMmapBuffered()==blockMappable(8192));
 	test("write, flush",wfl.flushWriteBuffer(-1,-1));
 	test("write, close",wfl.close());
 
@@ -4654,11 +4665,14 @@ static void largeOpen(file *fl, const char *name, bool readbuffer,
 	}
 }
 
-// check that the current block is mapped, where maps are supported
-static void largeMapped(file *fl, const char *name, bool usemmap) {
-	if (usemmap && memorymap::isSupported()) {
+// check that the current block, the one holding "pos", is mapped, where maps
+// are supported and its offset allows
+static void largeMapped(file *fl, const char *name, bool usemmap,
+					int64_t pos, size_t buffersize) {
+	if (usemmap && buffersize && memorymap::isSupported()) {
 		test(largeTitle(name,"block is mapped"),
-				fl->isCurrentBlockMmapBuffered());
+				fl->isCurrentBlockMmapBuffered()==
+				blockMappable(pos/buffersize*buffersize));
 	}
 }
 
@@ -4673,7 +4687,7 @@ static void largeRead(const char *name, size_t buffersize, bool usemmap,
 	test(largeTitle(name,"read"),fl.read(buf,len)==(ssize_t)len);
 	test(largeTitle(name,"data"),!bytestring::compare(buf,expected,len));
 	test(largeTitle(name,"position"),fl.getPosition()==pos+(int64_t)len);
-	largeMapped(&fl,name,usemmap);
+	largeMapped(&fl,name,usemmap,pos,buffersize);
 	test(largeTitle(name,"close"),fl.close());
 }
 
@@ -4686,7 +4700,7 @@ static void largeWrite(const char *name, size_t buffersize, bool usemmap,
 			fl.setPositionRelativeToBeginning(pos)==pos);
 	test(largeTitle(name,"write"),fl.write(data,len)==(ssize_t)len);
 	test(largeTitle(name,"position"),fl.getPosition()==pos+(int64_t)len);
-	largeMapped(&fl,name,usemmap);
+	largeMapped(&fl,name,usemmap,pos,buffersize);
 	test(largeTitle(name,"close"),fl.close());
 	stringbuffer	readname;
 	readname.append(name)->append(", read back");
