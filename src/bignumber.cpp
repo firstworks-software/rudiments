@@ -811,11 +811,13 @@ bool bignumber::modPow(const bignumber &exponent, const bignumber &modulus) {
 	bignumber	result;
 
 	#if defined(RUDIMENTS_HAS_SSL)
-		// an exponent of 0 needs no special case: BN_mod_exp() already
-		// gives 1 for it (or 0 when the modulus is 1)
+		// Old OpenSSL gives 1 for an exponent of 0 even when the
+		// modulus is 1, so reduce the result.
 		BN_CTX	*ctx=pvt->getContext();
 		if (!ctx || !BN_mod_exp(result.pvt->_bn,pvt->_bn,
 						exponent.pvt->_bn,
+						modulus.pvt->_bn,ctx) ||
+			!BN_nnmod(result.pvt->_bn,result.pvt->_bn,
 						modulus.pvt->_bn,ctx)) {
 			setError(BIGNUMBER_ERROR_OUT_OF_MEMORY);
 			bignumberclearsslerror();
