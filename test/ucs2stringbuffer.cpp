@@ -151,6 +151,22 @@ static void setPositionLimits() {
 		delete sb;
 	}
 
+	// an offset that fits but ends past the limit is refused
+	sb=new ucs2stringbuffer();
+	sb->appendUcs2(abcdef);
+	sb->setPositionRelativeToBeginning(2);
+	test("current past limit",
+		sb->setPositionRelativeToCurrent(offsetchars)==-1);
+	test("current past limit position",sb->getPosition()==2);
+	test("current past limit contents",
+		!ucs2charstring::compare(sb->getString(),abcdef));
+	sb->setPositionRelativeToBeginning(2);
+	test("end past limit",sb->setPositionRelativeToEnd(offsetchars)==-1);
+	test("end past limit position",sb->getPosition()==2);
+	test("end past limit contents",
+		!ucs2charstring::compare(sb->getString(),abcdef));
+	delete sb;
+
 	// the extreme offsets that still fit are accepted
 	sb=new ucs2stringbuffer();
 	sb->appendUcs2(abcdef);

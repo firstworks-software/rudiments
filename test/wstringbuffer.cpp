@@ -159,6 +159,22 @@ static void setPositionLimits() {
 		delete sb;
 	}
 
+	// an offset that fits but ends past the limit is refused
+	sb=new wstringbuffer();
+	sb->append(L"abcdef");
+	sb->setPositionRelativeToBeginning(2);
+	test("current past limit",
+		sb->setPositionRelativeToCurrent(offsetchars)==-1);
+	test("current past limit position",sb->getPosition()==2);
+	test("current past limit contents",
+		!wcharstring::compare(sb->getString(),L"abcdef"));
+	sb->setPositionRelativeToBeginning(2);
+	test("end past limit",sb->setPositionRelativeToEnd(offsetchars)==-1);
+	test("end past limit position",sb->getPosition()==2);
+	test("end past limit contents",
+		!wcharstring::compare(sb->getString(),L"abcdef"));
+	delete sb;
+
 	// the extreme offsets that still fit are accepted
 	sb=new wstringbuffer();
 	sb->append(L"abcdef");
