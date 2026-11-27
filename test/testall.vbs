@@ -81,14 +81,30 @@ tests=Array(_
 ' create shell object
 set WshShell=WScript.CreateObject("WScript.Shell")
 
+' put ..\src on the path, for librudiments.dll
+set fso=WScript.CreateObject("Scripting.FileSystemObject")
+srcdir=fso.GetParentFolderName(fso.GetParentFolderName(_
+				WScript.ScriptFullName))&"\src"
+set env=WshShell.Environment("PROCESS")
+env("PATH")=srcdir&";"&env("PATH")
+
 for each test in tests
 
-	set cmd=WshShell.Exec(test)
+	' Stderr is merged into stdout so that a full stderr pipe cannot
+	' hang the test while the script reads stdout.
+	set cmd=WshShell.Exec("cmd /c "&test&" 2>&1")
+	' close stdin so a test that reads it sees end of file
+	cmd.StdIn.Close
 	do until cmd.StdOut.AtEndOfStream
 		WScript.Echo(cmd.StdOut.Readline())
 	loop
+	do while cmd.Status=0
+		WScript.Sleep 10
+	loop
 
-	if cmd.ExitCode=1 then
-		WScript.Quit
+	' stop on any failure, including a test that failed to start
+	if cmd.ExitCode<>0 then
+		WScript.Echo("FAILED: "&test&" exit "&cmd.ExitCode)
+		WScript.Quit 1
 	end if
 next
