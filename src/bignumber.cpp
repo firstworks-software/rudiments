@@ -208,12 +208,15 @@ bool bignumber::setValue(const char *value, uint16_t base) {
 		return false;
 	}
 
-	// skip a leading +; only - is handled by the conversion itself
+	// skip a leading +; only - is handled by the conversion itself,
+	// but openssl 0.9.8 accepts a bare -, so reject it here
 	const char	*v=value;
 	bool		malformed=false;
 	if (*v=='+') {
 		v++;
 		malformed=(*v=='+' || *v=='-');
+	} else if (*v=='-') {
+		malformed=!v[1];
 	}
 	if (malformed || !*v) {
 		pvt->zero();
