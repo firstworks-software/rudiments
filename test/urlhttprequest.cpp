@@ -7,6 +7,7 @@
 #include <rudiments/permissions.h>
 #include <rudiments/file.h>
 #include <rudiments/stdio.h>
+#include <rudiments/signalclasses.h>
 #include <stdlib.h>
 #include <time.h>
 #include "test.cpp"
@@ -19,6 +20,9 @@
 #define OUT "urlhttprequest.out"
 #define REST "urlhttprequest.rest"
 #define VG "urlhttprequest.vg"
+
+// prefix for each cgi.cgi run, empty if there's no timeout command
+static const char	*timeoutcmd="";
 
 struct cgirun {
 	bool	exitedcleanly;
@@ -57,8 +61,8 @@ static void runCgi(const char *method,
 		cmd.append(" QUERY_STRING='")->
 				append(querystring)->append("'");
 	}
-	cmd.append(" timeout 30 ./cgi.cgi > " OUT "; cat > " REST " ) < " BODY
-			" 2> /dev/null");
+	cmd.append(timeoutcmd)->append(" ./cgi.cgi > " OUT "; cat > " REST
+						" ) < " BODY " 2> /dev/null");
 
 	// run it
 	time_t	start=time(NULL);
@@ -98,7 +102,8 @@ static void runCgiAccessCheck(const char *pathinfo,
 	if (referer) {
 		cmd.append(" HTTP_REFERER='")->append(referer)->append("'");
 	}
-	cmd.append(" timeout 30 ./cgi.cgi > " OUT " < /dev/null 2> /dev/null");
+	cmd.append(timeoutcmd)->append(" ./cgi.cgi > " OUT
+						" < /dev/null 2> /dev/null");
 
 	// run it
 	time_t	start=time(NULL);
@@ -164,7 +169,7 @@ static bool runCgiUnderValgrind(const char *pathinfo,
 			"DOCUMENT_ROOT=. SERVER_NAME=localhost "
 			"REQUEST_METHOD=GET");
 	cmd.append(" PATH_INFO='")->append(pathinfo)->append("'");
-	cmd.append(" timeout 30 sh ../libtool --mode=execute valgrind "
+	cmd.append(timeoutcmd)->append(" sh ../libtool --mode=execute valgrind "
 			"--leak-check=full --show-leak-kinds=definite "
 			"--num-callers=30 --log-file=" VG " ./cgi.cgi > " OUT
 			" ) < /dev/null 2> /dev/null");
@@ -232,6 +237,15 @@ static bool runCgiUnderValgrind(const char *pathinfo,
 int main() {
 
 	header("urlhttprequest");
+
+	// Some older systems have no timeout command.  There, an alarm
+	// bounds the whole test, so a hung cgi.cgi fails it instead.
+	if (!system("timeout 5 true > /dev/null 2>&1")) {
+		timeoutcmd=" timeout 30";
+	} else {
+		stdoutput.printf("\tno timeout command, using an alarm\n");
+		signalmanager::alarm(600);
+	}
 
 	cgirun	run;
 
