@@ -92,7 +92,9 @@ static void runCgi(const char *method,
 		cmd.append(" QUERY_STRING='")->
 				append(querystring)->append("'");
 	}
-	cmd.append(timeoutcmd)->append(" " CGI " > " OUTFILE "; cat > " REST
+	// The copy runs only if cgi.cgi succeeds, so the exit status is
+	// cgi.cgi's.
+	cmd.append(timeoutcmd)->append(" " CGI " > " OUTFILE " && cat > " REST
 						" ) < " BODY " 2> /dev/null");
 #endif
 
