@@ -282,16 +282,6 @@ static bool runCgiUnderValgrind(const char *pathinfo,
 	return true;
 }
 
-// Runs a check that reads what cgi.cgi wrote.  On Windows, cgi.cgi writes its
-// output and reads its input in text mode, so these checks are skipped there.
-static void testOutput(const char *name, bool result) {
-#ifdef _WIN32
-	stdoutput.printf("\t%s: skipped on Windows\n",name);
-#else
-	test(name,result);
-#endif
-}
-
 #ifdef _WIN32
 static void alarmHandler(int32_t signum) {
 	stdoutput.printf("\ttimed out\n");
@@ -322,8 +312,6 @@ int main(int argc, const char **argv) {
 	// with no handler does nothing there.  An alarm with a handler bounds
 	// the whole test instead, so a hung cgi.cgi fails it.
 	stdoutput.printf("\tno timeout command, using an alarm\n");
-	stdoutput.printf("\tchecks of the cgi.cgi output: skipped on Windows, "
-				"see ticket 11267\n");
 	signalhandler	alarmhandler;
 	alarmhandler.setHandler(alarmHandler);
 	alarmhandler.handleSignal(SIGALRM);
@@ -345,10 +333,10 @@ int main(int argc, const char **argv) {
 	runCgi("POST","application/x-www-form-urlencoded","19",NULL,
 				"var1=val1&var2=val2",&run);
 	test("urlencoded post, exit status",run.exitedcleanly);
-	testOutput("urlencoded post, count",
+	test("urlencoded post, count",
 		charstring::contains(run.output,"All Parameters: 2\n"));
-	testOutput("urlencoded post, var1",hasParameter(&run,"var1=val1"));
-	testOutput("urlencoded post, var2",hasParameter(&run,"var2=val2"));
+	test("urlencoded post, var1",hasParameter(&run,"var1=val1"));
+	test("urlencoded post, var2",hasParameter(&run,"var2=val2"));
 	test("urlencoded post, nothing left",run.restsize==0);
 	delete[] run.output;
 	stdoutput.printf("\n");
@@ -356,7 +344,7 @@ int main(int argc, const char **argv) {
 	// get with a body and no query string
 	runCgi("GET",NULL,"5",NULL,"a=b&c",&run);
 	test("get with body, exit status",run.exitedcleanly);
-	testOutput("get with body, no parameters",
+	test("get with body, no parameters",
 		charstring::contains(run.output,"All Parameters: 0\n"));
 	test("get with body, body left for app",run.restsize==5);
 	delete[] run.output;
@@ -365,8 +353,8 @@ int main(int argc, const char **argv) {
 	// get with a query string
 	runCgi("GET",NULL,NULL,"var1=a%20b&var2=c",NULL,&run);
 	test("get, exit status",run.exitedcleanly);
-	testOutput("get, var1",hasParameter(&run,"var1=a b"));
-	testOutput("get, var2",hasParameter(&run,"var2=c"));
+	test("get, var1",hasParameter(&run,"var1=a b"));
+	test("get, var2",hasParameter(&run,"var2=c"));
 	delete[] run.output;
 	stdoutput.printf("\n");
 
@@ -374,7 +362,7 @@ int main(int argc, const char **argv) {
 	runCgi("POST","multipart/form-data","20",NULL,
 				"--b\r\n\r\nvalue\r\n--b--\r\n",&run);
 	test("multipart, no boundary, exit status",run.exitedcleanly);
-	testOutput("multipart, no boundary, no parameters",
+	test("multipart, no boundary, no parameters",
 		charstring::contains(run.output,"All Parameters: 0\n"));
 	delete[] run.output;
 	stdoutput.printf("\n");
@@ -383,9 +371,9 @@ int main(int argc, const char **argv) {
 	runCgi("POST","Application/X-WWW-Form-Urlencoded","19",NULL,
 				"var1=val1&var2=val2",&run);
 	test("mixed-case urlencoded, exit status",run.exitedcleanly);
-	testOutput("mixed-case urlencoded, var1",
+	test("mixed-case urlencoded, var1",
 				hasParameter(&run,"var1=val1"));
-	testOutput("mixed-case urlencoded, var2",
+	test("mixed-case urlencoded, var2",
 				hasParameter(&run,"var2=val2"));
 	delete[] run.output;
 
@@ -406,11 +394,11 @@ int main(int argc, const char **argv) {
 	runCgi("POST","Multipart/Form-Data; Boundary=xyz",length,NULL,
 				multipartbody,&run);
 	test("mixed-case multipart, exit status",run.exitedcleanly);
-	testOutput("mixed-case multipart, count",
+	test("mixed-case multipart, count",
 		charstring::contains(run.output,"All Parameters: 2\n"));
-	testOutput("mixed-case multipart, input1",
+	test("mixed-case multipart, input1",
 		charstring::contains(run.output,"\n\tinput1=value1"));
-	testOutput("mixed-case multipart, input2",
+	test("mixed-case multipart, input2",
 		charstring::contains(run.output,"\n\tinput2=value2"));
 	delete[] run.output;
 	stdoutput.printf("\n");
@@ -419,9 +407,9 @@ int main(int argc, const char **argv) {
 	runCgi("POST","multipart/form-data; boundary=xyz",length,NULL,
 				multipartbody,&run);
 	test("multipart, exit status",run.exitedcleanly);
-	testOutput("multipart, input1",
+	test("multipart, input1",
 		charstring::contains(run.output,"\n\tinput1=value1"));
-	testOutput("multipart, nothing left on stdin",run.restsize==0);
+	test("multipart, nothing left on stdin",run.restsize==0);
 	delete[] run.output;
 	stdoutput.printf("\n");
 
@@ -430,46 +418,46 @@ int main(int argc, const char **argv) {
 				"var1=val1&var2=val2",&run);
 	test("huge content length, exit status",run.exitedcleanly);
 	test("huge content length, finishes quickly",run.elapsed<10);
-	testOutput("huge content length, var1",hasParameter(&run,"var1=val1"));
-	testOutput("huge content length, var2",hasParameter(&run,"var2=val2"));
+	test("huge content length, var1",hasParameter(&run,"var1=val1"));
+	test("huge content length, var2",hasParameter(&run,"var2=val2"));
 	delete[] run.output;
 	stdoutput.printf("\n");
 
 	// allowed ips only, with a match
 	runCgiAccessCheck("/allowips/page","GET","10.0.0.1",NULL,&run);
 	test("allowed ip, exit status",run.exitedcleanly);
-	testOutput("allowed ip, allowed",hasLine(&run,"isIpAllowed=1"));
+	test("allowed ip, allowed",hasLine(&run,"isIpAllowed=1"));
 	delete[] run.output;
 
 	// allowed ips only, with no match
 	runCgiAccessCheck("/allowips/page","GET","10.0.0.2",NULL,&run);
 	test("unlisted ip, exit status",run.exitedcleanly);
-	testOutput("unlisted ip, denied",hasLine(&run,"isIpAllowed=0"));
+	test("unlisted ip, denied",hasLine(&run,"isIpAllowed=0"));
 	delete[] run.output;
 
 	// ip in both the allowed and denied lists
 	runCgiAccessCheck("/denyips/page","GET","10.0.0.5",NULL,&run);
 	test("denied ip, exit status",run.exitedcleanly);
-	testOutput("denied ip, denied",hasLine(&run,"isIpAllowed=0"));
+	test("denied ip, denied",hasLine(&run,"isIpAllowed=0"));
 	delete[] run.output;
 
 	// ip in the allowed list only, with a denied list set
 	runCgiAccessCheck("/denyips/page","GET","10.0.0.6",NULL,&run);
 	test("allowed ip beside denied list, exit status",run.exitedcleanly);
-	testOutput("allowed ip beside denied list, allowed",
+	test("allowed ip beside denied list, allowed",
 					hasLine(&run,"isIpAllowed=1"));
 	delete[] run.output;
 
 	// denied ips only, with a match
 	runCgiAccessCheck("/deniedonlyips/page","GET","10.0.0.5",NULL,&run);
 	test("denied-only ip, exit status",run.exitedcleanly);
-	testOutput("denied-only ip, denied",hasLine(&run,"isIpAllowed=0"));
+	test("denied-only ip, denied",hasLine(&run,"isIpAllowed=0"));
 	delete[] run.output;
 
 	// denied ips only, with no match: no allowed list denies everything
 	runCgiAccessCheck("/deniedonlyips/page","GET","10.0.0.6",NULL,&run);
 	test("ip with no allowed list, exit status",run.exitedcleanly);
-	testOutput("ip with no allowed list, denied",
+	test("ip with no allowed list, denied",
 					hasLine(&run,"isIpAllowed=0"));
 	delete[] run.output;
 	stdoutput.printf("\n");
@@ -478,8 +466,8 @@ int main(int argc, const char **argv) {
 	runCgiAccessCheck("/referers/page","GET",
 				"10.0.0.1","http://bad.example.com/",&run);
 	test("denied referer, exit status",run.exitedcleanly);
-	testOutput("denied referer, ip allowed",hasLine(&run,"isIpAllowed=1"));
-	testOutput("denied referer, referer denied",
+	test("denied referer, ip allowed",hasLine(&run,"isIpAllowed=1"));
+	test("denied referer, referer denied",
 					hasLine(&run,"isRefererAllowed=0"));
 	delete[] run.output;
 
@@ -487,8 +475,8 @@ int main(int argc, const char **argv) {
 	runCgiAccessCheck("/referers/page","GET",
 				"10.0.0.5","http://good.example.com/",&run);
 	test("allowed referer, exit status",run.exitedcleanly);
-	testOutput("allowed referer, ip denied",hasLine(&run,"isIpAllowed=0"));
-	testOutput("allowed referer, referer allowed",
+	test("allowed referer, ip denied",hasLine(&run,"isIpAllowed=0"));
+	test("allowed referer, referer allowed",
 					hasLine(&run,"isRefererAllowed=1"));
 	delete[] run.output;
 
@@ -496,7 +484,7 @@ int main(int argc, const char **argv) {
 	runCgiAccessCheck("/referers/page","GET",
 				"10.0.0.1","http://other.test/",&run);
 	test("unlisted referer, exit status",run.exitedcleanly);
-	testOutput("unlisted referer, referer denied",
+	test("unlisted referer, referer denied",
 					hasLine(&run,"isRefererAllowed=0"));
 	delete[] run.output;
 	stdoutput.printf("\n");
@@ -504,19 +492,19 @@ int main(int argc, const char **argv) {
 	// method in the allowed list only
 	runCgiAccessCheck("/methods/page","GET",NULL,NULL,&run);
 	test("allowed method, exit status",run.exitedcleanly);
-	testOutput("allowed method, allowed",hasLine(&run,"isMethodAllowed=1"));
+	test("allowed method, allowed",hasLine(&run,"isMethodAllowed=1"));
 	delete[] run.output;
 
 	// method in both the allowed and denied lists
 	runCgiAccessCheck("/methods/page","POST",NULL,NULL,&run);
 	test("denied method, exit status",run.exitedcleanly);
-	testOutput("denied method, denied",hasLine(&run,"isMethodAllowed=0"));
+	test("denied method, denied",hasLine(&run,"isMethodAllowed=0"));
 	delete[] run.output;
 
 	// unlisted method
 	runCgiAccessCheck("/methods/page","PUT",NULL,NULL,&run);
 	test("unlisted method, exit status",run.exitedcleanly);
-	testOutput("unlisted method, denied",hasLine(&run,"isMethodAllowed=0"));
+	test("unlisted method, denied",hasLine(&run,"isMethodAllowed=0"));
 	delete[] run.output;
 	stdoutput.printf("\n");
 

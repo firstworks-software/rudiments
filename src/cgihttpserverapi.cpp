@@ -9,6 +9,10 @@
 #include <rudiments/stdio.h>
 #include <rudiments/signalclasses.h>
 #include <rudiments/process.h>
+#ifdef _WIN32
+	#include <io.h>
+	#include <fcntl.h>
+#endif
 
 class cgihttpserverapiprivate {
 	friend class cgihttpserverapi;
@@ -20,6 +24,11 @@ class cgihttpserverapiprivate {
 };
 
 cgihttpserverapi::cgihttpserverapi() : httpserverapi() {
+#ifdef _WIN32
+	// read stdin and write stdout in binary mode
+	_setmode(0,_O_BINARY);
+	_setmode(1,_O_BINARY);
+#endif
 	pvt=new cgihttpserverapiprivate;
 	pvt->_envdirty=false;
 	pvt->_envcount=0;

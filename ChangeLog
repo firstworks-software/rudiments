@@ -434,6 +434,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - fixed the Windows test Makefile to copy pr.cgi.exe to app1/app2
 - fixed process::wait() exit status on Windows
 - fixed environment::getValue() freeing its last return value on Windows
+- fixed the Windows cgihttpserverapi to read stdin and write stdout in binary mode
 
 ### Security
 - fixed buffer overflow when unix socket file name is too long
