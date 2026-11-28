@@ -59,7 +59,8 @@ static void runCgi(const char *method,
 	stringbuffer	cmd;
 #ifdef _WIN32
 	// cmd.exe has no env -i or cat, so set (or clear) each variable and
-	// let this program copy what cgi.cgi leaves unread on stdin
+	// let this program copy what cgi.cgi leaves unread on stdin.  The copy
+	// runs only if cgi.cgi succeeds, so the exit status is cgi.cgi's.
 	cmd.append("set \"SCRIPT_NAME=/cgi.cgi\"&& "
 			"set \"DOCUMENT_ROOT=.\"&& "
 			"set \"SERVER_NAME=localhost\"&& "
@@ -74,7 +75,7 @@ static void runCgi(const char *method,
 			append("\"&& ");
 	cmd.append("set \"QUERY_STRING=")->
 			append((querystring)?querystring:"")->append("\"&& ");
-	cmd.append("( " CGI " > " OUTFILE " & urlhttprequest.exe -cat > " REST
+	cmd.append("( " CGI " > " OUTFILE " && urlhttprequest.exe -cat > " REST
 						" ) < " BODY " 2> nul");
 #else
 	cmd.append("( env -i PATH=\"$PATH\" SCRIPT_NAME=/cgi.cgi "
