@@ -282,9 +282,8 @@ static bool runCgiUnderValgrind(const char *pathinfo,
 	return true;
 }
 
-// Runs a check that reads what cgi.cgi wrote.  On Windows, cgi.cgi reads
-// freed environment values and writes its output in text mode, so these
-// checks are skipped there.
+// Runs a check that reads what cgi.cgi wrote.  On Windows, cgi.cgi writes its
+// output and reads its input in text mode, so these checks are skipped there.
 static void testOutput(const char *name, bool result) {
 #ifdef _WIN32
 	stdoutput.printf("\t%s: skipped on Windows\n",name);
@@ -324,7 +323,7 @@ int main(int argc, const char **argv) {
 	// the whole test instead, so a hung cgi.cgi fails it.
 	stdoutput.printf("\tno timeout command, using an alarm\n");
 	stdoutput.printf("\tchecks of the cgi.cgi output: skipped on Windows, "
-				"see tickets 11266 and 11267\n");
+				"see ticket 11267\n");
 	signalhandler	alarmhandler;
 	alarmhandler.setHandler(alarmHandler);
 	alarmhandler.handleSignal(SIGALRM);
@@ -350,7 +349,7 @@ int main(int argc, const char **argv) {
 		charstring::contains(run.output,"All Parameters: 2\n"));
 	testOutput("urlencoded post, var1",hasParameter(&run,"var1=val1"));
 	testOutput("urlencoded post, var2",hasParameter(&run,"var2=val2"));
-	testOutput("urlencoded post, nothing left",run.restsize==0);
+	test("urlencoded post, nothing left",run.restsize==0);
 	delete[] run.output;
 	stdoutput.printf("\n");
 
@@ -359,7 +358,7 @@ int main(int argc, const char **argv) {
 	test("get with body, exit status",run.exitedcleanly);
 	testOutput("get with body, no parameters",
 		charstring::contains(run.output,"All Parameters: 0\n"));
-	testOutput("get with body, body left for app",run.restsize==5);
+	test("get with body, body left for app",run.restsize==5);
 	delete[] run.output;
 	stdoutput.printf("\n");
 

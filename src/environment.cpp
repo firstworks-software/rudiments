@@ -153,7 +153,8 @@ void environment::init() {
 #endif
 
 #ifdef RUDIMENTS_HAVE__DUPENV_S
-	static	char	*envval=NULL;
+	// LAME: not in the class
+	static dictionary<char *, char *>	*_envvalues=NULL;
 #endif
 
 const char *environment::getValue(const char *variable) {
@@ -164,14 +165,38 @@ const char *environment::getValue(const char *variable) {
 	error::clearError();
 	do {
 		#if defined(RUDIMENTS_HAVE__DUPENV_S)
-			// FIXME: _dupenv_s is meant to be thread-safe and this
-			// usage certainly isn't.  This just emulates the
-			// behavior of getenv and suppresses compiler warnings.
-			free((void *)envval);
-			envval=NULL;
+			// _dupenv_s() returns a copy for the caller to free, but
+			// callers of getValue() don't free what it returns and
+			// may keep it, as with getenv().  So keep one copy per
+			// variable, replaced only when the value changes.  The
+			// copies live until the process exits.  This is only
+			// thread-safe if a mutex was set.
+			char	*envval=NULL;
 			size_t	len;
-			if (!_dupenv_s(&envval,&len,variable)) {
-				retval=envval;
+			if (!_dupenv_s(&envval,&len,variable) && envval) {
+				if (!_envvalues) {
+					_envvalues=
+					new dictionary<char *, char *>;
+					_envvalues->setManageArrayKeys(true);
+				}
+				char	*oldval=NULL;
+				if (!_envvalues->getValue(
+						(char *)variable,&oldval)) {
+					_envvalues->setValue(
+						charstring::duplicate(variable),
+						envval);
+					retval=envval;
+				} else if (charstring::compare(oldval,envval)) {
+					free((void *)oldval);
+					_envvalues->setValue(
+						_envvalues->getKey(
+							(char *)variable),
+						envval);
+					retval=envval;
+				} else {
+					free((void *)envval);
+					retval=oldval;
+				}
 			}
 		#elif defined(RUDIMENTS_HAVE_GETENV)
 			retval=getenv(variable);
